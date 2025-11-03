@@ -37,4 +37,18 @@ public class HexBoard : MonoBehaviour
             this.transform.position.z - y * this.yoffset
         );
     }
+
+    public List<Square> filterOperationOnSquares(Func<Square, bool> filterOperation) {
+        List<Square> res = new List<Square>();
+
+        foreach(List<Square> sqrs in this.squares) {
+            foreach(Square s in sqrs) {
+                if(filterOperation(s)) {
+                    res.Add(s);
+                }
+            }
+        }
+
+        return res;
+    }
 }

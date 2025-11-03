@@ -30,20 +30,35 @@ public abstract class Unit : MonoBehaviour
     private float currentHealth;
     private Unit currentTarget;
 
+    public int getDecisionPriority() {
+        return this.decisionPriority;
+    }
+
     public bool isDead() {
         return currentHealth <= 0.0;
     }
 
-    public void assignTarget(Unit target) {
-
+    public int getRange() {
+        return this.range;
     }
 
-    public void attackUnit() {
+    public void checkUnitHasTask(CombatManager manager) {
         if(currentTarget == null || currentTarget.isDead /* || distance(this, currentTarget) > range*/) {
-            this.manager.requestAttackTarget(this.currentTarget); //give the current target as a tie break
-        } else {
-            //attack the target
+            manager.requestAttackTarget(this, this.currentTarget)
         }
+
+        //else does nothing
+    }
+
+    public void unitAttack() {
+        if(currentTarget == null || currentTarget.isDead /* || distance(this, currentTarget) > range*/) {
+            //can't do anything we don't have a target
+            // this.manager.requestAttackTarget(this.currentTarget);
+            return;
+        }
+
+        //attack the target
+        StartCoroutine(attackTarget)
     }
 
 
@@ -57,7 +72,7 @@ public abstract class Unit : MonoBehaviour
          - if target dies or moves 
      - 
      -  event based? 
-     - 
+     -  issue: how do we do order
      - 
     */
 }
