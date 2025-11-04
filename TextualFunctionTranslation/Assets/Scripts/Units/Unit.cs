@@ -9,6 +9,10 @@ struct StarStats {
     public float star3Stat;
 }
 
+enum UnitState {
+    Attacking, Idle
+}
+
 public abstract class Unit : MonoBehaviour
 {
     [Header ("Stats")]
@@ -42,9 +46,13 @@ public abstract class Unit : MonoBehaviour
         return this.range;
     }
 
+    public int getTaunt() {
+        return this.tauntAmount;
+    }
+
     public void checkUnitHasTask(CombatManager manager) {
         if(currentTarget == null || currentTarget.isDead /* || distance(this, currentTarget) > range*/) {
-            manager.requestAttackTarget(this, this.currentTarget)
+            CurrentTarget = manager.requestAttackTarget(this, this.currentTarget)
         }
 
         //else does nothing

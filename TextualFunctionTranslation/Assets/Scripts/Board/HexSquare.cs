@@ -10,4 +10,10 @@ public class HexSquare : MonoBehaviour
         this.x = x; this.y = y;
         this.transform.position = hexPos;
     }
+
+    //returns distance between two hexSquares
+    public static int hexDist(HexSquare s1, HexSquare s2) {
+        //TODO: implement
+        return 0;
+    }
 }

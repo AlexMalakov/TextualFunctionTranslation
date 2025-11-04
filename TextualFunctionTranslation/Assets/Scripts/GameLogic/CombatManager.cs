@@ -5,6 +5,7 @@ using UnityEngine;
 public class CombatManager : MonoBehaviour
 {
     List<Unit> units;
+    HexBoard board;
 
     public void Start() {
         this.units.Sort((a,b) => a.getDecisionPriority().CompareTo(b.getDecisionPriority()));
@@ -21,6 +22,29 @@ public class CombatManager : MonoBehaviour
     }
 
     public Unit requestAttackTarget(Unit attacker, Unit previousTarget) {
-        return null;
+        var getAttackableSquares = (HexSquare s) => {
+            return HexSquare.hexDist(attacker.getPosition(), s) <= attacker.getRange()
+                && s.containsUnit()
+                //TODO: && can reach that unit?
+                && s.getUnit().getOwner() != attacker.getOwner();
+        }
+
+        List<Square> possibleTargets = this.board.filterOperationOnSquares(getAttackableSquares);
+
+        int bestTaunt = int.MinValue;
+        Unit target = null;
+        foreach(Square s in possibleTargets) {
+            if(s.getUnit() == previousTarget) {
+                return previousTarget;
+            }
+
+            if(s.getUnit().getTaunt() > bestTaunt) {
+                target = s.getUnit();
+                bestTaunt = target.getTaunt();
+            }
+        }
+
+        //might return null?
+        return target;
     }
 }
