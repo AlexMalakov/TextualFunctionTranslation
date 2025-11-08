@@ -7,6 +7,19 @@ struct StarStats {
     public float star1Stat;
     public float star2Stat;
     public float star3Stat;
+
+    public float getStat(int starLevel) {
+        switch(starLevel) {
+            case 1:
+                return this.star1Stat;
+            case 2:
+                return this.star2Stat;
+            case 3:
+                return this.star3Stat;
+            default:
+                return -1;
+        }
+    }
 }
 
 enum UnitState {
@@ -23,6 +36,9 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private int cost;
     [SerializeField] private Trait roleTrait;
     [SerializeField] private Trait classTrait;
+
+    private int starLevel = 1;
+    private float combatHealth;
 
     [Header ("Hidden stats")]
     [SerializeField] private int decisionPriority;
@@ -52,13 +68,14 @@ public abstract class Unit : MonoBehaviour
 
     public void checkUnitHasTask(CombatManager manager) {
         if(currentTarget == null || currentTarget.isDead /* || distance(this, currentTarget) > range*/) {
-            CurrentTarget = manager.requestAttackTarget(this, this.currentTarget)
+            this.currentTarget = manager.requestAttackTarget(this, this.currentTarget);
+            this.unitAttack();
+            //problem: need to wait out animation
         }
-
-        //else does nothing
     }
 
     public void unitAttack() {
+        //problem: if we kill a unit we skip the down time
         if(currentTarget == null || currentTarget.isDead /* || distance(this, currentTarget) > range*/) {
             //can't do anything we don't have a target
             // this.manager.requestAttackTarget(this.currentTarget);
@@ -66,7 +83,17 @@ public abstract class Unit : MonoBehaviour
         }
 
         //attack the target
-        StartCoroutine(attackTarget)
+        this.currentTarget.takeDamage(this.damage.getStat(this.starLevel));
+        Invoke(nameOf)
+    }
+
+    public void takeDamage(float damage) {
+
+    }
+
+    private IENumerator attackTarget() {
+        //TODO Implement
+        yield break;
     }
 
 
