@@ -31,7 +31,7 @@ public abstract class Unit : MonoBehaviour
     [Header ("Stats")]
     [SerializeField] private StarStats health;
     [SerializeField] private StarStats damage;
-    [SerializeField] private float attackSpeed; //may not needed?
+    [SerializeField] private float attackSpeed;
     [SerializeField] private int range;
     [SerializeField] private int cost;
     [SerializeField] private Trait roleTrait;
@@ -111,3 +111,4 @@ public abstract class Unit : MonoBehaviour
      - 
     */
 }
+
