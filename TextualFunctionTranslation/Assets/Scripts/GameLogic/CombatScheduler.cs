@@ -7,8 +7,13 @@ public class CombatScheduler : MonoBehaviour
     [SerializeField] public float combatTickTime = .05f; //according to chat this is a good refresh rate
     [SerializeField] public CombatManager manager;
 
+    public static float combatTimePerTick;
+
     private float lastCheckIn;
 
+    public void Awake() {
+        combatTimePerTick = this.combatTickTime;
+    }
 
 
     public void runNUpdates() {

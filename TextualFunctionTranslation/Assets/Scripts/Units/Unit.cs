@@ -50,6 +50,8 @@ public abstract class Unit : MonoBehaviour
     private float currentHealth;
     private Unit currentTarget;
 
+    int totalUpdatesTillNext = 0;
+
     public int getDecisionPriority() {
         return this.decisionPriority;
     }
@@ -72,30 +74,61 @@ public abstract class Unit : MonoBehaviour
             this.unitAttack();
             //problem: need to wait out animation
         }
-    }
-
-    public void unitAttack() {
-        //problem: if we kill a unit we skip the down time
-        if(currentTarget == null || currentTarget.isDead /* || distance(this, currentTarget) > range*/) {
-            //can't do anything we don't have a target
-            // this.manager.requestAttackTarget(this.currentTarget);
+    
+        if(this.updateLockout > 0) {
+            this.updateLockout();
             return;
         }
 
-        //attack the target
+        if(this.canReachTarget) {
+
+        }
+
+
+        if(this.canReachTarget()) {
+            this.unitAttack();
+        } else {
+            this.walkTowardsTarget();
+        }
+        //figure out if im walking to my target
+
+
+
+        //figure out if im just attacking my target
+    }
+
+
+
+    private void unitAttack() {
+        //attack target
         this.currentTarget.takeDamage(this.damage.getStat(this.starLevel));
-        Invoke(nameOf)
+
+        //TODO: trigger animation
+
+        this.setLockout(this.attackSpeed)
+    }
+
+    private void walkTowardsTarget() {
+        //find hex on the way to target
+
+        //reserve it
+
+        //move towards it
+
+        //set lockout
+    }
+
+    private void setLockout(float duration) {
+        int framesToPause = (int) (duration / CombatScheduler.combatTimePerTick);
+    }
+
+    private void updateLockout() {
+        this.framesToPause -= 1;
     }
 
     public void takeDamage(float damage) {
 
     }
-
-    private IENumerator attackTarget() {
-        //TODO Implement
-        yield break;
-    }
-
 
     /*
      - ACTION (attack) BEHAVIOR:
