@@ -21,20 +21,30 @@ public class HexBoard : MonoBehaviour
                 lis.Add(Instantiate(this.hexSquarePrefab).GetComponent<HexSquare>());
                 lis[lis.Count - 1].init(x,y, calculateHexPos(x, y));
             }
-            squares.Add(lis);
+            this.squares.Add(lis);
         }
+    }
+
+    public HexSquare? getHexAt(AxialCoord c) {
+        return this.getHexAt(c.toOffset());
+    }
+
+    public HexSquare? getHexAt(OffsetCoord c) {
+        if(this.squares.Count > c.y && c.y >= 0 && this.squares[c.y].Count > c.x && c.x >= 0) {
+            return this.squares[c.y][c.x];
+        }
+        return null;
     }
 
 
     //returns null if path does not exist
     public HexSquare? pathfindToSquare(HexSquare source, HexSquare dest) {
+        List<HexSquare> path = 
         //a* where every node has g = 1, h = distance(node, dest), or Infinity if node is reserved
         return null;
     }
 
-    private List<HexSquare> runAStar(HexSquare start, HexSquare dest) {
 
-    }
 
     private Vector3 calculateHexPos(int x, int y) {
         return new Vector3(
