@@ -26,8 +26,14 @@ public class HexBoard : MonoBehaviour
     }
 
 
+    //returns null if path does not exist
     public HexSquare? pathfindToSquare(HexSquare source, HexSquare dest) {
+        //a* where every node has g = 1, h = distance(node, dest), or Infinity if node is reserved
         return null;
+    }
+
+    private List<HexSquare> runAStar(HexSquare start, HexSquare dest) {
+
     }
 
     private Vector3 calculateHexPos(int x, int y) {
