@@ -31,7 +31,8 @@ public abstract class Unit : MonoBehaviour
     [Header ("Stats")]
     [SerializeField] private StarStats health;
     [SerializeField] private StarStats damage;
-    [SerializeField] private float attackSpeed;
+    [SerializeField] private float timeBetweenAttack;
+    [SerializeField] private float timeBetweenMove;
     [SerializeField] private int range;
     [SerializeField] private int cost;
     [SerializeField] private Trait roleTrait;
@@ -80,15 +81,11 @@ public abstract class Unit : MonoBehaviour
             return;
         }
 
-        if(this.canReachTarget) {
-
-        }
-
 
         if(this.canReachTarget()) {
             this.unitAttack();
         } else {
-            this.walkTowardsTarget();
+            this.walkTowardsTarget()
         }
         //figure out if im walking to my target
 
@@ -105,17 +102,21 @@ public abstract class Unit : MonoBehaviour
 
         //TODO: trigger animation
 
-        this.setLockout(this.attackSpeed)
+        this.setLockout(this.timeBetweenAttack)
     }
 
     private void walkTowardsTarget() {
-        //find hex on the way to target
+        HexSquare? walkTo = this.CombatManager.pathfindToSquare(this, this.target);
+        if(walkTo != null) {
+            this.walkTowardsTarget(walkTo);
+        } else {
+            //TODO: idle behavior
+        }
 
+        //make move on the board
         //reserve it
 
-        //move towards it
-
-        //set lockout
+        this.setLockout(this.timeBetweenMove);
     }
 
     private void setLockout(float duration) {

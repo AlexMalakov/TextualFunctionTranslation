@@ -65,6 +65,10 @@ public class CombatManager : MonoBehaviour
         return target;
     }
 
+    public HexSquare? requestRoute(Unit attacker, Unit target) {
+        return this.board.pathfindToSquare(attacker.getPosition(), target.getPosition());
+    }
+
     public void onUnitDeath(Unit u) {
         if(player.getUnit().Contains(u)) {
             this.livingPlayerUnits--;

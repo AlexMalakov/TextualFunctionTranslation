@@ -37,11 +37,15 @@ public class HexBoard : MonoBehaviour
     }
 
 
+    public bool isResered(HexSquare s) {
+        //TODO: implement
+        return true;
+    }
+
     //returns null if path does not exist
     public HexSquare? pathfindToSquare(HexSquare source, HexSquare dest) {
         List<HexSquare> path = AStar.runAStar(source, dest, this);
-        //a* where every node has g = 1, h = distance(node, dest), or Infinity if node is reserved
-        return null;
+        return path.Count > 0 ? path[0] : null;
     }
 
 
