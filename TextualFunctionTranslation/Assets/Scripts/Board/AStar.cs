@@ -20,23 +20,26 @@ public class AStar
     public static List<HexSquare> runAStar(HexSquare start, HexSquare dest, HexBoard board) {
         PriorityQueue<Node, int> pq =  new PriorityQueue<HexSquare, int>();
 
-        pq.Enqueue(new Node(start, null, 0), 0);
+        int insertionOrder = 0;
+        pq.Enqueue(new Node(start, null, 0), (0, insertionOrder));
+        insertionOrder++;
         List<HexSquare> visited = new List<HexSquare>(){start};
         Node workingNode = null;
         workingNode = pq.Dequeue();
-        while(this.pq.Count > 0 && this.workingNode.val != dest) {
+        while(pq.Count > 0 && workingNode.val != dest) {
             if(visited.Contains(workingNode.val)) {
                 workingNode = pq.Dequeue();
                 continue;
             }
 
-            visited.Add(workingNode.val)
+            visited.Add(workingNode.val);
             foreach(AxialCoord axc in workingNode.val.getNeighborCoords()) {
                 HexSquare? neighbor = getHexAt(axc);
-                if(neighbor != null && !visited.Contains(neighbor)) {
+                if(neighbor != null && !visited.Contains(neighbor) && !board.isReserved(neighbor)) {
                     int weight = workingNode.weight + 1;
-                    int heursiticWeight = weight + HexSquare.hexDist(neighbor, dest) + (board.isReserved(neighbor) ? 10000 : 0);
-                    pq.Enqueue(new Node(neighbor, workingNode, weight), heursiticWeight);
+                    int heursiticWeight = weight + HexSquare.hexDist(neighbor, dest);
+                    pq.Enqueue(new Node(neighbor, workingNode, weight), (heursiticWeight, insertionOrder));
+                    insertionOrder++;
                 }
             }
 

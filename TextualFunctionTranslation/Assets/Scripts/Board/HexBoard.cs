@@ -39,7 +39,7 @@ public class HexBoard : MonoBehaviour
 
     //returns null if path does not exist
     public HexSquare? pathfindToSquare(HexSquare source, HexSquare dest) {
-        List<HexSquare> path = 
+        List<HexSquare> path = AStar.runAStar(source, dest, this);
         //a* where every node has g = 1, h = distance(node, dest), or Infinity if node is reserved
         return null;
     }
