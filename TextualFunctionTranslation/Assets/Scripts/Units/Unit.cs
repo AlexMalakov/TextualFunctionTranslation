@@ -51,6 +51,10 @@ public abstract class Unit : MonoBehaviour
     private float currentHealth;
     private Unit currentTarget;
 
+    private HexSquare curPosition; //TODO: INIT ME?
+
+    private int framesToPause = 0;
+
     int totalUpdatesTillNext = 0;
 
     public int getDecisionPriority() {
@@ -70,8 +74,8 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void checkUnitHasTask(CombatManager manager) {
-        if(currentTarget == null || currentTarget.isDead() /* || distance(this, currentTarget) > range*/) {
-            this.currentTarget = manager.requestAttackTarget(this, this.currentTarget);
+        if(this.currentTarget == null || this.currentTarget.isDead() /* || distance(this, currentTarget) > range*/) {
+            this.currentTarget = this.manager.requestAttackTarget(this, this.currentTarget);
             this.unitAttack();
             //problem: need to wait out animation
         }
@@ -94,6 +98,10 @@ public abstract class Unit : MonoBehaviour
         //figure out if im just attacking my target
     }
 
+    public HexSquare getPosition() {
+        return this.curPosition;
+    }
+
 
 
     private void unitAttack() {
@@ -105,8 +113,17 @@ public abstract class Unit : MonoBehaviour
         this.setLockout(this.timeBetweenAttack);
     }
 
+    //returns true if target is in range
+    private bool canReachTarget() {
+        if(this.currentTarget == null) {
+            return false;
+        }
+        return HexSquare.hexDist(this.getPosition(), this.currentTarget.getPosition()) <= this.range;
+    }
+
+    //moev one square towards target
     private void walkTowardsTarget() {
-        HexSquare? walkTo = this.CombatManager.pathfindToSquare(this, this.target);
+        HexSquare? walkTo = this.manager.requestRoute(this, this.currentTarget);
         if(walkTo != null) {
             this.walkTowardsTarget(walkTo);
         } else {
@@ -120,7 +137,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     private void setLockout(float duration) {
-        int framesToPause = (int) (duration / CombatScheduler.combatTimePerTick);
+        this.framesToPause = (int) (duration / CombatScheduler.combatTimePerTick);
     }
 
     private void updateLockout() {

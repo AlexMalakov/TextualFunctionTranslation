@@ -49,8 +49,6 @@ public class HexBoard : MonoBehaviour
         return path.Count > 0 ? path[0] : null;
     }
 
-
-
     private Vector3 calculateHexPos(int x, int y) {
         return new Vector3(
             this.transform.position.x + ((y % 2 == 0) ? this.xoffset/2 : 0) + x * this.xoffset,

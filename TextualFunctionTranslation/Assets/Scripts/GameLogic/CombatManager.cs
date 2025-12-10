@@ -33,6 +33,10 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    public HexBoard getBoard() {
+        return this.board;
+    }
+
     private bool sameOwner(Unit unit1, Unit unit2) {
         return (this.player.getUnits().Contains(unit1) && this.player.getUnits().Contains(unit2))
             || (this.enemy.getUnits().Contains(unit1) && this.enemy.getUnits().Contains(unit2));

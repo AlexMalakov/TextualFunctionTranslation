@@ -62,6 +62,6 @@ public class HexSquare : MonoBehaviour
     public static int hexDist(HexSquare s1, HexSquare s2) {
         AxialCoord s1c = s1.getCoords();
         AxialCoord s2c = s2.getCoords();
-        return s1c.q - s2c.q + s1c.r - s2c.r + s1c.s - s2c.s;
+        return (Mathf.Abs(s1c.q - s2c.q) + Mathf.Abs(s1c.r - s2c.r) + Mathf.Abs(s1c.s - s2c.s))/2;
     }
 }

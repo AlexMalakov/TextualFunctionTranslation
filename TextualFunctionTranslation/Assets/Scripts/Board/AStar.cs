@@ -1,6 +1,22 @@
 using System.Collections;
+
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
+
+class StablePriorityQueue<T> {
+    private readonly List<(T item, int priority)> heap = new();
+
+    public void Enqueue() {
+
+    }
+
+
+    public T Dequeue() {
+
+    }
+}
 
 
 class AStarNode {
@@ -18,7 +34,7 @@ class AStarNode {
 public class AStar
 {
     public static List<HexSquare> runAStar(HexSquare start, HexSquare dest, HexBoard board) {
-        PriorityQueue<AStarNode, int> pq =  new PriorityQueue<HexSquare, int>();
+        StablePriorityQueue<AStarNode> pq =  new StablePriorityQueue<HexSquare>(); //TODO NOT STABLE?
 
         int insertionOrder = 0;
         pq.Enqueue(new AStarNode(start, null, 0), (0, insertionOrder));
