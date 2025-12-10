@@ -128,6 +128,15 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void takeDamage(float damage) {
+        this.currentHealth -= damage;
+        //set healthbar to be max of 0, currentHealth
+
+        if(this.currentHealth <= 0) {
+            return this.onDeath();
+        }
+    }
+
+    public void onDeath() {
 
     }
 
