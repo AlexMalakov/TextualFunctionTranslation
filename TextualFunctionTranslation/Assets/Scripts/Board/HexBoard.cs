@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class HexBoard : MonoBehaviour
 {
@@ -58,11 +59,11 @@ public class HexBoard : MonoBehaviour
         );
     }
 
-    public List<Square> filterOperationOnSquares(Func<Square, bool> filterOperation) {
-        List<Square> res = new List<Square>();
+    public List<HexSquare> filterOperationOnSquares(Func<HexSquare, bool> filterOperation) {
+        List<HexSquare> res = new List<HexSquare>();
 
-        foreach(List<Square> sqrs in this.squares) {
-            foreach(Square s in sqrs) {
+        foreach(List<HexSquare> sqrs in this.squares) {
+            foreach(HexSquare s in sqrs) {
                 if(filterOperation(s)) {
                     res.Add(s);
                 }

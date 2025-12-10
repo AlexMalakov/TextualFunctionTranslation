@@ -13,8 +13,8 @@ public struct AxialCoord {
 
     public OffsetCoord toOffset() {
         int parity = r&1;
-        x = q + (r - parity) / 2
-        y = r;
+        int x = q + (r - parity) / 2;
+        int y = r;
         return new OffsetCoord(x, y);
     }
 }
@@ -25,8 +25,6 @@ public struct OffsetCoord {
     public OffsetCoord(int x, int y) {
         this.x = x;
         this.y = y;
-
-        this.parity = y&1;
     }
 
     public AxialCoord toAxial() {
@@ -39,13 +37,11 @@ public struct OffsetCoord {
 
 public class HexSquare : MonoBehaviour
 {
-    private int x, y;
     private AxialCoord axc;
     
     public void init(int x, int y, Vector3 hexPos) {
-        this.x = x; this.y = y;
         this.transform.position = hexPos;
-        this.axc = new OffsetCoords(x, y).toAxial();
+        this.axc = new OffsetCoord(x, y).toAxial();
     }
 
     public List<AxialCoord> getNeighborCoords() {

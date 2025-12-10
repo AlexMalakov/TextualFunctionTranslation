@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-struct Node {
+class AStarNode {
     public HexSquare val;
-    public Node? prev;
+    public AStarNode? prev;
     public int weight;
 
-    public Node(HexSquare val, Node? prev, int weight) {
+    public AStarNode(HexSquare val, AStarNode? prev, int weight) {
         this.val = val;
         this.prev = prev;
         this.weight = weight;
@@ -18,13 +18,13 @@ struct Node {
 public class AStar
 {
     public static List<HexSquare> runAStar(HexSquare start, HexSquare dest, HexBoard board) {
-        PriorityQueue<Node, int> pq =  new PriorityQueue<HexSquare, int>();
+        PriorityQueue<AStarNode, int> pq =  new PriorityQueue<HexSquare, int>();
 
         int insertionOrder = 0;
-        pq.Enqueue(new Node(start, null, 0), (0, insertionOrder));
+        pq.Enqueue(new AStarNode(start, null, 0), (0, insertionOrder));
         insertionOrder++;
         List<HexSquare> visited = new List<HexSquare>(){start};
-        Node workingNode = null;
+        AStarNode workingNode = null;
         workingNode = pq.Dequeue();
         while(pq.Count > 0 && workingNode.val != dest) {
             if(visited.Contains(workingNode.val)) {
@@ -38,7 +38,7 @@ public class AStar
                 if(neighbor != null && !visited.Contains(neighbor) && !board.isReserved(neighbor)) {
                     int weight = workingNode.weight + 1;
                     int heursiticWeight = weight + HexSquare.hexDist(neighbor, dest);
-                    pq.Enqueue(new Node(neighbor, workingNode, weight), (heursiticWeight, insertionOrder));
+                    pq.Enqueue(new AStarNode(neighbor, workingNode, weight), (heursiticWeight, insertionOrder));
                     insertionOrder++;
                 }
             }
@@ -54,11 +54,6 @@ public class AStar
 
         return pathSequence;
     }
-}
-
-struct Node {
-    public HexSquare square;
-    public HexSquare prev;
 }
 
 

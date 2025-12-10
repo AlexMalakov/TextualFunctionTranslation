@@ -70,13 +70,13 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void checkUnitHasTask(CombatManager manager) {
-        if(currentTarget == null || currentTarget.isDead /* || distance(this, currentTarget) > range*/) {
+        if(currentTarget == null || currentTarget.isDead() /* || distance(this, currentTarget) > range*/) {
             this.currentTarget = manager.requestAttackTarget(this, this.currentTarget);
             this.unitAttack();
             //problem: need to wait out animation
         }
     
-        if(this.updateLockout > 0) {
+        if(this.framesToPause > 0) { //idk what this is supposed to be
             this.updateLockout();
             return;
         }
@@ -85,7 +85,7 @@ public abstract class Unit : MonoBehaviour
         if(this.canReachTarget()) {
             this.unitAttack();
         } else {
-            this.walkTowardsTarget()
+            this.walkTowardsTarget();
         }
         //figure out if im walking to my target
 
@@ -102,7 +102,7 @@ public abstract class Unit : MonoBehaviour
 
         //TODO: trigger animation
 
-        this.setLockout(this.timeBetweenAttack)
+        this.setLockout(this.timeBetweenAttack);
     }
 
     private void walkTowardsTarget() {

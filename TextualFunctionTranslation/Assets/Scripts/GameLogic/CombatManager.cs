@@ -44,7 +44,7 @@ public class CombatManager : MonoBehaviour
                 && s.containsUnit()
                 //TODO: && can reach that unit?
                 && !sameOwner(attacker, s.getUnit());
-        }
+        };
 
         List<Square> possibleTargets = this.board.filterOperationOnSquares(getAttackableSquares);
 
