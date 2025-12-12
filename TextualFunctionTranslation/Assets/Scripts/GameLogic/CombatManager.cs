@@ -50,11 +50,11 @@ public class CombatManager : MonoBehaviour
                 && !sameOwner(attacker, s.getUnit());
         };
 
-        List<Square> possibleTargets = this.board.filterOperationOnSquares(getAttackableSquares);
+        List<HexSquare> possibleTargets = this.board.filterOperationOnSquares(getAttackableSquares);
 
         int bestTaunt = int.MinValue;
         Unit target = null;
-        foreach(Square s in possibleTargets) {
+        foreach(HexSquare s in possibleTargets) {
             if(s.getUnit() == previousTarget) {
                 return previousTarget;
             }

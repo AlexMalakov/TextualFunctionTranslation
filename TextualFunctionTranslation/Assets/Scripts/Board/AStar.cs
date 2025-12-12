@@ -67,7 +67,7 @@ class StablePriorityQueue<T> {
             return true;
         }
 
-        if(heap[index1] == heap[index2]) {
+        if(a.priority == b.priority) {
             return a.order > b.order;
         }
 
