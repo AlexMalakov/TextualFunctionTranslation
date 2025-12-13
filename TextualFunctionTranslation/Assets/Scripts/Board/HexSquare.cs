@@ -39,12 +39,12 @@ public class HexSquare : MonoBehaviour
 {
     private AxialCoord axc;
     
-    public void init(int x, int y, Vector3 hexPos) {
+    public virtual void init(int x, int y, Vector3 hexPos) {
         this.transform.position = hexPos;
         this.axc = new OffsetCoord(x, y).toAxial();
     }
 
-    public List<AxialCoord> getNeighborCoords() {
+    public virtual List<AxialCoord> getNeighborCoords() {
         return new List<AxialCoord>(){
             new AxialCoord(this.axc.q+1, this.axc.r),
             new AxialCoord(this.axc.q-1, this.axc.r),
@@ -54,7 +54,7 @@ public class HexSquare : MonoBehaviour
             new AxialCoord(this.axc.q-1, this.axc.r+1)};
     }
 
-    public AxialCoord getCoords() {
+    public virtual AxialCoord getCoords() {
         return this.axc;
     }
 

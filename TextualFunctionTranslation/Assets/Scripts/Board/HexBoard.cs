@@ -7,6 +7,7 @@ public class HexBoard : MonoBehaviour
 {
     List<List<HexSquare>> squares = new List<List<HexSquare>>();
     [SerializeField] private GameObject hexSquarePrefab;
+    [Serializable] private NullSquare nullSQ;
 
     [Header ("object placement")]
     [SerializeField] float xoffset;
@@ -34,7 +35,7 @@ public class HexBoard : MonoBehaviour
         if(this.squares.Count > c.y && c.y >= 0 && this.squares[c.y].Count > c.x && c.x >= 0) {
             return this.squares[c.y][c.x];
         }
-        return null;
+        return this.nullSQ;
     }
 
 
@@ -47,7 +48,7 @@ public class HexBoard : MonoBehaviour
     
     public HexSquare pathfindToSquare(HexSquare source, HexSquare dest) {
         List<HexSquare> path = AStar.runAStar(source, dest, this);
-        return path.Count > 0 ? path[0] : null;
+        return path.Count > 0 ? path[0] : this.nullSQ;
     }
 
     private Vector3 calculateHexPos(int x, int y) {
