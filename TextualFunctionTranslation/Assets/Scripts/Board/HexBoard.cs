@@ -26,11 +26,11 @@ public class HexBoard : MonoBehaviour
         }
     }
 
-    public HexSquare? getHexAt(AxialCoord c) {
+    public HexSquare getHexAt(AxialCoord c) {
         return this.getHexAt(c.toOffset());
     }
 
-    public HexSquare? getHexAt(OffsetCoord c) {
+    public HexSquare getHexAt(OffsetCoord c) {
         if(this.squares.Count > c.y && c.y >= 0 && this.squares[c.y].Count > c.x && c.x >= 0) {
             return this.squares[c.y][c.x];
         }
@@ -44,7 +44,8 @@ public class HexBoard : MonoBehaviour
     }
 
     //returns null if path does not exist
-    public HexSquare? pathfindToSquare(HexSquare source, HexSquare dest) {
+    
+    public HexSquare pathfindToSquare(HexSquare source, HexSquare dest) {
         List<HexSquare> path = AStar.runAStar(source, dest, this);
         return path.Count > 0 ? path[0] : null;
     }

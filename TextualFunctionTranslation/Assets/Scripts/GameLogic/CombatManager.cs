@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 //idea: each pla
 public class CombatManager : MonoBehaviour
@@ -43,9 +44,9 @@ public class CombatManager : MonoBehaviour
     }
 
     public Unit requestAttackTarget(Unit attacker, Unit previousTarget) {
-        var getAttackableSquares = (HexSquare s) => {
+        Func<HexSquare, bool> getAttackableSquares = (HexSquare s) => {
             return HexSquare.hexDist(attacker.getPosition(), s) <= attacker.getRange()
-                && s.containsUnit()
+                && s.getUnit() != null
                 //TODO: && can reach that unit?
                 && !sameOwner(attacker, s.getUnit());
         };
@@ -69,23 +70,23 @@ public class CombatManager : MonoBehaviour
         return target;
     }
 
-    public HexSquare? requestRoute(Unit attacker, Unit target) {
+    public HexSquare requestRoute(Unit attacker, Unit target) {
         return this.board.pathfindToSquare(attacker.getPosition(), target.getPosition());
     }
 
     public void onUnitDeath(Unit u) {
-        if(player.getUnit().Contains(u)) {
+        if(player.getUnits().Contains(u)) {
             this.livingPlayerUnits--;
             if(livingPlayerUnits <= 0) {
                 this.onCombatOver();
             }
-        } else if(enemy.getUnit().Contains(u)) {
+        } else if(enemy.getUnits().Contains(u)) {
             this.livingEnemyUnits--;
             if(livingEnemyUnits <= 0) {
                 this.onCombatOver();
             }
         } else {
-            throw new RuntimeException("im dead but not in any list something is wrong");
+            throw new Exception("im dead but not in any list something is wrong");
         }
         units.Remove(u);
     }

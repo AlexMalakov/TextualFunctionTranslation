@@ -123,9 +123,9 @@ public abstract class Unit : MonoBehaviour
 
     //moev one square towards target
     private void walkTowardsTarget() {
-        HexSquare? walkTo = this.manager.requestRoute(this, this.currentTarget);
+        HexSquare walkTo = this.manager.requestRoute(this, this.currentTarget);
         if(walkTo != null) {
-            this.walkTowardsTarget(walkTo);
+            StartCoroutine(this.moveToTarget(walkTo));
         } else {
             //TODO: idle behavior
         }
@@ -134,6 +134,10 @@ public abstract class Unit : MonoBehaviour
         //reserve it
 
         this.setLockout(this.timeBetweenMove);
+    }
+
+    private IEnumerator moveToTarget(HexSquare walkTo) {
+        yield break;
     }
 
     private void setLockout(float duration) {
@@ -149,7 +153,8 @@ public abstract class Unit : MonoBehaviour
         //set healthbar to be max of 0, currentHealth
 
         if(this.currentHealth <= 0) {
-            return this.onDeath();
+            this.onDeath();
+            return;
         }
     }
 

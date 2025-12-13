@@ -58,6 +58,10 @@ public class HexSquare : MonoBehaviour
         return this.axc;
     }
 
+    public virtual bool isSquare() {
+        return true;
+    }
+
     //returns distance between two hexSquares
     public static int hexDist(HexSquare s1, HexSquare s2) {
         AxialCoord s1c = s1.getCoords();

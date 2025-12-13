@@ -17,11 +17,11 @@ class StablePriorityQueue<T> {
 
 
     public T Dequeue() {
-        T item = heap[0];
+        T item = heap[0].item;
         heap[0] = heap[Count - 1];
         heap.RemoveAt(Count - 1);
         heapifyDown(0);
-        return item.item;
+        return item;
     }
 
     private void heapifyUp(int index) {
@@ -78,10 +78,10 @@ class StablePriorityQueue<T> {
 
 class AStarNode {
     public HexSquare val;
-    public AStarNode? prev;
+    public AStarNode prev;
     public int weight;
 
-    public AStarNode(HexSquare val, AStarNode? prev, int weight) {
+    public AStarNode(HexSquare val, AStarNode prev, int weight) {
         this.val = val;
         this.prev = prev;
         this.weight = weight;
@@ -91,7 +91,7 @@ class AStarNode {
 public class AStar
 {
     public static List<HexSquare> runAStar(HexSquare start, HexSquare dest, HexBoard board) {
-        StablePriorityQueue<AStarNode> pq =  new StablePriorityQueue<HexSquare>(); //TODO NOT STABLE?
+        StablePriorityQueue<AStarNode> pq =  new StablePriorityQueue<AStarNode>();
 
 
         pq.Enqueue(new AStarNode(start, null, 0), 0);
@@ -106,7 +106,7 @@ public class AStar
 
             visited.Add(workingNode.val);
             foreach(AxialCoord axc in workingNode.val.getNeighborCoords()) {
-                HexSquare? neighbor = getHexAt(axc);
+                HexSquare neighbor = board.getHexAt(axc);
                 if(neighbor != null && !visited.Contains(neighbor) && !board.isReserved(neighbor)) {
                     int weight = workingNode.weight + 1;
                     int heursiticWeight = weight + HexSquare.hexDist(neighbor, dest);
