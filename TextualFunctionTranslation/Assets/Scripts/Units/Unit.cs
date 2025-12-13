@@ -124,7 +124,7 @@ public abstract class Unit : MonoBehaviour
     //moev one square towards target
     private void walkTowardsTarget() {
         HexSquare walkTo = this.manager.requestRoute(this, this.currentTarget);
-        if(walkTo != null) {
+        if(walkTo.isSquare()) {
             StartCoroutine(this.moveToTarget(walkTo));
         } else {
             //TODO: idle behavior

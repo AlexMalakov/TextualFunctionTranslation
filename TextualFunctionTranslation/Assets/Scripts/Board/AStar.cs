@@ -96,8 +96,7 @@ public class AStar
 
         pq.Enqueue(new AStarNode(start, null, 0), 0);
         List<HexSquare> visited = new List<HexSquare>(){start};
-        AStarNode workingNode = null;
-        workingNode = pq.Dequeue();
+        AStarNode workingNode = pq.Dequeue();
         while(pq.Count > 0 && workingNode.val != dest) {
             if(visited.Contains(workingNode.val)) {
                 workingNode = pq.Dequeue();
@@ -107,7 +106,7 @@ public class AStar
             visited.Add(workingNode.val);
             foreach(AxialCoord axc in workingNode.val.getNeighborCoords()) {
                 HexSquare neighbor = board.getHexAt(axc);
-                if(neighbor != null && !visited.Contains(neighbor) && !board.isReserved(neighbor)) {
+                if(neighbor.isSquare() && !visited.Contains(neighbor) && !board.isReserved(neighbor)) {
                     int weight = workingNode.weight + 1;
                     int heursiticWeight = weight + HexSquare.hexDist(neighbor, dest);
                     pq.Enqueue(new AStarNode(neighbor, workingNode, weight), heursiticWeight);
