@@ -57,6 +57,9 @@ public abstract class Unit : MonoBehaviour
 
     int totalUpdatesTillNext = 0;
 
+    private bool isMoving;
+    private bool requestOverride;
+
     public int getDecisionPriority() {
         return this.decisionPriority;
     }
@@ -76,26 +79,22 @@ public abstract class Unit : MonoBehaviour
     public void checkUnitHasTask(CombatManager manager) {
         if(this.currentTarget == null || this.currentTarget.isDead() /* || distance(this, currentTarget) > range*/) {
             this.currentTarget = this.manager.requestAttackTarget(this, this.currentTarget);
-            this.unitAttack();
             //problem: need to wait out animation
         }
     
-        if(this.framesToPause > 0) { //idk what this is supposed to be
+        if(this.framesToPause > 0) { //i am already doing a task
             this.updateLockout();
             return;
         }
-
-
-        if(this.canReachTarget()) {
+        
+        //i am not doing a task but have a target, so i am going to go to that target
+        if(this.currentTarget == null) {
+            this.beIdle();//do nothing for a couple of frames, try again after
+        }else if(this.canReachTarget()) {
             this.unitAttack();
         } else {
             this.walkTowardsTarget();
         }
-        //figure out if im walking to my target
-
-
-
-        //figure out if im just attacking my target
     }
 
     public HexSquare getPosition() {
@@ -125,19 +124,45 @@ public abstract class Unit : MonoBehaviour
     private void walkTowardsTarget() {
         HexSquare walkTo = this.manager.requestRoute(this, this.currentTarget);
         if(walkTo.isSquare()) {
+            this.getPosition().claimSquare(this, false);
+            walkTo.claimSquare(this, true);
             StartCoroutine(this.moveToTarget(walkTo));
-        } else {
-            //TODO: idle behavior
+            this.setLockout(this.timeBetweenMove);
         }
-
-        //make move on the board
-        //reserve it
-
-        this.setLockout(this.timeBetweenMove);
     }
 
     private IEnumerator moveToTarget(HexSquare walkTo) {
-        yield break;
+        //TODO: play walking animation
+        while(isMoving) {
+            this.requestOverride = true;
+            Debug.Log("waiting for an older move to abort!");
+            yield return null;
+        }
+
+        this.isMoving = true;
+        this.requestOverride = false;
+        Vector3 startPos = transform.position;
+
+        float duration = this.timeBetweenMove;
+        float elapsed = 0f;
+
+        while(elapsed < duration) {
+            if(this.requestOverride) {
+                this.isMoving = false;
+                yield break;
+            }
+
+            this.transform.position = Vector3.Lerp(startPos, walkTo.transform.position, elapsed/duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        this.isMoving = false;
+    }
+
+    private void beIdle() {
+        //TODO: idle animation?
+        this.setLockout(.2f);
     }
 
     private void setLockout(float duration) {
