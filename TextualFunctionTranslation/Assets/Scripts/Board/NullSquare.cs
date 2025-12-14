@@ -20,4 +20,12 @@ public class NullSquare : HexSquare
     public override bool isSquare() {
         return false;
     }
+
+    public override Unit getUnit() {
+        throw new Exception("null squares have no units!");
+    }
+
+    public override void claimSquare(Unit u, bool status) {
+        throw new Exception("cannot assign or remove a unit from a null square!");
+    }
 }

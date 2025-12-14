@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public struct AxialCoord {
     public int q, r, s;
@@ -38,6 +39,7 @@ public struct OffsetCoord {
 public class HexSquare : MonoBehaviour
 {
     private AxialCoord axc;
+    private Unit unit;
     
     public virtual void init(int x, int y, Vector3 hexPos) {
         this.transform.position = hexPos;
@@ -67,5 +69,23 @@ public class HexSquare : MonoBehaviour
         AxialCoord s1c = s1.getCoords();
         AxialCoord s2c = s2.getCoords();
         return (Mathf.Abs(s1c.q - s2c.q) + Mathf.Abs(s1c.r - s2c.r) + Mathf.Abs(s1c.s - s2c.s))/2;
+    }
+
+    public virtual Unit getUnit() {
+        return this.unit;
+    }
+
+    public virtual void claimSquare(Unit u, bool status) {
+        if(status) {
+            if(this.unit != null) {
+                throw new Exception("cannot claim an already claimed hex square!");
+            } 
+            this.unit = u;
+        } else {
+            if(this.unit == null) {
+                throw new Exception("cannot leave an unoccupied hex square!");
+            }
+            this.unit = null;
+        }
     }
 }
