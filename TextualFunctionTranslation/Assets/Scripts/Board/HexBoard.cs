@@ -7,7 +7,7 @@ public class HexBoard : MonoBehaviour
 {
     List<List<HexSquare>> squares = new List<List<HexSquare>>();
     [SerializeField] private GameObject hexSquarePrefab;
-    [Serializable] private NullSquare nullSQ;
+    [SerializeField] private NullSquare nullSQ;
 
     [Header ("object placement")]
     [SerializeField] float xoffset;
@@ -36,12 +36,6 @@ public class HexBoard : MonoBehaviour
             return this.squares[c.y][c.x];
         }
         return this.nullSQ;
-    }
-
-
-    public bool isResered(HexSquare s) {
-        //TODO: implement
-        return true;
     }
 
     //returns null if path does not exist
