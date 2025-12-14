@@ -55,8 +55,6 @@ public abstract class Unit : MonoBehaviour
 
     private int framesToPause = 0;
 
-    int totalUpdatesTillNext = 0;
-
     private bool isMoving;
     private bool requestOverride;
 
