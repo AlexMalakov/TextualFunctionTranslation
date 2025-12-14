@@ -15,9 +15,7 @@ public class CombatManager : MonoBehaviour
     private int livingEnemyUnits = -1;
     private List<Unit> units;
 
-    public void Start() {
-
-        //todo this doesn't update with the shop, or across different combats
+    public void initializeCombat() {
         this.units = new List<Unit>();
         this.units.AddRange(this.player.getUnits());
         this.units.AddRange(this.enemy.getUnits());
@@ -66,7 +64,7 @@ public class CombatManager : MonoBehaviour
             }
         }
 
-        //might return null?
+        //TODO: handle might return null?
         return target;
     }
 
