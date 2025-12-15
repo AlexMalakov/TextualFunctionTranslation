@@ -99,6 +99,10 @@ public abstract class Unit : MonoBehaviour
         return this.curPosition;
     }
 
+    public void setPosition(HexSquare square) {
+        this.curPosition = square;
+        square.claimSquare(this, true);
+    }
 
 
     private void unitAttack() {
@@ -137,6 +141,7 @@ public abstract class Unit : MonoBehaviour
             yield return null;
         }
 
+        this.curPosition = walkTo;
         this.isMoving = true;
         this.requestOverride = false;
         Vector3 startPos = transform.position;
