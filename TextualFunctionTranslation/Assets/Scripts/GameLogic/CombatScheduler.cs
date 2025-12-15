@@ -19,6 +19,10 @@ public class CombatScheduler : MonoBehaviour
     public void runNUpdates() {
         float newCheckIn = Time.time;
 
+        if((newCheckIn - this.lastCheckIn)/combatTickTime < 1) {
+            return;
+        }
+
         for(int i = 1; i <= (newCheckIn - this.lastCheckIn)/combatTickTime; i++) {
             //call update?
             manager.runAttackFrame();

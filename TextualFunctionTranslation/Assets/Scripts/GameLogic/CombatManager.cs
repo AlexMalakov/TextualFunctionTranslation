@@ -35,6 +35,7 @@ public class CombatManager : MonoBehaviour
 
     //check each unit every frame
     public void runAttackFrame() {
+        Debug.Log("ATTACK FRAME RUN!");
         foreach(Unit u in this.units) {
             u.checkUnitHasTask(this);
         }

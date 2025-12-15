@@ -72,9 +72,11 @@ public abstract class Unit : MonoBehaviour
     }
 
     public virtual void checkUnitHasTask(CombatManager manager) {
+        Debug.Log("CHECLONG FOR TASK!" + this.currentTarget);
         if(this.currentTarget == null || this.currentTarget.isDead() /* || distance(this, currentTarget) > range*/) {
             this.currentTarget = this.manager.requestAttackTarget(this, this.currentTarget);
             //problem: need to wait out animation
+            Debug.Log("WAS GIVEN TARGET " + this.currentTarget);
         }
     
         if(this.framesToPause > 0) { //i am already doing a task
@@ -84,10 +86,13 @@ public abstract class Unit : MonoBehaviour
         
         //i am not doing a task but have a target, so i am going to go to that target
         if(this.currentTarget == null) {
+            Debug.Log("NULL!");
             this.beIdle();//do nothing for a couple of frames, try again after
         }else if(this.canReachTarget()) {
+            Debug.Log("ATTACK!");
             this.unitAttack();
         } else {
+            Debug.Log("WALK!");
             this.walkTowardsTarget();
         }
     }
@@ -99,7 +104,7 @@ public abstract class Unit : MonoBehaviour
     public void placeUnitOnSquare(HexSquare square) {
         this.curPosition = square;
         square.claimSquare(this, true);
-        this.transform.position = square.transform.position;
+        this.transform.position = new Vector3(square.transform.position.x, this.transform.position.y, square.transform.position.z);
     }
 
 
@@ -146,6 +151,7 @@ public abstract class Unit : MonoBehaviour
         this.isMoving = true;
         this.requestOverride = false;
         Vector3 startPos = transform.position;
+        Vector3 dest = new Vector3(walkTo.transform.position.x, startPos.y, walkTo.transform.position.z);
 
         float duration = this.timeBetweenMove;
         float elapsed = 0f;
@@ -156,7 +162,7 @@ public abstract class Unit : MonoBehaviour
                 yield break;
             }
 
-            this.transform.position = Vector3.Lerp(startPos, walkTo.transform.position, elapsed/duration);
+            this.transform.position = Vector3.Lerp(startPos, dest, elapsed/duration);
             elapsed += Time.deltaTime;
             yield return null;
         }
