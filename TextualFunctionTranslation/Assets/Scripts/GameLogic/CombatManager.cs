@@ -35,7 +35,6 @@ public class CombatManager : MonoBehaviour
 
     //check each unit every frame
     public void runAttackFrame() {
-        Debug.Log("ATTACK FRAME RUN!");
         foreach(Unit u in this.units) {
             u.checkUnitHasTask(this);
         }
@@ -50,10 +49,9 @@ public class CombatManager : MonoBehaviour
             || (this.enemy.getActiveUnits().Contains(unit1) && this.enemy.getActiveUnits().Contains(unit2));
     }
 
-    public Unit requestAttackTarget(Unit attacker, Unit previousTarget) {
+    public Unit requestAttackTarget(Unit attacker, Unit previousTarget) { //I IS ALWAYS RETURNING NULL PROBABLY NOT CORRECT !!!!!!!!!!
         Func<HexSquare, bool> getAttackableSquares = (HexSquare s) => {
-            return HexSquare.hexDist(attacker.getPosition(), s) <= attacker.getRange()
-                && s.getUnit() != null
+            return s.getUnit() != null
                 //TODO: && can reach that unit?
                 && !sameOwner(attacker, s.getUnit());
         };

@@ -95,11 +95,16 @@ public class AStar
 
 
         pq.Enqueue(new AStarNode(start, null, 0), 0);
-        List<HexSquare> visited = new List<HexSquare>(){start};
-        AStarNode workingNode = pq.Dequeue();
-        while(pq.Count > 0 && workingNode.val != dest) {
+        List<HexSquare> visited = new List<HexSquare>(){};
+        
+        AStarNode workingNode = null;
+        while(pq.Count > 0) {
+            workingNode = pq.Dequeue();
+            if(workingNode.val == dest) {
+                break;
+            }
+
             if(visited.Contains(workingNode.val)) {
-                workingNode = pq.Dequeue();
                 continue;
             }
 
@@ -112,8 +117,6 @@ public class AStar
                     pq.Enqueue(new AStarNode(neighbor, workingNode, weight), heursiticWeight);
                 }
             }
-
-            workingNode = pq.Dequeue();
         }
 
         List<HexSquare> pathSequence = new List<HexSquare>();

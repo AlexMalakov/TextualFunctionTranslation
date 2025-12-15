@@ -72,11 +72,9 @@ public abstract class Unit : MonoBehaviour
     }
 
     public virtual void checkUnitHasTask(CombatManager manager) {
-        Debug.Log("CHECLONG FOR TASK!" + this.currentTarget);
         if(this.currentTarget == null || this.currentTarget.isDead() /* || distance(this, currentTarget) > range*/) {
             this.currentTarget = this.manager.requestAttackTarget(this, this.currentTarget);
             //problem: need to wait out animation
-            Debug.Log("WAS GIVEN TARGET " + this.currentTarget);
         }
     
         if(this.framesToPause > 0) { //i am already doing a task
@@ -86,7 +84,7 @@ public abstract class Unit : MonoBehaviour
         
         //i am not doing a task but have a target, so i am going to go to that target
         if(this.currentTarget == null) {
-            Debug.Log("NULL!");
+            Debug.Log("IDLE!");
             this.beIdle();//do nothing for a couple of frames, try again after
         }else if(this.canReachTarget()) {
             Debug.Log("ATTACK!");
@@ -129,6 +127,7 @@ public abstract class Unit : MonoBehaviour
     //moev one square towards target
     private void walkTowardsTarget() {
         HexSquare walkTo = this.manager.requestRoute(this, this.currentTarget);
+        Debug.Log(walkTo.toString() + "<--- walkTo" + this.curPosition.toString() + "<----- walk from");
         if(walkTo.isSquare()) {
             this.getPosition().claimSquare(this, false);
             walkTo.claimSquare(this, true);

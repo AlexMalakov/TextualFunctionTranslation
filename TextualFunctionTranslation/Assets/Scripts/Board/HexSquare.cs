@@ -89,4 +89,8 @@ public class HexSquare : MonoBehaviour
             this.unit = null;
         }
     }
+
+    public string toString() {
+        return this.getCoords().toOffset().x + ", " + this.getCoords().toOffset().y;
+    }
 }
