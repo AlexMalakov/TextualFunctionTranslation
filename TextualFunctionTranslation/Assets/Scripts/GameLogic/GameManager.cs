@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
         this.onCombatStart();
     }
 
-    //TODO HOOK THIS AND END TO SOMETHING
+    //TODO HOOK THIS END TO SOMETHING
     private void onCombatStart() {
         this.combatManager.initializeCombat();
         this.inCombat = true;
