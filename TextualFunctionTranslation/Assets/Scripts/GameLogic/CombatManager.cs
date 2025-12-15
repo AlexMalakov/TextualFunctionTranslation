@@ -17,12 +17,15 @@ public class CombatManager : MonoBehaviour
 
     public void initializeCombat() {
         this.units = new List<Unit>();
-        this.units.AddRange(this.player.getUnits());
-        this.units.AddRange(this.enemy.getUnits());
-        livingPlayerUnits = this.player.getUnits().Count;
-        livingEnemyUnits = this.enemy.getUnits().Count;
+        this.units.AddRange(this.player.getActiveUnits());
+        this.units.AddRange(this.enemy.getActiveUnits());
+        livingPlayerUnits = this.player.getActiveUnits().Count;
+        livingEnemyUnits = this.enemy.getActiveUnits().Count;
         this.units.Sort((a,b) => a.getDecisionPriority().CompareTo(b.getDecisionPriority())); //TODO: swap with inumerable.OrderBy to make this stable so its deterministic
         //TODO: knob to tune: tiebreak behavior. Does player get to win ties?6
+
+        this.player.getUnitLayout().placeUnits();
+        this.enemy.getUnitLayout().placeUnits();
     }
 
     //check each unit every frame
@@ -37,8 +40,8 @@ public class CombatManager : MonoBehaviour
     }
 
     private bool sameOwner(Unit unit1, Unit unit2) {
-        return (this.player.getUnits().Contains(unit1) && this.player.getUnits().Contains(unit2))
-            || (this.enemy.getUnits().Contains(unit1) && this.enemy.getUnits().Contains(unit2));
+        return (this.player.getActiveUnits().Contains(unit1) && this.player.getActiveUnits().Contains(unit2))
+            || (this.enemy.getActiveUnits().Contains(unit1) && this.enemy.getActiveUnits().Contains(unit2));
     }
 
     public Unit requestAttackTarget(Unit attacker, Unit previousTarget) {
@@ -73,12 +76,12 @@ public class CombatManager : MonoBehaviour
     }
 
     public void onUnitDeath(Unit u) {
-        if(player.getUnits().Contains(u)) {
+        if(player.getActiveUnits().Contains(u)) {
             this.livingPlayerUnits--;
             if(livingPlayerUnits <= 0) {
                 this.onCombatOver();
             }
-        } else if(enemy.getUnits().Contains(u)) {
+        } else if(enemy.getActiveUnits().Contains(u)) {
             this.livingEnemyUnits--;
             if(livingEnemyUnits <= 0) {
                 this.onCombatOver();

@@ -99,9 +99,10 @@ public abstract class Unit : MonoBehaviour
         return this.curPosition;
     }
 
-    public void setPosition(HexSquare square) {
+    public void placeUnitOnSquare(HexSquare square) {
         this.curPosition = square;
         square.claimSquare(this, true);
+        this.transform.position = square.transform.position;
     }
 
 

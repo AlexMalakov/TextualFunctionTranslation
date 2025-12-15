@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     private bool inCombat = false;    
 
     [SerializeField] private CombatScheduler combatSched;
-    [SerializeField] private CombatManager manager;
+    [SerializeField] private CombatManager combatManager;
 
 
 
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
     //TODO HOOK THIS AND END TO SOMETHING
     private void onCombatStart() {
-        this.manager.initializeCombat();
+        this.combatManager.initializeCombat();
         this.inCombat = true;
     }
 

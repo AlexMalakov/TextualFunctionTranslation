@@ -20,6 +20,7 @@ public struct AxialCoord {
     }
 }
 
+[Serializable]
 public struct OffsetCoord {
     public int x, y;
 

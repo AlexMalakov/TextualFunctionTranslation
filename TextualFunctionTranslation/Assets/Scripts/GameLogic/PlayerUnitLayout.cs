@@ -7,7 +7,7 @@ using System;
 public struct USPair
 {
     public Unit unit;
-    public HexSquare hex;
+    public OffsetCoord coord;
 }
 
 public class PlayerUnitLayout : MonoBehaviour
@@ -15,11 +15,12 @@ public class PlayerUnitLayout : MonoBehaviour
     private Dictionary<Unit, HexSquare> layout;
 
     [SerializeField] private List<USPair> startingLayout;
+    [SerializeField] private HexBoard board;
 
     public void Awake() {
         layout = new Dictionary<Unit, HexSquare>();
         foreach(USPair u in this.startingLayout) {
-            this.layout.Add(u.unit, u.hex);
+            this.layout.Add(u.unit, this.board.getHexAt(u.coord));
         }
     }
     
@@ -40,8 +41,12 @@ public class PlayerUnitLayout : MonoBehaviour
             Unit u = kvp.Key;
             HexSquare sq = kvp.Value;
 
-            u.setPosition(sq);
+            u.placeUnitOnSquare(sq);
         }
+    }
+
+    public Dictionary<Unit, HexSquare> getUnitLayout() {
+        return this.layout;
     }
 
 
