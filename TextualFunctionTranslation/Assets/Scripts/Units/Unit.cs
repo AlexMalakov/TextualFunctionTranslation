@@ -22,10 +22,6 @@ struct StarStats {
     }
 }
 
-enum UnitState {
-    Attacking, Idle
-}
-
 public abstract class Unit : MonoBehaviour
 {
     [Header ("Stats")]
@@ -47,6 +43,7 @@ public abstract class Unit : MonoBehaviour
 
     [Header ("Objects")]
     [SerializeField] private CombatManager manager;
+    [SerializeField] private Animator animator;
 
     private float currentHealth;
     private Unit currentTarget;
@@ -74,7 +71,7 @@ public abstract class Unit : MonoBehaviour
         return this.tauntAmount;
     }
 
-    public void checkUnitHasTask(CombatManager manager) {
+    public virtual void checkUnitHasTask(CombatManager manager) {
         if(this.currentTarget == null || this.currentTarget.isDead() /* || distance(this, currentTarget) > range*/) {
             this.currentTarget = this.manager.requestAttackTarget(this, this.currentTarget);
             //problem: need to wait out animation
@@ -111,6 +108,7 @@ public abstract class Unit : MonoBehaviour
         this.currentTarget.takeDamage(this.damage.getStat(this.starLevel));
 
         //TODO: trigger animation
+        this.animator.SetTrigger("Attack");
 
         this.setLockout(this.timeBetweenAttack);
     }
@@ -142,6 +140,8 @@ public abstract class Unit : MonoBehaviour
             yield return null;
         }
 
+        this.animator.SetTrigger("Walk");
+
         this.curPosition = walkTo;
         this.isMoving = true;
         this.requestOverride = false;
@@ -165,7 +165,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     private void beIdle() {
-        //TODO: idle animation?
+        this.animator.SetTrigger("Idle");
         this.setLockout(.2f);
     }
 

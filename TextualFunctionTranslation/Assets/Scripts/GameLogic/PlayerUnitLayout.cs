@@ -17,8 +17,8 @@ public class PlayerUnitLayout : MonoBehaviour
     [SerializeField] private List<USPair> startingLayout;
     [SerializeField] private HexBoard board;
 
-    public void Awake() {
-        layout = new Dictionary<Unit, HexSquare>();
+    public void initLayout() {
+        this.layout = new Dictionary<Unit, HexSquare>();
         foreach(USPair u in this.startingLayout) {
             this.layout.Add(u.unit, this.board.getHexAt(u.coord));
         }

@@ -8,7 +8,12 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private CombatScheduler combatSched;
     [SerializeField] private CombatManager combatManager;
+    [SerializeField] private HexBoard board;
 
+    void Awake() {
+        this.board.initBoard();
+        this.combatManager.initPlayers();
+    }
 
 
     void Update() {

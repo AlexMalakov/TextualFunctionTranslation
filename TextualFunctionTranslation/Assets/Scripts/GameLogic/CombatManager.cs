@@ -15,6 +15,11 @@ public class CombatManager : MonoBehaviour
     private int livingEnemyUnits = -1;
     private List<Unit> units;
 
+    public void initPlayers() {
+        player.init();
+        enemy.init();
+    }
+
     public void initializeCombat() {
         this.units = new List<Unit>();
         this.units.AddRange(this.player.getActiveUnits());

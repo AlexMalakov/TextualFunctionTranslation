@@ -16,7 +16,8 @@ public class HexBoard : MonoBehaviour
 
 
     //create a hex board that will be used
-    public void Awake() {
+    public void initBoard() {
+        Debug.Log("????");
         for(int y = 0; y < 8; y++) {
             List<HexSquare> lis = new List<HexSquare>();
             for(int x = 0; x < ((y % 2 == 0) ? 6 : 7); x++) {
@@ -25,6 +26,8 @@ public class HexBoard : MonoBehaviour
             }
             this.squares.Add(lis);
         }
+        Debug.Log("DONE?");
+        Debug.Log(this.squares.Count + " | " + "????");
     }
 
     public HexSquare getHexAt(AxialCoord c) {
@@ -32,6 +35,7 @@ public class HexBoard : MonoBehaviour
     }
 
     public HexSquare getHexAt(OffsetCoord c) {
+        Debug.Log("finding hex: " + c.x + ", " + c.y + ", " + this.squares.Count + " ycon | ");
         if(this.squares.Count > c.y && c.y >= 0 && this.squares[c.y].Count > c.x && c.x >= 0) {
             return this.squares[c.y][c.x];
         }
