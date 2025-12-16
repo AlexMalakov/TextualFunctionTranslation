@@ -12,6 +12,12 @@ public struct AxialCoord {
         this.s = -q - r;
     }
 
+    public AxialCoord(int q, int r, int s) {
+        this.q = q;
+        this.r = r;
+        this.s = s;
+    }
+
     public OffsetCoord toOffset() {
         int parity = r&1;
         int x = q + (r - parity) / 2;
@@ -49,12 +55,12 @@ public class HexSquare : MonoBehaviour
 
     public virtual List<AxialCoord> getNeighborCoords() {
         return new List<AxialCoord>(){
-            new AxialCoord(this.axc.q+1, this.axc.r),
-            new AxialCoord(this.axc.q-1, this.axc.r),
-            new AxialCoord(this.axc.q, this.axc.r+1),
-            new AxialCoord(this.axc.q, this.axc.r-1),
-            new AxialCoord(this.axc.q+1, this.axc.r-1),
-            new AxialCoord(this.axc.q-1, this.axc.r+1)};
+            new AxialCoord(this.axc.q+1, this.axc.r-1, this.axc.s),
+            new AxialCoord(this.axc.q+1, this.axc.r, this.axc.s-1),
+            new AxialCoord(this.axc.q-1, this.axc.r+1, this.axc.s),
+            new AxialCoord(this.axc.q-1, this.axc.r, this.axc.s+1),
+            new AxialCoord(this.axc.q, this.axc.r+1, this.axc.s-1),
+            new AxialCoord(this.axc.q, this.axc.r-1, this.axc.s+1)};
     }
 
     public virtual AxialCoord getCoords() {

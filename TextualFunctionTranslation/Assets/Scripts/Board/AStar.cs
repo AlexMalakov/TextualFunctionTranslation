@@ -17,6 +17,7 @@ class StablePriorityQueue<T> {
 
 
     public T Dequeue() {
+        printHeap();
         T item = heap[0].item;
         heap[0] = heap[Count - 1];
         heap.RemoveAt(Count - 1);
@@ -25,6 +26,7 @@ class StablePriorityQueue<T> {
     }
 
     private void heapifyUp(int index) {
+        printHeap();
         if(index/2 >= 0 && index > 0 && this.gt(heap[index/2], heap[index])) {
             (T item, int priority, long order) swap = heap[index];
             heap[index] = heap[index/2];
@@ -37,12 +39,12 @@ class StablePriorityQueue<T> {
         if(index < Count) {
             int smallestIndex = index;
 
-            if(index*2 < Count &&  this.gt(heap[index], heap[index*2]) ) {
-                smallestIndex = index*2;
+            if((index*2) + 1 < Count &&  this.gt(heap[index], heap[(index*2) + 1]) ) {
+                smallestIndex = (index*2) + 1;
             }
 
-            if((index * 2) + 1 < Count && this.gt(heap[smallestIndex], heap[(index*2) + 1])) {
-                smallestIndex = (index * 2) + 1;
+            if((index * 2) + 2 < Count && this.gt(heap[smallestIndex], heap[(index*2) + 2])) {
+                smallestIndex = (index * 2) + 2;
             }
 
             if(smallestIndex != index) {
@@ -72,6 +74,27 @@ class StablePriorityQueue<T> {
         }
 
         return false;
+    }
+
+    private void printHeap() {
+        // Debug.Log("PRINTING HEAP!");
+        // for(int i = 0; i < heap.Count; i++) {
+        //     string message = "node at list index: " + i + " = " + heap[i];
+        //     if(i/2 > 0 && i > 0) {
+        //         message = message + " | parent " + i/2 + " = " + heap[i/2];
+        //     }
+
+        //     if(2*i < heap.Count - 1) {
+        //         message = message + " | child " + (2*i + 1) + " = " + heap[2*i+1];
+        //     }
+
+        //     if(2*i < heap.Count - 2) {
+        //         message = message + " | child " + (2*i + 2) + " = " + heap[2*i + 2];
+        //     }
+        //     Debug.Log(message);
+        // }
+        // Debug.Log("===========================");
+        // Debug.Log("===========================");
     }
 }
 
@@ -104,14 +127,25 @@ public class AStar
                 break;
             }
 
+            
+            // string visitedCon = "";
+            // foreach(HexSquare hs in visited) {
+            //     visitedCon += " | " + hs.toString();
+            // }
+            // Debug.Log("VISITED CONTAINS" + visitedCon);
+            // Debug.Log("I AM " + workingNode.val.toString());
+
             if(visited.Contains(workingNode.val)) {
+                // Debug.Log("skipped!!!!!!!");
                 continue;
             }
+            // Debug.Log("CONTINUINGING INTO NEIGHBORS???");
 
             visited.Add(workingNode.val);
             foreach(AxialCoord axc in workingNode.val.getNeighborCoords()) {
                 HexSquare neighbor = board.getHexAt(axc);
-                if(neighbor.isSquare() && !visited.Contains(neighbor) && neighbor.getUnit() == null) {
+                if(neighbor.isSquare() && !visited.Contains(neighbor) && (neighbor.getUnit() == null || neighbor == dest)) {
+                    // Debug.Log("I am" + workingNode.val.toString() +"ADDIGN NEIGHBOR: " + neighbor.toString());
                     int weight = workingNode.weight + 1;
                     int heursiticWeight = weight + HexSquare.hexDist(neighbor, dest);
                     pq.Enqueue(new AStarNode(neighbor, workingNode, weight), heursiticWeight);
@@ -119,12 +153,14 @@ public class AStar
             }
         }
 
+        Debug.Log("calculated route dest to start!!!!!!!!!!!!!!!!");
         List<HexSquare> pathSequence = new List<HexSquare>();
         while(workingNode != null) {
+            Debug.Log("next node: " + workingNode.val.toString());
             pathSequence.Add(workingNode.val);
             workingNode = workingNode.prev;
         }
-
+        Debug.Log("===========================");
         return pathSequence;
     }
 }

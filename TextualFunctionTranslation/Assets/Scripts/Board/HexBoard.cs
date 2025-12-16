@@ -41,6 +41,7 @@ public class HexBoard : MonoBehaviour
     //returns null if path does not exist
     
     public HexSquare pathfindToSquare(HexSquare source, HexSquare dest) {
+        Debug.Log("DOING ROUTE TO FROM" + source.toString() + " | " + dest.toString());
         List<HexSquare> path = AStar.runAStar(source, dest, this);
         return path.Count > 2 ? path[path.Count-2] : this.nullSQ;
     }
