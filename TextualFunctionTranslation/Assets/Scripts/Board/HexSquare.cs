@@ -13,14 +13,17 @@ public struct AxialCoord {
     }
 
     public AxialCoord(int q, int r, int s) {
+        if(q + r + s != 0) {
+            throw new Exception("INVALID Q R S VALUES!");
+        }
         this.q = q;
         this.r = r;
         this.s = s;
     }
 
     public OffsetCoord toOffset() {
-        int parity = r&1;
-        int x = q + (r - parity) / 2;
+        int parity = r|0;
+        int x = q + (int)Mathf.Floor((r - parity) * .5f);
         int y = r;
         return new OffsetCoord(x, y);
     }
@@ -36,8 +39,8 @@ public struct OffsetCoord {
     }
 
     public AxialCoord toAxial() {
-        int parity = y&1;
-        int q = x - (y - parity) / 2;
+        int parity = y|1;
+        int q = x - (int)Mathf.Floor((y - parity) * .5f);
         int r = y;
         return new AxialCoord(q, r);
     }
@@ -97,6 +100,7 @@ public class HexSquare : MonoBehaviour
     }
 
     public string toString() {
-        return this.getCoords().toOffset().x + ", " + this.getCoords().toOffset().y;
+        // return this.getCoords().toOffset().x + ", " + this.getCoords().toOffset().y;
+        return "OFFEST: " + this.getCoords().toOffset().x + ", " + this.getCoords().toOffset().y + " CUBIC: " + this.getCoords().q+ ", " + this.getCoords().r+ ", " + this.getCoords().s;
     }
 }

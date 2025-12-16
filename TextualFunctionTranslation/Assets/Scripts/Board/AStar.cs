@@ -153,14 +153,14 @@ public class AStar
             }
         }
 
-        Debug.Log("calculated route dest to start!!!!!!!!!!!!!!!!");
+        // Debug.Log("calculated route dest to start!!!!!!!!!!!!!!!!");
         List<HexSquare> pathSequence = new List<HexSquare>();
         while(workingNode != null) {
-            Debug.Log("next node: " + workingNode.val.toString());
+            // Debug.Log("next node: " + workingNode.val.toString());
             pathSequence.Add(workingNode.val);
             workingNode = workingNode.prev;
         }
-        Debug.Log("===========================");
+        // Debug.Log("===========================");
         return pathSequence;
     }
 }
