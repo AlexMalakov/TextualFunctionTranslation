@@ -108,6 +108,7 @@ public abstract class Unit : MonoBehaviour
 
     private void unitAttack() {
         //attack target
+        transform.LookAt(this.currentTarget.transform);
         this.currentTarget.takeDamage(this.damage.getStat(this.starLevel));
 
         //TODO: trigger animation
@@ -147,6 +148,7 @@ public abstract class Unit : MonoBehaviour
         this.animator.SetTrigger("Walk");
 
         this.curPosition = walkTo;
+        transform.LookAt(walkTo.transform);
         this.isMoving = true;
         this.requestOverride = false;
         Vector3 startPos = transform.position;

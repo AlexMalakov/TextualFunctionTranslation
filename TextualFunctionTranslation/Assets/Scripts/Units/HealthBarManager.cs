@@ -1,0 +1,50 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.UI;
+using UnityEngine;
+
+public class HealthBarManager : MonoBehaviour
+{
+    [SerializeField] private Image healthFill;
+    [SerializeField] private Image damageFill;
+
+    [SerializeField] private float chipDelay = 0.15f;
+    [SerializeField] private float chipSpeed = 2f;
+
+    private float currentHealth;
+    private float maxHealth;
+    private Coroutine chipRoutine;
+
+    public void init(float maxHealth) {
+        this.currentHealth = maxHealth;
+        this.currentHealth = maxHealth;
+        this.healthFill.fillAmount = 1f;
+        this.damageFill.fillAmount = 1f;
+    }
+
+    public void updateDamage(float damage) {
+        currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
+
+        float targetFill = currentHealth / maxHealth;
+        healthFill.fillAmount = targetFill;
+
+        if (chipRoutine != null)
+            StopCoroutine(chipRoutine);
+
+        chipRoutine = StartCoroutine(ChipDamage(targetFill));
+    }
+
+    IEnumerator ChipDamage(float targetFill) {
+        yield return new WaitForSeconds(chipDelay);
+
+        while (damageFill.fillAmount > targetFill)
+        {
+            damageFill.fillAmount = Mathf.MoveTowards(
+                damageFill.fillAmount,
+                targetFill,
+                chipSpeed * Time.deltaTime
+            );
+            yield return null;
+        }
+    }
+}
