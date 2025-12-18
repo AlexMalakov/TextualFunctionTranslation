@@ -44,6 +44,7 @@ public abstract class Unit : MonoBehaviour
     [Header ("Objects")]
     [SerializeField] private CombatManager manager;
     [SerializeField] private Animator animator;
+    private HealthBarManager hpBar;
 
     private float currentHealth;
     private Unit currentTarget;
@@ -97,6 +98,11 @@ public abstract class Unit : MonoBehaviour
 
     public HexSquare getPosition() {
         return this.curPosition;
+    }
+
+    public void initUnit(HexSquare square, HealthBarManager hpBar) {
+        this.hpBar = hpBar;
+        this.placeUnitOnSquare(square);
     }
 
     public void placeUnitOnSquare(HexSquare square) {
@@ -186,7 +192,7 @@ public abstract class Unit : MonoBehaviour
 
     public void takeDamage(float damage) {
         this.currentHealth -= damage;
-        //set healthbar to be max of 0, currentHealth
+        this.hpBar.updateDamage(damage);
 
         if(this.currentHealth <= 0) {
             this.onDeath();
@@ -195,7 +201,15 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void onDeath() {
+        //play dying animatiom?
 
+        //careful that this isn't called more than once
+        Invoke(nameof(die), .3f);
+    }
+
+    private void die() {
+        this.hpBar.onDeath();
+        Destroy(this.gameObject);
     }
 
     /*

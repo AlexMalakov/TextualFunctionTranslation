@@ -39,7 +39,7 @@ public class HealthBarManager : MonoBehaviour
         chipRoutine = StartCoroutine(ChipDamage(targetFill));
     }
 
-    IEnumerator ChipDamage(float targetFill) {
+    private IEnumerator ChipDamage(float targetFill) {
         yield return new WaitForSeconds(chipDelay);
 
         while (damageFill.fillAmount > targetFill)
@@ -56,5 +56,9 @@ public class HealthBarManager : MonoBehaviour
     public void LateUpdate() {
         if (this.target)
             transform.position = this.target.position + this.worldOffset;
+    }
+
+    public void onDeath() {
+        Destroy(this.gameObject);
     }
 }

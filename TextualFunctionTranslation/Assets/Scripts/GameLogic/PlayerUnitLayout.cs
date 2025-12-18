@@ -36,12 +36,12 @@ public class PlayerUnitLayout : MonoBehaviour
         this.layout.Remove(u);
     }
 
-    public void placeUnits() {
+    public void placeUnits(GameObject hpBarPrefab) {
         foreach (KeyValuePair<Unit, HexSquare> kvp in this.layout) {
             Unit u = kvp.Key;
             HexSquare sq = kvp.Value;
 
-            u.placeUnitOnSquare(sq);
+            u.initUnit(sq, Instantiate(hpBarPrefab).GetComponent<HealthBarManager>());
         }
     }
 
