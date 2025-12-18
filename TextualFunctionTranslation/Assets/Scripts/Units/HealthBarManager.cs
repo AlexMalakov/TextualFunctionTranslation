@@ -8,18 +8,23 @@ public class HealthBarManager : MonoBehaviour
     [SerializeField] private Image healthFill;
     [SerializeField] private Image damageFill;
 
+    [SerializeField] private Vector3 worldOffset = new Vector3(0, 2f, 0);
     [SerializeField] private float chipDelay = 0.15f;
     [SerializeField] private float chipSpeed = 2f;
 
     private float currentHealth;
     private float maxHealth;
+    private Transform target;
     private Coroutine chipRoutine;
 
-    public void init(float maxHealth) {
+    public void init(float maxHealth, Transform target) {
         this.currentHealth = maxHealth;
         this.currentHealth = maxHealth;
         this.healthFill.fillAmount = 1f;
         this.damageFill.fillAmount = 1f;
+        this.target = target;
+        
+        transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
     }
 
     public void updateDamage(float damage) {
@@ -46,5 +51,10 @@ public class HealthBarManager : MonoBehaviour
             );
             yield return null;
         }
+    }
+
+    public void LateUpdate() {
+        if (this.target)
+            transform.position = this.target.position + this.worldOffset;
     }
 }
