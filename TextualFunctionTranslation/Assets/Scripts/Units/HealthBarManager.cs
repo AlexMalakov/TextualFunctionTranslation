@@ -17,14 +17,15 @@ public class HealthBarManager : MonoBehaviour
     private Transform target;
     private Coroutine chipRoutine;
 
-    public void init(float maxHealth, Transform target) {
+    public void init(float maxHealth, Transform target, Transform canvasParent) {
+        this.transform.parent = canvasParent;
         this.currentHealth = maxHealth;
         this.currentHealth = maxHealth;
         this.healthFill.fillAmount = 1f;
         this.damageFill.fillAmount = 1f;
         this.target = target;
         
-        transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
+        // transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
     }
 
     public void updateDamage(float damage) {

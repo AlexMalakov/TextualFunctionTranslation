@@ -100,8 +100,11 @@ public abstract class Unit : MonoBehaviour
         return this.curPosition;
     }
 
-    public void initUnit(HexSquare square, HealthBarManager hpBar) {
+    public void initUnit(HexSquare square, HealthBarManager hpBar, Transform hpCanvas) {
         this.hpBar = hpBar;
+        this.currentHealth = this.health.getStat(this.starLevel);
+        this.currentTarget = null;
+        this.hpBar.init(this.currentHealth, this.transform, hpCanvas);
         this.placeUnitOnSquare(square);
     }
 
@@ -114,7 +117,8 @@ public abstract class Unit : MonoBehaviour
 
     private void unitAttack() {
         //attack target
-        transform.LookAt(this.currentTarget.transform);
+        Vector3 lookAt = new Vector3(this.currentTarget.transform.position.x, this.transform.position.y, this.currentTarget.transform.position.z);
+        transform.LookAt(lookAt);
         this.currentTarget.takeDamage(this.damage.getStat(this.starLevel));
 
         //TODO: trigger animation
@@ -154,7 +158,8 @@ public abstract class Unit : MonoBehaviour
         this.animator.SetTrigger("Walk");
 
         this.curPosition = walkTo;
-        transform.LookAt(walkTo.transform);
+        Vector3 lookAt = new Vector3(walkTo.transform.position.x, this.transform.position.y, walkTo.transform.position.z);
+        transform.LookAt(lookAt);
         this.isMoving = true;
         this.requestOverride = false;
         Vector3 startPos = transform.position;

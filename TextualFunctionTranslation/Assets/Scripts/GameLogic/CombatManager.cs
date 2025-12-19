@@ -10,6 +10,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private Player enemy;
     [SerializeField] private HexBoard board;
     [SerializeField] private GameObject healthbarPrefab;
+    [SerializeField] private Transform hpCanvas;
 
     //not very nice but it will make this unit division work better
     private int livingPlayerUnits = -1;
@@ -30,8 +31,8 @@ public class CombatManager : MonoBehaviour
         this.units.Sort((a,b) => a.getDecisionPriority().CompareTo(b.getDecisionPriority())); //TODO: swap with inumerable.OrderBy to make this stable so its deterministic
         //TODO: knob to tune: tiebreak behavior. Does player get to win ties?6
 
-        this.player.getUnitLayout().placeUnits(this.healthbarPrefab);
-        this.enemy.getUnitLayout().placeUnits(this.healthbarPrefab);
+        this.player.getUnitLayout().placeUnits(this.healthbarPrefab, hpCanvas);
+        this.enemy.getUnitLayout().placeUnits(this.healthbarPrefab, hpCanvas);
     }
 
     //check each unit every frame
