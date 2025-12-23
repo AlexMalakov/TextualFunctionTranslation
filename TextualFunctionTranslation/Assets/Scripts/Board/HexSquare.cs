@@ -23,7 +23,7 @@ public struct AxialCoord {
 
     public OffsetCoord toOffset() {
         int parity = r|0;
-        int x = q + (int)Mathf.Floor((r - parity) * .5f);
+        int x = q + (int)Mathf.Floor((r + parity) * .5f);
         int y = r;
         return new OffsetCoord(x, y);
     }
@@ -40,7 +40,7 @@ public struct OffsetCoord {
 
     public AxialCoord toAxial() {
         int parity = y|1;
-        int q = x - (int)Mathf.Floor((y - parity) * .5f);
+        int q = x - (int)Mathf.Floor((y + parity) * .5f);
         int r = y;
         return new AxialCoord(q, r);
     }

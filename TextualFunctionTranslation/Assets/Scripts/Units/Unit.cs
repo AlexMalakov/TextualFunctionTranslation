@@ -138,7 +138,7 @@ public abstract class Unit : MonoBehaviour
     //moev one square towards target
     private void walkTowardsTarget() {
         HexSquare walkTo = this.manager.requestRoute(this, this.currentTarget);
-        Debug.Log(walkTo.toString() + "<--- walkTo" + this.curPosition.toString() + "<----- walk from");
+        // Debug.Log(walkTo.toString() + "<--- walkTo" + this.curPosition.toString() + "<----- walk from");
         if(walkTo.isSquare()) {
             this.getPosition().claimSquare(this, false);
             walkTo.claimSquare(this, true);
