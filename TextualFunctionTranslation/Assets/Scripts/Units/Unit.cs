@@ -27,6 +27,7 @@ public abstract class Unit : MonoBehaviour
     [Header ("Stats")]
     [SerializeField] private StarStats health;
     [SerializeField] private StarStats damage;
+    [SerializeField] private float attackWindup;
     [SerializeField] private float timeBetweenAttack;
     [SerializeField] private float timeBetweenMove;
     [SerializeField] private int range;
@@ -89,7 +90,7 @@ public abstract class Unit : MonoBehaviour
             this.beIdle();//do nothing for a couple of frames, try again after
         }else if(this.canReachTarget()) {
             Debug.Log("ATTACK!");
-            this.unitAttack();
+            StartCoroutine(this.unitAttack());
         } else {
             Debug.Log("WALK!");
             this.walkTowardsTarget();
@@ -115,16 +116,20 @@ public abstract class Unit : MonoBehaviour
     }
 
 
-    private void unitAttack() {
+    private IEnumerator unitAttack() {
         //attack target
         Vector3 lookAt = new Vector3(this.currentTarget.transform.position.x, this.transform.position.y, this.currentTarget.transform.position.z);
         transform.LookAt(lookAt);
-        this.currentTarget.takeDamage(this.damage.getStat(this.starLevel));
+        // this.currentTarget.takeDamage(this.damage.getStat(this.starLevel));
 
         //TODO: trigger animation
         this.animator.SetTrigger("Attack");
 
         this.setLockout(this.timeBetweenAttack);
+        yield return new WaitForSeconds(this.attackWindup);
+        if(!this.isDead()) {
+            this.currentTarget.takeDamage(this.damage.getStat(this.starLevel));
+        }
     }
 
     //returns true if target is in range
