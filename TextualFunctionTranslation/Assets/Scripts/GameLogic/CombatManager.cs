@@ -51,7 +51,7 @@ public class CombatManager : MonoBehaviour
             || (this.enemy.getActiveUnits().Contains(unit1) && this.enemy.getActiveUnits().Contains(unit2));
     }
 
-    public Unit requestAttackTarget(Unit attacker, Unit previousTarget) { //I IS ALWAYS RETURNING NULL PROBABLY NOT CORRECT !!!!!!!!!!
+    public Unit requestAttackTarget(Unit attacker, Unit previousTarget) {
         Func<HexSquare, bool> getAttackableSquares = (HexSquare s) => {
             return s.getUnit() != null
                 //TODO: && can reach that unit?
@@ -61,12 +61,19 @@ public class CombatManager : MonoBehaviour
         List<HexSquare> possibleTargets = this.board.filterOperationOnSquares(getAttackableSquares);
 
         int bestTaunt = int.MinValue;
+        int closestTarget = int.MaxValue;
         Unit target = null;
         foreach(HexSquare s in possibleTargets) {
             if(s.getUnit() == previousTarget) {
                 return previousTarget;
             }
 
+            if(HexSquare.hexDist(attacker.getPosition(), s) < closestTarget) {
+                target = s.getUnit();
+                bestTaunt = target.getTaunt();
+                closestTarget = HexSquare.hexDist(attacker.getPosition(), s);
+                continue;
+            }
             if(s.getUnit().getTaunt() > bestTaunt) {
                 target = s.getUnit();
                 bestTaunt = target.getTaunt();
