@@ -20,7 +20,7 @@ public class HealthBarManager : MonoBehaviour
     public void init(float maxHealth, Transform target, Transform canvasParent) {
         this.transform.parent = canvasParent;
         this.currentHealth = maxHealth;
-        this.currentHealth = maxHealth;
+        this.maxHealth = maxHealth;
         this.healthFill.fillAmount = 1f;
         this.damageFill.fillAmount = 1f;
         this.target = target;
@@ -52,6 +52,8 @@ public class HealthBarManager : MonoBehaviour
             );
             yield return null;
         }
+
+        Debug.Log("POST DAMAGE!" + healthFill.fillAmount + " | " + damageFill.fillAmount);
     }
 
     public void LateUpdate() {

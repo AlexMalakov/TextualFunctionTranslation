@@ -169,7 +169,7 @@ MonoBehaviour:
   healthFill: {fileID: 7453024471714718916}
   damageFill: {fileID: 6231164681046273348}
   worldOffset: {x: 0, y: 0.8, z: 0}
-  chipDelay: 0.15
+  chipDelay: 1
   chipSpeed: 2
 --- !u!1 &5256481123572715783
 GameObject:
@@ -236,11 +236,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 6d5fe8036baea4b6ea5d781e7d12dd29, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -311,11 +311,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 6d5fe8036baea4b6ea5d781e7d12dd29, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
