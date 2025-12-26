@@ -219,7 +219,7 @@ public abstract class Unit : MonoBehaviour
 
     private void die() {
         this.hpBar.onDeath();
-        Destroy(this.gameObject);
+        this.gameObject.SetActive(false);
     }
 
     /*
