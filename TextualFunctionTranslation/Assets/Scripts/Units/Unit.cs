@@ -74,6 +74,10 @@ public abstract class Unit : MonoBehaviour
     }
 
     public virtual void checkUnitHasTask(CombatManager manager) {
+        if(this.isDead()) {
+            return;
+        }
+
         if(this.currentTarget == null || this.currentTarget.isDead() /* || distance(this, currentTarget) > range*/) {
             this.currentTarget = this.manager.requestAttackTarget(this, this.currentTarget);
             //problem: need to wait out animation
@@ -201,6 +205,11 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void takeDamage(float damage) {
+        if(this.isDead()) {
+            Debug.Log("HITTING A DEAD!");
+            return;
+        }
+
         this.currentHealth -= damage;
         this.hpBar.updateDamage(damage);
 
@@ -212,6 +221,9 @@ public abstract class Unit : MonoBehaviour
 
     public void onDeath() {
         //play dying animatiom?
+
+        this.manager.onUnitDeath(this);
+        this.curPosition.claimSquare(this, false);
 
         //careful that this isn't called more than once
         Invoke(nameof(die), .3f);
