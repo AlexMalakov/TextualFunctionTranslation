@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GameStage {
+    preperation, combat, result
+}
+
 public class GameManager : MonoBehaviour
 {
-    private bool inCombat = false;    
+    private GameStage gameState = GameStage.preperation;    
 
     [SerializeField] private CombatScheduler combatSched;
     [SerializeField] private CombatManager combatManager;
@@ -17,14 +21,16 @@ public class GameManager : MonoBehaviour
 
 
     void Update() {
-        if(this.inCombat) {
+        if(this.gameState == GameStage.combat) {
             this.handleCombat();
-        } else {
-            this.handleNonCombat();
+        } else if(this.gameState == GameStage.preperation){
+            this.handlePreperation();
+        } else { //results
+            this.gameState = GameStage.preperation;
         }
     }
 
-    private void handleNonCombat() {
+    private void handlePreperation() {
         //TODO: NON COMBAT PHASE
         this.onCombatStart();
     }
@@ -32,11 +38,11 @@ public class GameManager : MonoBehaviour
     //TODO HOOK THIS END TO SOMETHING
     private void onCombatStart() {
         this.combatManager.initializeCombat();
-        this.inCombat = true;
+        this.gameState = GameStage.combat;
     }
 
     private void onCombatEnd() {
-        this.inCombat = false;
+        this.gameState = GameStage.result;
     }
 
     private void handleCombat() {
