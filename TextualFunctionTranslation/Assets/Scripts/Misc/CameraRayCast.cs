@@ -14,6 +14,15 @@ public class CameraRayCast : MonoBehaviour
                     Debug.Log("raycast CLICKED! " + hit.collider.gameObject.GetComponentInParent<HexSquare>().toString());
                 }
             }
+        } else if(Input.GetMouseButtonUp(0)) {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit)) {
+                 if (hit.collider.gameObject.GetComponentInParent<HexSquare>() != null) {
+                    Debug.Log("raycast UNCLOCKED!!!! <----- ! " + hit.collider.gameObject.GetComponentInParent<HexSquare>().toString());
+                }
+            }
         }
     }
 }
