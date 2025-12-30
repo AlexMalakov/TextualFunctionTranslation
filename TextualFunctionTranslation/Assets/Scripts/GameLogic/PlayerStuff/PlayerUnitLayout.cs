@@ -15,6 +15,7 @@ public class PlayerUnitLayout : MonoBehaviour
     private Dictionary<Unit, HexSquare> layout;
 
     [SerializeField] private List<USPair> startingLayout;
+    [SerializeField] private Player player;
     [SerializeField] private HexBoard board;
 
     public void initLayout() {
@@ -24,16 +25,27 @@ public class PlayerUnitLayout : MonoBehaviour
         }
     }
     
-    public void updateLayout(Unit u, HexSquare square) {
+    //return false if fails
+    public bool attemptUpdateLayout(Unit u, HexSquare square) {
         if(this.layout.ContainsKey(u)) {
             this.layout[u] = square;
+            //
         } else {
+            if(this.player.getMaxCombatUnits() <= this.layout.Count) {
+                return false;//TODO: move unit back to the bench
+            }
             this.layout.Add(u, square);
+            //
         }
+        return true;
     }
 
     public void removeUnitFromLayout(Unit u) {
         this.layout.Remove(u);
+    }
+
+    public List<Unit> getActiveUnits() {
+        return new List<Unit>(this.layout.Keys);
     }
 
     public void placeUnits(GameObject hpBarPrefab, Transform hpCanvas) {

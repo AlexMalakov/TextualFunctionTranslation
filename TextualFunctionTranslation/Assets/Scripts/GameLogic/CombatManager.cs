@@ -47,8 +47,8 @@ public class CombatManager : MonoBehaviour
     }
 
     private bool sameOwner(Unit unit1, Unit unit2) {
-        return (this.player.getActiveUnits().Contains(unit1) && this.player.getActiveUnits().Contains(unit2))
-            || (this.enemy.getActiveUnits().Contains(unit1) && this.enemy.getActiveUnits().Contains(unit2));
+        return (this.player.ownsUnit(unit1) && this.player.ownsUnit(unit2))
+            || (this.enemy.ownsUnit(unit1) && this.enemy.ownsUnit(unit2));
     }
 
     public Unit requestAttackTarget(Unit attacker, Unit previousTarget) {
@@ -89,12 +89,12 @@ public class CombatManager : MonoBehaviour
     }
 
     public void onUnitDeath(Unit u) {
-        if(player.getActiveUnits().Contains(u)) {
+        if(player.ownsUnit(u) && this.livingPlayerUnits.Contains(u)) {
             this.livingPlayerUnits--;
             if(livingPlayerUnits <= 0) {
                 this.onCombatOver();
             }
-        } else if(enemy.getActiveUnits().Contains(u)) {
+        } else if(enemy.ownsUnit(u) && this.livingEnemyUnits.Contains(u)) {
             this.livingEnemyUnits--;
             if(livingEnemyUnits <= 0) {
                 this.onCombatOver();
