@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CombatScheduler combatSched;
     [SerializeField] private CombatManager combatManager;
     [SerializeField] private HexBoard board;
+    [SerializeField] private GameStartButton combatButton;
 
     void Awake() {
         this.board.initBoard();
@@ -38,11 +39,13 @@ public class GameManager : MonoBehaviour
     //TODO HOOK THIS END TO SOMETHING
     private void onCombatStart() {
         this.combatManager.initializeCombat();
+        this.combatButton.setEnabled(false);
         this.gameState = GameStage.combat;
     }
 
     private void onCombatEnd() {
         this.gameState = GameStage.result;
+        this.combatButton.setEnabled(true); //TODO - move this to preparation start method?
     }
 
     private void handleCombat() {

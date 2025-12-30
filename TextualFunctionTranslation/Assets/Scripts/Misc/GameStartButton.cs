@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameStartButton : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        //im a bozo and wrote my own script called "button"
+    [SerializeField] Button button;
+    [SerializeField] GameManager game;
+
+    private bool bEnabled = false;
+
+    public void Start() {
+        UnityEngine.UI.Button btn = button.GetComponent<UnityEngine.UI.Button>();
+		btn.onClick.AddListener(onButtonClick);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void onButtonClick() {
+        this.game.onCombatStart();
+    }
+
+    public void setEnabled(bool isEnabled) {
+        this.bEnabled = isEnabled;
     }
 }
+
