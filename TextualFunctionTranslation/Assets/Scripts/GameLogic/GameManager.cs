@@ -36,8 +36,7 @@ public class GameManager : MonoBehaviour
         this.onCombatStart();
     }
 
-    //TODO HOOK THIS END TO SOMETHING
-    private void onCombatStart() {
+    public void onCombatStart() {
         this.combatManager.initializeCombat();
         this.combatButton.setEnabled(false);
         this.gameState = GameStage.combat;
