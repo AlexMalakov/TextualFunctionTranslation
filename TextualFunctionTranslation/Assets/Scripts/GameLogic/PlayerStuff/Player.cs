@@ -22,8 +22,12 @@ public class Player : MonoBehaviour
         return this.unitLayout;
     }
 
+    public Bench getBench() {
+        return this.bench;
+    }
+
     public bool ownsUnit(Unit u) {
-        return this.playerUnits.Contains(u);
+        return this.playersUnits.Contains(u);
     }
 
     //returns true if a unit is in the combat layout

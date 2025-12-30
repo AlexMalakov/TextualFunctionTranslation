@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Bench : MonoBehaviour
@@ -21,8 +22,8 @@ public class Bench : MonoBehaviour
         return false;
     }
 
-    public void addUnitToBench(Unit u) {
-        if(!canAddUnitToBench) {
+    public void addUnitToBench(Unit u) { //TODO either spawn unit in bench or move unit into bench
+        if(!canAddUnitToBench()) {
             throw new Exception("BENCH IS FULL!!!");
         }
 

@@ -89,12 +89,12 @@ public class CombatManager : MonoBehaviour
     }
 
     public void onUnitDeath(Unit u) {
-        if(player.ownsUnit(u) && this.livingPlayerUnits.Contains(u)) {
+        if(player.ownsUnit(u)) {
             this.livingPlayerUnits--;
             if(livingPlayerUnits <= 0) {
                 this.onCombatOver();
             }
-        } else if(enemy.ownsUnit(u) && this.livingEnemyUnits.Contains(u)) {
+        } else if(enemy.ownsUnit(u)) {
             this.livingEnemyUnits--;
             if(livingEnemyUnits <= 0) {
                 this.onCombatOver();
