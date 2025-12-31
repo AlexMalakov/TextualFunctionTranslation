@@ -84,9 +84,7 @@ public class Bench : MonoBehaviour
     public void unitClickedOn(Unit u) {
         this.draggedUnits.Remove(u);
     }
-
     
-
     public bool updateBenchLayout(Unit u, int slotNum) {
         //TODO: check if unit can be used
         int posInBench = this.unitInBench(u);

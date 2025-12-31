@@ -5,6 +5,7 @@ using UnityEngine;
 public class MouseTransform : MonoBehaviour
 {
     [SerializeField] private float liftHeight = 0.5f;
+    [SerializeField] private Player humanPlayer;
     private Plane dragPlane;
     private Unit unitDragging;
     private Vector3 initialPos;
@@ -14,6 +15,9 @@ public class MouseTransform : MonoBehaviour
     }
 
     public void startUnitDrag(Unit u) {
+        this.humanPlayer.getUnitLayout().unitClickedOn(u);
+        this.humanPlayer.getBench().unitClickedOn(u);
+
         this.initialPos = u.transform.position;
         this.unitDragging = u;
     }
@@ -32,22 +36,38 @@ public class MouseTransform : MonoBehaviour
     }
 
     void endUnitDrag() {
+        bool succeeded = false;
         if(this.unitDragging != null) {
             // TODO: snapping logic
             Collider[] hits = Physics.OverlapSphere(this.transform.position, this.snapRadius);
 
             float closestObj = float.MaxValue;
-            Bench closestBench = null;
+            BenchSlot closestBench = null;
             HexSquare closestSquare = null;
             bool square = true;
 
-            // foreach(Collider c in hits) {
-            //     if(c.gameObject.GetComponentInParent<HexSquare>()) {
+            foreach(Collider c in hits) {
+                if(c.gameObject.GetComponentInParent<HexSquare>() != null) {
+                    if((c.gameObject.transform.position - this.transform.position).magnitude < closestObj) {
+                        closestObj = (c.gameObject.transform.position - this.transform.position).magnitude;
+                        square = true;
+                        closestSquare = c.gameObject.GetComponentInParent<HexSquare>();
+                    }
+                } else if(c.gameObject.GetComponent<BenchSlot>() != null) {
+                    if((c.gameObject.transform.position - this.transform.position).magnitude < closestObj) {
+                        closestObj = (c.gameObject.transform.position - this.transform.position).magnitude;
+                        square = false;
+                        closestBench = c.gameObject.GetComponentInParent<BenchSlot>();
+                    }
+                }
+            }
 
-            //     } else if(c.gameObject.GetComponentInParent<Bench>()) {
-
-            //     }
-            // }
+            
+            if(square && closestSquare != null) {
+                succeeded = this.humanPlayer.getUnitLayout().attemptUpdateLayout(this.unitDragging, closestSquare)
+            } else if(!square && closestBench != null) {
+                succeeded = this.humanPlayer.getBench().updateBenchLayout(this.unitDragging, closestBench.getSlotNum());
+            }
 
 
             //call bench or playerLayout => update method
@@ -55,6 +75,9 @@ public class MouseTransform : MonoBehaviour
             //or if no object is found in overlap then also just move it back to initialPosition
         }
 
+        if(!succeeded) {
+            StartCoroutine(returnUnit())
+        }
         this.unitDragging = null;
     }
 }

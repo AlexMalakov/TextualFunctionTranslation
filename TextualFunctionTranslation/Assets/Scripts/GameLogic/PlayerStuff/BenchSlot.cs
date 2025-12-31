@@ -27,4 +27,8 @@ public class BenchSlot : MonoBehaviour
         this.unit = u;
         return this.slotNum;
     }
+
+    public int getSlotNum() {
+        return this.slotNum;
+    }
 }
