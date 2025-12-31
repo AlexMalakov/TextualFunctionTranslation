@@ -49,9 +49,9 @@ public class PlayerUnitLayout : MonoBehaviour
             if(square.getUnit() != null) {
                 Unit swapper = square.getUnit();
                 this.layout.Remove(swapper);
-                this.player.getBench().addUnitToBench(swapper);
+                int dest = this.player.getBench().addUnitToBench(swapper);
 
-                StartCoroutine(this.player.getBench().dragUnitToBench(u));
+                StartCoroutine(this.player.getBench().dragUnitToBench(u, dest));
             }
             this.layout.Add(u, square);
         }
@@ -109,7 +109,7 @@ public class PlayerUnitLayout : MonoBehaviour
     }
 
     public void unitClickedOn(Unit u) {
-        this.draggedUnits.Remove(u)
+        this.draggedUnits.Remove(u);
     }
 
     private string jsonify() {

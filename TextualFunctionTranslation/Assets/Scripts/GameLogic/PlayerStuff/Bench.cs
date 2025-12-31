@@ -7,6 +7,8 @@ public class Bench : MonoBehaviour
 {
     Unit[] benchedUnits;
     [SerializeField] private int benchSize;
+    [SerializeField] private Transform benchStart;
+    [SerializeField] private float benchSlotOffset;
 
     private List<Unit> draggedUnits = new List<Unit>();
 
@@ -24,7 +26,7 @@ public class Bench : MonoBehaviour
         return false;
     }
 
-    public void addUnitToBench(Unit u) { //TODO either spawn unit in bench or move unit into bench
+    public int addUnitToBench(Unit u) { //TODO either spawn unit in bench or move unit into bench
         if(!canAddUnitToBench()) {
             throw new Exception("BENCH IS FULL!!!");
         }
@@ -32,9 +34,10 @@ public class Bench : MonoBehaviour
         for(int i = 0; i < this.benchedUnits.Length; i++) {
             if(this.benchedUnits[i] == null) {
                 this.benchedUnits[i] = u;
-                break;
+                return i;
             }
         }
+        return -1;
     }
 
     public void removeUnitFromBench(Unit u) {
@@ -48,21 +51,21 @@ public class Bench : MonoBehaviour
         throw new Exception("Unit not in bench!!!");
     }
 
-    public IEnumerator dragUnitToBench(Unit u) {
-        if(this.draggedUnits.Contains(u1)) { //is this possible? {
+    public IEnumerator dragUnitToBench(Unit u, int dest) {
+        if(this.draggedUnits.Contains(u)) { //is this possible? {
             yield break;
         }
-        this.draggedUnits.Add(u1);
+        this.draggedUnits.Add(u);
 
-        Vector3 startPos = u1.transform.position;
-        Vector3 endPos = Vector3.zero; //TODO: find the spot in the bench im going into
+        Vector3 startPos = u.transform.position;
+        Vector3 endPos = new Vector3(this.benchStart.x, this.benchStart.y, this.benchStart.z + dest * this.benchSlotOffset);
 
         float elapsed = 0f;
         float totalDur = (endPos - startPos).magnitude / this.player.getUnitDragSpeed();
 
         while(elapsed < totalDur) {
 
-            if (!this.draggedUnits.Contains(u1)) {
+            if (!this.draggedUnits.Contains(u)) {
                 yield break;
             }
 
@@ -71,11 +74,11 @@ public class Bench : MonoBehaviour
             yield return null;
         }
 
-        this.draggedUnits.Remove(u1);
+        this.draggedUnits.Remove(u);
     }
 
     public void unitClickedOn(Unit u) {
-        this.draggedUnits.Remove(u)
+        this.draggedUnits.Remove(u);
     }
 
     //TODO: might want to be able to organize bench although it doesn't really matter...
