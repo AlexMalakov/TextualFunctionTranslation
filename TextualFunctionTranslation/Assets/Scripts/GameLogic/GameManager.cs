@@ -25,9 +25,9 @@ public class GameManager : MonoBehaviour
     void Update() {
         if(this.gameState == GameStage.combat) {
             this.handleCombat();
-        } else if(this.gameState == GameStage.preperation){
+        } else if(this.gameState == GameStage.preperation) {
             this.handlePreperation();
-        } else { //results
+        } else { //results TODO make it do stuff el em ef ay oh
             this.gameState = GameStage.preperation;
         }
     }

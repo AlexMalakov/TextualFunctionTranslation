@@ -5,20 +5,8 @@ using UnityEngine;
 public class CameraRayCast : MonoBehaviour
 {
     [SerializeField] private MouseTransform mt;
-    private bool prepPhaseAcive = false;
 
-    public bool setPrepPhaseStatus(bool status) {
-        this.prepPhaseAcive = true;
-
-        if(!this.prepPhaseAcive) {
-            this.onUnitReleased();
-        }
-    }
-
-    void Update() {
-        if(!prepPhaseAcive) {
-            return;
-        }
+    public void checkUserInteraction() {
 
         if (Input.GetMouseButtonDown(0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -35,7 +23,7 @@ public class CameraRayCast : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit)) {
                 if (hit.collider.gameObject.GetComponentInParent<Unit>() != null) {
-                    this.onUnitReleased();
+                    this.releaseUnit();
                 }
             }
         }
@@ -46,7 +34,7 @@ public class CameraRayCast : MonoBehaviour
         this.mt.startUnitDrag(u);
     }
 
-    private void onUnitReleased() {
+    public void releaseUnit() {
         this.mt.endUnitDrag();
     }
 }
