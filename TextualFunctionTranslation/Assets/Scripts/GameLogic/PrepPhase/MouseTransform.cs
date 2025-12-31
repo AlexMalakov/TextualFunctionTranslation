@@ -7,12 +7,14 @@ public class MouseTransform : MonoBehaviour
     [SerializeField] private float liftHeight = 0.5f;
     private Plane dragPlane;
     private Unit unitDragging;
+    private Vectror3 initialPos;
 
     void Start() {
         this.dragPlane = new Plane(Vector3.up, Vector3.zero);
     }
 
     public void startUnitDrag(Unit u) {
+        this.initialPos = u.transform.position;
         this.unitDragging = u;
     }
 
@@ -32,6 +34,20 @@ public class MouseTransform : MonoBehaviour
     void endUnitDrag() {
         if(this.unitDragging != null) {
             // TODO: snapping logic
+            Collider[] hits = Physics.OverlapSphere(this.transform.position, this.snapRadius);
+
+            float closestObj = float.MaxValue;
+            Bench closestBench = null;
+            HexSquare closestSquare = null;
+            bool square = true;
+
+            foreach(Collider c in hits) {
+                if(c.gameObject.GetComponentInParent<HexSquare>()) {
+
+                } else if(c.gameObject.GetComponentInParent<Bench>()) {
+                    
+                }
+            }
         }
 
         this.unitDragging = null;

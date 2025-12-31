@@ -32,7 +32,6 @@ public class PlayerUnitLayout : MonoBehaviour
     //this is ugly as shit but womp womp
     public bool attemptUpdateLayout(Unit u, HexSquare square) {
         //TODO: check if unit and square can be used for layout
-        //TODO: move units to new positions
         if(this.layout.ContainsKey(u)) {
             if(square.getUnit() != null) {
                 Unit swapper = square.getUnit();
@@ -43,7 +42,7 @@ public class PlayerUnitLayout : MonoBehaviour
             this.layout[u] = square;
         } else {
             if(this.player.getMaxCombatUnits() <= this.layout.Count && (square.getUnit() == null || !this.player.getBench().canAddUnitToBench())) {
-                return false;//TODO: move unit back to the bench
+                return false;//TODO: move unit back to where it came from
             }
 
             if(square.getUnit() != null) {
