@@ -45,6 +45,16 @@ public class Bench : MonoBehaviour
         throw new Exception("Unit not in bench!!!");
     }
 
+    public int unitInBench(Unit u) {
+        for(int i = 0; i < this.benchSlotPositions.Count; i++) {
+            if(this.benchSlotPositions[i].getUnit() == u) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     public IEnumerator dragUnitToBench(Unit u, int dest) {
         if(this.draggedUnits.Contains(u)) { //is this possible? {
             yield break;
@@ -75,6 +85,38 @@ public class Bench : MonoBehaviour
         this.draggedUnits.Remove(u);
     }
 
-    //TODO: might want to be able to organize bench although it doesn't really matter...
-    //public void updateBenchLayout(){}.....
+    
+
+    public bool updateBenchLayout(Unit u, int slotNum) {
+        //TODO: check if unit can be used
+        int posInBench = this.unitInBench(u);
+        if(posInBench >= 0) {
+            if(this.benchSlotPositions[slotNum].isOccupied()) { //swap to units on the bench
+                Unit swapper = this.benchSlotPositions[slotNum].getUnit();
+                this.benchSlotPositions[posInBench].insertUnit(swapper);
+                StartCoroutine(this.dragUnitToBench(swapper, posInBench));
+            } 
+            
+        } else {
+            if(!this.canAddUnitToBench() && u.getPosition() == null) { //double check if position == null or positions == NULLSQUARE !!!!!!
+                //only fail condition: bench is full and the unit didn't come from the board or bench (so it came from the shop)
+                return false;
+            }
+
+            if(this.benchSlotPositions[slotNum].isOccupied()) {
+                Unit swapper = this.benchSlotPositions[slotNum].getUnit();
+                StartCoroutine(this.player.getUnitLayout().dragUnitToBoard(swapper, u.getPosition()));
+            }
+            
+        }
+        this.benchSlotPositions[slotNum].insertUnit(u);
+        StartCoroutine(this.dragUnitToBench(u, slotNum));
+        return true;
+    }
+
+
+    public string jsonify() {
+        return "";
+    }
+
 }
