@@ -7,7 +7,7 @@ public class MouseTransform : MonoBehaviour
     [SerializeField] private float liftHeight = 0.5f;
     private Plane dragPlane;
     private Unit unitDragging;
-    private Vectror3 initialPos;
+    private Vector3 initialPos;
 
     void Start() {
         this.dragPlane = new Plane(Vector3.up, Vector3.zero);
@@ -41,13 +41,18 @@ public class MouseTransform : MonoBehaviour
             HexSquare closestSquare = null;
             bool square = true;
 
-            foreach(Collider c in hits) {
-                if(c.gameObject.GetComponentInParent<HexSquare>()) {
+            // foreach(Collider c in hits) {
+            //     if(c.gameObject.GetComponentInParent<HexSquare>()) {
 
-                } else if(c.gameObject.GetComponentInParent<Bench>()) {
-                    
-                }
-            }
+            //     } else if(c.gameObject.GetComponentInParent<Bench>()) {
+
+            //     }
+            // }
+
+
+            //call bench or playerLayout => update method
+            //if true then do the move, otherwise move unit back to its initialPosition
+            //or if no object is found in overlap then also just move it back to initialPosition
         }
 
         this.unitDragging = null;

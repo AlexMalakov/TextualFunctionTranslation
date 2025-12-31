@@ -5,21 +5,19 @@ using UnityEngine;
 
 public class Bench : MonoBehaviour
 {
-    Unit[] benchedUnits;
-    [SerializeField] private int benchSize;
-    [SerializeField] private Transform benchStart;
-    [SerializeField] private float benchSlotOffset;
+    [SerializeField] private List<BenchSlot> benchSlotPositions;
 
     private List<Unit> draggedUnits = new List<Unit>();
 
     void Awake() {
-        benchedUnits = new Unit[this.benchSize];
+        for(int i = 0; i < this.benchSlotPositions.Count; i++) {
+            this.benchSlotPositions[i].init(i);
+        }
     }
 
-
     public bool canAddUnitToBench() {
-        foreach(Unit u in this.benchedUnits) {
-            if(u == null) {
+        foreach(BenchSlot b in this.benchSlotPositions) {
+            if(!b.isOccupied()) {
                 return true;
             }
         }
@@ -27,23 +25,19 @@ public class Bench : MonoBehaviour
     }
 
     public int addUnitToBench(Unit u) { //TODO either spawn unit in bench or move unit into bench
-        if(!canAddUnitToBench()) {
-            throw new Exception("BENCH IS FULL!!!");
-        }
-
-        for(int i = 0; i < this.benchedUnits.Length; i++) {
-            if(this.benchedUnits[i] == null) {
-                this.benchedUnits[i] = u;
-                return i;
+        foreach(BenchSlot b in this.benchSlotPositions) {
+            if(!b.isOccupied()) {
+                return b.insertUnit(u);
             }
         }
-        return -1;
+
+        throw new Exception("BENCH IS FULL!!!");
     }
 
     public void removeUnitFromBench(Unit u) {
-        for(int i = 0; i < this.benchedUnits.Length; i++) {
-            if(this.benchedUnits[i] == u) {
-                this.benchedUnits[i] = null;
+        foreach(BenchSlot b in this.benchSlotPositions) {
+            if(b.getUnit() == u) {
+                b.removeUnit();
                 return;
             }
         }
@@ -58,7 +52,7 @@ public class Bench : MonoBehaviour
         this.draggedUnits.Add(u);
 
         Vector3 startPos = u.transform.position;
-        Vector3 endPos = new Vector3(this.benchStart.x, this.benchStart.y, this.benchStart.z + dest * this.benchSlotOffset);
+        Vector3 endPos = this.benchSlotPositions[dest].transform.position;
 
         float elapsed = 0f;
         float totalDur = (endPos - startPos).magnitude / this.player.getUnitDragSpeed();
@@ -69,7 +63,7 @@ public class Bench : MonoBehaviour
                 yield break;
             }
 
-            u1.transform.position = Vector3.Lerp(startPos, endPos, elapsed/totalDur);
+            u.transform.position = Vector3.Lerp(startPos, endPos, elapsed/totalDur);
             elapsed += Time.time;
             yield return null;
         }
