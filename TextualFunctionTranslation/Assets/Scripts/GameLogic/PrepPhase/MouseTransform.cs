@@ -5,7 +5,6 @@ using UnityEngine;
 public class MouseTransform : MonoBehaviour
 {
     [SerializeField] private float liftHeight = 0.5f;
-    [SerializeField] private Player humanPlayer;
     private Plane dragPlane;
     private Unit unitDragging;
 

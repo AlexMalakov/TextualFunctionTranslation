@@ -18,6 +18,9 @@ public class PlayerUnitLayout : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private HexBoard board;
 
+    
+    private List<Unit> draggedUnits = new List<Unit>();
+
     public void initLayout() {
         this.layout = new Dictionary<Unit, HexSquare>();
         foreach(USPair u in this.startingLayout) {
@@ -35,6 +38,7 @@ public class PlayerUnitLayout : MonoBehaviour
                 Unit swapper = square.getUnit();
                 this.layout[swapper] = this.layout[u];
                 swapper.placeUnitOnSquare(this.layout[u]);
+                StartCoroutine(this.dragUnitToBoard(swapper, this.layout[u]));
             } 
             this.layout[u] = square;
         } else {
@@ -46,10 +50,13 @@ public class PlayerUnitLayout : MonoBehaviour
                 Unit swapper = square.getUnit();
                 this.layout.Remove(swapper);
                 this.player.getBench().addUnitToBench(swapper);
+
+                StartCoroutine(this.player.getBench().dragUnitToBench(u));
             }
             this.layout.Add(u, square);
         }
         u.placeUnitOnSquare(square);
+        StartCoroutine(this.dragUnitToBoard(u, square));
         return true;
     }
 
@@ -74,6 +81,36 @@ public class PlayerUnitLayout : MonoBehaviour
         return this.layout;
     }
 
+    //can drag one or two units
+    public IEnumerator dragUnitToBoard(Unit u1, HexSquare dest) {
+        if(this.draggedUnits.Contains(u1)) { //is this possible? {
+            yield break;
+        }
+        this.draggedUnits.Add(u1);
+
+        Vector3 startPos = u1.transform.position;
+        Vector3 endPos = dest.transform.position;
+
+        float elapsed = 0f;
+        float totalDur = (endPos - startPos).magnitude / this.player.getUnitDragSpeed();
+
+        while(elapsed < totalDur) {
+
+            if (!this.draggedUnits.Contains(u1)) {
+                yield break;
+            }
+
+            u1.transform.position = Vector3.Lerp(startPos, endPos, elapsed/totalDur);
+            elapsed += Time.time;
+            yield return null;
+        }
+
+        this.draggedUnits.Remove(u1);
+    }
+
+    public void unitClickedOn(Unit u) {
+        this.draggedUnits.Remove(u)
+    }
 
     private string jsonify() {
         //future thing to create, take a layout return as string ezpz

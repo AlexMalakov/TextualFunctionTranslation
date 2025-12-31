@@ -8,6 +8,8 @@ public class Bench : MonoBehaviour
     Unit[] benchedUnits;
     [SerializeField] private int benchSize;
 
+    private List<Unit> draggedUnits = new List<Unit>();
+
     void Awake() {
         benchedUnits = new Unit[this.benchSize];
     }
@@ -44,6 +46,36 @@ public class Bench : MonoBehaviour
         }
 
         throw new Exception("Unit not in bench!!!");
+    }
+
+    public IEnumerator dragUnitToBench(Unit u) {
+        if(this.draggedUnits.Contains(u1)) { //is this possible? {
+            yield break;
+        }
+        this.draggedUnits.Add(u1);
+
+        Vector3 startPos = u1.transform.position;
+        Vector3 endPos = Vector3.zero; //TODO: find the spot in the bench im going into
+
+        float elapsed = 0f;
+        float totalDur = (endPos - startPos).magnitude / this.player.getUnitDragSpeed();
+
+        while(elapsed < totalDur) {
+
+            if (!this.draggedUnits.Contains(u1)) {
+                yield break;
+            }
+
+            u1.transform.position = Vector3.Lerp(startPos, endPos, elapsed/totalDur);
+            elapsed += Time.time;
+            yield return null;
+        }
+
+        this.draggedUnits.Remove(u1);
+    }
+
+    public void unitClickedOn(Unit u) {
+        this.draggedUnits.Remove(u)
     }
 
     //TODO: might want to be able to organize bench although it doesn't really matter...
