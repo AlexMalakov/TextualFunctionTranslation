@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CombatScheduler combatSched;
     [SerializeField] private CombatManager combatManager;
     [SerializeField] private HexBoard board;
-    [SerializeField] private GameStartButton combatButton;
+
+    [SerializeField] private PrecombatManager pcm;
 
     void Awake() {
         this.board.initBoard();
@@ -32,17 +33,18 @@ public class GameManager : MonoBehaviour
     }
 
     private void handlePreperation() {
-        //TODO: NON COMBAT PHASE
-        this.onCombatStart();
+        this.pcm.handlePrep();
     }
 
     public void onCombatStart() {
+        this.pcm.endPrep();
         this.combatManager.initializeCombat();
         this.combatButton.setEnabled(false);
         this.gameState = GameStage.combat;
     }
 
     private void onCombatEnd() {
+        //TODO tell game manager to end comabt
         this.gameState = GameStage.result;
         this.combatButton.setEnabled(true); //TODO - move this to preparation start method?
     }

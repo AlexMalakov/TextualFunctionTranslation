@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class PrecombatManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    
+    public void handlePrep() {
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    public void endPrep() {
         
     }
 }

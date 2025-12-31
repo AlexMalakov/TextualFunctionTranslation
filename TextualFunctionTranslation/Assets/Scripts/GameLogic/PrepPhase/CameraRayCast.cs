@@ -4,10 +4,22 @@ using UnityEngine;
 
 public class CameraRayCast : MonoBehaviour
 {
+    [SerializeField] private MouseTransform mt;
+    private bool prepPhaseAcive = false;
 
-    private Unit unitHeld = null;
+    public bool setPrepPhaseStatus(bool status) {
+        this.prepPhaseAcive = true;
+
+        if(!this.prepPhaseAcive) {
+            this.onUnitReleased();
+        }
+    }
 
     void Update() {
+        if(!prepPhaseAcive) {
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -31,12 +43,10 @@ public class CameraRayCast : MonoBehaviour
 
 
     private void onUnitPressed(Unit u) {
-        this.unitHeld = u;
+        this.mt.startUnitDrag(u);
     }
 
     private void onUnitReleased() {
-        if(this.unitHeld == null) {
-            return;
-        }
+        this.mt.endUnitDrag();
     }
 }

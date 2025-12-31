@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MouseTransform : MonoBehaviour
 {
-    public float liftHeight = 0.5f;
+    [SerializeField] private float liftHeight = 0.5f;
     private Plane dragPlane;
     private Unit unitDragging;
 
@@ -13,7 +13,6 @@ public class MouseTransform : MonoBehaviour
     }
 
     public void startUnitDrag(Unit u) {
-        
         this.unitDragging = u;
     }
 
@@ -26,12 +25,15 @@ public class MouseTransform : MonoBehaviour
             Vector3 point = ray.GetPoint(enter);
             point.y += liftHeight;
             this.transform.position = point;
-            this.unitDragging.transform.position = this.transform.position;
+            this.unitDragging.transform.position = point;
         }
     }
 
     void endUnitDrag() {
+        if(this.unitDragging != null) {
+            // TODO: snapping logic
+        }
+
         this.unitDragging = null;
-        // TODO: snapping logic
     }
 }

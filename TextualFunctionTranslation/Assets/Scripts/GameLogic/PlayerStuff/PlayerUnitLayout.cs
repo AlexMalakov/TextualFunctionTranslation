@@ -33,8 +33,8 @@ public class PlayerUnitLayout : MonoBehaviour
         if(this.layout.ContainsKey(u)) {
             if(square.getUnit() != null) {
                 Unit swapper = square.getUnit();
-                this.layout[swapper] = this.layout[unit];
-                swapper.placeUnitOnSquare(this.layout[unit]);
+                this.layout[swapper] = this.layout[u];
+                swapper.placeUnitOnSquare(this.layout[u]);
             } 
             this.layout[u] = square;
         } else {
@@ -45,7 +45,7 @@ public class PlayerUnitLayout : MonoBehaviour
             if(square.getUnit() != null) {
                 Unit swapper = square.getUnit();
                 this.layout.Remove(swapper);
-                this.player.getBench.addUnitToBench(swapper);
+                this.player.getBench().addUnitToBench(swapper);
             }
             this.layout.Add(u, square);
         }
