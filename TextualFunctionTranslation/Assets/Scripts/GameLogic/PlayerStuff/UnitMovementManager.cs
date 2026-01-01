@@ -6,6 +6,7 @@ public class UnitMovementManager : MonoBehaviour
 {
     private List<Unit> draggedUnits = new List<Unit>();
     [SerializeField] private float unitDragSnapSpeed;
+    [SerializeField] private float unitFastTime = .1f;
     
     public void overrideMovement(Unit u) {
         this.draggedUnits.Remove(u);
@@ -24,7 +25,7 @@ public class UnitMovementManager : MonoBehaviour
         Vector3 startPos = u.transform.position;
 
         float elapsed = 0f;
-        float totalDur = !snap ? .3f : (dest - startPos).magnitude / this.unitDragSnapSpeed;
+        float totalDur = !snap ? unitFastTime : (dest - startPos).magnitude / this.unitDragSnapSpeed;
 
         while(elapsed < totalDur) {
             

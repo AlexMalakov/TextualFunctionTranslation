@@ -35,6 +35,7 @@ public class PlayerUnitLayout : MonoBehaviour
         if(this.layout.ContainsKey(u)) {
             if(square.getUnit() != null) {
                 Unit swapper = square.getUnit();
+                u.unclaimSquare();
                 this.layout[swapper] = this.layout[u];
                 swapper.placeUnitOnSquare(this.layout[u]);
                 StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, this.layout[u].transform, false));
@@ -48,6 +49,7 @@ public class PlayerUnitLayout : MonoBehaviour
             if(square.getUnit() != null) {
                 Unit swapper = square.getUnit();
                 this.layout.Remove(swapper);
+                swapper.unclaimSquare();
                 BenchSlot dest = this.player.getBench().addUnitToBench(swapper);
 
                 StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, dest.transform, false));

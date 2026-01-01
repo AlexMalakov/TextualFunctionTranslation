@@ -222,6 +222,15 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
+    //this does not five a unit a new square use carefully!
+    public void unclaimSquare() {
+        if(this.curPosition == null || !this.curPosition.isSquare()) {
+            return;
+        } 
+        this.curPosition.claimSquare(this, false);
+        this.curPosition = null; //should prob be a null square but oh well
+    }
+
     public void onDeath() {
         //play dying animatiom?
 

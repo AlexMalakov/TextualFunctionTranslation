@@ -64,8 +64,9 @@ public class Bench : MonoBehaviour
                 Unit swapper = this.benchSlotPositions[slotNum].getUnit();
                 benchPos.insertUnit(swapper);
                 StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, benchPos.transform, false));
-            } 
-            
+            } else {
+                benchPos.removeUnit();
+            }
         } else {
             if(!this.canAddUnitToBench() && u.getPosition() == null) { //double check if position == null or positions == NULLSQUARE !!!!!!
                 //only fail condition: bench is full and the unit didn't come from the board or bench (so it came from the shop)
@@ -74,11 +75,15 @@ public class Bench : MonoBehaviour
 
             if(this.benchSlotPositions[slotNum].isOccupied()) {
                 Unit swapper = this.benchSlotPositions[slotNum].getUnit();
-                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, u.getPosition().transform, false));
+                HexSquare uPos = u.getPosition();
+                u.unclaimSquare();
+                swapper.placeUnitOnSquare(uPos);
+                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, uPos.transform, false));
             }
             
         }
         this.benchSlotPositions[slotNum].insertUnit(u);
+        this.player.getUnitLayout().removeUnitFromLayout(u);
         StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, this.benchSlotPositions[slotNum].transform, true));
         return true;
     }
