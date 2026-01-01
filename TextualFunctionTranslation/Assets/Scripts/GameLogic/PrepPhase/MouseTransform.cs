@@ -16,6 +16,9 @@ public class MouseTransform : MonoBehaviour
     }
 
     public void startUnitDrag(Unit u) {
+        if(!this.humanPlayer.ownsUnit(u)) {
+            return;
+        }
         this.humanPlayer.getUnitMoveManager().overrideMovement(u);
 
         this.initialPos = u.transform.position;
@@ -37,8 +40,9 @@ public class MouseTransform : MonoBehaviour
 
     public void endUnitDrag() {
         bool succeeded = false;
+
+        //snapping logicL
         if(this.unitDragging != null) {
-            // TODO: snapping logic
             Collider[] hits = Physics.OverlapSphere(this.transform.position, this.snapRadius);
 
             float closestObj = float.MaxValue;
@@ -47,6 +51,7 @@ public class MouseTransform : MonoBehaviour
             bool square = true;
 
             foreach(Collider c in hits) {
+                //debug here might need different get component stuff
                 if(c.gameObject.GetComponentInParent<HexSquare>() != null) {
                     if((c.gameObject.transform.position - this.transform.position).magnitude < closestObj) {
                         closestObj = (c.gameObject.transform.position - this.transform.position).magnitude;
@@ -63,16 +68,12 @@ public class MouseTransform : MonoBehaviour
             }
 
             
+            //call update and see if it succeeded or not
             if(square && closestSquare != null) {
                 succeeded = this.humanPlayer.getUnitLayout().attemptUpdateLayout(this.unitDragging, closestSquare);
             } else if(!square && closestBench != null) {
                 succeeded = this.humanPlayer.getBench().updateBenchLayout(this.unitDragging, closestBench.getSlotNum());
             }
-
-
-            //call bench or playerLayout => update method
-            //if true then do the move, otherwise move unit back to its initialPosition
-            //or if no object is found in overlap then also just move it back to initialPosition
         }
 
         if(!succeeded) {

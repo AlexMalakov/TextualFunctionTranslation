@@ -55,7 +55,9 @@ public class Bench : MonoBehaviour
     }
 
     public bool updateBenchLayout(Unit u, int slotNum) {
-        //TODO: check if unit can be used
+        if(!this.player.ownsUnit(u)) {
+            return false;
+        }
         BenchSlot benchPos = this.unitInBench(u);
         if(benchPos) {
             if(this.benchSlotPositions[slotNum].isOccupied()) { //swap to units on the bench

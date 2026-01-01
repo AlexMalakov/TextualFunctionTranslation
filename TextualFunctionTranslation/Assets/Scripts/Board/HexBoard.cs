@@ -6,6 +6,7 @@ using System;
 public class HexBoard : MonoBehaviour
 {
     List<List<HexSquare>> squares = new List<List<HexSquare>>();
+    List<HexSquare> humanSquares = new List<HexSquare>();
     [SerializeField] private GameObject hexSquarePrefab;
     [SerializeField] private NullSquare nullSQ;
 
@@ -22,6 +23,10 @@ public class HexBoard : MonoBehaviour
             for(int x = 0; x < ((y % 2 == 0) ? 6 : 7); x++) {
                 lis.Add(Instantiate(this.hexSquarePrefab).GetComponent<HexSquare>());
                 lis[lis.Count - 1].init(x,y, calculateHexPos(x, y));
+
+                if(y >= 4) {
+                    this.humanSquares.Add(lis[lis.Count - 1]);
+                }
             }
             this.squares.Add(lis);
         }
@@ -66,5 +71,9 @@ public class HexBoard : MonoBehaviour
         }
 
         return res;
+    }
+
+    public List<HexSquare> getPlayerSqures() {
+        return this.humanSquares;
     }
 }

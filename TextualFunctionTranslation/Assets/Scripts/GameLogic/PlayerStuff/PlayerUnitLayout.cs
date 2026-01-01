@@ -17,8 +17,6 @@ public class PlayerUnitLayout : MonoBehaviour
     [SerializeField] private List<USPair> startingLayout;
     [SerializeField] private Player player;
     [SerializeField] private HexBoard board;
-
-    
     
 
     public void initLayout() {
@@ -31,7 +29,9 @@ public class PlayerUnitLayout : MonoBehaviour
     //return false if fails
     //this is ugly as shit but womp womp
     public bool attemptUpdateLayout(Unit u, HexSquare square) {
-        //TODO: check if unit and square can be used for layout
+        if(!this.board.getPlayerSqures().Contains(square) || !this.player.ownsUnit(u)) {
+            return false;
+        }
         if(this.layout.ContainsKey(u)) {
             if(square.getUnit() != null) {
                 Unit swapper = square.getUnit();
@@ -42,7 +42,7 @@ public class PlayerUnitLayout : MonoBehaviour
             this.layout[u] = square;
         } else {
             if(this.player.getMaxCombatUnits() <= this.layout.Count && (square.getUnit() == null || !this.player.getBench().canAddUnitToBench())) {
-                return false;//TODO: move unit back to where it came from
+                return false;
             }
 
             if(square.getUnit() != null) {
