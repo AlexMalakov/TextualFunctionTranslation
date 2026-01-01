@@ -5,6 +5,7 @@ using UnityEngine;
 public class MouseTransform : MonoBehaviour
 {
     [SerializeField] private float liftHeight = 0.5f;
+    [SerializeField] private float snapRadius = 1f;
     [SerializeField] private Player humanPlayer;
     private Plane dragPlane;
     private Unit unitDragging;
@@ -15,8 +16,7 @@ public class MouseTransform : MonoBehaviour
     }
 
     public void startUnitDrag(Unit u) {
-        this.humanPlayer.getUnitLayout().unitClickedOn(u);
-        this.humanPlayer.getBench().unitClickedOn(u);
+        this.humanPlayer.getUnitMoveManager().overrideMovement(u);
 
         this.initialPos = u.transform.position;
         this.unitDragging = u;
@@ -35,7 +35,7 @@ public class MouseTransform : MonoBehaviour
         }
     }
 
-    void endUnitDrag() {
+    public void endUnitDrag() {
         bool succeeded = false;
         if(this.unitDragging != null) {
             // TODO: snapping logic
@@ -64,7 +64,7 @@ public class MouseTransform : MonoBehaviour
 
             
             if(square && closestSquare != null) {
-                succeeded = this.humanPlayer.getUnitLayout().attemptUpdateLayout(this.unitDragging, closestSquare)
+                succeeded = this.humanPlayer.getUnitLayout().attemptUpdateLayout(this.unitDragging, closestSquare);
             } else if(!square && closestBench != null) {
                 succeeded = this.humanPlayer.getBench().updateBenchLayout(this.unitDragging, closestBench.getSlotNum());
             }
@@ -76,7 +76,7 @@ public class MouseTransform : MonoBehaviour
         }
 
         if(!succeeded) {
-            StartCoroutine(returnUnit())
+            StartCoroutine(this.humanPlayer.getUnitMoveManager().dragUnitTo(this.unitDragging, this.initialPos));
         }
         this.unitDragging = null;
     }

@@ -5,7 +5,6 @@ using UnityEngine;
 public class CameraRayCast : MonoBehaviour
 {
     [SerializeField] private MouseTransform mt;
-    [SerializeField] private Player humanPlayer;
 
     public void checkUserInteraction() {
 
@@ -32,9 +31,6 @@ public class CameraRayCast : MonoBehaviour
 
 
     private void onUnitPressed(Unit u) {
-        this.humanPlayer.getUnitLayout().unitClickedOn(u);
-        this.humanPlayer.getBench().unitClickedOn(u);
-        //TODO: same for bench
         this.mt.startUnitDrag(u);
     }
 

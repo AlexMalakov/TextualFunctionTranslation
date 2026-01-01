@@ -39,14 +39,12 @@ public class GameManager : MonoBehaviour
     public void onCombatStart() {
         this.pcm.endPrep();
         this.combatManager.initializeCombat();
-        this.combatButton.setEnabled(false);
         this.gameState = GameStage.combat;
     }
 
     private void onCombatEnd() {
         //TODO tell game manager to end comabt
         this.gameState = GameStage.result;
-        this.combatButton.setEnabled(true); //TODO - move this to preparation start method?
     }
 
     private void handleCombat() {

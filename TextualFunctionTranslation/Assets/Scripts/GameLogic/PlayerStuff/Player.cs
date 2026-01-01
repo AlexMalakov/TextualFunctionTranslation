@@ -7,9 +7,10 @@ public class Player : MonoBehaviour
     [SerializeField] private List<Unit> playersUnits;
     [SerializeField] private PlayerUnitLayout unitLayout;
     [SerializeField] private Bench bench;
+    [SerializeField] private UnitMovementManager umm;
 
     [SerializeField] private int unitCap; //TODO: upadte this based on the current round
-    [SerializeField] private float unitDragSnapSpeed;
+    
 
     public void init() {
         this.unitLayout.initLayout();
@@ -27,12 +28,12 @@ public class Player : MonoBehaviour
         return this.bench;
     }
 
-    public bool ownsUnit(Unit u) {
-        return this.playersUnits.Contains(u);
+    public UnitMovementManager getUnitMoveManager() {
+        return this.umm;
     }
 
-    public float getUnitDragSpeed() {
-        return this.unitDragSnapSpeed;
+    public bool ownsUnit(Unit u) {
+        return this.playersUnits.Contains(u);
     }
 
     //returns true if a unit is in the combat layout
