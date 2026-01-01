@@ -79,7 +79,7 @@ public class Bench : MonoBehaviour
             
         }
         this.benchSlotPositions[slotNum].insertUnit(u);
-        StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, benchPos.transform));
+        StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, this.benchSlotPositions[slotNum].transform));
         return true;
     }
 

@@ -7,7 +7,6 @@ public class CameraRayCast : MonoBehaviour
     [SerializeField] private MouseTransform mt;
 
     public void checkUserInteraction() {
-
         if (Input.GetMouseButtonDown(0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;

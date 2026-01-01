@@ -114,6 +114,9 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void placeUnitOnSquare(HexSquare square) {
+        if(this.curPosition && this.curPosition.isSquare()) {
+            this.curPosition.claimSquare(this, false);
+        }
         this.curPosition = square;
         square.claimSquare(this, true);
         this.transform.position = new Vector3(square.transform.position.x, this.transform.position.y, square.transform.position.z);

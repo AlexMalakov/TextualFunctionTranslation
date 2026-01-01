@@ -6,6 +6,7 @@ public class PrecombatManager : MonoBehaviour
 {
     [SerializeField] private CameraRayCast userClicks;
     [SerializeField] private GameStartButton gameStart;
+    [SerializeField] private CombatManager combatManager;
 
     private bool inPrep;
 
@@ -20,6 +21,7 @@ public class PrecombatManager : MonoBehaviour
     private void startPrep() {
         this.inPrep = true;
         this.gameStart.setEnabled(true);
+        this.combatManager.placeUnitsFromLayouts();
     }
 
     public void endPrep() {

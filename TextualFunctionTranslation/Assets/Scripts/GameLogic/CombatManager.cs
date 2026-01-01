@@ -22,6 +22,11 @@ public class CombatManager : MonoBehaviour
         enemy.init();
     }
 
+    public void placeUnitsFromLayouts() {
+        this.player.getUnitLayout().placeUnits(this.healthbarPrefab, this.hpCanvas);
+        this.enemy.getUnitLayout().placeUnits(this.healthbarPrefab, this.hpCanvas);
+    }
+
     public void initializeCombat() {
         this.units = new List<Unit>();
         this.units.AddRange(this.player.getActiveUnits());
@@ -31,8 +36,7 @@ public class CombatManager : MonoBehaviour
         this.units.Sort((a,b) => a.getDecisionPriority().CompareTo(b.getDecisionPriority())); //TODO: swap with inumerable.OrderBy to make this stable so its deterministic
         //TODO: knob to tune: tiebreak behavior. Does player get to win ties?6
 
-        this.player.getUnitLayout().placeUnits(this.healthbarPrefab, hpCanvas);
-        this.enemy.getUnitLayout().placeUnits(this.healthbarPrefab, hpCanvas);
+        this.placeUnitsFromLayouts();
     }
 
     //check each unit every frame
