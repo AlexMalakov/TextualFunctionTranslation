@@ -11,11 +11,11 @@ public class UnitMovementManager : MonoBehaviour
         this.draggedUnits.Remove(u);
     }
 
-    public IEnumerator dragUnitTo(Unit u, Transform dest) {
-        return this.dragUnitTo(u, dest.position);
+    public IEnumerator dragUnitTo(Unit u, Transform dest, bool snap) {
+        return this.dragUnitTo(u, dest.position, snap);
     }
     
-    public IEnumerator dragUnitTo(Unit u, Vector3 dest) {
+    public IEnumerator dragUnitTo(Unit u, Vector3 dest, bool snap) {
         if(this.draggedUnits.Contains(u)) { //is this possible? {
             yield break;
         }
@@ -24,16 +24,16 @@ public class UnitMovementManager : MonoBehaviour
         Vector3 startPos = u.transform.position;
 
         float elapsed = 0f;
-        float totalDur = (dest - startPos).magnitude / this.unitDragSnapSpeed;
+        float totalDur = !snap ? .3f : (dest - startPos).magnitude / this.unitDragSnapSpeed;
 
         while(elapsed < totalDur) {
-
+            
             if (!this.draggedUnits.Contains(u)) {
                 yield break;
             }
 
             u.transform.position = Vector3.Lerp(startPos, dest, elapsed/totalDur);
-            elapsed += Time.time;
+            elapsed += Time.deltaTime;
             yield return null;
         }
 

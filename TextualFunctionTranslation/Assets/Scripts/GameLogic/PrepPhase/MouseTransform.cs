@@ -76,8 +76,9 @@ public class MouseTransform : MonoBehaviour
             }
         }
 
+
         if(!succeeded) {
-            StartCoroutine(this.humanPlayer.getUnitMoveManager().dragUnitTo(this.unitDragging, this.initialPos));
+            StartCoroutine(this.humanPlayer.getUnitMoveManager().dragUnitTo(this.unitDragging, this.initialPos, false));
         }
         this.unitDragging = null;
     }

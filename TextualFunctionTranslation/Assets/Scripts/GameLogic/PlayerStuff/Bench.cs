@@ -63,7 +63,7 @@ public class Bench : MonoBehaviour
             if(this.benchSlotPositions[slotNum].isOccupied()) { //swap to units on the bench
                 Unit swapper = this.benchSlotPositions[slotNum].getUnit();
                 benchPos.insertUnit(swapper);
-                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, benchPos.transform));
+                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, benchPos.transform, false));
             } 
             
         } else {
@@ -74,12 +74,12 @@ public class Bench : MonoBehaviour
 
             if(this.benchSlotPositions[slotNum].isOccupied()) {
                 Unit swapper = this.benchSlotPositions[slotNum].getUnit();
-                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, u.getPosition().transform));
+                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, u.getPosition().transform, false));
             }
             
         }
         this.benchSlotPositions[slotNum].insertUnit(u);
-        StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, this.benchSlotPositions[slotNum].transform));
+        StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, this.benchSlotPositions[slotNum].transform, true));
         return true;
     }
 
