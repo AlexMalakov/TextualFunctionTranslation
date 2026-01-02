@@ -73,6 +73,10 @@ public abstract class Unit : MonoBehaviour
         return this.tauntAmount;
     }
 
+    public int getCost() {
+        return this.cost;
+    }
+
     public virtual void checkUnitHasTask(CombatManager manager) {
         if(this.isDead()) {
             return;

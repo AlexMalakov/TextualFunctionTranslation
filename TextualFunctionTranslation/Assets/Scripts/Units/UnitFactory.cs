@@ -1,15 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [System.Serializable]
 public class UnitPrefabs {
     public string unitName;
     public GameObject unitPrefab;
-
-    public Unit getUnit() {
-        return Instantiate(unitPrefab).GetComponent<Unit>();
-    }
 }
 
 public class UnitFactory : MonoBehaviour
@@ -21,7 +18,7 @@ public class UnitFactory : MonoBehaviour
     public Unit createUnit(string unitName) {
         foreach(UnitPrefabs up in this.units) {
             if(up.unitName == unitName) {
-                return up.getUnit();
+                return Instantiate(up.unitPrefab).GetComponent<Unit>();
             }
         }
 

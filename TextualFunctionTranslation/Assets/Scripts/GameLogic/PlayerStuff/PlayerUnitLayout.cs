@@ -61,6 +61,17 @@ public class PlayerUnitLayout : MonoBehaviour
         return true;
     }
 
+    public void addUnitFromShop(Unit u) {
+        foreach(HexSquare s in this.board.getPlayerSqures()) {
+            if(!s.isOccupied()) {
+                this.layout.Add(u, s);
+                u.placeUnitOnSquare(s);
+                return;
+            }
+        }
+        throw new Exception("cannot place unit in layout despite player unit cap allowing it!!!");
+    }
+
     public void removeUnitFromLayout(Unit u) {
         this.layout.Remove(u);
     }

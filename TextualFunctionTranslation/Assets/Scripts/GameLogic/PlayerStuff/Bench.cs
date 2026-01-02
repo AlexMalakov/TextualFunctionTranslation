@@ -40,8 +40,6 @@ public class Bench : MonoBehaviour
                 return;
             }
         }
-
-        throw new Exception("Unit not in bench!!!");
     }
 
     public BenchSlot unitInBench(Unit u) {

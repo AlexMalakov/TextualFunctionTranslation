@@ -10,10 +10,37 @@ public class Player : MonoBehaviour
     [SerializeField] private UnitMovementManager umm;
 
     [SerializeField] private int unitCap; //TODO: upadte this based on the current round
-    
+    private int money = 0;
 
     public void init() {
         this.unitLayout.initLayout();
+    }
+
+    public bool canPurchaseUnit(int unitCost) {
+        return this.money >= unitCost && (this.bench.canAddUnitToBench() || this.unitLayout.getActiveUnits() < this.unitCap);
+    }
+
+    public void purchaseUnit(Unit u) {
+        this.money -= u.getCost();
+        this.playersUnits.Add(u);
+
+        if(this.bench.canAddUnitToBench()) {
+            this.bench.addUnitToBench(); //throws exception if it fails but shouldnt since im checking for room first
+        } else {
+            this.layout.addUnitFromShop();
+        }
+    }
+
+    public void sellUnit(Unit u) {
+        if(!this.playersUnits.Contains(u)) {
+            throw new Exception("cannot sell unit you do not own");
+        }
+
+        this.money += u.getCost() - 1;
+        this.playersUnits.Remove(u);
+        this.bench.removeUnitFromBench(u);
+        this.unitLayout.removeUnitFromLayout(u);
+        Destroy(u.gameObject);
     }
 
     public List<Unit> getActiveUnits() {

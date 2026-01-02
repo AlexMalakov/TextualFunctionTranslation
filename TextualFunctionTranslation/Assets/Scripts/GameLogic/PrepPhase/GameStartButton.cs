@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class GameStartButton : MonoBehaviour
 {
-        //im a bozo and wrote my own script called "button"
     [SerializeField] Button button;
     [SerializeField] GameManager game;
 
