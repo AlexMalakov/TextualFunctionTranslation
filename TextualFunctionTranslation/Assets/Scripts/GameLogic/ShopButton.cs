@@ -10,7 +10,7 @@ public class ShopButton : MonoBehaviour
     [SerializeField] private Button button;
     [SerializeField] private Shop shop;
 
-    [SerializeField] private Unit unitBeingSold;
+    [SerializeField] private UnitBlueprint unitBeingSold;
 
     [SerializeField] private TMP_Text unitName;
     [SerializeField] private TMP_Text unitCost;
@@ -21,11 +21,11 @@ public class ShopButton : MonoBehaviour
 		btn.onClick.AddListener(onButtonClick);
     }
 
-    public void setOffering(Unit unitBeingSold) {
-        //TODO: set cost TMP
-        //TODO: set unit name
-        //TODO: set unit sprite
+    public void setOffering(UnitBlueprint unitBeingSold) {
         this.unitBeingSold = unitBeingSold;
+        unitCost.text = "" + unitBeingSold.unitCost;
+        unitName.text = unitBeingSold.unitName;
+        //TODO: set unit sprite
     }
 
     public void onButtonClick() {

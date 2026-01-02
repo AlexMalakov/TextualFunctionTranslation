@@ -31,10 +31,10 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private float timeBetweenAttack;
     [SerializeField] private float timeBetweenMove;
     [SerializeField] private int range;
-    [SerializeField] private int cost;
     [SerializeField] private Trait roleTrait;
     [SerializeField] private Trait classTrait;
 
+    private UnitBlueprint unitBlueprint;
     private int starLevel = 1;
     private float combatHealth;
 
@@ -57,6 +57,11 @@ public abstract class Unit : MonoBehaviour
     private bool isMoving;
     private bool requestOverride;
 
+    public Unit setBlueprint(UnitBlueprint blueprint) {
+        this.unitBlueprint = blueprint;
+        return this;
+    }
+
     public int getDecisionPriority() {
         return this.decisionPriority;
     }
@@ -74,7 +79,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     public int getCost() {
-        return this.cost;
+        return this.unitBlueprint.unitCost;
     }
 
     public virtual void checkUnitHasTask(CombatManager manager) {
