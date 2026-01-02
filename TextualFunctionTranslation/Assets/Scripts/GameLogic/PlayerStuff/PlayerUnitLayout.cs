@@ -63,7 +63,7 @@ public class PlayerUnitLayout : MonoBehaviour
 
     public void addUnitFromShop(Unit u) {
         foreach(HexSquare s in this.board.getPlayerSqures()) {
-            if(!s.isOccupied()) {
+            if(s.getUnit() == null) {
                 this.layout.Add(u, s);
                 u.placeUnitOnSquare(s);
                 return;

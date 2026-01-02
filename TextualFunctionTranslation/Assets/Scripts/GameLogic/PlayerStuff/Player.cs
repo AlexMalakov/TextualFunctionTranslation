@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Player : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class Player : MonoBehaviour
     }
 
     public bool canPurchaseUnit(int unitCost) {
-        return this.money >= unitCost && (this.bench.canAddUnitToBench() || this.unitLayout.getActiveUnits() < this.unitCap);
+        return this.money >= unitCost && (this.bench.canAddUnitToBench() || this.unitLayout.getActiveUnits().Count < this.unitCap);
     }
 
     public void purchaseUnit(Unit u) {
@@ -25,9 +26,9 @@ public class Player : MonoBehaviour
         this.playersUnits.Add(u);
 
         if(this.bench.canAddUnitToBench()) {
-            this.bench.addUnitToBench(); //throws exception if it fails but shouldnt since im checking for room first
+            this.bench.addUnitToBench(u); //throws exception if it fails but shouldnt since im checking for room first
         } else {
-            this.layout.addUnitFromShop();
+            this.unitLayout.addUnitFromShop(u);
         }
     }
 
