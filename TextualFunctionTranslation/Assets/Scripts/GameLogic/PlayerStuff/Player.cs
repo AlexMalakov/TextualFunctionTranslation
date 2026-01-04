@@ -17,19 +17,30 @@ public class Player : MonoBehaviour
         this.unitLayout.initLayout();
     }
 
-    public bool canPurchaseUnit(int unitCost) {
-        return this.money >= unitCost && (this.bench.canAddUnitToBench() || this.unitLayout.getActiveUnits().Count < this.unitCap);
+    public bool canPurchaseUnit(string unitName, int unitCost) {
+        return this.money >= unitCost && (this.bench.canAddUnitToBench() || this.unitLayout.getActiveUnits().Count < this.unitCap || this.canMergeUnit(unitName));
     }
 
     public void purchaseUnit(Unit u) {
         this.money -= u.getCost();
         this.playersUnits.Add(u);
 
-        if(this.bench.canAddUnitToBench()) {
+        if(this.canMergeUnit(u.getName())) {
+            this.mergeUnit(u);
+        }
+        else if(this.bench.canAddUnitToBench()) {
             this.bench.addUnitToBench(u); //throws exception if it fails but shouldnt since im checking for room first
         } else {
             this.unitLayout.addUnitFromShop(u);
         }
+    }
+
+    public bool canMergeUnit(string unitName) {
+        return this.bench.hasStarLevel(unitName, 1) || this.layout.hasStarLevel(unitName, 1);
+    }
+
+    private void mergeUnit(Unit u) {
+        
     }
 
     public void sellUnit(Unit u) {

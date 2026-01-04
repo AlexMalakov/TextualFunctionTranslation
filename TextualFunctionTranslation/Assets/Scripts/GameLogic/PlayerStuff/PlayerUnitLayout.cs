@@ -93,6 +93,15 @@ public class PlayerUnitLayout : MonoBehaviour
         return this.layout;
     }
 
+    public bool hasStarLevel(string unitName, int starLevel) {
+        foreach(Unit u in this.layout.Keys) {
+            if(u.getName() == unitName  && u.getMergeLevel() == starLevel) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private string jsonify() {
         //future thing to create, take a layout return as string ezpz

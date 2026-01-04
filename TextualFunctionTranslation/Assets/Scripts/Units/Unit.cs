@@ -31,6 +31,7 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private float timeBetweenAttack;
     [SerializeField] private float timeBetweenMove;
     [SerializeField] private int range;
+    [SerializeField] private string unitName;
     [SerializeField] private Trait roleTrait;
     [SerializeField] private Trait classTrait;
 
@@ -72,6 +73,10 @@ public abstract class Unit : MonoBehaviour
 
     public int getRange() {
         return this.range;
+    }
+
+    public string getName() {
+        return this.unitName;
     }
 
     public int getTaunt() {

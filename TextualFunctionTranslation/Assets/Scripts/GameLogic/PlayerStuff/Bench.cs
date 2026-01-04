@@ -86,6 +86,15 @@ public class Bench : MonoBehaviour
         return true;
     }
 
+    public bool hasStarLevel(string unitName, int starLevel) {
+        foreach(BenchSlot b in this.benchSlotPositions) {
+            if(b.getUnit().getName() == unitName  && b.getUnit().getMergeLevel() == starLevel) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public string jsonify() {
         return "";
