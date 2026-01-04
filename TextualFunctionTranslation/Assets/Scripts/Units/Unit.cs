@@ -255,6 +255,14 @@ public abstract class Unit : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
+    public void mergeUnit() {
+        this.starLevel += 1;
+    }
+
+    public int getMergeLevel() {
+        return this.starLevel;
+    }
+
     /*
      - ACTION (attack) BEHAVIOR:
          - start with no target

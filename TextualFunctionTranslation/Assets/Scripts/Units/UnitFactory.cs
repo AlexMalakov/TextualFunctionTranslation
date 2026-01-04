@@ -5,10 +5,10 @@ using System;
 
 [System.Serializable]
 public class UnitBlueprint {
-    public string unitName { get; private set; }
-    public int unitCost { get; private set; }
-    public Sprite unitIcon { get; private set; }
-    public GameObject unitPrefab { get; private set; } //object with unit property
+    public string unitName;
+    public int unitCost;
+    public Sprite unitIcon;
+    public GameObject unitPrefab; //object with unit property
 }
 
 public class UnitFactory : MonoBehaviour
