@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
         this.playersUnits.Add(u);
 
         if(this.canMergeUnit(u.getName())) {
-            this.mergeUnit(u);
+            this.mergeUnit(u, 1);
         }
         else if(this.bench.canAddUnitToBench()) {
             this.bench.addUnitToBench(u); //throws exception if it fails but shouldnt since im checking for room first
@@ -40,7 +40,16 @@ public class Player : MonoBehaviour
     }
 
     private void mergeUnit(Unit u) {
-        
+        if(this.bench.hasStarLevel()) {
+
+        } else {
+            
+        }
+    }
+
+    private IEnumerator killUnitInMerge(Unit preMerge, Unit postMerge) {
+        yield return this.umm.dragUnitTo(preMerge, postMerge.transform.position, false);
+        Destroy(preMerge);
     }
 
     public void sellUnit(Unit u) {
