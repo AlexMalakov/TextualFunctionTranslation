@@ -94,12 +94,16 @@ public class PlayerUnitLayout : MonoBehaviour
     }
 
     public bool hasStarLevel(string unitName, int starLevel) {
+        return this.getStarLevel(unitName, starLevel) != null;
+    }
+
+    public Unit getStarLevel(string unitName, int starLevel) {
         foreach(Unit u in this.layout.Keys) {
             if(u.getName() == unitName  && u.getMergeLevel() == starLevel) {
-                return true;
+                return u;
             }
         }
-        return false;
+        return null;
     }
 
 

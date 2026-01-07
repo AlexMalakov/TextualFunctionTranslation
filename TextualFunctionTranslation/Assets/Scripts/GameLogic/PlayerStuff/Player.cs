@@ -39,12 +39,19 @@ public class Player : MonoBehaviour
         return this.bench.hasStarLevel(unitName, 1) || this.layout.hasStarLevel(unitName, 1);
     }
 
-    private void mergeUnit(Unit u) {
-        if(this.bench.hasStarLevel()) {
-
-        } else {
+    private void mergeUnit(Unit u, int starLevel) {
+        Unit mergeTo;
+        if(this.bench.hasStarLevel(u.getName(), starLevel)) {
+            mergeTo = this.bench.getStarLevel(u.getName(), starLevel);
+        } else if(this.unitLayout.hasStarLevel(u.getName(), starLevel)){
+            mergeTo = this.unitLayout.getStarLevel(u.getName(), starLevel)
             
+        } else {
+            return;
         }
+        this.killUnitInMerge(u, mergeTo);
+        mergeTo.mergeUnit();
+        this.mergeUnit(mergeTo, ++starLevel);
     }
 
     private IEnumerator killUnitInMerge(Unit preMerge, Unit postMerge) {
