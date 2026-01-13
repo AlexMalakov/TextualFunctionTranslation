@@ -11,4 +11,12 @@ public class Trait : MonoBehaviour
     public int getMinimumForActive() {
         return this.minimumForActivate;
     }
+
+    public void attemptActivate(int numUnits) {
+        if(numUnits < this.minimumForActivate) {
+            return;
+        }
+
+        //TODO: ELSE DO STUFF !!!!!
+    }
 }

@@ -159,6 +159,12 @@ public class PlayerUnitLayout : MonoBehaviour
         return active;
     }
 
+    public void reportActiveTraits() {
+        foreach(Trait t in this.traitCount.Keys) {
+            t.attemptActivate(this.traitCount[t]);
+        }
+    }
+
     private string jsonify() {
         //future thing to create, take a layout return as string ezpz
         return "";
