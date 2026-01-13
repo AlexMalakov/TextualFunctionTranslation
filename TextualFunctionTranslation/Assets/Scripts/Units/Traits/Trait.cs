@@ -6,4 +6,9 @@ public class Trait : MonoBehaviour
 {
     public string name;
     public int minimumForActivate;
+
+
+    public int getMinimumForActive() {
+        return this.minimumForActivate;
+    }
 }

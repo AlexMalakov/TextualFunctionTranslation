@@ -144,14 +144,24 @@ public class PlayerUnitLayout : MonoBehaviour
         return null;
     }
 
+    //TODO: determine which approach is better
+
+    //get all the active traits so they can be used, maybe shouldnt do this this way tho cuz maybe it's smarter
+    //to deligate that action to each trait
+    public List<Trait> getActiveTraits() {
+        List<Trait> active = new List<Trait>();
+        foreach(Trait t in this.traitCount.Keys) {
+            if(this.traitCount[t] >= t.getMinimumForActive()) {
+                this.active.Add(t);
+            }
+        }
+
+        return active;
+    }
 
     private string jsonify() {
         //future thing to create, take a layout return as string ezpz
         return "";
-    }
-
-    private void countTraits() {
-
     }
 
 }
