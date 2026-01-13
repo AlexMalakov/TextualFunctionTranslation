@@ -26,11 +26,37 @@ public class PlayerUnitLayout : MonoBehaviour
         this.layout = new Dictionary<Unit, HexSquare>();
         foreach(USPair u in this.startingLayout) {
             this.layout.Add(u.unit, this.board.getHexAt(u.coord));
-            if(this.traitCount.Contains) {
+            this.addTrait(u.unit);
+        }
+    }
 
-            } else {
-                
-            }
+    private void addTrait(Unit u) {
+        Trait rt = u.getRoleTrait();
+        if(this.traitCount.Contains(rt)) {
+            this.traitCount[rt] += 1;
+        } else {
+            this.traitCount.Add(rt, 1);
+        }
+
+        Trait ct = u.getClassTrait();
+        if(this.traitCount.Contains(ut)) {
+            this.traitCount[ut] += 1;
+        } else {
+            this.traitCount.Add(ut, 1);
+        }
+    }
+
+    private void removeTrait(Unit u) {
+        Trait rt = u.getRoleTrait();
+        this.traitCount[rt] -= 1;
+        if(this.traitCount[rt] == 0) {
+            this.traitCount.Remove(rt);
+        }
+
+        Trait ct = u.getClassTrait();
+        this.traitCount[ct] -= 1;
+        if(this.traitCount[ct] == 0) {
+            this.traitCount.Remove(ct);
         }
     }
     
@@ -73,6 +99,7 @@ public class PlayerUnitLayout : MonoBehaviour
         foreach(HexSquare s in this.board.getPlayerSqures()) {
             if(s.getUnit() == null) {
                 this.layout.Add(u, s);
+                this.addTrait(u);
                 u.placeUnitOnSquare(s);
                 return;
             }
