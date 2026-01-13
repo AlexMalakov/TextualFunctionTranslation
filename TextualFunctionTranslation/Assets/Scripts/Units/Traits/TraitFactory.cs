@@ -16,15 +16,15 @@ public class TraitBlueprint {
 public class TraitFactory : MonoBehaviour
 {
     [SerializeField] private List<TraitBlueprint> traitBP;
-    private Dictionary<TraitNames, Trait> traitToObj;
+    private static Dictionary<TraitNames, Trait> traitToObj = new Dictionary<TraitNames, Trait>();
 
     public void Awake() {
         foreach(TraitBlueprint tbp in this.traitBP) {
-            this.traitToObj.Add(tbp.trait, tbp.traitObj);
+            traitToObj.Add(tbp.trait, tbp.traitObj);
         }
     }
 
-    public Trait getTrait(TraitNames t) {
-        return this.traitToObj[t];
+    public static Trait getTrait(TraitNames t) {
+        return traitToObj[t];
     }
 }

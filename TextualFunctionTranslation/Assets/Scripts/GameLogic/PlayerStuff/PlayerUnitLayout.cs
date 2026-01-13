@@ -13,16 +13,24 @@ public struct USPair
 public class PlayerUnitLayout : MonoBehaviour
 {
     private Dictionary<Unit, HexSquare> layout;
+    private Dictionary<Trait, int> traitCount = new Dictionary<Trait, int>();
 
     [SerializeField] private List<USPair> startingLayout;
     [SerializeField] private Player player;
     [SerializeField] private HexBoard board;
+    
+    
     
 
     public void initLayout() {
         this.layout = new Dictionary<Unit, HexSquare>();
         foreach(USPair u in this.startingLayout) {
             this.layout.Add(u.unit, this.board.getHexAt(u.coord));
+            if(this.traitCount.Contains) {
+
+            } else {
+                
+            }
         }
     }
     
@@ -110,6 +118,10 @@ public class PlayerUnitLayout : MonoBehaviour
     private string jsonify() {
         //future thing to create, take a layout return as string ezpz
         return "";
+    }
+
+    private void countTraits() {
+
     }
 
 }
