@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+//struct linking a unit to a position
 [Serializable]
 public struct USPair
 {
@@ -10,6 +11,7 @@ public struct USPair
     public OffsetCoord coord;
 }
 
+//stores the units a player has on the board: their position and the number of each trait that is present
 public class PlayerUnitLayout : MonoBehaviour
 {
     private Dictionary<Unit, HexSquare> layout;
@@ -18,10 +20,8 @@ public class PlayerUnitLayout : MonoBehaviour
     [SerializeField] private List<USPair> startingLayout;
     [SerializeField] private Player player;
     [SerializeField] private HexBoard board;
-    
-    
-    
-
+     
+    //initializes the layout from starting layout, and sets up initial traits
     public void initLayout() {
         this.layout = new Dictionary<Unit, HexSquare>();
         foreach(USPair u in this.startingLayout) {
@@ -30,22 +30,24 @@ public class PlayerUnitLayout : MonoBehaviour
         }
     }
 
+    //given a unit, add the role trait and class trait to the traits dic
     private void addTrait(Unit u) {
         Trait rt = u.getRoleTrait();
-        if(this.traitCount.Contains(rt)) {
+        if(this.traitCount.ContainsKey(rt)) {
             this.traitCount[rt] += 1;
         } else {
             this.traitCount.Add(rt, 1);
         }
 
         Trait ct = u.getClassTrait();
-        if(this.traitCount.Contains(ut)) {
-            this.traitCount[ut] += 1;
+        if(this.traitCount.ContainsKey(ct)) {
+            this.traitCount[ct] += 1;
         } else {
-            this.traitCount.Add(ut, 1);
+            this.traitCount.Add(ct, 1);
         }
     }
 
+    //given a unit, remove its role and class traits from the dict
     private void removeTrait(Unit u) {
         Trait rt = u.getRoleTrait();
         this.traitCount[rt] -= 1;
@@ -62,10 +64,12 @@ public class PlayerUnitLayout : MonoBehaviour
     
     //return false if fails
     //this is ugly as shit but womp womp
-    public bool attemptUpdateLayout(Unit u, HexSquare square) {
+    public bool attemptUpdateLayout(Unit u, HexSquare square) { //moves unit u inot square s
+        //can't move unit you don't own
         if(!this.board.getPlayerSqures().Contains(square) || !this.player.ownsUnit(u)) {
             return false;
         }
+        //if unit already in the layout, it is being moved around
         if(this.layout.ContainsKey(u)) {
             if(square.getUnit() != null) {
                 Unit swapper = square.getUnit();
@@ -75,6 +79,7 @@ public class PlayerUnitLayout : MonoBehaviour
                 StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, this.layout[u].transform, false));
             } 
             this.layout[u] = square;
+        //unit being added into layout
         } else {
             if(this.player.getMaxCombatUnits() <= this.layout.Count && (square.getUnit() == null || !this.player.getBench().canAddUnitToBench())) {
                 return false;
@@ -94,6 +99,7 @@ public class PlayerUnitLayout : MonoBehaviour
         }
         u.placeUnitOnSquare(square);
         StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
+
         return true;
     }
 
@@ -144,26 +150,19 @@ public class PlayerUnitLayout : MonoBehaviour
         return null;
     }
 
-    //TODO: determine which approach is better
-
-    //get all the active traits so they can be used, maybe shouldnt do this this way tho cuz maybe it's smarter
-    //to deligate that action to each trait
+    //attempts to activate all traits, stores all traits that were activated
+    //TODO: SOMETHING SHOULD CALL THIS!
     public List<Trait> getActiveTraits() {
         List<Trait> active = new List<Trait>();
         foreach(Trait t in this.traitCount.Keys) {
-            if(this.traitCount[t] >= t.getMinimumForActive()) {
-                this.active.Add(t);
+            if(t.attemptActivate(this.traitCount[t])) {
+                active.Add(t);
             }
         }
 
         return active;
     }
 
-    public void reportActiveTraits() {
-        foreach(Trait t in this.traitCount.Keys) {
-            t.attemptActivate(this.traitCount[t]);
-        }
-    }
 
     private string jsonify() {
         //future thing to create, take a layout return as string ezpz

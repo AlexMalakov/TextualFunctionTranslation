@@ -20,7 +20,7 @@ public class Shop : MonoBehaviour
     }
 
     public void onUnitPurchased(UnitBlueprint ub) {
-        if(!this.player.canPurchaseUnit(ub.unitCost)) //TODO SWAP COST 
+        if(!this.player.canPurchaseUnit(ub.unitName, ub.unitCost)) //TODO SWAP COST 
         {
             //TODO: NOTIFY PLAYER THAT THEY ARE TOO BUM ASS POOR
             return;

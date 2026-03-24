@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum TraitNames {
-    Anchors
+    Anchors,
+    Plugs
 }
 
 [System.Serializable]

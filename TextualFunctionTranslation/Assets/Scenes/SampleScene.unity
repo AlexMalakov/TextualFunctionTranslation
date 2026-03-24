@@ -5498,6 +5498,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 25444066}
   shop: {fileID: 833718200}
+  unitBeingSold:
+    unitName: 
+    unitCost: 0
+    unitIcon: {fileID: 0}
+    unitPrefab: {fileID: 0}
   unitName: {fileID: 235916696}
   unitCost: {fileID: 1425534197}
   unitSprite: {fileID: 635394563}
@@ -7210,7 +7215,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50981c1c3c4364001a6f29746e0849d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curUnits: []
+  curUnits:
+  - unitName: test
+    unitCost: 1
+    unitIcon: {fileID: 0}
+    unitPrefab: {fileID: 0}
 --- !u!1 &753563810
 GameObject:
   m_ObjectHideFlags: 0

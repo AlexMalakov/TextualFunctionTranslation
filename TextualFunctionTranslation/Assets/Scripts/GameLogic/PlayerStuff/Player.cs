@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
 public class Player : MonoBehaviour
 {
     [SerializeField] private List<Unit> playersUnits;
@@ -36,15 +37,16 @@ public class Player : MonoBehaviour
     }
 
     public bool canMergeUnit(string unitName) {
-        return this.bench.hasStarLevel(unitName, 1) || this.layout.hasStarLevel(unitName, 1);
+        return this.bench.hasStarLevel(unitName, 1) || this.unitLayout.hasStarLevel(unitName, 1);
     }
 
+    //recursively merge until can no longer merge any longer
     private void mergeUnit(Unit u, int starLevel) {
         Unit mergeTo;
         if(this.bench.hasStarLevel(u.getName(), starLevel)) {
             mergeTo = this.bench.getStarLevel(u.getName(), starLevel);
         } else if(this.unitLayout.hasStarLevel(u.getName(), starLevel)){
-            mergeTo = this.unitLayout.getStarLevel(u.getName(), starLevel)
+            mergeTo = this.unitLayout.getStarLevel(u.getName(), starLevel);
             
         } else {
             return;

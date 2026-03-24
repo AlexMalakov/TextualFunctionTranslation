@@ -63,7 +63,7 @@ public abstract class Unit : MonoBehaviour
 
     void Start() {
         this.roleTrait = TraitFactory.getTrait(this.roleTraitName);
-        this.classTraitName = TraitFactory.getTrait(this.classTraitName);
+        this.classTrait = TraitFactory.getTrait(this.classTraitName);
     }
 
     public Unit setBlueprint(UnitBlueprint blueprint) {
