@@ -96,10 +96,16 @@ public abstract class Unit : MonoBehaviour
     }
 
     public Trait getRoleTrait() {
+        if(!this.roleTrait) {
+            this.roleTrait = TraitFactory.getTrait(this.roleTraitName);
+        }
         return this.roleTrait;
     }
 
     public Trait getClassTrait() {
+        if(!this.classTrait) {
+            this.classTrait = TraitFactory.getTrait(this.classTraitName);
+        }
         return this.classTrait;
     }
 
@@ -252,7 +258,7 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
-    //this does not five a unit a new square use carefully!
+    //this does not give a unit a new square use carefully!
     public void unclaimSquare() {
         if(this.curPosition == null || !this.curPosition.isSquare()) {
             return;
