@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] private UnitMovementManager umm;
 
     [SerializeField] private int unitCap; //TODO: upadte this based on the current round
-    private int money = 0;
+    [SerializeField] private int money = 0;
 
     public void init() {
         this.unitLayout.initLayout();

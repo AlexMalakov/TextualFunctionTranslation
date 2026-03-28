@@ -66,7 +66,8 @@ public abstract class Unit : MonoBehaviour
         this.classTrait = TraitFactory.getTrait(this.classTraitName);
     }
 
-    public Unit setBlueprint(UnitBlueprint blueprint) {
+    public Unit setBlueprint(UnitBlueprint blueprint, CombatManager manager) {
+        this.manager = manager;
         this.unitBlueprint = blueprint;
         return this;
     }

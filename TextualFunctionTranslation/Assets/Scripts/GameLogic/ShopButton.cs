@@ -29,6 +29,7 @@ public class ShopButton : MonoBehaviour
     }
 
     public void onButtonClick() {
+        Debug.Log("CLICKED!");
         this.shop.onUnitPurchased(this.unitBeingSold);
     }
 
