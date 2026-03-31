@@ -154,6 +154,10 @@ public abstract class Unit : MonoBehaviour
         this.transform.position = new Vector3(square.transform.position.x, this.transform.position.y, square.transform.position.z);
     }
 
+    public void placeUnitOnBench() {
+        this.unclaimSquare();
+    }
+
 
     private IEnumerator unitAttack() {
         //attack target

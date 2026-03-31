@@ -79,27 +79,35 @@ public class PlayerUnitLayout : MonoBehaviour
                 StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, this.layout[u].transform, false));
             } 
             this.layout[u] = square;
+            u.placeUnitOnSquare(square);
+            StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
         //unit being added into layout
         } else {
             if(this.player.getMaxCombatUnits() <= this.layout.Count && (square.getUnit() == null || !this.player.getBench().canAddUnitToBench())) {
+                Debug.Log("TOO MANY UNITS! FAILED!");
                 return false;
             }
+
+            Debug.Log("MOVING UNIT NOT ON LAYOUT");
 
             if(square.getUnit() != null) {
                 Unit swapper = square.getUnit();
                 this.layout.Remove(swapper);
                 this.removeTrait(swapper);
                 swapper.unclaimSquare();
+                u.placeUnitOnSquare(square);
+                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
                 BenchSlot dest = this.player.getBench().addUnitToBench(swapper);
 
                 StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, dest.transform, false));
+            } else {
+                u.placeUnitOnSquare(square);
+                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
             }
             this.layout.Add(u, square);
             this.addTrait(u);
         }
-        u.placeUnitOnSquare(square);
-        StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
-
+        
         return true;
     }
 

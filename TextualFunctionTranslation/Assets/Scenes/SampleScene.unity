@@ -4922,7 +4922,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &635394562
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11230,7 +11230,7 @@ MonoBehaviour:
   bench: {fileID: 753563811}
   umm: {fileID: 1395918879}
   unitCap: 3
-  money: 0
+  money: 1
 --- !u!114 &1395918877
 MonoBehaviour:
   m_ObjectHideFlags: 0

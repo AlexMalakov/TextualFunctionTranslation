@@ -25,6 +25,7 @@ public class BenchSlot : MonoBehaviour
 
     public BenchSlot insertUnit(Unit u) {
         this.unit = u;
+        u.placeUnitOnBench();
         return this;
     }
 
