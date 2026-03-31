@@ -26,6 +26,7 @@ public class Shop : MonoBehaviour
             return;
         }
         
+        Debug.Log("BUYING!");
         Unit u = UnitFactory.createUnit(ub.unitName);
         this.player.purchaseUnit(u);
         shopIndex++;

@@ -22,16 +22,19 @@ public class Player : MonoBehaviour
         return this.money >= unitCost && (this.bench.canAddUnitToBench() || this.unitLayout.getActiveUnits().Count < this.unitCap || this.canMergeUnit(unitName));
     }
 
-    public void purchaseUnit(Unit u) {
+    public void purchaseUnit(Unit u) { //TODO: Make sure unit actually arrives where it needs to
         this.money -= u.getCost();
         this.playersUnits.Add(u);
 
         if(this.canMergeUnit(u.getName())) {
+            //don't need to move unit because it will get exploded by the merge
             this.mergeUnit(u, 1);
         }
         else if(this.bench.canAddUnitToBench()) {
-            this.bench.addUnitToBench(u); //throws exception if it fails but shouldnt since im checking for room first
+            BenchSlot unitSlot = this.bench.addUnitToBench(u); //throws exception if it fails but shouldnt since im checking for room first
+            StartCoroutine(this.getUnitMoveManager().dragUnitTo(u, unitSlot.transform, false));
         } else {
+            //don't need to? it gets auto dragged in
             this.unitLayout.addUnitFromShop(u);
         }
     }
