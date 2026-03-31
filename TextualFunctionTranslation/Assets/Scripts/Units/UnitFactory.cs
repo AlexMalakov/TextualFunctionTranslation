@@ -18,7 +18,7 @@ public class UnitFactory : MonoBehaviour
     private static CombatManager com;
 
     static List<UnitBlueprint> units;
-    public void Awake() {
+    public void Awake() { //Awake because this needs to run first
         units = this.curUnits;
         com = cm;
     }

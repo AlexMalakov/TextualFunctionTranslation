@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private PrecombatManager pcm;
 
-    void Awake() {
+    void Start() { //starts the game, runs after factories have finished
         this.board.initBoard();
         this.combatManager.initPlayers();
     }

@@ -16,7 +16,7 @@ public class ShopButton : MonoBehaviour
     [SerializeField] private TMP_Text unitCost;
     [SerializeField] private Image unitSprite;
 
-    public void Start() {
+    public void Awake() { //Awake because this doesn't affect other systems
         UnityEngine.UI.Button btn = button.GetComponent<UnityEngine.UI.Button>();
 		btn.onClick.AddListener(onButtonClick);
     }

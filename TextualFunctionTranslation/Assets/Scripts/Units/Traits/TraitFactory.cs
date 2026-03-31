@@ -19,7 +19,7 @@ public class TraitFactory : MonoBehaviour
     [SerializeField] private List<TraitBlueprint> traitBP;
     private static Dictionary<TraitNames, Trait> traitToObj = new Dictionary<TraitNames, Trait>();
 
-    public void Awake() {
+    public void Awake() { //Awake because this needs to run first
         foreach(TraitBlueprint tbp in this.traitBP) {
             traitToObj.Add(tbp.trait, tbp.traitObj);
         }

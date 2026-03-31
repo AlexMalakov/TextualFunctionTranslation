@@ -15,7 +15,7 @@ public class Shop : MonoBehaviour
     [SerializeField] private List<ShopButton> shopButtons;
     private int shopIndex = 0; //TODO: make sure on restarts this gets saved?
 
-    void Awake() {
+    void Start() { //sets initial entries, runs after factories have finished
         this.updateEntries();
     }
 

@@ -61,11 +61,6 @@ public abstract class Unit : MonoBehaviour
     private bool isMoving;
     private bool requestOverride;
 
-    void Start() {
-        this.roleTrait = TraitFactory.getTrait(this.roleTraitName);
-        this.classTrait = TraitFactory.getTrait(this.classTraitName);
-    }
-
     public Unit setBlueprint(UnitBlueprint blueprint, CombatManager manager) {
         this.manager = manager;
         this.unitBlueprint = blueprint;
@@ -97,7 +92,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     public Trait getRoleTrait() {
-        if(!this.roleTrait) {
+        if(!this.roleTrait) { //this unit's trait is always known. It however cannot be retrieved until the factory is done. So this method can't be called during 'AWAKE'
             this.roleTrait = TraitFactory.getTrait(this.roleTraitName);
         }
         return this.roleTrait;

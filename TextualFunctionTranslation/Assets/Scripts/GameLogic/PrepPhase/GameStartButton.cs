@@ -10,7 +10,7 @@ public class GameStartButton : MonoBehaviour
 
     private bool bEnabled = false;
 
-    public void Start() {
+    public void Awake() { //Awake because this doesn't affect other systems
         UnityEngine.UI.Button btn = button.GetComponent<UnityEngine.UI.Button>();
 		btn.onClick.AddListener(onButtonClick);
     }

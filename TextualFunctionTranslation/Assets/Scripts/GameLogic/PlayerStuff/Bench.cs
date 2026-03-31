@@ -8,7 +8,7 @@ public class Bench : MonoBehaviour
     [SerializeField] private List<BenchSlot> benchSlotPositions;
     [SerializeField] private Player player;
 
-    void Awake() {
+    void Awake() { //Awake because this doesn't affect other systems
         for(int i = 0; i < this.benchSlotPositions.Count; i++) {
             this.benchSlotPositions[i].init(i);
         }
@@ -92,7 +92,7 @@ public class Bench : MonoBehaviour
 
     public Unit getStarLevel(string unitName, int starLevel) {
         foreach(BenchSlot b in this.benchSlotPositions) {
-            if(b.getUnit().getName() == unitName  && b.getUnit().getMergeLevel() == starLevel) {
+            if(b.getUnit() && b.getUnit().getName() == unitName  && b.getUnit().getMergeLevel() == starLevel) {
                 return b.getUnit();
             }
         }

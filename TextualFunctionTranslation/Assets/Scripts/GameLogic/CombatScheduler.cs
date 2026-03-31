@@ -11,7 +11,7 @@ public class CombatScheduler : MonoBehaviour
 
     private float lastCheckIn;
 
-    public void Awake() {
+    public void Awake() { //Awake because this doesn't affect other systems
         combatTimePerTick = this.combatTickTime;
     }
 

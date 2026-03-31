@@ -31,7 +31,7 @@ public class PlayerUnitLayout : MonoBehaviour
     }
 
     //given a unit, add the role trait and class trait to the traits dic
-    private void addTrait(Unit u) { //OK SO THIS RUNS BEFORE THE TRAITS ARE ASSIGNED WHICH IS KINDA ROUGH
+    private void addTrait(Unit u) {
         Trait rt = u.getRoleTrait();
         if(this.traitCount.ContainsKey(rt)) {
             this.traitCount[rt] += 1;

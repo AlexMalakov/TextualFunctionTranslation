@@ -11,7 +11,7 @@ public class MouseTransform : MonoBehaviour
     private Unit unitDragging;
     private Vector3 initialPos;
 
-    void Start() {
+    void Awake() { //Awake because this doesn't affect other systems
         this.dragPlane = new Plane(Vector3.up, Vector3.zero);
     }
 

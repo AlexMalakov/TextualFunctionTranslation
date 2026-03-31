@@ -4956,7 +4956,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -6358,7 +6358,8 @@ MonoBehaviour:
   - unitName: test
     unitCost: 1
     unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitPrefab: {fileID: 2723457009500729549, guid: dc33ab89a688d458e8a999ea6ef9477b, type: 3}
+  cm: {fileID: 747084477}
 --- !u!114 &747084481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6485,7 +6486,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -11229,6 +11230,7 @@ MonoBehaviour:
   bench: {fileID: 753563811}
   umm: {fileID: 1395918879}
   unitCap: 3
+  money: 0
 --- !u!114 &1395918877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12390,7 +12392,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -16466,6 +16468,7 @@ MonoBehaviour:
   bench: {fileID: 0}
   umm: {fileID: 0}
   unitCap: 3
+  money: 0
 --- !u!114 &2012429345
 MonoBehaviour:
   m_ObjectHideFlags: 0
