@@ -98,8 +98,7 @@ public class PlayerUnitLayout : MonoBehaviour
                 u.placeUnitOnSquare(square);
                 StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
                 BenchSlot dest = this.player.getBench().addUnitToBench(swapper);
-
-                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, dest.transform, false));
+                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, dest.transform, false));
             } else {
                 u.placeUnitOnSquare(square);
                 StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
