@@ -56,13 +56,16 @@ public class Bench : MonoBehaviour
         if(!this.player.ownsUnit(u)) {
             return false;
         }
+        
         BenchSlot benchPos = this.unitInBench(u);
         if(benchPos) {
             if(this.benchSlotPositions[slotNum].isOccupied()) { //swap to units on the bench
+                Debug.Log("BENCH LAYOUT UPDATE CASE INTERNAL SWAP");
                 Unit swapper = this.benchSlotPositions[slotNum].getUnit();
                 benchPos.insertUnit(swapper);
                 StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, benchPos.transform, false));
             } else {
+                Debug.Log("BENCH LAYOUT UPDATE CASE SHIFT");
                 benchPos.removeUnit();
             }
         } else {
@@ -72,11 +75,15 @@ public class Bench : MonoBehaviour
             }
 
             if(this.benchSlotPositions[slotNum].isOccupied()) {
+                Debug.Log("BENCH LAYOUT UPDATE CASE EXTERNAL SWAP");
                 Unit swapper = this.benchSlotPositions[slotNum].getUnit();
                 HexSquare uPos = u.getPosition();
                 u.unclaimSquare();
-                swapper.placeUnitOnSquare(uPos);
-                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, uPos.transform, false));
+                this.player.getUnitLayout().addUnitFromBench(swapper, uPos);
+                // swapper.placeUnitOnSquare(uPos);
+                // StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, uPos.transform, false));
+            } else {
+                Debug.Log("BENCH LAYOUT UPDATE CASE EXTERNAL");
             }
 
             this.player.getUnitLayout().removeUnitFromLayout(u);

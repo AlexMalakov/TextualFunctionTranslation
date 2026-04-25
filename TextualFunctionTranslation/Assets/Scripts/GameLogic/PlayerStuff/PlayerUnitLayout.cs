@@ -49,6 +49,7 @@ public class PlayerUnitLayout : MonoBehaviour
 
     //given a unit, remove its role and class traits from the dict
     private void removeTrait(Unit u) {
+        
         Trait rt = u.getRoleTrait();
         this.traitCount[rt] -= 1;
         if(this.traitCount[rt] == 0) {
@@ -65,53 +66,72 @@ public class PlayerUnitLayout : MonoBehaviour
     //return false if fails
     //this is ugly as shit but womp womp
     public bool attemptUpdateLayout(Unit u, HexSquare square) { //moves unit u inot square s
-        //can't move unit you don't own
-        if(!this.board.getPlayerSqures().Contains(square) || !this.player.ownsUnit(u)) {
+        //TODO: ADD UNIT TRAITS
+
+        //not my unit or not my destination square, then fail the movement
+        if(!this.board.getPlayerSquares().Contains(square) || !this.player.ownsUnit(u) 
+            || (!this.layout.ContainsKey(u) && this.player.getMaxCombatUnits() <= this.layout.Count
+                && (square.getUnit() == null //we are at full capacity and trying to add another unit
+                //    || //or we are adding a unit from the shop, but maybe that's the shops responsibility to block?
+                )
+            )
+        ) {
             return false;
         }
-        //if unit already in the layout, it is being moved around
-        if(this.layout.ContainsKey(u)) {
-            if(square.getUnit() != null) {
-                Unit swapper = square.getUnit();
-                u.unclaimSquare();
-                this.layout[swapper] = this.layout[u];
-                swapper.placeUnitOnSquare(this.layout[u]);
-                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, this.layout[u].transform, false));
-            } 
-            this.layout[u] = square;
-            u.placeUnitOnSquare(square);
-            StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
-        //unit being added into layout
-        } else {
-            if(this.player.getMaxCombatUnits() <= this.layout.Count && (square.getUnit() == null || !this.player.getBench().canAddUnitToBench())) {
-                Debug.Log("TOO MANY UNITS! FAILED!");
-                return false;
-            }
 
-            Debug.Log("MOVING UNIT NOT ON LAYOUT");
+        HexSquare currentSquare = u.getPosition(); //this might have side effects
+        u.unclaimSquare(); //might hurt
 
-            if(square.getUnit() != null) {
+        if(this.layout.ContainsKey(u)) { //either we're swapping 2 units already on the layout or moving a unit already on the layout into a new square
+            if(square.getUnit() != null) { // this is a unit swap
+                Debug.Log("UNIT LAYOUT UPDATE CASE INTERNAL SWAP");
                 Unit swapper = square.getUnit();
-                this.layout.Remove(swapper);
-                this.removeTrait(swapper);
+                
                 swapper.unclaimSquare();
-                u.placeUnitOnSquare(square);
+
+                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, this.layout[swapper].transform, true));
+                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, this.layout[u].transform, true));
+
+                swapper.placeUnitOnSquare(this.layout[u]);
+                u.placeUnitOnSquare(this.layout[swapper]);
+
+                this.layout[u] = square;
+                this.layout[swapper] = currentSquare;
+            } else {
+                Debug.Log("UNIT LAYOUT UPDATE CASE SHIFT");
                 StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
+                u.placeUnitOnSquare(square);
+                this.layout[u] = square;
+            }
+        } else { //either we're adding a unit from the shop or moving a unit from the bench: If from the shop can't move it into a unit, if from the bench can do whatever
+            Debug.Log("UNIT LAYOUT UPDATE CASE ADD NEW UNIT");
+            if(square.getUnit() != null) { //swap this unit to the bench
+                //INVARIANT: THERE SHOULD BE ROOM ON THE BENCH: TODO: DEBUG IN THE EVENT THAT THERE ISN"T YOU SMILE
+                Unit swapper = square.getUnit();
+                swapper.unclaimSquare();
+                this.removeUnitFromLayout(swapper);
                 BenchSlot dest = this.player.getBench().addUnitToBench(swapper);
                 StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, dest.transform, false));
-            } else {
-                u.placeUnitOnSquare(square);
-                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
             }
-            this.layout.Add(u, square);
+            
+            if(this.player.getBench().unitInBench(u)) { //unit from bench
+                //remove unit from the bench,
+                this.player.getBench().removeUnitFromBench(u);
+
+            } //for shop, unit needs to be instantiated already
+            StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
+            u.placeUnitOnSquare(square);
+            this.layout[u] = square;
             this.addTrait(u);
         }
-        
+
         return true;
+
+
     }
 
     public void addUnitFromShop(Unit u) {
-        foreach(HexSquare s in this.board.getPlayerSqures()) {
+        foreach(HexSquare s in this.board.getPlayerSquares()) {
             if(s.getUnit() == null) {
                 this.layout.Add(u, s);
                 this.addTrait(u);
@@ -120,6 +140,14 @@ public class PlayerUnitLayout : MonoBehaviour
             }
         }
         throw new Exception("cannot place unit in layout despite player unit cap allowing it!!!");
+    }
+
+    public void addUnitFromBench(Unit u, HexSquare destination) {
+        this.layout.Add(u, destination);
+        this.addTrait(u);
+        StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, destination.transform, true));
+        u.placeUnitOnSquare(destination);
+        //this does not need to unclaim bench slots the bench can do that for you
     }
 
     public void removeUnitFromLayout(Unit u) {

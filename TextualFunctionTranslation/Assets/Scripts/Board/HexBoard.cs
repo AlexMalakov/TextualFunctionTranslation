@@ -73,7 +73,7 @@ public class HexBoard : MonoBehaviour
         return res;
     }
 
-    public List<HexSquare> getPlayerSqures() {
+    public List<HexSquare> getPlayerSquares() {
         return this.humanSquares;
     }
 }
