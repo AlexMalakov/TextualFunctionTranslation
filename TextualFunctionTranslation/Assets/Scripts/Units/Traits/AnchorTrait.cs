@@ -9,7 +9,4 @@ public class AnchorTrait : Trait
 
     }
 
-    public override void doThing() {
-
-    }
 }
