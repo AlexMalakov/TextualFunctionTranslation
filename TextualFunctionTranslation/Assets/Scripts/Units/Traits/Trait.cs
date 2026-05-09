@@ -59,6 +59,15 @@ public abstract class Trait : MonoBehaviour
 
     public virtual void onCombatEnd(Unit traitHaver);
 
+    /*
+    scout - on first attack
+druid - when layout phase starts
+warden - on combat start
+marksman - on unit attack
+outsider - on combat start
+tracker - on combat end
+    */
+
 
 }
 

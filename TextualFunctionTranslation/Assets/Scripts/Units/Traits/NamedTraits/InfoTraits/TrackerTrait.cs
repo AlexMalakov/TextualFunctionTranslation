@@ -5,4 +5,8 @@ using UnityEngine;
 public class TrackerTrait : InformationTrait
 {
     public TrackerTrait() : base("tracker", 1) {}
+
+
+    public virtual void onCombatEnd(Unit traitHaver);
+
 }
