@@ -50,6 +50,8 @@ public class HexSquare : MonoBehaviour
 {
     private AxialCoord axc;
     private Unit unit;
+
+    private char characterValue;
     
     public virtual void init(int x, int y, Vector3 hexPos) {
         this.transform.position = hexPos;
@@ -64,6 +66,10 @@ public class HexSquare : MonoBehaviour
             new AxialCoord(this.axc.q-1, this.axc.r, this.axc.s+1),
             new AxialCoord(this.axc.q, this.axc.r+1, this.axc.s-1),
             new AxialCoord(this.axc.q, this.axc.r-1, this.axc.s+1)};
+    }
+
+    public char getCharValue() {
+        return characterValue;
     }
 
     public virtual AxialCoord getCoords() {
@@ -97,6 +103,10 @@ public class HexSquare : MonoBehaviour
             }
             this.unit = null;
         }
+    }
+
+    public void displayValue(bool toggle) {
+        //TODO: IMPLEMENT ME
     }
 
     public string toString() {
