@@ -45,7 +45,7 @@ public abstract class Trait : MonoBehaviour
     }
 
     //this should do whatever the trait does
-    public virtual void onPrecombatStart(Unit traitHaver);
+    public virtual void onPrecombatStart();
 
     public virtual void onCombatStart(Unit traitHaver);
 

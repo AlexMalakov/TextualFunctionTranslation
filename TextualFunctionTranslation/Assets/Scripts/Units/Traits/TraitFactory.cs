@@ -22,6 +22,7 @@ public class TraitBlueprint {
 public class TraitFactory : MonoBehaviour
 {
     [SerializeField] private List<TraitBlueprint> traitBP;
+
     private static Dictionary<TraitNames, Trait> traitToObj = new Dictionary<TraitNames, Trait>();
 
     public void Awake() { //Awake because this needs to run first
