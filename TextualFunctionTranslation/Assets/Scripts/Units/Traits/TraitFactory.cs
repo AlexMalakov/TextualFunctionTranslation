@@ -4,7 +4,12 @@ using UnityEngine;
 
 public enum TraitNames {
     Anchors,
-    Plugs
+    Darouidyse,
+    Marksman,
+    Outcast,
+    Scout,
+    Tracker,
+    Warden
 }
 
 [System.Serializable]

@@ -45,19 +45,19 @@ public abstract class Trait : MonoBehaviour
     }
 
     //this should do whatever the trait does
-    public abstract void onPrecombatStart(Unit traitHaver);
+    public virtual void onPrecombatStart(Unit traitHaver);
 
-    public abstract void onCombatStart(Unit traitHaver);
+    public virtual void onCombatStart(Unit traitHaver);
 
-    public abstract void onFirstAttackAgainstUnit(Unit traitHaver, Unit target);
+    public virtual void onFirstAttackAgainstUnit(Unit traitHaver, Unit target);
 
-    public abstract void onUnitAttack(Unit traitHaver, Unit target); //target not needed but correct to have 
+    public virtual void onUnitAttack(Unit traitHaver, Unit target); //target not needed but correct to have 
 
-    public abstract void onEnemyDefeat(Unit traitHaver, Unit target);
+    public virtual void onEnemyDefeat(Unit traitHaver, Unit target);
 
-    public abstract void onCombatSurvival(Unit traitHaver);
+    public virtual void onCombatSurvival(Unit traitHaver);
 
-    public abstract void onCombatEnd(Unit traitHaver);
+    public virtual void onCombatEnd(Unit traitHaver);
 
 
 }
