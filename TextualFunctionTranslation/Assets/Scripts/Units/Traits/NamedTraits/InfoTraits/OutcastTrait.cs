@@ -12,12 +12,12 @@ public class OutcastTrait : InformationTrait
 
         AxialCoord center = traitHaver.getPosition().getCoords();
         AxialCoord[] possibleNeighbors = {
-            new AxialCoord(center.q + 1, center.r, center.s),
-            new AxialCoord(center.q - 1, center.r, center.s),
-            new AxialCoord(center.q, center.r + 1, center.s),
-            new AxialCoord(center.q, center.r - 1, center.s),
-            new AxialCoord(center.q, center.r, center.s + 1),
-            new AxialCoord(center.q, center.r, center.s - 1),
+            new AxialCoord(center.q + 1, center.r - 1, center.s),
+            new AxialCoord(center.q + 1, center.r, center.s - 1),
+            new AxialCoord(center.q - 1, center.r + 1, center.s),
+            new AxialCoord(center.q, center.r + 1, center.s - 1),
+            new AxialCoord(center.q - 1, center.r, center.s + 1),
+            new AxialCoord(center.q, center.r - 1, center.s + 1),
         };
 
         foreach(AxialCoord c in possibleNeighbors) {

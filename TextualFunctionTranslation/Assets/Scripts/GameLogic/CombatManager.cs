@@ -55,6 +55,11 @@ public class CombatManager : MonoBehaviour
             || (this.enemy.ownsUnit(unit1) && this.enemy.ownsUnit(unit2));
     }
 
+    //this might already exist if so oops
+    public bool isPlayerUnit() {
+        return this.player.ownsUnit(unit1)
+    }
+
     public Unit requestAttackTarget(Unit attacker, Unit previousTarget) {
         Func<HexSquare, bool> getAttackableSquares = (HexSquare s) => {
             return s.getUnit() != null
