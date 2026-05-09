@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-class CharacterTransformation {
+public class CharacterTransformation {
     private HexSquare to;
     private HexSquare from;
 
@@ -25,8 +25,8 @@ public abstract class CypherTrait : Trait
         this.cypher = new List<CharacterTransformation>();
     }
 
-    protected void addToCypher(List<CharacterTransformation> transforms) {
-        this.cypher.AddAll(transforms);
+    protected void addToCypher(List<CharacterTransformation> tr) {
+        this.cypher.AddRange(tr);
     }
 
     public void runCypher(char[] curCypherText) {
@@ -37,7 +37,7 @@ public abstract class CypherTrait : Trait
         }
 
         for(int i = 0; i < curCypherText.Length; i++) {
-            if (!newCypherText[i]) {
+            if (newCypherText[i] != '\0') {
                 newCypherText[i] = curCypherText[i]; //if no transformation applied, then it's just identity
             }
         }

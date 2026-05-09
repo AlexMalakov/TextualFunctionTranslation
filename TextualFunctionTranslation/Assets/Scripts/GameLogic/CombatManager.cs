@@ -56,8 +56,8 @@ public class CombatManager : MonoBehaviour
     }
 
     //this might already exist if so oops
-    public bool isPlayerUnit() {
-        return this.player.ownsUnit(unit1)
+    public bool isPlayerUnit(Unit unit) {
+        return this.player.ownsUnit(unit);
     }
 
     public Unit requestAttackTarget(Unit attacker, Unit previousTarget) {

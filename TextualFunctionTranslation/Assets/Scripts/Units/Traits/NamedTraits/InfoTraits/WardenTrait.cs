@@ -12,6 +12,7 @@ public class WardenTrait : InformationTrait
         AxialCoord pos = traitHaver.getPosition().getCoords();
         HexSquare leftSquare;
         HexSquare rightSquare;
+        
         if(cm.isPlayerUnit(traitHaver)) { //just dont use r
             leftSquare = cm.getBoard().getHexAt(new AxialCoord(pos.q - 1, pos.r + 1, pos.s));
             rightSquare = cm.getBoard().getHexAt(new AxialCoord(pos.q, pos.r + 1, pos.s - 1));
