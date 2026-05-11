@@ -6,7 +6,12 @@ public class CharacterTransformation {
     private HexSquare to;
     private HexSquare from;
 
-    public void apply(char[] outputArr, char[] cypherText) { //this might need hashing? might not be efficient, but counter point do I care?
+    public CharacterTransformation(HexSquare to, HexSquare from) {
+        this.to = to;
+        this.from = from;
+    }
+
+    public virtual void apply(char[] outputArr, char[] cypherText) { //this might need hashing? might not be efficient, but counter point do I care?
         char t = to.getCharValue();
         char f = from.getCharValue();
         for(int i = 0; i < cypherText.Length; i++) {
