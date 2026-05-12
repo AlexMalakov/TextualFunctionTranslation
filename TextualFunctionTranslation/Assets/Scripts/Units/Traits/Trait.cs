@@ -44,6 +44,28 @@ public abstract class Trait : MonoBehaviour
         //TODO: ELSE DO STUFF !!!!!
     }
 
+    protected List<HexSquare> getSquaresInRadius(HexSquare centerSq, int radius, Board board) {
+        List<HexSquare> squares = new List<HexSquare>();
+        AxialCoord center = centerSq.getCoords();
+        AxialCoord[] possibleNeighbors = {
+            new AxialCoord(center.q + radius, center.r - radius, center.s),
+            new AxialCoord(center.q + radius, center.r, center.s - radius),
+            new AxialCoord(center.q - radius, center.r + radius, center.s),
+            new AxialCoord(center.q, center.r + radius, center.s - radius),
+            new AxialCoord(center.q - radius, center.r, center.s + radius),
+            new AxialCoord(center.q, center.r - radius, center.s + radius),
+        };
+
+        foreach(AxialCoord c in possibleNeighbors) {
+            HexSquare sq = cm.getBoard().getHexAt(c);
+            if(sq.isSquare()) {
+                squares.Add(sq);
+            }
+        }
+
+        return squares;
+    }
+
     //this should do whatever the trait does
     public virtual void onPrecombatStart(){}
 
@@ -60,12 +82,12 @@ public abstract class Trait : MonoBehaviour
     public virtual void onCombatEnd(Unit traitHaver){}
 
     /*
-    scout - on first attack
-druid - when layout phase starts
-warden - on combat start
-marksman - on unit attack
-outsider - on combat start
-tracker - on combat end
+Vegenary - on combat end
+Rotator - on combat start 
+royal knights - on unit defeat, on combat survive
+plug - on unit defeat
+assasin - on combat end
+flank guard - on combat start
     */
 
 
