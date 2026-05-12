@@ -10,26 +10,16 @@ public class OutcastTrait : InformationTrait
 
     public virtual void onCombatStart(Unit traitHaver) {
 
-        AxialCoord center = traitHaver.getPosition().getCoords();
-        AxialCoord[] possibleNeighbors = {
-            new AxialCoord(center.q + 1, center.r - 1, center.s),
-            new AxialCoord(center.q + 1, center.r, center.s - 1),
-            new AxialCoord(center.q - 1, center.r + 1, center.s),
-            new AxialCoord(center.q, center.r + 1, center.s - 1),
-            new AxialCoord(center.q - 1, center.r, center.s + 1),
-            new AxialCoord(center.q, center.r - 1, center.s + 1),
-        };
-
-        foreach(AxialCoord c in possibleNeighbors) {
-            HexSquare sq = cm.getBoard().getHexAt(c);
-            if(!sq.isSquare()) {
+        List<HexSquare> circle = this.getSquaresInRadius(traitHaver.getPosition(), 1, cm.getBoard());
+        foreach(HexSquare s in circle) {
+            if(s.getUnit() != null)
                 return;
-            }
         }
 
         //TODO: give unit it's stat boost
-        foreach(AxialCoord c in possibleNeighbors) {
-            this.logSquare(cm.getBoard().getHexAt(c));
+        
+        foreach(HexSquare s in circle) {
+            this.logSquare(s);
         }
     }
   
