@@ -13,7 +13,7 @@ class VegenereCharacterTransformation : CharacterTransformation {
 
         for(int i = 0; i < cypherText.Length; i++) {
 
-            outputArr[i] = (char)((((int)cypherText[i] + (int)this.key[i % key.Length])%(int)'a') + (int)'a'); //this is horrifying will debug the issues tomorrow byeeee :)
+            outputArr[i] = (char)((((int)cypherText[i] + (int)this.key[i % key.Length]) % 26) + (int)'a'); //this is horrifying will debug the issues tomorrow byeeee :)
         }
     }
 }
