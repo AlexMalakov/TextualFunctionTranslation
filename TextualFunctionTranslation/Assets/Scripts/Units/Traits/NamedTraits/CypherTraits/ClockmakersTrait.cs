@@ -4,15 +4,33 @@ using UnityEngine;
 
 public class ClockmakersTrait : CypherTrait
 {
-    public ClockmakersTrait() : base("clockmaker", 2) {
+    [SerializeField] private CombatManager cm;
 
-    }
+    public ClockmakersTrait() : base("clockmaker", 2) {}
 
     public virtual void onCombatStart(Unit traitHaver){
         
+        //TODO: determine if radius 1 or 1 and 2
+
+        List<HexSquare> rad1circle = this.getSquaresInRadius(traitHaver.getPosition(), 1, this.cm.getBoard());
+        
+        // foreach(HexSquare s in rad1circle) {
+        //     //TODO: buff every unit in circle
+        // }
+
+        List<CharacterTransformation> cypher = new List<CharacterTransformation>();
+
+        HexSquare prev = null;
+        foreach(HexSquare s in rad1circle) {
+            if(prev != null) {
+                cypher.Add(new CharacterTransformation(s, prev));
+            }
+
+            prev = s;
+        }
+        cypher.Add(new CharacterTransformation(rad1circle[0], prev));
+
+        this.addToCypher(cypher);
     }
 
-    private List<HexSquare> getSquaresInRadius(HexSquare center, int radius) {
-        
-    }
 }
