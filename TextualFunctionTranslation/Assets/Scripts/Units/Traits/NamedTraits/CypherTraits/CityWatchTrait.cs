@@ -9,7 +9,7 @@ public class CityWatchTrait : CypherTrait
 
     
     public virtual void onCombatStart(Unit traitHaver){
-        HexSquare start = traitHaver.getPosition()
+        HexSquare start = traitHaver.getPosition();
         List<Unit> leftBuff = this.getAllUnitsInDirection(start, -1);
         List<Unit> rightBuff = this.getAllUnitsInDirection(start, 1);
 

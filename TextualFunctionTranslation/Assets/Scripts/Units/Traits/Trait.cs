@@ -44,7 +44,7 @@ public abstract class Trait : MonoBehaviour
         //TODO: ELSE DO STUFF !!!!!
     }
 
-    protected List<HexSquare> getSquaresInRadius(HexSquare centerSq, int radius, Board board) {
+    protected List<HexSquare> getSquaresInRadius(HexSquare centerSq, int radius, HexBoard board) {
         List<HexSquare> squares = new List<HexSquare>();
         AxialCoord center = centerSq.getCoords();
         AxialCoord[] possibleNeighbors = {
@@ -57,7 +57,7 @@ public abstract class Trait : MonoBehaviour
         };
 
         foreach(AxialCoord c in possibleNeighbors) {
-            HexSquare sq = cm.getBoard().getHexAt(c);
+            HexSquare sq = board.getHexAt(c);
             if(sq.isSquare()) {
                 squares.Add(sq);
             }

@@ -33,7 +33,7 @@ public class RoyalGuardsTrait : CypherTrait
 
         List<CharacterTransformation> cypher = new List<CharacterTransformation>();
 
-        foreach(char c in charToSq.Keys()) {
+        foreach(char c in charToSq.Keys) {
             char toC = (char)((((int)c + this.count) % 26 ) + (int)'a');
             cypher.Add(new CharacterTransformation(charToSq[toC], charToSq[c]));
         }
