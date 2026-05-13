@@ -22,11 +22,11 @@ tracker - on combat end
 
 public abstract class Trait : MonoBehaviour
 {
-    public string name;
+    public string traitName;
     public int minimumForActivate;
 
     public Trait(string name, int minimumForActivate) {
-        this.name = name;
+        this.traitName = name;
         this.minimumForActivate = minimumForActivate;
     }
 

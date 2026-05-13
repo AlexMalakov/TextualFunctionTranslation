@@ -8,11 +8,11 @@ public class MarksmanTrait : InformationTrait
     public MarksmanTrait() : base("marksman", 2) {}
 
 
-    public virtual void onPrecombatStart() {
+    public override void onPrecombatStart() {
         this.unitCounters = new Dictionary<Unit, int>();
     }
 
-    public virtual void onCombatStart(Unit traitHaver) {
+    public override void onCombatStart(Unit traitHaver) {
         this.unitCounters.Add(traitHaver, 0);
     }
 

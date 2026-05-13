@@ -8,7 +8,7 @@ public class CityWatchTrait : CypherTrait
     public CityWatchTrait() : base("city watch", 2) {}
 
     
-    public virtual void onCombatStart(Unit traitHaver){
+    public override void onCombatStart(Unit traitHaver){
         HexSquare start = traitHaver.getPosition();
         List<Unit> leftBuff = this.getAllUnitsInDirection(start, -1);
         List<Unit> rightBuff = this.getAllUnitsInDirection(start, 1);
@@ -24,6 +24,7 @@ public class CityWatchTrait : CypherTrait
 
             if(!next.isSquare()) {
                 rightEdge = start;
+                break;
             }
 
             loopdeloop.Add(new CharacterTransformation(next, start));
@@ -37,6 +38,7 @@ public class CityWatchTrait : CypherTrait
 
             if(!next.isSquare()) {
                 leftEdge = start;
+                break;
             }
 
             loopdeloop.Add(new CharacterTransformation(start, next));

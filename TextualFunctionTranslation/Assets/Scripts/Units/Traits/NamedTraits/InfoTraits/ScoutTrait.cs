@@ -8,7 +8,7 @@ public class ScoutTrait : InformationTrait
 
 
 
-    public virtual void onFirstAttackAgainstUnit(Unit traitHaver, Unit target) {
+    public override void onFirstAttackAgainstUnit(Unit traitHaver, Unit target) {
         if(true) { //TODO check stuns for units
             //TODO: stun target
             //TODO: bonus damage to target

@@ -8,7 +8,7 @@ public class ClockmakersTrait : CypherTrait
 
     public ClockmakersTrait() : base("clockmaker", 2) {}
 
-    public virtual void onCombatStart(Unit traitHaver){
+    public override void onCombatStart(Unit traitHaver){
         
         //TODO: determine if radius 1 or 1 and 2
 

@@ -5,4 +5,6 @@ using UnityEngine;
 public class AssasinsGuildTrait : CypherTrait
 {
     public AssasinsGuildTrait() : base("assasins", 2) {}
+
+    
 }

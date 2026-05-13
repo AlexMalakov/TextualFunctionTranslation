@@ -9,7 +9,7 @@ class VegenereCharacterTransformation : CharacterTransformation {
         this.key = key;
     }
 
-    public virtual void apply(char[] outputArr, char[] cypherText) {
+    public override void apply(char[] outputArr, char[] cypherText) {
 
         for(int i = 0; i < cypherText.Length; i++) {
 

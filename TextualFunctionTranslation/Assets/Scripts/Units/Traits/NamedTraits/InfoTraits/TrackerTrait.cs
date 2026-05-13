@@ -8,7 +8,7 @@ public class TrackerTrait : InformationTrait
     public TrackerTrait() : base("tracker", 1) {}
 
 
-    public virtual void onCombatEnd(Unit traitHaver) {
+    public override void onCombatEnd(Unit traitHaver) {
         //TODO: give player 1 oracle lense
     }
 

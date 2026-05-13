@@ -8,7 +8,7 @@ public class OutcastTrait : InformationTrait
     public OutcastTrait() : base("outcast", 2) {}
 
 
-    public virtual void onCombatStart(Unit traitHaver) {
+    public override void onCombatStart(Unit traitHaver) {
 
         List<HexSquare> circle = this.getSquaresInRadius(traitHaver.getPosition(), 1, cm.getBoard());
         foreach(HexSquare s in circle) {
@@ -17,7 +17,7 @@ public class OutcastTrait : InformationTrait
         }
 
         //TODO: give unit it's stat boost
-        
+
         foreach(HexSquare s in circle) {
             this.logSquare(s);
         }
