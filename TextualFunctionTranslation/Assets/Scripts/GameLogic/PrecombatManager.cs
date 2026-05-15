@@ -18,10 +18,10 @@ public class PrecombatManager : MonoBehaviour
         this.userClicks.checkUserInteraction();
     }
 
-    private void startPrep() {
+    private void startPrep(PlayerUnitLayout currentEnemy) {
         this.inPrep = true;
         this.gameStart.setEnabled(true);
-        this.combatManager.placeUnitsFromLayouts();
+        this.combatManager.placeUnitsFromLayouts(currentEnemy);
     }
 
     public void endPrep() {

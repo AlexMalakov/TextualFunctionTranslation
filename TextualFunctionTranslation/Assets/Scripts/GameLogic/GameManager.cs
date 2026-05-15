@@ -13,33 +13,47 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CombatScheduler combatSched;
     [SerializeField] private CombatManager combatManager;
     [SerializeField] private HexBoard board;
+    [SerializeField] private List<CombatStage> currentLevel; 
+
+    private int currentStage = 0; //TODO: skip tutorial?
 
     [SerializeField] private PrecombatManager pcm;
 
     void Start() { //starts the game, runs after factories have finished
-        this.board.initBoard();
-        this.combatManager.initPlayers();
+        this.onPreperationStart();
     }
 
 
     void Update() {
-        if(this.gameState == GameStage.combat) {
+        if(this.gameState == GameStage.combat) { 
             this.handleCombat();
         } else if(this.gameState == GameStage.preperation) {
             this.handlePreperation();
         } else { //results TODO make it do stuff el em ef ay oh
-            this.gameState = GameStage.preperation;
+            this.handleResults();
         }
     }
 
+    private void onPreperationStart() {
+        this.board.initBoard();
+        this.combatManager.initPlayers(this.currentLevel[this.currentStage].getCombatLayout());
+    }
+
     private void handlePreperation() {
-        this.pcm.handlePrep();
+        this.pcm.handlePrep(this.currentLevel[]);
+    }
+
+    private void onPreperationEnd() {
+        this.gameState = GameStage.combat;
+        this.pcm.endPrep();
     }
 
     public void onCombatStart() {
-        this.pcm.endPrep();
         this.combatManager.initializeCombat();
-        this.gameState = GameStage.combat;
+    }
+
+    private void handleCombat() {
+        this.combatSched.runNUpdates();
     }
 
     private void onCombatEnd() {
@@ -47,7 +61,17 @@ public class GameManager : MonoBehaviour
         this.gameState = GameStage.result;
     }
 
-    private void handleCombat() {
-        this.combatSched.runNUpdates();
+    private void onResultsStart() {
+
+    }
+
+    private void handleResults() {
+        this.onResultsEnd(); //PLACEHOLDER
+    }
+
+    private void onResultsEnd() {
+        this.currentStage++;
+        this.gameState = GameStage.preperation;
+        this.onPrecombatStart();
     }
 }

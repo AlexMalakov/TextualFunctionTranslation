@@ -18,6 +18,10 @@ public class Player : MonoBehaviour
         this.unitLayout.initLayout();
     }
 
+    public void assignLayout(PlayerUnitLayout layout) {
+        this.unitLayout = layout;
+    }
+
     public bool canPurchaseUnit(string unitName, int unitCost) {
         return this.money >= unitCost && (this.bench.canAddUnitToBench() || this.unitLayout.getActiveUnits().Count < this.unitCap || this.canMergeUnit(unitName));
     }

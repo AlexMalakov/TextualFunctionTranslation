@@ -17,9 +17,10 @@ public class CombatManager : MonoBehaviour
     private int livingEnemyUnits = -1;
     private List<Unit> units;
 
-    public void initPlayers() {
-        player.init();
-        enemy.init();
+    public void initPlayers(PlayerUnitLayout enemyLayout) {
+        this.player.init();
+        this.enemy.assignLayout(enemyLayout);
+        this.enemy.init();
     }
 
     public void placeUnitsFromLayouts() {
