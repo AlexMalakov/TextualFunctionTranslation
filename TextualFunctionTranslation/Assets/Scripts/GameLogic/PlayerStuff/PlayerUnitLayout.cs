@@ -198,10 +198,11 @@ public class PlayerUnitLayout : MonoBehaviour
         return active;
     }
 
-
     private string jsonify() {
         //future thing to create, take a layout return as string ezpz
         return "";
     }
+
+
 
 }

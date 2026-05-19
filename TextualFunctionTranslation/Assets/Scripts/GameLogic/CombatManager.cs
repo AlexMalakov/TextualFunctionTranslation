@@ -11,6 +11,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private HexBoard board;
     [SerializeField] private GameObject healthbarPrefab;
     [SerializeField] private Transform hpCanvas;
+    [SerializeField] private GameManager gameManager;
 
     //not very nice but it will make this unit division work better
     private int livingPlayerUnits = -1;
@@ -115,8 +116,17 @@ public class CombatManager : MonoBehaviour
         units.Remove(u);
     }
 
-    //ill figure it out later lol
     public void onCombatOver() {
-        //TODO: implement
+        this.gameManager.onCombatEnd();
+    }
+
+    public void runSquaresReveal() {
+        this.player.getUnitLayout().getActiveTraits();
+        this.enemy.getUnitLayout().getActiveTraits();
+    }
+    
+    public void runCypherAnimation() {
+        this.player.getUnitLayout().getActiveTraits();
+        this.enemy.getUnitLayout().getActiveTraits();
     }
 }

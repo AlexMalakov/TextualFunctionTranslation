@@ -66,6 +66,8 @@ public abstract class Trait : MonoBehaviour
         return squares;
     }
 
+    public virtual void runSquareReveal() {} //overriden by info traits, and cypher equalivaletn overriden by cypher prestty simple yearh
+
     //this should do whatever the trait does
     public virtual void onPrecombatStart(){}
 

@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void handlePreperation() {
-        this.pcm.handlePrep(this.currentLevel[]);
+        this.pcm.handlePrep();
     }
 
     private void onPreperationEnd() {
@@ -59,10 +59,14 @@ public class GameManager : MonoBehaviour
     private void onCombatEnd() {
         //TODO tell game manager to end comabt
         this.gameState = GameStage.result;
+        this.onResultsStart();
     }
 
     private void onResultsStart() {
-
+        //run cipher animation
+        this.combatManager.runSquaresReveal();
+        string ciphertext = this.combatManager.encrypt(this.currentLevel[this.currentStage].getLevelCipher());
+        this.combatManager.runCypherAnimation();
     }
 
     private void handleResults() {
@@ -72,6 +76,6 @@ public class GameManager : MonoBehaviour
     private void onResultsEnd() {
         this.currentStage++;
         this.gameState = GameStage.preperation;
-        this.onPrecombatStart();
+        this.onPreperationStart();
     }
 }

@@ -16,7 +16,7 @@ public abstract class InformationTrait : Trait
     }
 
 
-    public void runSquareReveal() {
+    public override void runSquareReveal() {
         foreach(HexSquare sq in this.squaresToReveal) {
             sq.displayValue(true);
         }

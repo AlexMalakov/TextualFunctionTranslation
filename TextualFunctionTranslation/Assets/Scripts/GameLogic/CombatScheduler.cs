@@ -15,7 +15,6 @@ public class CombatScheduler : MonoBehaviour
         combatTimePerTick = this.combatTickTime;
     }
 
-
     public void runNUpdates() {
         float newCheckIn = Time.time;
 
