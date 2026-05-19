@@ -15,7 +15,7 @@ public class DruidTrait : InformationTrait
     
 
 
-    public override void onPrecombatStart() { //this might run multiple times which may be annoying or slow
+    public override void onPrecombatStart() { //this might run multiple times which may be annoying or slow | solution enemy wont have this trait ever
         vowelSquares = new List<HexSquare>();
         char[] vowels = {'a', 'e', 'i', 'o', 'u'};
 

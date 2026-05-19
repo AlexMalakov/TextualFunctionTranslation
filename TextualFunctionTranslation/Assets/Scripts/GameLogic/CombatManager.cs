@@ -39,6 +39,9 @@ public class CombatManager : MonoBehaviour
         //TODO: knob to tune: tiebreak behavior. Does player get to win ties?6
 
         this.placeUnitsFromLayouts();
+
+        //TODO: apply trait buffs
+        this.traitPreCombat();
     }
 
     //check each unit every frame
@@ -118,6 +121,7 @@ public class CombatManager : MonoBehaviour
 
     public void onCombatOver() {
         this.gameManager.onCombatEnd();
+        //TODO: remove all unit buffs
     }
 
     public void runSquaresReveal() {
@@ -152,5 +156,27 @@ public class CombatManager : MonoBehaviour
     
     public void runCypherAnimation() {
         //TODO: this should start a coroutine I think?
+    }
+
+    private void traitPreCombat() {
+        //ok so briliant idea: since cypher is only called on active traits, i can just have these methods get pinged constantly for inactive traits
+        //I just need to make sure all traits get their shit wiped at the end
+
+        foreach(Trait t in this.player.getUnitLayout().getActiveTraits()) {
+            t.onPrecombatStart()
+        }
+        foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits()) {
+            t.onPrecombatStart();
+        }
+
+        foreach(Unit u in this.player.getActiveUnits()) {
+            u.getRoleTrait().onCombatStart(u);
+            u.getClassTrait().onCombatStart(u);
+        }
+        
+        foreach(Unit u in this.enemy.getActiveTraits()) {
+            u.getRoleTrait().onCombatStart(u);
+            u.getClassTrait().onCombatStart(u);
+        }
     }
 }
