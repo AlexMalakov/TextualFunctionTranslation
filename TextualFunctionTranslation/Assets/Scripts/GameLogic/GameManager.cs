@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
         this.combatSched.runNUpdates();
     }
 
-    private void onCombatEnd() {
+    public void onCombatEnd() {
         //TODO tell game manager to end comabt
         this.gameState = GameStage.result;
         this.onResultsStart();
@@ -67,6 +67,8 @@ public class GameManager : MonoBehaviour
         this.combatManager.runSquaresReveal();
         string ciphertext = this.combatManager.encrypt(this.currentLevel[this.currentStage].getLevelCipher());
         this.combatManager.runCypherAnimation();
+
+        //TODO: display encrypted text
     }
 
     private void handleResults() {

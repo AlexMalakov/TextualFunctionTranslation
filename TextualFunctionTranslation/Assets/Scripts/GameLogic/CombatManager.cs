@@ -121,12 +121,36 @@ public class CombatManager : MonoBehaviour
     }
 
     public void runSquaresReveal() {
-        this.player.getUnitLayout().getActiveTraits();
-        this.enemy.getUnitLayout().getActiveTraits();
+
+        //TODO: sort alphabetically
+        foreach(Trait t in this.player.getUnitLayout().getActiveTraits()) {
+            t.runSquareReveal();
+        }
+        
+        //TODO: sort reverse alphabetically
+        foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits()) {
+            t.runSquareReveal();
+        }
+        
+    }
+
+    public string encrypt(string plaintext) {
+        char[] cypherArray = plaintext.ToCharArray();
+
+        //TODO: sort alphabetically
+        foreach(Trait t in this.player.getUnitLayout().getActiveTraits()) {
+            t.runCypher(cypherArray);
+        }
+        
+        //TODO: sort reverse alphabetically
+        foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits()) {
+            t.runCypher(cypherArray);
+        }
+        
+        return new string(cypherArray);
     }
     
     public void runCypherAnimation() {
-        this.player.getUnitLayout().getActiveTraits();
-        this.enemy.getUnitLayout().getActiveTraits();
+        //TODO: this should start a coroutine I think?
     }
 }

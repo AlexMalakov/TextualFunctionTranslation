@@ -34,7 +34,7 @@ public abstract class CypherTrait : Trait
         this.cypher.AddRange(tr);
     }
 
-    public void runCypher(char[] curCypherText) {
+    public override void runCypher(char[] curCypherText) {
         char[] newCypherText = new char[curCypherText.Length];
 
         foreach(CharacterTransformation ct in this.cypher) {
