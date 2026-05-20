@@ -130,6 +130,17 @@ public class CombatManager : MonoBehaviour
 
     public void onCombatOver() {
         foreach(Unit u in this.units) {
+            if(!u.isDead()) {
+                u.getRoleTrait().onCombatSurvival(u);
+                u.getClassTrait().onCombatSurvival(u);
+            }
+
+            u.getRoleTrait().onCombatEnd(u);
+            u.getClassTrait().onCombatEnd(u);
+
+        }
+
+        foreach(Unit u in this.units) {
             u.resetBuffs();
         }
 
