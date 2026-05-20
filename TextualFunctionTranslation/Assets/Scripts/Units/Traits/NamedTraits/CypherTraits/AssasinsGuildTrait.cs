@@ -6,5 +6,5 @@ public class AssasinsGuildTrait : CypherTrait
 {
     public AssasinsGuildTrait() : base("assasins", 2) {}
 
-    
+    //on combat start, and on unit defeat?
 }

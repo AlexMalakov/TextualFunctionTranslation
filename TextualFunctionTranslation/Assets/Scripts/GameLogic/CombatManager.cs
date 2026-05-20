@@ -12,6 +12,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private GameObject healthbarPrefab;
     [SerializeField] private Transform hpCanvas;
     [SerializeField] private GameManager gameManager;
+    [SerializeField] private CombatLog combatLog;
 
     //not very nice but it will make this unit division work better
     private int livingPlayerUnits = -1;
@@ -41,6 +42,8 @@ public class CombatManager : MonoBehaviour
         this.placeUnitsFromLayouts();
 
         //TODO: apply trait buffs
+        this.combatLog.initLog(this.units);
+
         this.traitPreCombat();
     }
 
@@ -66,6 +69,12 @@ public class CombatManager : MonoBehaviour
     }
 
     public Unit requestAttackTarget(Unit attacker, Unit previousTarget) {
+        if(previousTarget.isDead()) {
+            this.combatLog.logEvent(new CombatEvent(attacker, previousTarget));
+            this.attacker.getRoleTrait().onEnemyDefeat(previousTarget);
+            this.attacker.getClassTrait().onEnemyDefeat(previousTarget);
+        }
+
         Func<HexSquare, bool> getAttackableSquares = (HexSquare s) => {
             return s.getUnit() != null
                 //TODO: && can reach that unit?
@@ -120,11 +129,7 @@ public class CombatManager : MonoBehaviour
     }
 
     public void onCombatOver() {
-        foreach(Unit u in this.player.getActiveUnits()) {
-            u.resetBuffs();
-        }
-        
-        foreach(Unit u in this.enemy.getActiveTraits()) {
+        foreach(Unit u in this.units) {
             u.resetBuffs();
         }
 
@@ -176,12 +181,7 @@ public class CombatManager : MonoBehaviour
             t.onPrecombatStart();
         }
 
-        foreach(Unit u in this.player.getActiveUnits()) {
-            u.getRoleTrait().onCombatStart(u);
-            u.getClassTrait().onCombatStart(u);
-        }
-        
-        foreach(Unit u in this.enemy.getActiveTraits()) {
+        foreach(Unit u in this.units) {
             u.getRoleTrait().onCombatStart(u);
             u.getClassTrait().onCombatStart(u);
         }
