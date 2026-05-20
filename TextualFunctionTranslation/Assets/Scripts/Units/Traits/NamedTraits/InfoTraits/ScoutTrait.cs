@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class ScoutTrait : InformationTrait
 {
+    private List<Unit> attackedUnits;
+
     public ScoutTrait() : base("scout", 2) {}
 
 
+    public override void onPrecombatStart() {
 
-    public override void onFirstAttackAgainstUnit(Unit traitHaver, Unit target) {
-        if(true) { //TODO check stuns for units
+    }
+
+    public override void onUnitAttack(Unit traitHaver, Unit target) {
+        if(true && !attackedUnits.Contains(target)) { //TODO check stuns for units
             //TODO: stun target
             //TODO: bonus damage to target
             //TODO: record the stun
+
+            attackedUnits.Add(target);
 
             this.logSquare(target.getPosition());
         }

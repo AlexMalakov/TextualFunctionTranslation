@@ -75,8 +75,6 @@ public abstract class Trait : MonoBehaviour
 
     public virtual void onCombatStart(Unit traitHaver){}
 
-    public virtual void onFirstAttackAgainstUnit(Unit traitHaver, Unit target){}
-
     public virtual void onUnitAttack(Unit traitHaver, Unit target){} //target not needed but correct to have 
 
     public virtual void onEnemyDefeat(Unit traitHaver, Unit target){}

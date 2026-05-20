@@ -172,6 +172,8 @@ public abstract class Unit : MonoBehaviour
         yield return new WaitForSeconds(this.attackWindup);
         if(!this.isDead()) {
             this.currentTarget.takeDamage(this.damage.getStat(this.starLevel));
+            this.roleTrait.onUnitAttack(this, this.currentTarget);
+            this.classTrait.onUnitAttack(this, this.currentTarget);
         }
     }
 
