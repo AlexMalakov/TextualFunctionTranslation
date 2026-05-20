@@ -120,8 +120,15 @@ public class CombatManager : MonoBehaviour
     }
 
     public void onCombatOver() {
+        foreach(Unit u in this.player.getActiveUnits()) {
+            u.resetBuffs();
+        }
+        
+        foreach(Unit u in this.enemy.getActiveTraits()) {
+            u.resetBuffs();
+        }
+
         this.gameManager.onCombatEnd();
-        //TODO: remove all unit buffs
     }
 
     public void runSquaresReveal() {
