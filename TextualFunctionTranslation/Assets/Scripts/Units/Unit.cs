@@ -22,6 +22,10 @@ struct StarStats {
     }
 }
 
+public enum BuffableStats {
+    Health, Damage, AttackSpeed //idk about this one ngl but ill keep it for now
+}
+
 public abstract class Unit : MonoBehaviour
 {
     [Header ("Stats")]
@@ -300,8 +304,18 @@ public abstract class Unit : MonoBehaviour
         return this.starLevel;
     }
 
-    public void buffStat() {
-
+    public void buffStat(OperationType buffType, float buffAmount, BuffableStats stat) {
+        switch(stat) {
+            case BuffableStats.Health:
+                this.currentHealth.addOperation(buffType, buffAmount);
+                break;
+            case BuffableStats.Damage:
+                //TODO: buff damage
+                break;
+            case BuffableStats.AttackSpeed:
+                //TODO: buff attack speed (if im doing that idk if i am )
+                break;
+        }
     }
 
     /*
