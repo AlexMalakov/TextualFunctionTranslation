@@ -141,7 +141,7 @@ public class CombatManager : MonoBehaviour
         }
 
         foreach(Unit u in this.units) {
-            u.resetBuffs();
+            u.onCombatEnd();
         }
 
         this.gameManager.onCombatEnd();

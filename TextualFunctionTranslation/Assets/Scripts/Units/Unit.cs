@@ -40,7 +40,6 @@ public abstract class Unit : MonoBehaviour
 
     private UnitBlueprint unitBlueprint;
     private int starLevel = 1;
-    private float combatHealth;
 
     [Header ("Hidden stats")]
     [SerializeField] private int decisionPriority;
@@ -51,7 +50,9 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private Animator animator;
     private HealthBarManager hpBar;
 
-    private float currentHealth;
+    //buffable stats
+    private UnitNumericCalculator currentHealth;
+
     private Unit currentTarget;
 
     private HexSquare curPosition; //TODO: INIT ME?
@@ -139,10 +140,17 @@ public abstract class Unit : MonoBehaviour
 
     public void initUnit(HexSquare square, HealthBarManager hpBar, Transform hpCanvas) {
         this.hpBar = hpBar;
-        this.currentHealth = this.health.getStat(this.starLevel);
+        this.currentHealth = new UnitNumericCalculator(this.health.getStat(this.starLevel));
         this.currentTarget = null;
-        this.hpBar.init(this.currentHealth, this.transform, hpCanvas);
+
+        //TODO: this wont reflect the post buffed value
+        this.hpBar.init(this.currentHealth.calculate(), this.transform, hpCanvas);
         this.placeUnitOnSquare(square);
+    }
+
+    public void onCombatOver() {
+        //TODO: reset all buffs
+        this.currentHealth.wipe();
     }
 
     public void placeUnitOnSquare(HexSquare square) {
@@ -292,7 +300,9 @@ public abstract class Unit : MonoBehaviour
         return this.starLevel;
     }
 
+    public void buffStat() {
 
+    }
 
     /*
      - ACTION (attack) BEHAVIOR:
