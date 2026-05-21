@@ -152,7 +152,7 @@ public abstract class Unit : MonoBehaviour
         this.placeUnitOnSquare(square);
     }
 
-    public void onCombatOver() {
+    public void onCombatEnd() {
         //TODO: reset all buffs
         this.currentHealth.wipe();
     }

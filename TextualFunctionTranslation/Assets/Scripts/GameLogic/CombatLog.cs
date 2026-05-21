@@ -33,7 +33,7 @@ public class CombatLog : MonoBehaviour
         }
     }
 
-    public void logEvent(CombatEvent event) {
-        this.log.Add(event);
+    public void logEvent(CombatEvent ev) {
+        this.log.Add(ev);
     }
 }

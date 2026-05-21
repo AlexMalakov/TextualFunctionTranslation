@@ -71,8 +71,8 @@ public class CombatManager : MonoBehaviour
     public Unit requestAttackTarget(Unit attacker, Unit previousTarget) {
         if(previousTarget.isDead()) {
             this.combatLog.logEvent(new CombatEvent(attacker, previousTarget));
-            this.attacker.getRoleTrait().onEnemyDefeat(previousTarget);
-            this.attacker.getClassTrait().onEnemyDefeat(previousTarget);
+            attacker.getRoleTrait().onEnemyDefeat(attacker, previousTarget);
+            attacker.getClassTrait().onEnemyDefeat(attacker, previousTarget);
         }
 
         Func<HexSquare, bool> getAttackableSquares = (HexSquare s) => {
@@ -186,7 +186,7 @@ public class CombatManager : MonoBehaviour
         //I just need to make sure all traits get their shit wiped at the end
 
         foreach(Trait t in this.player.getUnitLayout().getActiveTraits()) {
-            t.onPrecombatStart()
+            t.onPrecombatStart();
         }
         foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits()) {
             t.onPrecombatStart();

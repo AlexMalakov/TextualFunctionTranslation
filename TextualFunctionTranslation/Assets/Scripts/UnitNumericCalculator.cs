@@ -7,16 +7,16 @@ public enum OperationType {
 }
 
 struct Operation {
-    OperationType type;
-    float amount;
+    public OperationType type;
+    public float amount;
 
-    Operation(OperationType type, float amount) {
+    public Operation(OperationType type, float amount) {
         this.type = type;
         this.amount = amount;
     }
 
-    float apply(float incoming) {
-        if(this.type == OperationType.PreMultiply or this.type == OperationType.PostMultiply) {
+    public float apply(float incoming) {
+        if(this.type == OperationType.PreMultiply || this.type == OperationType.PostMultiply) {
             return this.amount * incoming;
         }
         return this.amount + incoming;
@@ -45,7 +45,7 @@ public class UnitNumericCalculator
         this.operations.Sort((a, b) => a.type.CompareTo(b.type));
 
         float carry = this.val;
-        for(Operation o in this.operations) {
+        foreach(Operation o in this.operations) {
             carry = o.apply(carry);
         }
 
