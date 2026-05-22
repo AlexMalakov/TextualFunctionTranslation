@@ -37,6 +37,7 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private int range;
     [SerializeField] private string unitName;
 
+    [Header ("Traits")]
     [SerializeField] private TraitNames roleTraitName;
     [SerializeField] private TraitNames classTraitName;
     private Trait roleTrait;
@@ -54,15 +55,17 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private Animator animator;
     private HealthBarManager hpBar;
 
-    //buffable stats
-    private UnitNumericCalculator currentHealth;
+    //[Header ("Active Stats")]
+    private UnitNumericCalculator healthCalculator;
+    private UnitNumericCalculator damageCalculator;
+    private UnitNumericCalculator attackSpeedCalculator; //need a way to balance this?
+
+    private float currentHealth;
 
     private Unit currentTarget;
-
     private HexSquare curPosition; //TODO: INIT ME?
 
     private int framesToPause = 0;
-
     private bool isMoving;
     private bool requestOverride;
 
@@ -144,17 +147,25 @@ public abstract class Unit : MonoBehaviour
 
     public void initUnit(HexSquare square, HealthBarManager hpBar, Transform hpCanvas) {
         this.hpBar = hpBar;
-        this.currentHealth = new UnitNumericCalculator(this.health.getStat(this.starLevel));
+        this.healthCalculator = new UnitNumericCalculator(this.health.getStat(this.starLevel));
+        this.damageCalculator = new UnitNumericCalculator(this.damage.getStat(this.starLevel));
+        //TODO: init attack speed calculator
+
+        this.currentHealth = this.healthCalculator.calculate();
+
         this.currentTarget = null;
 
         //TODO: this wont reflect the post buffed value
-        this.hpBar.init(this.currentHealth.calculate(), this.transform, hpCanvas);
+        this.hpBar.init(this.currentHealth, this.transform, hpCanvas);
         this.placeUnitOnSquare(square);
     }
 
+
     public void onCombatEnd() {
         //TODO: reset all buffs
-        this.currentHealth.wipe();
+        this.healthCalculator.wipe();
+        this.damageCalculator.wipe();
+        this.attackSpeedCalculator.wipe();
     }
 
     public void placeUnitOnSquare(HexSquare square) {
@@ -175,7 +186,7 @@ public abstract class Unit : MonoBehaviour
         //attack target
         Vector3 lookAt = new Vector3(this.currentTarget.transform.position.x, this.transform.position.y, this.currentTarget.transform.position.z);
         transform.LookAt(lookAt);
-        // this.currentTarget.takeDamage(this.damage.getStat(this.starLevel));
+        // this.currentTarget.takeDamage(this.damageCalculator.calculate());
 
         //TODO: trigger animation
         this.animator.SetTrigger("Attack");
@@ -183,7 +194,7 @@ public abstract class Unit : MonoBehaviour
         this.setLockout(this.timeBetweenAttack);
         yield return new WaitForSeconds(this.attackWindup);
         if(!this.isDead()) {
-            this.currentTarget.takeDamage(this.damage.getStat(this.starLevel));
+            this.currentTarget.takeDamage(this.damageCalculator.calculate());
             this.roleTrait.onUnitAttack(this, this.currentTarget);
             this.classTrait.onUnitAttack(this, this.currentTarget);
         }
@@ -257,14 +268,14 @@ public abstract class Unit : MonoBehaviour
         this.framesToPause -= 1;
     }
 
-    public void takeDamage(float damage) {
+    public void takeDamage(float in_damage) {
         if(this.isDead()) {
             Debug.Log("HITTING A DEAD!");
             return;
         }
 
-        this.currentHealth -= damage;
-        this.hpBar.updateDamage(damage);
+        this.currentHealth -= in_damage;
+        this.hpBar.updateDamage(in_damage);
 
         if(this.currentHealth <= 0) {
             this.onDeath();
@@ -307,13 +318,13 @@ public abstract class Unit : MonoBehaviour
     public void buffStat(OperationType buffType, float buffAmount, BuffableStats stat) {
         switch(stat) {
             case BuffableStats.Health:
-                this.currentHealth.addOperation(buffType, buffAmount);
+                this.healthCalculator.addOperation(buffType, buffAmount);
                 break;
             case BuffableStats.Damage:
-                //TODO: buff damage
+                this.damageCalculator.addOperation(buffType, buffAmount);
                 break;
             case BuffableStats.AttackSpeed:
-                //TODO: buff attack speed (if im doing that idk if i am )
+                this.attackSpeedCalculator.addOperation(buffType, buffAmount);
                 break;
         }
     }
