@@ -8,7 +8,7 @@ public class ClockmakersTrait : CypherTrait
 
 
     public override void onCombatStart(Unit traitHaver){
-        
+
         //TODO: determine if radius 1 or 1 and 2
 
         List<HexSquare> rad1circle = this.getSquaresInRadius(traitHaver.getPosition(), 1, this.cm.getBoard());

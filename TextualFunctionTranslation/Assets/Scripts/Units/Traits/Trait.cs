@@ -51,9 +51,13 @@ public abstract class Trait : MonoBehaviour
     public virtual void runSquareReveal() {}
     public virtual void runCypher(char[] curCypherText) {}
 
+    public void registerUnit() {
+        this.numberActive++;
+    }
+
     //this should do whatever the trait does
     public virtual void onPrecombatStart(){
-        this.numberActive++;
+        this.numberActive = 0;
     }
 
     public virtual void onCombatStart(Unit traitHaver){}

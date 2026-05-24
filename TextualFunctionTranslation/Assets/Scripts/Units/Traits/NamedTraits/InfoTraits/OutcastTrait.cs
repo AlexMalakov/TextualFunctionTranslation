@@ -11,7 +11,7 @@ public class OutcastTrait : InformationTrait
 
 
     public override void onCombatStart(Unit traitHaver) {
-
+        
         List<HexSquare> circle = this.getSquaresInRadius(traitHaver.getPosition(), 1, cm.getBoard());
         foreach(HexSquare s in circle) {
             if(s.getUnit() != null)
