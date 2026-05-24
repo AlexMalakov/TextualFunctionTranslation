@@ -9,10 +9,12 @@ public enum OperationType {
 struct Operation {
     public OperationType type;
     public float amount;
+    public float buffName;
 
-    public Operation(OperationType type, float amount) {
+    public Operation(OperationType type, float amount, string buffName) {
         this.type = type;
         this.amount = amount;
+        this.buffName = buffName;
     }
 
     public float apply(float incoming) {
@@ -33,8 +35,13 @@ public class UnitNumericCalculator
         this.operations = new List<Operation>();
     }
 
-    public void addOperation(OperationType type, float value) {
-        this.operations.Add(new Operation(type, value));
+    public void addOperation(Operation newOperation) {
+        foreach(Operation o in this.operations) {
+            if(newOperation.buffName == o.buffName) {
+                return;
+            }
+        }
+        this.operations.Add(newOperation);
     }
 
     public void wipe() {

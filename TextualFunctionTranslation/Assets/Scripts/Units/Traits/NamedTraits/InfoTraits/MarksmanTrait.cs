@@ -5,6 +5,7 @@ using UnityEngine;
 public class MarksmanTrait : InformationTrait
 {
     Dictionary<Unit, int> unitCounters;
+    [SerializeField] private float attackSpeedGain;
 
 
     public override void onPrecombatStart() {
@@ -17,8 +18,8 @@ public class MarksmanTrait : InformationTrait
 
     public override void onUnitAttack(Unit traitHaver, Unit target) {
         if(this.unitCounters[traitHaver] < 15) {
-            //TODO give the unit it's stat bonus
-
+            Operation buffOpp = new Operation(OperationType.PostAdd, this.attackSpeedGain, "Marksman Shot Buff " + this.unitCounters[traitHaver]);
+            traitHaver.buffStat(BuffableStats.AttackSpeed, buffOpp);
         } 
 
         this.unitCounters[traitHaver] = this.unitCounters[traitHaver] + 1;

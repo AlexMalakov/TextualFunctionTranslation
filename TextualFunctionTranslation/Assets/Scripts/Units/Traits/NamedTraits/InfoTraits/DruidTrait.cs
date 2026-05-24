@@ -33,10 +33,14 @@ public class DruidTrait : InformationTrait
 
     public override void onCombatStart(Unit traitHaver) {
         if (vowelSquares.Contains(traitHaver.getPosition())) {
-            //TODO: apply stat boost
+            Operation buffOpp = new Operation(OperationType.PreMultiply, this.statBoostAmountV, "Druid Start Buff");
+            traitHaver.buffStat(BuffableStats.Damage, buffOpp);
+            traitHaver.buffStat(BuffableStats.Health, buffOpp);
             return;
         } else if(traitHaver.getPosition() == ySquare) {
-            //TODO: apply stat boost
+            Operation buffOpp = new Operation(OperationType.PreMultiply, this.statBoostAmountY, "Druid Start Buff");
+            traitHaver.buffStat(BuffableStats.Damage, buffOpp);
+            traitHaver.buffStat(BuffableStats.Health, buffOpp);
             return;
         }
     }

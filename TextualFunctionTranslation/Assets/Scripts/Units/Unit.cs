@@ -315,16 +315,16 @@ public abstract class Unit : MonoBehaviour
         return this.starLevel;
     }
 
-    public void buffStat(OperationType buffType, float buffAmount, BuffableStats stat) {
+    public void buffStat(BuffableStats stat, Operation operation) {
         switch(stat) {
             case BuffableStats.Health:
-                this.healthCalculator.addOperation(buffType, buffAmount);
+                this.healthCalculator.addOperation(operation);
                 break;
             case BuffableStats.Damage:
-                this.damageCalculator.addOperation(buffType, buffAmount);
+                this.damageCalculator.addOperation(operation);
                 break;
             case BuffableStats.AttackSpeed:
-                this.attackSpeedCalculator.addOperation(buffType, buffAmount);
+                this.attackSpeedCalculator.addOperation(operation);
                 break;
         }
     }
