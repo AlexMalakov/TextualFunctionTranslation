@@ -5,7 +5,6 @@ using UnityEngine;
 public class OutcastTrait : InformationTrait
 {
     [SerializeField] private CombatManager cm;
-    public OutcastTrait() : base("outcast", 2) {}
 
 
     public override void onCombatStart(Unit traitHaver) {
@@ -21,6 +20,14 @@ public class OutcastTrait : InformationTrait
         foreach(HexSquare s in circle) {
             this.logSquare(s);
         }
+    }
+
+    protected override string getTraitName() {
+        return "outcast";
+    }
+
+    protected override int getMinimumForActive() {
+        return 2;
     }
   
 }

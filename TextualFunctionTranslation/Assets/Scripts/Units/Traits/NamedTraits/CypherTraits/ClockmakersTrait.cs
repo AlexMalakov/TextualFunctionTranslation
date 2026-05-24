@@ -6,7 +6,6 @@ public class ClockmakersTrait : CypherTrait
 {
     [SerializeField] private CombatManager cm;
 
-    public ClockmakersTrait() : base("clockmaker", 2) {}
 
     public override void onCombatStart(Unit traitHaver){
         
@@ -31,6 +30,14 @@ public class ClockmakersTrait : CypherTrait
         cypher.Add(new CharacterTransformation(rad1circle[0], prev));
 
         this.addToCypher(cypher);
+    }
+
+    protected override string getTraitName() {
+        return "clockmaker";
+    }
+
+    protected override int getMinimumForActive() {
+        return 2;
     }
 
 }

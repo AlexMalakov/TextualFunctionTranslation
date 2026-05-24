@@ -3,32 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-/*
-Needed trait behavior
-Vegenary - on combat end
-Rotator - on combat start 
-royal knights - on unit defeat, on combat survive
-plug - on unit defeat
-assasin - on combat end
-flank guard - on combat start
-
-scout - on first attack
-druid - when layout phase starts
-warden - on combat start
-marksman - on unit attack
-outsider - on combat start
-tracker - on combat end
-*/
 
 public abstract class Trait : MonoBehaviour
 {
     public string traitName;
     public int minimumForActivate;
-
-    public Trait(string name, int minimumForActivate) {
-        this.traitName = name;
-        this.minimumForActivate = minimumForActivate;
-    }
 
     public int getMinimumForActive() {
         return this.minimumForActivate;
@@ -83,16 +62,56 @@ public abstract class Trait : MonoBehaviour
 
     public virtual void onCombatEnd(Unit traitHaver){}
 
-    /*
-Vegenary - on combat end
-Rotator - on combat start 
-royal knights - on unit defeat, on combat survive
-plug - on unit defeat
-assasin - on combat end
-flank guard - on combat start
-    */
 
+    //constructor work around cuz unity is a chad platform :(
+    protected abstract string getTraitName();
+
+    protected abstract int getMinimumForActive();
 
 }
 
 
+
+/*
+
+vegenery 2
+clockmaker 4
+royal guard 4
+artisan 3
+assasin 4
+city watch 4
+unnamed on-death trait 3
+
+scout 4
+druid 3
+warden 4
+marksman 4
+outcast 3
+tracker 4
+plague doctor 2
+
+01 - scout | royal guard
+02 - scout | night watch
+03 - scout | 
+04 - scout |
+05 - druid | vegenery
+06 - druid | assasin
+07 - druid | 
+08 - warden |
+09 - warden |
+10 - warden |
+11 - warden |
+12 - marksman |
+13 - marksman |
+14 - marksman |
+15 - marksman |
+16 - outcast |
+17 - outcast |
+18 - outcast |
+19 - tracker |
+20 - tracker |
+21 - tracker |
+22 - tracker |
+23 - plague doctor | assasin
+24 - plague doctor | unnamed on-death trait
+/*

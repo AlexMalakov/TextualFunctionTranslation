@@ -6,12 +6,13 @@ using System.Linq;
 public class DruidTrait : InformationTrait
 {
     [SerializeField] private CombatManager combatManager;
+    [SerializeField] private float statBoostAmountV;
+    [SerializeField] private float statBoostAmountY;
 
     private List<HexSquare> vowelSquares;
     private HexSquare ySquare;
 
     //NOTE: THIS TRAIT IS ONLY USABLE FOR THE PLAYER
-    public DruidTrait() : base("darouidyse", 2) {}
     
 
 
@@ -40,5 +41,12 @@ public class DruidTrait : InformationTrait
         }
     }
 
+    protected override string getTraitName() {
+        return "druid";
+    }
+
+    protected override int getMinimumForActive() {
+        return 2;
+    }
 
 }

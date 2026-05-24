@@ -4,11 +4,18 @@ using UnityEngine;
 
 public class ArtisansTrait : CypherTrait
 {
-    public ArtisansTrait() : base("artisans", 1) {}
 
 
     public override void onEnemyDefeat(Unit traitHaver, Unit target){
         //I need to think this trait through better
+    }
+
+    protected override string getTraitName() {
+        return "artisans";
+    }
+
+    protected override int getMinimumForActive() {
+        return 1;
     }
 
 }

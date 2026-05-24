@@ -5,7 +5,6 @@ using UnityEngine;
 public class CityWatchTrait : CypherTrait
 {
     [SerializeField] private CombatManager cm;
-    public CityWatchTrait() : base("city watch", 2) {}
 
     
     public override void onCombatStart(Unit traitHaver){
@@ -62,5 +61,13 @@ public class CityWatchTrait : CypherTrait
             if(start.getUnit() != null)
                 allUnits.Add(start.getUnit());
         }
+    }
+
+    protected override string getTraitName() {
+        return "city watch";
+    }
+
+    protected override int getMinimumForActive() {
+        return 2;
     }
 }

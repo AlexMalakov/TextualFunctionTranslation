@@ -20,7 +20,6 @@ class VegenereCharacterTransformation : CharacterTransformation {
 
 public class VegeneryTrait : CypherTrait
 {
-    public VegeneryTrait() : base("vegenery", 2) {}
 
 
     public override void onCombatEnd(Unit traitHaver){
@@ -29,5 +28,13 @@ public class VegeneryTrait : CypherTrait
         //TODO: buy the placeholder unit
 
         this.addToCypher(new List<CharacterTransformation>(){new VegenereCharacterTransformation(traitHaver.getPosition(), traitHaver.getPosition(), unitName)});
+    }
+
+    protected override string getTraitName() {
+        return "vegenere";
+    }
+
+    protected override int getMinimumForActive() {
+        return 2;
     }
 }

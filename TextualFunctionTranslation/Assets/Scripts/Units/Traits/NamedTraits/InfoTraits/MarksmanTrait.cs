@@ -5,7 +5,6 @@ using UnityEngine;
 public class MarksmanTrait : InformationTrait
 {
     Dictionary<Unit, int> unitCounters;
-    public MarksmanTrait() : base("marksman", 2) {}
 
 
     public override void onPrecombatStart() {
@@ -29,5 +28,12 @@ public class MarksmanTrait : InformationTrait
         }
     }
 
+    protected override string getTraitName() {
+        return "marksman";
+    }
+
+    protected override int getMinimumForActive() {
+        return 2;
+    }
 
 }

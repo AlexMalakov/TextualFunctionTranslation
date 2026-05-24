@@ -5,8 +5,6 @@ using UnityEngine;
 public class WardenTrait : InformationTrait
 {
     [SerializeField] private CombatManager cm;
-    public WardenTrait() : base("warden", 2) {}
-
 
     public override void onCombatStart(Unit traitHaver) {
         AxialCoord pos = traitHaver.getPosition().getCoords();
@@ -30,6 +28,14 @@ public class WardenTrait : InformationTrait
             //todo boost unit if it's there
             this.logSquare(rightSquare);
         }
+    }
+
+    protected override string getTraitName() {
+        return "warden";
+    }
+
+    protected override int getMinimumForActive() {
+        return 2;
     }
 
 }

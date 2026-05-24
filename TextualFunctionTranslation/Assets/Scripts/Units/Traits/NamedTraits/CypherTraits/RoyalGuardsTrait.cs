@@ -41,6 +41,14 @@ public class RoyalGuardsTrait : CypherTrait
         this.addToCypher(cypher);
     }
 
+    protected override string getTraitName() {
+        return "royal guards";
+    }
+
+    protected override int getMinimumForActive() {
+        return 2;
+    }
+
     /*
 Vegenary - on combat end
 Rotator - on combat start 
