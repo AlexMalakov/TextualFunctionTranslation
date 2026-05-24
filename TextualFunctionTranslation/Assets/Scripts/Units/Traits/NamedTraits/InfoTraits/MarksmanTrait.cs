@@ -9,6 +9,7 @@ public class MarksmanTrait : InformationTrait
 
 
     public override void onPrecombatStart() {
+        base.onPrecombatStart();
         this.unitCounters = new Dictionary<Unit, int>();
     }
 

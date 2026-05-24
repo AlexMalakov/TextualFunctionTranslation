@@ -5,6 +5,9 @@ using UnityEngine;
 public class OutcastTrait : InformationTrait
 {
     [SerializeField] private CombatManager cm;
+    [SerializeField] private float attackSpeedBoost;
+    [SerializeField] private float healthBoost;
+    [SerializeField] private float damageBoost;
 
 
     public override void onCombatStart(Unit traitHaver) {
@@ -15,7 +18,12 @@ public class OutcastTrait : InformationTrait
                 return;
         }
 
-        //TODO: give unit it's stat boost
+        Operation speedBoost = new Operation(OperationType.PostAdd, this.attackSpeedBoost, "Outcast Start Buff");
+        Operation healthBoost = new Operation(OperationType.PreMultiply, this.healthBoost, "Outcast Start Buff");
+        Operation damageBoost = new Operation(OperationType.PreMultiply, this.damageBoost, "Outcast Start Buff");
+        traitHaver.buffStat(BuffableStats.AttackSpeed, speedBoost);
+        traitHaver.buffStat(BuffableStats.Health, healthBoost);
+        traitHaver.buffStat(BuffableStats.Damage, damageBoost);
 
         foreach(HexSquare s in circle) {
             this.logSquare(s);

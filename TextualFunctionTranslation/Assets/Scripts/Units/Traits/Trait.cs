@@ -6,8 +6,10 @@ using UnityEngine;
 
 public abstract class Trait : MonoBehaviour
 {
-    public string traitName;
-    public int minimumForActivate;
+    private string traitName;
+    private int minimumForActivate;
+    private int numberActive = 0;
+    
 
     public int getMinimumForActive() {
         return this.minimumForActivate;
@@ -50,7 +52,9 @@ public abstract class Trait : MonoBehaviour
     public virtual void runCypher(char[] curCypherText) {}
 
     //this should do whatever the trait does
-    public virtual void onPrecombatStart(){}
+    public virtual void onPrecombatStart(){
+        this.numberActive++;
+    }
 
     public virtual void onCombatStart(Unit traitHaver){}
 
@@ -67,6 +71,10 @@ public abstract class Trait : MonoBehaviour
     protected abstract string getTraitName();
 
     protected abstract int getMinimumForActive();
+
+    public int getNumberActive() {
+        return this.numberActive;
+    }
 
 }
 
