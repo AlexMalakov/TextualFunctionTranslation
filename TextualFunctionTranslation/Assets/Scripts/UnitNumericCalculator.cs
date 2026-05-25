@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum OperationType {
-    PreMultiply = 0, Add = 1, PostMultiply = 2, PostAdd = 3
+    PreAdd = 0, PreMultiply = 1, Add = 2, PostMultiply = 3, PostAdd = 4
 }
 
-struct Operation {
+public struct Operation {
     public OperationType type;
     public float amount;
-    public float buffName;
+    public string buffName;
 
     public Operation(OperationType type, float amount, string buffName) {
         this.type = type;

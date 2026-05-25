@@ -19,8 +19,9 @@ public class MarksmanTrait : InformationTrait
 
     public override void onUnitAttack(Unit traitHaver, Unit target) {
         if(this.unitCounters[traitHaver] < 15) {
-            int attackGain = this.getNumberActive() > 2 ? this.largeAttackGain : this.smallAttackGain;
-            Operation buffOpp = new Operation(OperationType.PostAdd, attackGain, "Marksman Shot Buff " + this.unitCounters[traitHaver]);
+            float attackGain = this.getNumberActive() > 2 ? this.largeAttackGain : this.smallAttackGain;
+            //TODO: make sure this buff actually aplies mid combat
+            Operation buffOpp = new Operation(OperationType.Add, attackGain, "Marksman Shot Buff " + this.unitCounters[traitHaver]);
             traitHaver.buffStat(BuffableStats.AttackSpeed, buffOpp);
         } 
 

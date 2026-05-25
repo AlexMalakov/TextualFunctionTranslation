@@ -4,10 +4,7 @@ using UnityEngine;
 
 public abstract class InformationTrait : Trait
 {
-    List<HexSquare> squaresToReveal;
-    public InformationTrait(string name, int minimumForActivate) : base(name, minimumForActivate) {
-        this.squaresToReveal = new List<HexSquare>();
-    }
+    private List<HexSquare> squaresToReveal = new List<HexSquare>();
 
     
 

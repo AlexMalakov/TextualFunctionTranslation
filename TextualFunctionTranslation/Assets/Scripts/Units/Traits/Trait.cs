@@ -10,11 +10,6 @@ public abstract class Trait : MonoBehaviour
     private int minimumForActivate;
     private int numberActive = 0;
     
-
-    public int getMinimumForActive() {
-        return this.minimumForActivate;
-    }
-
     public bool attemptActivate(int numUnits) {
         if(numUnits < this.minimumForActivate) {
             return false;
@@ -80,10 +75,6 @@ public abstract class Trait : MonoBehaviour
         return this.numberActive;
     }
 
-}
-
-
-
 /*
 
 vegenery 2
@@ -126,4 +117,7 @@ plague doctor 2
 22 - tracker |
 23 - plague doctor | assasin
 24 - plague doctor | unnamed on-death trait
-/*
+*/
+}
+
+

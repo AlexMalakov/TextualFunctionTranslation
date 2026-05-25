@@ -9,7 +9,7 @@ public class CityWatchTrait : CypherTrait
     [SerializeField] private float damageBuff;
     [SerializeField] private float fullTraitMultiplier;
 
-    
+    //TODO: should this trait's buffs stack
     public override void onCombatStart(Unit traitHaver){
         HexSquare start = traitHaver.getPosition();
         List<Unit> leftBuff = new List<Unit>();
@@ -55,13 +55,13 @@ public class CityWatchTrait : CypherTrait
 
         float amt = this.getNumberActive() > 2 ? this.healthBuff * this.fullTraitMultiplier : this.healthBuff;
         Operation buff = new Operation(OperationType.PreMultiply, amt, "city watch health buff");
-        foreach(Unit u in this.leftBuff) {
+        foreach(Unit u in leftBuff) {
             u.buffStat(BuffableStats.Health, buff);
         }
 
-        float amt = this.getNumberActive() > 2 ? this.damageBuff * this.fullTraitMultiplier : this.damageBuff;
-        Operation buff = new Operation(OperationType.PreMultiply, amt, "city watch damage buff");
-        foreach(Unut u in this.rightBuff) {
+        amt = this.getNumberActive() > 2 ? this.damageBuff * this.fullTraitMultiplier : this.damageBuff;
+        buff = new Operation(OperationType.PreMultiply, amt, "city watch damage buff");
+        foreach(Unit u in rightBuff) {
             u.buffStat(BuffableStats.Damage, buff);
         }
 

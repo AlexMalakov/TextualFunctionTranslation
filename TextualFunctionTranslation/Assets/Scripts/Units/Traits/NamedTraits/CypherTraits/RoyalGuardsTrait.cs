@@ -9,28 +9,30 @@ public class RoyalGuardsTrait : CypherTrait
     [SerializeField] private float healthPerFullCompStack;
     [SerializeField] private float damagePerStack;
     [SerializeField] private float damagePerFullCompStack;
-    private int count;
 
-    public RoyalGuardsTrait() : base("royal guards", 2) {
-        this.count = 0;
-    }
+    [SerializeField] private float killStackGainSmall = 2f;
+    [SerializeField] private float killStackGainLarge = 5f;
+    [SerializeField] private float surviveStackGainSmall = 5f;
+    [SerializeField] private float surviveStackGainLarge = 8f;
+    private int count = 0;
+    //TODO: shouldnt persist across different runs
 
     public override void onCombatStart(Unit traitHaver){
         float amt = this.getNumberActive() > 2 ? this.count * this.healthPerFullCompStack : this.count * this.healthPerStack;
         Operation buff = new Operation(OperationType.PreAdd, amt, "royal guard health");
         traitHaver.buffStat(BuffableStats.Health, buff);
 
-        float amt = this.getNumberActive() > 2 ? this.count * this.damagePerFullCompStack : this.count * this.damagePerStack;
-        Operation buff = new Operation(OperationType.PreAdd, amt, "royal guard damage");
+        amt = this.getNumberActive() > 2 ? this.count * this.damagePerFullCompStack : this.count * this.damagePerStack;
+        buff = new Operation(OperationType.PreAdd, amt, "royal guard damage");
         traitHaver.buffStat(BuffableStats.Damage, buff);
     }
 
     public override void onEnemyDefeat(Unit traitHaver, Unit target){
-        this.count += 2; //TODO: give bigger buff if more traits
+        this.count += (int) (this.getNumberActive() > 2 ? this.killStackGainLarge : this.killStackGainSmall);
     }
 
     public override void onCombatSurvival(Unit traitHaver){
-        this.count += 5; //TODO: give bigger buff if more traits
+        this.count += (int) (this.getNumberActive() > 2 ? this.surviveStackGainLarge : this.surviveStackGainSmall);
     }
 
     public override void onCombatEnd(Unit traitHaver){

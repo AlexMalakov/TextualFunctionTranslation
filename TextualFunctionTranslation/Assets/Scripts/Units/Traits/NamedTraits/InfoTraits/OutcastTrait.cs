@@ -8,7 +8,7 @@ public class OutcastTrait : InformationTrait
     [SerializeField] private float attackSpeedBoost;
     [SerializeField] private float healthBoost;
     [SerializeField] private float damageBoost;
-    //doesn't require unit count check
+    //doesn't require unit count checkl
 
 
     public override void onCombatStart(Unit traitHaver) {
@@ -19,7 +19,7 @@ public class OutcastTrait : InformationTrait
                 return;
         }
 
-        Operation speedBoost = new Operation(OperationType.PostAdd, this.attackSpeedBoost, "Outcast Start Buff");
+        Operation speedBoost = new Operation(OperationType.Add, this.attackSpeedBoost, "Outcast Start Buff");
         Operation healthBoost = new Operation(OperationType.PreMultiply, this.healthBoost, "Outcast Start Buff");
         Operation damageBoost = new Operation(OperationType.PreMultiply, this.damageBoost, "Outcast Start Buff");
         traitHaver.buffStat(BuffableStats.AttackSpeed, speedBoost);

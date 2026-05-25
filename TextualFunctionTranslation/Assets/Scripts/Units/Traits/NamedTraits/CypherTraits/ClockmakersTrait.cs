@@ -9,9 +9,9 @@ public class ClockmakersTrait : CypherTrait
     //this traits buffs stack :)
 
     public override void onCombatStart(Unit traitHaver){
-        this.applyInRadius(1);
+        this.applyInRadius(traitHaver, 1);
         if(this.getNumberActive() > 2) {
-            this.applyInRadius(2);
+            this.applyInRadius(traitHaver, 2);
         }
     }
 
@@ -19,23 +19,23 @@ public class ClockmakersTrait : CypherTrait
         List<HexSquare> radCircle = this.getSquaresInRadius(traitHaver.getPosition(), radius, this.cm.getBoard());
         
         Operation buff = new Operation(OperationType.PreAdd, this.healthBoostAmount, "clockmaker health " + traitHaver.getName());
-        foreach(HexSquare s in radcircle) {
+        foreach(HexSquare s in radCircle) {
             if(s.getUnit() != null) {
-                s.getUnit(BuffableStats.Health, buff)
+                s.getUnit().buffStat(BuffableStats.Health, buff);
             }
         }
 
         List<CharacterTransformation> cypher = new List<CharacterTransformation>();
 
         HexSquare prev = null;
-        foreach(HexSquare s in radcircle) {
+        foreach(HexSquare s in radCircle) {
             if(prev != null) {
                 cypher.Add(new CharacterTransformation(s, prev));
             }
 
             prev = s;
         }
-        cypher.Add(new CharacterTransformation(radcircle[0], prev));
+        cypher.Add(new CharacterTransformation(radCircle[0], prev));
 
         this.addToCypher(cypher);
     }

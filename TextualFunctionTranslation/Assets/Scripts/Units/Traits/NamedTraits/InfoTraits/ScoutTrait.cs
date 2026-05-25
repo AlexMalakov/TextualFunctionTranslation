@@ -25,8 +25,8 @@ public class ScoutTrait : InformationTrait
         if(!scoutsStuns.Contains(target)) {
             //TODO: stun target
             
-            int damage = this.getNumberActive() > 2 ? this.stunDamageLarge : this.stunDamageSmall;
-            this.target.takeDamage(damage);
+            float damage = this.getNumberActive() > 2 ? this.stunDamageLarge : this.stunDamageSmall;
+            target.takeDamage(damage);
 
             attackedUnits[traitHaver].Add(target);
             this.logSquare(target.getPosition());

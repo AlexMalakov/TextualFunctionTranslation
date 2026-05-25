@@ -6,5 +6,11 @@ using UnityEngine;
 public class AnchorTrait : Trait
 {
 
+    protected override string getTraitName() {
+        return "outcast";
+    }
 
+    protected override int getMinimumForActive() {
+        return 2;
+    }
 }

@@ -21,19 +21,19 @@ public class WardenTrait : InformationTrait
             rightSquare = cm.getBoard().getHexAt(new AxialCoord(pos.q, pos.r - 1, pos.s + 1));
         }
 
-        int buffAmt = this.getNumberActive() > 2 ? this.largeBoostAmount : this.smallBoostAmount;
+        float buffAmt = this.getNumberActive() > 2 ? this.largeBoostAmount : this.smallBoostAmount;
         Operation buffOpp = new Operation(OperationType.PreMultiply, buffAmt, "Warden Health Buff ");
 
         if(leftSquare.isSquare()) {
             if(leftSquare.getUnit() != null) {
-                this.leftSquare.getUnit().buffStat(BuffableStats.Health, buffOpp);
+                leftSquare.getUnit().buffStat(BuffableStats.Health, buffOpp);
             }
             this.logSquare(leftSquare);
         }
 
         if(rightSquare.isSquare()) {
-            if(leftSquare.getUnit() != null) {
-                this.leftSquare.getUnit().buffStat(BuffableStats.Health, buffOpp);
+            if(rightSquare.getUnit() != null) {
+                rightSquare.getUnit().buffStat(BuffableStats.Health, buffOpp);
             }
             this.logSquare(rightSquare);
         }

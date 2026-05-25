@@ -24,11 +24,7 @@ public class CharacterTransformation {
 
 public abstract class CypherTrait : Trait
 {
-    private List<CharacterTransformation> cypher;
-
-    public CypherTrait(string name, int minimumForActivate) : base(name, minimumForActivate) {
-        this.cypher = new List<CharacterTransformation>();
-    }
+    private List<CharacterTransformation> cypher = new List<CharacterTransformation>();
 
     protected void addToCypher(List<CharacterTransformation> tr) {
         this.cypher.AddRange(tr);
