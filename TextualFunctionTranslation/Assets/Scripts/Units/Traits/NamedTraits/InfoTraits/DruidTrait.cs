@@ -13,6 +13,7 @@ public class DruidTrait : InformationTrait
     private HexSquare ySquare;
 
     //NOTE: THIS TRAIT IS ONLY USABLE FOR THE PLAYER
+    //DOESN'T need to check amount just active
 
     public override void onPrecombatStart() { //this might run multiple times which may be annoying or slow | solution enemy wont have this trait ever
         base.onPrecombatStart();

@@ -71,7 +71,7 @@ public abstract class Trait : MonoBehaviour
     public virtual void onCombatEnd(Unit traitHaver){}
 
 
-    //constructor work around cuz unity is a chad platform :(
+    //constructor work around cuz unity is a chud platform :(
     protected abstract string getTraitName();
 
     protected abstract int getMinimumForActive();

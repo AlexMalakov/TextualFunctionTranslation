@@ -8,6 +8,7 @@ public class OutcastTrait : InformationTrait
     [SerializeField] private float attackSpeedBoost;
     [SerializeField] private float healthBoost;
     [SerializeField] private float damageBoost;
+    //doesn't require unit count check
 
 
     public override void onCombatStart(Unit traitHaver) {

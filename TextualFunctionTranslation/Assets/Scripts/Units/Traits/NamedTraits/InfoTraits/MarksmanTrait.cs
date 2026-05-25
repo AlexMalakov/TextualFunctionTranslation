@@ -5,8 +5,8 @@ using UnityEngine;
 public class MarksmanTrait : InformationTrait
 {
     Dictionary<Unit, int> unitCounters;
-    [SerializeField] private float attackSpeedGain;
-
+    [SerializeField] private float smallAttackGain;
+    [SerializeField] private float largeAttackGain;
 
     public override void onPrecombatStart() {
         base.onPrecombatStart();
@@ -19,7 +19,8 @@ public class MarksmanTrait : InformationTrait
 
     public override void onUnitAttack(Unit traitHaver, Unit target) {
         if(this.unitCounters[traitHaver] < 15) {
-            Operation buffOpp = new Operation(OperationType.PostAdd, this.attackSpeedGain, "Marksman Shot Buff " + this.unitCounters[traitHaver]);
+            int attackGain = this.getNumberActive() > 2 ? this.largeAttackGain : this.smallAttackGain;
+            Operation buffOpp = new Operation(OperationType.PostAdd, attackGain, "Marksman Shot Buff " + this.unitCounters[traitHaver]);
             traitHaver.buffStat(BuffableStats.AttackSpeed, buffOpp);
         } 
 
