@@ -9,8 +9,8 @@ public class CityWatchTrait : CypherTrait
     
     public override void onCombatStart(Unit traitHaver){
         HexSquare start = traitHaver.getPosition();
-        List<Unit> leftBuff = this.getAllUnitsInDirection(start, -1);
-        List<Unit> rightBuff = this.getAllUnitsInDirection(start, 1);
+        List<Unit> leftBuff = new List<Unit>();
+        List<Unit> rightBuff = new List<Unit>();
 
         //TODO: give left units their buff, give right units their buff
         
@@ -26,6 +26,10 @@ public class CityWatchTrait : CypherTrait
                 break;
             }
 
+            if(next.getUnit() != null) {
+                rightBuff.Add(next.getUnit());
+            }
+
             loopdeloop.Add(new CharacterTransformation(next, start));
             start = next;
         }
@@ -38,6 +42,10 @@ public class CityWatchTrait : CypherTrait
             if(!next.isSquare()) {
                 leftEdge = start;
                 break;
+            }
+
+            if(next.getUnit() != null) {
+                leftBuff.Add(next.getUnit());
             }
 
             loopdeloop.Add(new CharacterTransformation(start, next));
