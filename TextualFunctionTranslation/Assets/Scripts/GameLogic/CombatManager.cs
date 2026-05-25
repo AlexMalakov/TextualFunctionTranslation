@@ -13,6 +13,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private Transform hpCanvas;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private CombatLog combatLog;
+    [SerializeField] private TraitDisplay traitDisplay;
 
     //not very nice but it will make this unit division work better
     private int livingPlayerUnits = -1;
@@ -22,6 +23,7 @@ public class CombatManager : MonoBehaviour
     public void initPlayers(PlayerUnitLayout enemyLayout) {
         this.player.init();
         this.enemy.assignLayout(enemyLayout);
+        this.traitDisplay.onUnitLayoutUpdate();
         this.enemy.init();
     }
 

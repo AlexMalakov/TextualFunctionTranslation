@@ -20,6 +20,7 @@ public class PlayerUnitLayout : MonoBehaviour
     [SerializeField] private List<USPair> startingLayout;
     [SerializeField] private Player player;
     [SerializeField] private HexBoard board;
+    [SerializeField] private TraitDisplay traitDisplay;
      
     //initializes the layout from starting layout, and sets up initial traits
     public void initLayout() {
@@ -125,9 +126,8 @@ public class PlayerUnitLayout : MonoBehaviour
             this.addTrait(u);
         }
 
+        this.traitDisplay.onUnitLayoutUpdate();
         return true;
-
-
     }
 
     public void addUnitFromShop(Unit u) {
