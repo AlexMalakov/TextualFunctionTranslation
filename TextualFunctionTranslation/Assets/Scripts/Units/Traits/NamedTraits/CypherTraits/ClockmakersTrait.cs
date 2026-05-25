@@ -5,29 +5,37 @@ using UnityEngine;
 public class ClockmakersTrait : CypherTrait
 {
     [SerializeField] private CombatManager cm;
-
+    [SerializeField] private float healthBoostAmount;
+    //this traits buffs stack :)
 
     public override void onCombatStart(Unit traitHaver){
+        this.applyInRadius(1);
+        if(this.getNumberActive() > 2) {
+            this.applyInRadius(2);
+        }
+    }
 
-        //TODO: determine if radius 1 or 1 and 2
-
-        List<HexSquare> rad1circle = this.getSquaresInRadius(traitHaver.getPosition(), 1, this.cm.getBoard());
+    private void applyInRadius(Unit traitHaver, int radius) {
+        List<HexSquare> radCircle = this.getSquaresInRadius(traitHaver.getPosition(), radius, this.cm.getBoard());
         
-        // foreach(HexSquare s in rad1circle) {
-        //     //TODO: buff every unit in circle
-        // }
+        Operation buff = new Operation(OperationType.PreAdd, this.healthBoostAmount, "clockmaker health " + traitHaver.getName());
+        foreach(HexSquare s in radcircle) {
+            if(s.getUnit() != null) {
+                s.getUnit(BuffableStats.Health, buff)
+            }
+        }
 
         List<CharacterTransformation> cypher = new List<CharacterTransformation>();
 
         HexSquare prev = null;
-        foreach(HexSquare s in rad1circle) {
+        foreach(HexSquare s in radcircle) {
             if(prev != null) {
                 cypher.Add(new CharacterTransformation(s, prev));
             }
 
             prev = s;
         }
-        cypher.Add(new CharacterTransformation(rad1circle[0], prev));
+        cypher.Add(new CharacterTransformation(radcircle[0], prev));
 
         this.addToCypher(cypher);
     }

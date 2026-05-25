@@ -5,6 +5,10 @@ using UnityEngine;
 public class RoyalGuardsTrait : CypherTrait
 {
     [SerializeField] private CombatManager cm;
+    [SerializeField] private float healthPerStack;
+    [SerializeField] private float healthPerFullCompStack;
+    [SerializeField] private float damagePerStack;
+    [SerializeField] private float damagePerFullCompStack;
     private int count;
 
     public RoyalGuardsTrait() : base("royal guards", 2) {
@@ -12,7 +16,13 @@ public class RoyalGuardsTrait : CypherTrait
     }
 
     public override void onCombatStart(Unit traitHaver){
-        //TODO: BUFF UNITS BASED ON COUNT
+        float amt = this.getNumberActive() > 2 ? this.count * this.healthPerFullCompStack : this.count * this.healthPerStack;
+        Operation buff = new Operation(OperationType.PreAdd, amt, "royal guard health");
+        traitHaver.buffStat(BuffableStats.Health, buff);
+
+        float amt = this.getNumberActive() > 2 ? this.count * this.damagePerFullCompStack : this.count * this.damagePerStack;
+        Operation buff = new Operation(OperationType.PreAdd, amt, "royal guard damage");
+        traitHaver.buffStat(BuffableStats.Damage, buff);
     }
 
     public override void onEnemyDefeat(Unit traitHaver, Unit target){

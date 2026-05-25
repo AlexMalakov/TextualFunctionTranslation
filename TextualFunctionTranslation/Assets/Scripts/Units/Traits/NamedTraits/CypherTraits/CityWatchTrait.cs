@@ -5,14 +5,15 @@ using UnityEngine;
 public class CityWatchTrait : CypherTrait
 {
     [SerializeField] private CombatManager cm;
+    [SerializeField] private float healthBuff;
+    [SerializeField] private float damageBuff;
+    [SerializeField] private float fullTraitMultiplier;
 
     
     public override void onCombatStart(Unit traitHaver){
         HexSquare start = traitHaver.getPosition();
         List<Unit> leftBuff = new List<Unit>();
         List<Unit> rightBuff = new List<Unit>();
-
-        //TODO: give left units their buff, give right units their buff
         
         List<CharacterTransformation> loopdeloop = new List<CharacterTransformation>();
         HexSquare rightEdge;
@@ -51,6 +52,19 @@ public class CityWatchTrait : CypherTrait
             loopdeloop.Add(new CharacterTransformation(start, next));
             start = next;
         }
+
+        float amt = this.getNumberActive() > 2 ? this.healthBuff * this.fullTraitMultiplier : this.healthBuff;
+        Operation buff = new Operation(OperationType.PreMultiply, amt, "city watch health buff");
+        foreach(Unit u in this.leftBuff) {
+            u.buffStat(BuffableStats.Health, buff);
+        }
+
+        float amt = this.getNumberActive() > 2 ? this.damageBuff * this.fullTraitMultiplier : this.damageBuff;
+        Operation buff = new Operation(OperationType.PreMultiply, amt, "city watch damage buff");
+        foreach(Unut u in this.rightBuff) {
+            u.buffStat(BuffableStats.Damage, buff);
+        }
+
 
         loopdeloop.Add(new CharacterTransformation(leftEdge, rightEdge));
         this.addToCypher(loopdeloop);
