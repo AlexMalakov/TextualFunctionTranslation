@@ -51,7 +51,7 @@ public abstract class Trait : MonoBehaviour
     }
 
     //this should do whatever the trait does
-    public virtual void onPrecombatStart(){
+    public virtual void onPrecombatStart() {
         this.numberActive = 0;
     }
 
@@ -62,6 +62,8 @@ public abstract class Trait : MonoBehaviour
     public virtual void onEnemyDefeat(Unit traitHaver, Unit target){}
 
     public virtual void onCombatSurvival(Unit traitHaver){}
+
+    public virtual void onUnitDeath(Unit traitHaver) {}
 
     public virtual void onCombatEnd(Unit traitHaver){}
 
@@ -82,8 +84,8 @@ clockmaker 4
 royal guard 4
 artisan 3
 assasin 4
-city watch 4
-unnamed on-death trait 3
+night watch 4
+martyr 3
 
 scout 4
 druid 3
@@ -95,28 +97,28 @@ plague doctor 2
 
 01 - scout | royal guard
 02 - scout | night watch
-03 - scout | 
-04 - scout |
+03 - scout | martyr
+04 - scout | assasin
 05 - druid | vegenery
 06 - druid | assasin
-07 - druid | 
-08 - warden |
-09 - warden |
-10 - warden |
-11 - warden |
-12 - marksman |
-13 - marksman |
-14 - marksman |
-15 - marksman |
-16 - outcast |
-17 - outcast |
-18 - outcast |
-19 - tracker |
-20 - tracker |
-21 - tracker |
-22 - tracker |
+07 - druid | artisan
+08 - warden | martyr
+09 - warden | royal guard
+10 - warden | night watch
+11 - warden | clockmaker
+12 - marksman | royal guard
+13 - marksman | artisan
+14 - marksman | clockmaker
+15 - marksman | vegenery
+16 - outcast | night watch
+17 - outcast | martyr
+18 - outcast | artisan
+19 - tracker | royal guard
+20 - tracker | assasin
+21 - tracker | night watch
+22 - tracker | clockmaker
 23 - plague doctor | assasin
-24 - plague doctor | unnamed on-death trait
+24 - plague doctor | clockmaker
 */
 }
 
