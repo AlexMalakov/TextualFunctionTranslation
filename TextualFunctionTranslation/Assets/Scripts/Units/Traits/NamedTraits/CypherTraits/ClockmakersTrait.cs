@@ -20,7 +20,7 @@ public class ClockmakersTrait : CypherTrait
         
         Operation buff = new Operation(OperationType.PreAdd, this.healthBoostAmount, "clockmaker health " + traitHaver.getName());
         foreach(HexSquare s in radCircle) {
-            if(s.getUnit() != null) {
+            if(s.getUnit() != null && this.cm.sameOwner(s.getUnit(), traitHaver)) {
                 s.getUnit().buffStat(BuffableStats.Health, buff);
             }
         }

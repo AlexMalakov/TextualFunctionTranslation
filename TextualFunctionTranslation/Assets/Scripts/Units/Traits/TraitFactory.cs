@@ -2,36 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TraitNames {
-    Anchors,
-    Darouidyse,
-    Marksman,
-    Outcast,
-    Scout,
-    Tracker,
-    Warden
-}
-
-[System.Serializable]
-public class TraitBlueprint {
-    public TraitNames trait;
-    public Trait traitObj;
-}
-
-
 public class TraitFactory : MonoBehaviour
 {
-    [SerializeField] private List<TraitBlueprint> traitBP;
+    [SerializeField] private CombatManger cm;
+    [SerializeField] private List<Trait> playerTraits;
+    [SerializeField] private List<Trait> enemyTraits;
 
-    private static Dictionary<TraitNames, Trait> traitToObj = new Dictionary<TraitNames, Trait>();
+    private static private List<Trait> staticPlayerTraits;
+    private static private List<Trait> staticEnemyTraits;
 
     public void Awake() { //Awake because this needs to run first
-        foreach(TraitBlueprint tbp in this.traitBP) {
-            traitToObj.Add(tbp.trait, tbp.traitObj);
-        }
+        staticPlayerTraits = this.playerTraits;
+        staticEnemyTraits = this.enemyTraits;
     }
 
-    public static Trait getTrait(TraitNames t) {
-        return traitToObj[t];
+    public static Trait getTrait(string t_name, Unit traitGetter) {
+        if(cm.isPlayerUnit(traitGetter)) {
+            for(Trait t in staticPlayerTraits) {
+                if(t.getName() == t_name) {
+                    return t;
+                }
+            }
+        }
+        for (Trait t in staticEnemyTraits) {
+            if(t.get_name() == t_name) {
+                return t;
+            }
+        }
+
+        throw new Exception("TRAIT DOES NOT EXIST IN FACTORY!" + t_name);
     }
 }
