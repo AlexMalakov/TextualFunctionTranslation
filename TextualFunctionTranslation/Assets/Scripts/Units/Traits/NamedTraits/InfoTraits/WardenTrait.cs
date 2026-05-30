@@ -13,6 +13,7 @@ public class WardenTrait : InformationTrait
         HexSquare leftSquare;
         HexSquare rightSquare;
 
+        //TODO ISSUE: mirrored for opponent
         if(cm.isPlayerUnit(traitHaver)) { //just dont use r
             leftSquare = cm.getBoard().getHexAt(new AxialCoord(pos.q - 1, pos.r + 1, pos.s));
             rightSquare = cm.getBoard().getHexAt(new AxialCoord(pos.q, pos.r + 1, pos.s - 1));

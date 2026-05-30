@@ -10,6 +10,8 @@ public class OutcastTrait : InformationTrait
     [SerializeField] private float damageBoost;
     //doesn't require unit count checkl
 
+    //TODO: can be next to enemies? or no
+
 
     public override void onCombatStart(Unit traitHaver) {
         
