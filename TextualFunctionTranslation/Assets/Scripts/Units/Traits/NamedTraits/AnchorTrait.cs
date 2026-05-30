@@ -6,7 +6,7 @@ using UnityEngine;
 public class AnchorTrait : Trait
 {
 
-    protected override string getTraitName() {
+    public override string getTraitName() {
         return "outcast";
     }
 

@@ -38,17 +38,17 @@ public class MartyrTrait : CypherTrait
         float heal = 0;
 
         if(this.getNumberActive() == 1) {
-            float debuff = this.debuffAmountSmall;
-            float damage = this.damageAmountSmall;
-            float heal = this.healPercentSmall;
+            debuff = this.debuffAmountSmall;
+            damage = this.damageAmountSmall;
+            heal = this.healPercentSmall;
         } else if(this.getNumberActive() == 2) {
-            float debuff = this.debuffAmount;
-            float damage = this.damageAmount;
-            float heal = this.healPercent;
+            debuff = this.debuffAmount;
+            damage = this.damageAmount;
+            heal = this.healPercent;
         } else if(this.getNumberActive() == 3) {
-            float debuff = this.debuffAmountLarge;
-            float damage = this.damageAmountLarge;
-            float heal = this.healPercentLarge;
+            debuff = this.debuffAmountLarge;
+            damage = this.damageAmountLarge;
+            heal = this.healPercentLarge;
         }
 
         Operation buff = new Operation(OperationType.PostMultiply, debuff, "Martyr Debuff");
@@ -58,7 +58,7 @@ public class MartyrTrait : CypherTrait
             if(u != null && this.cm.sameOwner(originUnit, u)) {
                 //TODO: heal unit
             } else if(u != null) {
-                u.buffStat(UnitStats.Damage, buff);
+                u.buffStat(BuffableStats.Damage, buff);
                 u.takeDamage(damage);
             }
             return;
@@ -70,7 +70,7 @@ public class MartyrTrait : CypherTrait
             if(u != null && this.cm.sameOwner(originUnit, u)) {
                 //TODO: heal unit
             } else if(u != null) {
-                u.buffStat(UnitStats.Damage, buff);
+                u.buffStat(BuffableStats.Damage, buff);
                 u.takeDamage(damage);
             }
 
@@ -87,7 +87,7 @@ public class MartyrTrait : CypherTrait
         int distance = getNumberActive() + 1;
 
         for(int i = 1; i < distance; i++) {
-            iterC = iter.getCoords();
+            AxialCoord iterC = iter.getCoords();
             HexSquare check = this.cm.getBoard().getHexAt(new AxialCoord(iterC.q + qOffset, iterC.r + rOffset, iterC.s + sOffset));
             if(!check.isSquare()) {
                 break;
@@ -98,5 +98,13 @@ public class MartyrTrait : CypherTrait
         }
 
         return squares;
+    }
+
+    public override string getTraitName() {
+        return "martyr";
+    }
+
+    protected override int getMinimumForActive() {
+        return 1;
     }
 }

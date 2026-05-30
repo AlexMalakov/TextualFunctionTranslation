@@ -85,7 +85,7 @@ public class CityWatchTrait : CypherTrait
         }
     }
 
-    protected override string getTraitName() {
+    public override string getTraitName() {
         return "city watch";
     }
 

@@ -40,7 +40,7 @@ public class ClockmakersTrait : CypherTrait
         this.addToCypher(cypher);
     }
 
-    protected override string getTraitName() {
+    public override string getTraitName() {
         return "clockmaker";
     }
 

@@ -1,31 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class TraitFactory : MonoBehaviour
 {
-    [SerializeField] private CombatManger cm;
+    [SerializeField] private CombatManager cm;
     [SerializeField] private List<Trait> playerTraits;
     [SerializeField] private List<Trait> enemyTraits;
 
-    private static private List<Trait> staticPlayerTraits;
-    private static private List<Trait> staticEnemyTraits;
+    private static List<Trait> staticPlayerTraits;
+    private static List<Trait> staticEnemyTraits;
+    private static CombatManager staticCM;
 
     public void Awake() { //Awake because this needs to run first
         staticPlayerTraits = this.playerTraits;
         staticEnemyTraits = this.enemyTraits;
+        staticCM = cm;
     }
 
     public static Trait getTrait(string t_name, Unit traitGetter) {
-        if(cm.isPlayerUnit(traitGetter)) {
-            for(Trait t in staticPlayerTraits) {
-                if(t.getName() == t_name) {
+        if(staticCM.isPlayerUnit(traitGetter)) {
+            foreach(Trait t in staticPlayerTraits) {
+                if(t.getTraitName() == t_name) {
                     return t;
                 }
             }
         }
-        for (Trait t in staticEnemyTraits) {
-            if(t.get_name() == t_name) {
+        foreach(Trait t in staticEnemyTraits) {
+            if(t.getTraitName() == t_name) {
                 return t;
             }
         }

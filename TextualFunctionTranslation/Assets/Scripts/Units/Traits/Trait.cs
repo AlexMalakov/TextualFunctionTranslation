@@ -69,7 +69,7 @@ public abstract class Trait : MonoBehaviour
 
 
     //constructor work around cuz unity is a chud platform :(
-    protected abstract string getTraitName();
+    public abstract string getTraitName();
 
     protected abstract int getMinimumForActive();
 

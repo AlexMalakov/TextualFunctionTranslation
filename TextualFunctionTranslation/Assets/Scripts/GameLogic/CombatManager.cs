@@ -60,7 +60,7 @@ public class CombatManager : MonoBehaviour
         return this.board;
     }
 
-    private bool sameOwner(Unit unit1, Unit unit2) {
+    public bool sameOwner(Unit unit1, Unit unit2) {
         return (this.player.ownsUnit(unit1) && this.player.ownsUnit(unit2))
             || (this.enemy.ownsUnit(unit1) && this.enemy.ownsUnit(unit2));
     }

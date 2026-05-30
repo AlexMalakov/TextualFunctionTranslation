@@ -10,7 +10,7 @@ public class ArtisansTrait : CypherTrait
         //I need to think this trait through better
     }
 
-    protected override string getTraitName() {
+    public override string getTraitName() {
         return "artisans";
     }
 

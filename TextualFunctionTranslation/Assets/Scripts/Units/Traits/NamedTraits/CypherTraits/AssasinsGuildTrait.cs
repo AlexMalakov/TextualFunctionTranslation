@@ -7,7 +7,7 @@ public class AssasinsGuildTrait : CypherTrait
 
     //on combat start, and on unit defeat?
 
-    protected override string getTraitName() {
+    public override string getTraitName() {
         return "assasins";
     }
 

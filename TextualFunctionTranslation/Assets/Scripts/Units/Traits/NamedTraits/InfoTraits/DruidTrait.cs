@@ -45,7 +45,7 @@ public class DruidTrait : InformationTrait
         }
     }
 
-    protected override string getTraitName() {
+    public override string getTraitName() {
         return "druid";
     }
 

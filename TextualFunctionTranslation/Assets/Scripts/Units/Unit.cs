@@ -38,8 +38,8 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private string unitName;
 
     [Header ("Traits")]
-    [SerializeField] private TraitNames roleTraitName;
-    [SerializeField] private TraitNames classTraitName;
+    [SerializeField] private string roleTraitName;
+    [SerializeField] private string classTraitName;
     private Trait roleTrait;
     private Trait classTrait;
 
@@ -101,14 +101,14 @@ public abstract class Unit : MonoBehaviour
 
     public Trait getRoleTrait() {
         if(!this.roleTrait) { //this unit's trait is always known. It however cannot be retrieved until the factory is done. So this method can't be called during 'AWAKE'
-            this.roleTrait = TraitFactory.getTrait(this.roleTraitName);
+            this.roleTrait = TraitFactory.getTrait(this.roleTraitName, this);
         }
         return this.roleTrait;
     }
 
     public Trait getClassTrait() {
         if(!this.classTrait) {
-            this.classTrait = TraitFactory.getTrait(this.classTraitName);
+            this.classTrait = TraitFactory.getTrait(this.classTraitName, this);
         }
         return this.classTrait;
     }

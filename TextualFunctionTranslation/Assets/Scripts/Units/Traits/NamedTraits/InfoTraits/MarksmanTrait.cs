@@ -32,7 +32,7 @@ public class MarksmanTrait : InformationTrait
         }
     }
 
-    protected override string getTraitName() {
+    public override string getTraitName() {
         return "marksman";
     }
 

@@ -11,7 +11,7 @@ public class TrackerTrait : InformationTrait
         //TODO: give player 1 oracle lense
     }
 
-    protected override string getTraitName() {
+    public override string getTraitName() {
         return "tracker";
     }
 

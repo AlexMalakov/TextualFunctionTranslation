@@ -33,7 +33,7 @@ public class ScoutTrait : InformationTrait
         }
     }
 
-    protected override string getTraitName() {
+    public override string getTraitName() {
         return "scout";
     }
 

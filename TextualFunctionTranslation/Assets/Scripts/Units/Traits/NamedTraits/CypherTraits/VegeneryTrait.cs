@@ -30,7 +30,7 @@ public class VegeneryTrait : CypherTrait
         this.addToCypher(new List<CharacterTransformation>(){new VegenereCharacterTransformation(traitHaver.getPosition(), traitHaver.getPosition(), unitName)});
     }
 
-    protected override string getTraitName() {
+    public override string getTraitName() {
         return "vegenere";
     }
 
