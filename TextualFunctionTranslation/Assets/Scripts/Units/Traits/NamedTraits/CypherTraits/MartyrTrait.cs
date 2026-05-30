@@ -17,7 +17,7 @@ public class MartyrTrait : CypherTrait
     [SerializeField] private float healPercent;
     [SerializeField] private float healPercentLarge;
     
-    public override void onUnitDeath(Unit traitHaver) {
+    public override void onUnitDeath(Unit traitHaver, Unit killer) {
         this.applyInDirection(traitHaver, 1, -1, 0);
         this.applyInDirection(traitHaver, -1, 1, 0);
         this.applyInDirection(traitHaver, 1, 0, -1);
@@ -40,7 +40,7 @@ public class MartyrTrait : CypherTrait
         if(this.getNumberActive() == 1) {
             float debuff = this.debuffAmountSmall;
             float damage = this.damageAmountSmall;
-            float heal = this.healPercentSmall
+            float heal = this.healPercentSmall;
         } else if(this.getNumberActive() == 2) {
             float debuff = this.debuffAmount;
             float damage = this.damageAmount;

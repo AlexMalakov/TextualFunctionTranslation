@@ -63,7 +63,7 @@ public abstract class Trait : MonoBehaviour
 
     public virtual void onCombatSurvival(Unit traitHaver){}
 
-    public virtual void onUnitDeath(Unit traitHaver) {}
+    public virtual void onUnitDeath(Unit traitHaver, Unit killer) {}
 
     public virtual void onCombatEnd(Unit traitHaver){}
 

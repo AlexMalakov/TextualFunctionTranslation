@@ -75,6 +75,8 @@ public class CombatManager : MonoBehaviour
             this.combatLog.logEvent(new CombatEvent(attacker, previousTarget));
             attacker.getRoleTrait().onEnemyDefeat(attacker, previousTarget);
             attacker.getClassTrait().onEnemyDefeat(attacker, previousTarget);
+            attacker.getRoleTrait().onUnitDeath(previousTarget, attacker);
+            attacker.getClassTrait().onUnitDeath(previousTarget, attacker);
         }
 
         Func<HexSquare, bool> getAttackableSquares = (HexSquare s) => {
