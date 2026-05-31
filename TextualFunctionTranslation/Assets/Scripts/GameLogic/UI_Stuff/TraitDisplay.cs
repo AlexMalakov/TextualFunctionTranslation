@@ -8,11 +8,11 @@ public class TraitDisplay : MonoBehaviour
     [SerializeField] private Player enemy;
 
     [SerializeField] private GameObject traitDisplayWidgetPrefab;
-    //private List<TraitWidget> traitWidgets;
+    private List<TraitWidget> traitWidgets;
     //TODO: this is a bad design -- i think this should be moved into trait, also i think i need to think about splitting trait objects between player's and enemies :)
 
     public void Awake() {
-        //this.traitWidgets = new List<TraitWidget>();
+        this.traitWidgets = new List<TraitWidget>();
         for(int i = 0; i < 26; i++) {
             //this.traitWidgets.Add(Instantiate(traitDisplayWidgetPrefab).GetComponent<TraitWidget>());
             //this.traitWidgets[i].init()

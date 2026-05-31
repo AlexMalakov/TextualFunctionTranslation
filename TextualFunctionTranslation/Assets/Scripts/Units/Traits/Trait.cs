@@ -61,9 +61,13 @@ public abstract class Trait : MonoBehaviour
 
     public virtual void onEnemyDefeat(Unit traitHaver, Unit target){}
 
+    public virtual void onArbitraryDeath(Unit traitHaver, Unit target){}
+
     public virtual void onCombatSurvival(Unit traitHaver){}
 
     public virtual void onUnitDeath(Unit traitHaver, Unit killer) {}
+
+    public virtual void informAllOffDeath(Unit died){}
 
     public virtual void onCombatEnd(Unit traitHaver){}
 

@@ -4,8 +4,17 @@ using UnityEngine;
 
 public class TrackerTrait : InformationTrait
 {
-    //TODO: make this unit do something in combat????
+    private Dictionary<Unit, List<Unit>> assistMap;
+    private int lenseCount;
 
+    public override void onPrecombatStart() {
+        this.lenseCount = 0;
+        this.assistMap = new Dictionary<Unit, List<Unit>>();
+    }
+
+    public override void onCombatStart(Unit traitHaver) {
+        this.assistMap.Add(traitHaver, new List<Unit>());
+    }
 
     public override void onCombatEnd(Unit traitHaver) {
         //TODO: give player 1 oracle lense
