@@ -31,7 +31,9 @@ public struct AxialCoord {
     public AxialCoord getMirroredCoord() {
         int mirroredQ = 4 - this.q;
         int mirroredR = 7 - this.r;
-        int s = -(mirroredR + mirroredQ);
+        int mirroredS = -(mirroredR + mirroredQ);
+
+        return new AxialCoord(mirroredQ, mirroredR, mirroredS);
     }
 }
 

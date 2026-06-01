@@ -9,9 +9,9 @@ public class ArtisansTrait : CypherTrait
     [SerializeField] private float damageAmount;
     [SerializeField] private float damageAmountLarge;
 
-    public virtual void onEnemyDefeat(Unit traitHaver, Unit target){
-        int amt = this.getNumberActive() == 1 ? this.damageAmountSmall : (this.getNumberActive() == 2 ? this.damageAmount : this.damageAmountLarge);
-        Operation buff = new Operation(OperationType.PreMultiply, amt, "Artisan Stack for " + died.getName());
+    public override void onEnemyDefeat(Unit traitHaver, Unit target){
+        float amt = this.getNumberActive() == 1 ? this.damageAmountSmall : (this.getNumberActive() == 2 ? this.damageAmount : this.damageAmountLarge);
+        Operation buff = new Operation(OperationType.PreMultiply, amt, "Artisan Stack for " + target.getName());
         traitHaver.buffStat(BuffableStats.Damage, buff);
         //TODO heal unit
 
