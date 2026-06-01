@@ -16,8 +16,23 @@ public class TrackerTrait : InformationTrait
         this.assistMap.Add(traitHaver, new List<Unit>());
     }
 
+    public override void onUnitAttack(Unit traitHaver, Unit target) {
+        if(!this.assistMap[traitHaver].Contains(target)) {
+            this.assistMap[traitHaver].Add(target);
+        }
+    }
+
+    public override void informAllOffDeath(Unit death) {
+        foreach(Unit u in this.assistMap.Keys) {
+            if(this.assistMap[u].Contains(death)) {
+                this.lenseCount++;
+                //TODO: give unit it's combat buff???
+            }
+        }
+    }
+
     public override void onCombatEnd(Unit traitHaver) {
-        //TODO: give player 1 oracle lense
+        //TODO: give players lenses = this.lenseCount
     }
 
     public override string getTraitName() {
@@ -27,5 +42,4 @@ public class TrackerTrait : InformationTrait
     protected override int getMinimumForActive() {
         return 1;
     }
-
 }
