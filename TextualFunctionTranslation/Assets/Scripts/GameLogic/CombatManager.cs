@@ -205,5 +205,10 @@ public class CombatManager : MonoBehaviour
             u.getRoleTrait().onCombatStart(u);
             u.getClassTrait().onCombatStart(u);
         }
+
+        foreach(Unit u in this.units) {
+            u.getRoleTrait().preCombatFinal(u);
+            u.getClassTrait().preCombatFinal(u);
+        }
     }
 }

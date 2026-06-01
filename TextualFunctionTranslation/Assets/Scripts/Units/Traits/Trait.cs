@@ -67,7 +67,10 @@ public abstract class Trait : MonoBehaviour
 
     public virtual void onUnitDeath(Unit traitHaver, Unit killer) {}
 
+    //THESE LAST 2 are kinda ass they only exist for one trait
     public virtual void informAllOffDeath(Unit died){}
+
+    public virtual void preCombatFinal(Unit traitHaver) {}
 
     public virtual void onCombatEnd(Unit traitHaver){}
 

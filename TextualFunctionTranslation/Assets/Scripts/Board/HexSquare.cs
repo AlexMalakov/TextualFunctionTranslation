@@ -27,6 +27,12 @@ public struct AxialCoord {
         int y = r;
         return new OffsetCoord(x, y);
     }
+
+    public AxialCoord getMirroredCoord() {
+        int mirroredQ = 4 - this.q;
+        int mirroredR = 7 - this.r;
+        int s = -(mirroredR + mirroredQ);
+    }
 }
 
 [Serializable]
