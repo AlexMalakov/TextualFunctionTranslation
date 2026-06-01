@@ -56,7 +56,7 @@ public class MartyrTrait : CypherTrait
         if(squares.Count == 1) {
             Unit u = squares[0].getUnit();
             if(u != null && this.cm.sameOwner(originUnit, u)) {
-                //TODO: heal unit
+                u.heal(heal);
             } else if(u != null) {
                 u.buffStat(BuffableStats.Damage, buff);
                 u.takeDamage(damage);
@@ -68,7 +68,7 @@ public class MartyrTrait : CypherTrait
         for(int i = 1; i < squares.Count; i++) {
             Unit u = squares[0].getUnit();
             if(u != null && this.cm.sameOwner(originUnit, u)) {
-                //TODO: heal unit
+                u.heal(heal);
             } else if(u != null) {
                 u.buffStat(BuffableStats.Damage, buff);
                 u.takeDamage(damage);

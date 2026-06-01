@@ -13,7 +13,7 @@ public class ArtisansTrait : CypherTrait
         float amt = this.getNumberActive() == 1 ? this.damageAmountSmall : (this.getNumberActive() == 2 ? this.damageAmount : this.damageAmountLarge);
         Operation buff = new Operation(OperationType.PreMultiply, amt, "Artisan Stack for " + target.getName());
         traitHaver.buffStat(BuffableStats.Damage, buff);
-        //TODO heal unit
+        traitHaver.heal(healAmount);
 
         List<CharacterTransformation> cypher = new List<CharacterTransformation>();
         cypher.Add(new CharacterTransformation(target.getPosition(), traitHaver.getPosition()));

@@ -283,6 +283,17 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
+    public void heal(float in_healing) {
+        float preHealth = this.currentHealth;
+        this.currentHealth += in_healing;
+
+        if(this.currentHealth >= this.healthCalculator.calculate()) {
+            this.currentHealth = this.healthCalculator.calculate();
+        }
+
+        this.hpBar.updateDamage(this.preHealth - this.currentHealth);
+    }
+
     //this does not give a unit a new square use carefully!
     public void unclaimSquare() {
         if(this.curPosition == null || !this.curPosition.isSquare()) {

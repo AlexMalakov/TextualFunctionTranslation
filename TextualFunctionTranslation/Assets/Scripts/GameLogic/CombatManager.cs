@@ -43,7 +43,6 @@ public class CombatManager : MonoBehaviour
 
         this.placeUnitsFromLayouts();
 
-        //TODO: apply trait buffs
         this.combatLog.initLog(this.units);
 
         this.traitPreCombat();

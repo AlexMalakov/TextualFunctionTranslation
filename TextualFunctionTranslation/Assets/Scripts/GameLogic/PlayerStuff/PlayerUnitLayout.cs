@@ -67,7 +67,6 @@ public class PlayerUnitLayout : MonoBehaviour
     //return false if fails
     //this is ugly as shit but womp womp
     public bool attemptUpdateLayout(Unit u, HexSquare square) { //moves unit u inot square s
-        //TODO: ADD UNIT TRAITS
 
         //not my unit or not my destination square, then fail the movement
         if(!this.board.getPlayerSquares().Contains(square) || !this.player.ownsUnit(u) 
@@ -186,7 +185,6 @@ public class PlayerUnitLayout : MonoBehaviour
     }
 
     //attempts to activate all traits, stores all traits that were activated
-    //TODO: SOMETHING SHOULD CALL THIS!
     public List<Trait> getActiveTraits() {
         List<Trait> active = new List<Trait>();
         foreach(Trait t in this.traitCount.Keys) {
