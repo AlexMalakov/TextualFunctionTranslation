@@ -21,6 +21,11 @@ public class CombatManager : MonoBehaviour
     private List<Unit> units;
 
     public void initPlayers(PlayerUnitLayout enemyLayout) {
+        foreach(Unit u in this.units) {
+            u.getRoleTrait().wipeCount();
+            u.getClassTrait().wipeCount();
+        }
+
         this.player.init();
         this.enemy.assignLayout(enemyLayout);
         this.traitDisplay.onUnitLayoutUpdate();
@@ -193,11 +198,6 @@ public class CombatManager : MonoBehaviour
         }
         foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits()) {
             t.onPrecombatStart();
-        }
-
-        foreach(Unit u in this.units) {
-            u.getRoleTrait().registerUnit();
-            u.getClassTrait().registerUnit();
         }
 
         foreach(Unit u in this.units) {

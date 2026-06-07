@@ -6,6 +6,7 @@ using UnityEngine;
 
 public abstract class Trait : MonoBehaviour
 {
+    [SerializeField] private TraitWidget tw;
     private string traitName;
     private int minimumForActivate;
     private int numberActive = 0;
@@ -18,6 +19,10 @@ public abstract class Trait : MonoBehaviour
         return true;
 
         //TODO: ELSE DO STUFF !!!!!
+    }
+
+    public TraitWidget getTraitWidget() {
+        return this.tw;
     }
 
     protected List<HexSquare> getSquaresInRadius(HexSquare centerSq, int radius, HexBoard board) {
@@ -46,14 +51,19 @@ public abstract class Trait : MonoBehaviour
     public virtual void runSquareReveal() {}
     public virtual void runCypher(char[] curCypherText) {}
 
-    public void registerUnit() {
-        this.numberActive++;
+    public void registerUnit(bool addingUnit) {
+        if(addingUnit)
+            this.numberActive++;
+        else
+            this.numberActive--;
     }
 
-    //this should do whatever the trait does
-    public virtual void onPrecombatStart() {
+    public void wipeCount() {
         this.numberActive = 0;
     }
+
+    //these should do whatever the trait does
+    public virtual void onPrecombatStart() {}
 
     public virtual void onCombatStart(Unit traitHaver){}
 
@@ -83,7 +93,6 @@ public abstract class Trait : MonoBehaviour
     public int getNumberActive() {
         return this.numberActive;
     }
-
 /*
 
 vegenery 2

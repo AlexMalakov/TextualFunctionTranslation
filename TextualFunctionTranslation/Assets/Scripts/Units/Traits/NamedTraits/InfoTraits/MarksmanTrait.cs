@@ -9,7 +9,6 @@ public class MarksmanTrait : InformationTrait
     [SerializeField] private float largeAttackGain;
 
     public override void onPrecombatStart() {
-        base.onPrecombatStart();
         this.unitCounters = new Dictionary<Unit, int>();
     }
 

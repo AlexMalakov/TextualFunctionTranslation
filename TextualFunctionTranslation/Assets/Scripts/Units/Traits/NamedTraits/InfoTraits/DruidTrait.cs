@@ -16,7 +16,6 @@ public class DruidTrait : InformationTrait
     //DOESN'T need to check amount just active
 
     public override void onPrecombatStart() { //this might run multiple times which may be annoying or slow | solution enemy wont have this trait ever
-        base.onPrecombatStart();
         vowelSquares = new List<HexSquare>();
         char[] vowels = {'a', 'e', 'i', 'o', 'u'};
 

@@ -40,12 +40,16 @@ public class PlayerUnitLayout : MonoBehaviour
             this.traitCount.Add(rt, 1);
         }
 
+        rt.registerUnit(true);
+
         Trait ct = u.getClassTrait();
         if(this.traitCount.ContainsKey(ct)) {
             this.traitCount[ct] += 1;
         } else {
             this.traitCount.Add(ct, 1);
         }
+
+        ct.registerUnit(true);
     }
 
     //given a unit, remove its role and class traits from the dict
@@ -57,11 +61,15 @@ public class PlayerUnitLayout : MonoBehaviour
             this.traitCount.Remove(rt);
         }
 
+        rt.registerUnit(false);
+
         Trait ct = u.getClassTrait();
         this.traitCount[ct] -= 1;
         if(this.traitCount[ct] == 0) {
             this.traitCount.Remove(ct);
         }
+
+        ct.registerUnit(false);
     }
     
     //return false if fails
@@ -151,6 +159,7 @@ public class PlayerUnitLayout : MonoBehaviour
 
     public void removeUnitFromLayout(Unit u) {
         this.layout.Remove(u);
+
         this.removeTrait(u);
     }
 

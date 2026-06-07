@@ -5,4 +5,9 @@ using UnityEngine;
 public class TraitWidget : MonoBehaviour
 {
     [SerializeField] private Trait trait;
+
+
+
+
+    public void update()
 }

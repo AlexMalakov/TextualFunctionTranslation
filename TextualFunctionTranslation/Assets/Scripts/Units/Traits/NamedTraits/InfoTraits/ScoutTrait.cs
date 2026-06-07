@@ -11,7 +11,6 @@ public class ScoutTrait : InformationTrait
 
 
     public override void onPrecombatStart() {
-        base.onPrecombatStart();
         this.attackedUnits = new Dictionary<Unit, List<Unit>>();
     }
 

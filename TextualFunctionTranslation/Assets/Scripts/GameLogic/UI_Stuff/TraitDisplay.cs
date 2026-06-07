@@ -8,16 +8,8 @@ public class TraitDisplay : MonoBehaviour
     [SerializeField] private Player enemy;
 
     [SerializeField] private GameObject traitDisplayWidgetPrefab;
-    private List<TraitWidget> traitWidgets;
-    //TODO: this is a bad design -- i think this should be moved into trait, also i think i need to think about splitting trait objects between player's and enemies :)
-
-    public void Awake() {
-        this.traitWidgets = new List<TraitWidget>();
-        for(int i = 0; i < 26; i++) {
-            //this.traitWidgets.Add(Instantiate(traitDisplayWidgetPrefab).GetComponent<TraitWidget>());
-            //this.traitWidgets[i].init()
-        }
-    }
+    private List<Trait> playerTraits;
+    private List<Trait> enemyTraits;
 
     public void onUnitLayoutUpdate() {
         //TODO: display all traits for player, enemy
@@ -47,7 +39,7 @@ public class TraitDisplay : MonoBehaviour
             }
         }
 
-        //TODO: create little thingies for each trait, which shows the name and the number, and when hovered over displays more info about it?
-        //use TRAIT.getNumberActive()
+        this.playerTraits = playerTraits;
+        this.enemyTraits = enemyTraits;
     }
 }
