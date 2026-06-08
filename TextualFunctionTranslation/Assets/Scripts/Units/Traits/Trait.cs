@@ -21,6 +21,10 @@ public abstract class Trait : MonoBehaviour
         //TODO: ELSE DO STUFF !!!!!
     }
 
+    public void Start() {
+        this.tw.init(this);
+    }
+
     public TraitWidget getTraitWidget() {
         return this.tw;
     }
@@ -56,6 +60,8 @@ public abstract class Trait : MonoBehaviour
             this.numberActive++;
         else
             this.numberActive--;
+
+        this.tw.update();
     }
 
     public void wipeCount() {
