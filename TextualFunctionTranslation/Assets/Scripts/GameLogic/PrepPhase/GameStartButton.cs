@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-public class GameStartButton : MonoBehaviour
+public class GameStateButton : MonoBehaviour
 {
-    [SerializeField] Button button;
-    [SerializeField] GameManager game;
-
-    private bool bEnabled = false;
+    [SerializeField] private Button button;
+    [SerializeField] private GameManager game;
+    [SerializeField] private TMP_Text button_text;
+    private bool isPrecombat = false;
 
     public void Awake() { //Awake because this doesn't affect other systems
         UnityEngine.UI.Button btn = button.GetComponent<UnityEngine.UI.Button>();
@@ -16,11 +17,25 @@ public class GameStartButton : MonoBehaviour
     }
 
     public void onButtonClick() {
-        this.game.onCombatStart();
+        if(isPrecombat) {
+            // this.game.onCombatStart();
+            this.game.onPreperationEnd();
+        } else {
+            this.game.onResultsEnd();
+        }
+        
     }
 
-    public void setEnabled(bool isEnabled) {
-        this.bEnabled = isEnabled;
+    public void runPrecombat(bool isEnabled) {
+        this.gameObject.SetActive(isEnabled);
+        this.button_text = "start combat";
+        this.isPrecombat = isEnabled;
+    }
+
+    public void runResults(bool isEnabled) {
+        this.gameObject.SetActive(isEnabled);
+        this.button_text = "next round";
+        this.isPrecombat = !isEnabled;
     }
 }
 

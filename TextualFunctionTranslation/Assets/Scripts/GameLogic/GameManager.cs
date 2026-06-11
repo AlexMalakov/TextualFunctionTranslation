@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     private int currentStage = 0; //TODO: skip tutorial?
 
     [SerializeField] private PrecombatManager pcm;
+    [SerializeField] private ReviewManager rvm;
 
     void Start() { //starts the game, runs after factories have finished
         this.onPreperationStart();
@@ -46,6 +47,8 @@ public class GameManager : MonoBehaviour
     private void onPreperationEnd() {
         this.gameState = GameStage.combat;
         this.pcm.endPrep();
+
+        this.onCombatStart();
     }
 
     public void onCombatStart() {
@@ -57,25 +60,26 @@ public class GameManager : MonoBehaviour
     }
 
     public void onCombatEnd() {
-        //TODO tell game manager to end comabt
+        //TODO tell combat manager to end comabt
         this.gameState = GameStage.result;
         this.onResultsStart();
     }
 
     private void onResultsStart() {
-        //run cipher animation
         this.combatManager.runSquaresReveal();
         string ciphertext = this.combatManager.encrypt(this.currentLevel[this.currentStage].getLevelCipher());
         this.combatManager.runCypherAnimation();
 
+        this.rvm.onResultsStart();
         //TODO: display encrypted text
     }
 
     private void handleResults() {
-        this.onResultsEnd(); //PLACEHOLDER
+        this.rvm.handleResults();
     }
 
     private void onResultsEnd() {
+        this.rvm.onResultsEnd();
         this.currentStage++;
         this.gameState = GameStage.preperation;
         this.onPreperationStart();

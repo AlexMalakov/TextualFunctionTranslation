@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class ReviewManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+
+
+    [SerializeField] private GameStateButton gameStateButton;
+
+    public void onResultsStart() {
+        gameStateButton.runResults(true);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void handleResults() {
+
+    }
+
+    public void onResultsEnd() {
+        gameStateButton.runResults(true);
     }
 }
