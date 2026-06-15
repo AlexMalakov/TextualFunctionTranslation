@@ -9,7 +9,7 @@ public class ReviewManager : MonoBehaviour
     [SerializeField] private GameStateButton gameStateButton;
 
     public void onResultsStart() {
-        gameStateButton.runResults(true);
+        this.gameStateButton.runResults(true);
     }
 
     public void handleResults() {
@@ -17,6 +17,6 @@ public class ReviewManager : MonoBehaviour
     }
 
     public void onResultsEnd() {
-        gameStateButton.runResults(true);
+        this.gameStateButton.runResults(false);
     }
 }
