@@ -5,7 +5,7 @@ using UnityEngine;
 public class ResultsRaycast : MonoBehaviour
 {
  
-    [SerializeField] private MouseTransform mt;
+    [SerializeField] private CombatLog log;
 
     public void checkUserInteraction() {
         if (Input.GetMouseButtonDown(0)) {
@@ -22,6 +22,6 @@ public class ResultsRaycast : MonoBehaviour
     }
 
     private void onUnitPressed(Unit u) {
-        
+        //display what the unit
     }
 }
