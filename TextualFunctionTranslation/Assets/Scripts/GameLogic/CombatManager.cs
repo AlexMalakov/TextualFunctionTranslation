@@ -141,6 +141,8 @@ public class CombatManager : MonoBehaviour
             if(!u.isDead()) {
                 u.getRoleTrait().onCombatSurvival(u);
                 u.getClassTrait().onCombatSurvival(u);
+
+                this.combatLog.logEvent(new CombatEvent(u, u, CombatEventType.Survival));
             }
 
             u.getRoleTrait().onCombatEnd(u);

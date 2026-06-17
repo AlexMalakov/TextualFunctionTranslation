@@ -186,7 +186,7 @@ public abstract class Unit : MonoBehaviour
         //attack target
         Vector3 lookAt = new Vector3(this.currentTarget.transform.position.x, this.transform.position.y, this.currentTarget.transform.position.z);
         transform.LookAt(lookAt);
-        // this.currentTarget.takeDamage(this.damageCalculator.calculate());
+        // this.currentTarget.takeDamage(this.damageCalculator.calculate(), this);
 
         //TODO: trigger animation
         this.animator.SetTrigger("Attack");
@@ -194,7 +194,7 @@ public abstract class Unit : MonoBehaviour
         this.setLockout(this.timeBetweenAttack);
         yield return new WaitForSeconds(this.attackWindup);
         if(!this.isDead()) {
-            this.currentTarget.takeDamage(this.damageCalculator.calculate());
+            this.currentTarget.takeDamage(this.damageCalculator.calculate(), this);
             this.roleTrait.onUnitAttack(this, this.currentTarget);
             this.classTrait.onUnitAttack(this, this.currentTarget);
         }
@@ -268,7 +268,7 @@ public abstract class Unit : MonoBehaviour
         this.framesToPause -= 1;
     }
 
-    public void takeDamage(float in_damage) {
+    public void takeDamage(float in_damage, Unit damage_from) {
         if(this.isDead()) {
             Debug.Log("HITTING A DEAD!");
             return;
@@ -278,6 +278,14 @@ public abstract class Unit : MonoBehaviour
         this.hpBar.updateDamage(in_damage);
 
         if(this.currentHealth <= 0) {
+            this.combatLog.logEvent(new CombatEvent(this, damage_from, CombatEventType.death));
+            this.combatLog.logEvent(new CombatEvent(damage_from, this, CombatEventType.kill));
+
+            damage_from.getRoleTrait().onEnemyDefeat(attacker, previousTarget);
+            damage_from.getClassTrait().onEnemyDefeat(attacker, previousTarget);
+            this.getRoleTrait().onUnitDeath(previousTarget, attacker);
+            this.getClassTrait().onUnitDeath(previousTarget, attacker);
+
             this.onDeath();
             return;
         }
