@@ -195,6 +195,7 @@ public abstract class Unit : MonoBehaviour
         yield return new WaitForSeconds(this.attackWindup);
         if(!this.isDead()) {
             this.currentTarget.takeDamage(this.damageCalculator.calculate(), this);
+            this.log.logEvent(new CombatEvent(this, this.currentTarget, CombatEventType.attack));
             this.roleTrait.onUnitAttack(this, this.currentTarget);
             this.classTrait.onUnitAttack(this, this.currentTarget);
         }
@@ -334,7 +335,8 @@ public abstract class Unit : MonoBehaviour
         return this.starLevel;
     }
 
-    public void buffStat(BuffableStats stat, Operation operation) {
+    public void buffStat(BuffableStats stat, Operation operation, Unit source) {
+        this.log.logEvent(new CombatEvent(source, this, CombatEventType.buff));
         switch(stat) {
             case BuffableStats.Health:
                 this.healthCalculator.addOperation(operation);

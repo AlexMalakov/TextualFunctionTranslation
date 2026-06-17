@@ -20,7 +20,6 @@ public struct CombatEvent {
     public HexSquare colatPos;
     public CombatEventType eventType;
 
-
     public CombatEvent(Unit source, Unit colat, CombatEventType eventType) {
         this.source = source;
         this.colat = colat;
