@@ -5,8 +5,8 @@ using UnityEngine;
 
 public enum CombatEventType {
     Buff,
-    Attack,
     Kill,
+    Attack,
     Death,
     Survival
 }
@@ -32,11 +32,13 @@ public struct CombatEvent {
 
 public class CombatLog : MonoBehaviour
 {
-    Dictionary<Unit, HexSquare> initialPositions;
-    List<CombatEvent> log;
+    private Dictionary<Unit, HexSquare> initialPositions;
+    private Dictionary<Unit, Unit> assistList;
+    private List<CombatEvent> log;
 
     public void initLog(List<Unit> units) {
         this.initialPositions = new Dictionary<Unit, HexSquare>();
+        this.assistList = new Dictionary<Unit, Unit>();
         this.log = new List<CombatEvent>();
 
         foreach(Unit u in units) {
@@ -45,7 +47,13 @@ public class CombatLog : MonoBehaviour
     }
 
     public void logEvent(CombatEvent ev) {
-        this.log.Add(ev);
+        if(ev.eventType == CombatEventType.Attack) {
+            if(!this.assistList.ContainsKey(ev.source)) {
+                this.assistList.Add(ev.source, ev.colat);
+            }
+        } else {
+            this.log.Add(ev);
+        }
     }
 
     public List<CombatEvent> getUnitsEvents(Unit u) {
@@ -58,5 +66,9 @@ public class CombatLog : MonoBehaviour
         }
 
         return uLog;
+    }
+
+    public Dictionary<Unit, HexSquare> getInitialPositions() {
+        return this.initialPositions;
     }
 }
