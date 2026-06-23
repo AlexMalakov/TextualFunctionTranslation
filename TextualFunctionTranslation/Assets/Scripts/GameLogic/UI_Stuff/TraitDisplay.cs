@@ -7,7 +7,7 @@ public class TraitDisplay : MonoBehaviour
 {
     [SerializeField] private Player player;
     [SerializeField] private Player enemy;
-    [SerializeField] private Panel panel;
+    [SerializeField] private Image img;
 
     [SerializeField] private GameObject traitDisplayWidgetPrefab;
     private List<Trait> playerTraits;
@@ -46,11 +46,11 @@ public class TraitDisplay : MonoBehaviour
     }
 
     public void flashTrait() {
-        panel.color = new Color(255,0,0);
+        img.color = new Color(255,0,0);
         Invoke(nameof("unflashTrait"), .5f);
     }
 
     private void unflashTrait() {
-        panel.color = new Color(0,255,0);
+        img.color = new Color(0,255,0);
     }
 }
