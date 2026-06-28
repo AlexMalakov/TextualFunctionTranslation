@@ -33,13 +33,13 @@ public class DruidTrait : InformationTrait
     public override void onCombatStart(Unit traitHaver) {
         if (vowelSquares.Contains(traitHaver.getPosition())) {
             Operation buffOpp = new Operation(OperationType.PreMultiply, this.statBoostAmountV, "Druid Start Buff");
-            traitHaver.buffStat(BuffableStats.Damage, buffOpp);
-            traitHaver.buffStat(BuffableStats.Health, buffOpp);
+            traitHaver.buffStat(BuffableStats.Damage, buffOpp, traitHaver);
+            traitHaver.buffStat(BuffableStats.Health, buffOpp, traitHaver);
             return;
         } else if(traitHaver.getPosition() == ySquare) {
             Operation buffOpp = new Operation(OperationType.PreMultiply, this.statBoostAmountY, "Druid Start Buff");
-            traitHaver.buffStat(BuffableStats.Damage, buffOpp);
-            traitHaver.buffStat(BuffableStats.Health, buffOpp);
+            traitHaver.buffStat(BuffableStats.Damage, buffOpp, traitHaver);
+            traitHaver.buffStat(BuffableStats.Health, buffOpp, traitHaver);
             return;
         }
     }
@@ -50,6 +50,10 @@ public class DruidTrait : InformationTrait
 
     protected override int getMinimumForActive() {
         return 2;
+    }
+
+    public override List<int> getTraitTiering() {
+        return new List<int>{2};
     }
 
 }

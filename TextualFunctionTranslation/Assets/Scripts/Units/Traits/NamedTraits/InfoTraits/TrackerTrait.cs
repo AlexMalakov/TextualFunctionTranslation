@@ -42,4 +42,8 @@ public class TrackerTrait : InformationTrait
     protected override int getMinimumForActive() {
         return 1;
     }
+
+    public override List<int> getTraitTiering() {
+        return new List<int>{1};
+    }
 }

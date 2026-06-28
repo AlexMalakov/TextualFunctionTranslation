@@ -35,16 +35,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void onPreperationStart() {
+    public void onPreperationStart() {
         this.board.initBoard();
         this.combatManager.initPlayers(this.currentLevel[this.currentStage].getCombatLayout());
     }
 
-    private void handlePreperation() {
+    public void handlePreperation() {
         this.pcm.handlePrep();
     }
 
-    private void onPreperationEnd() {
+    public void onPreperationEnd() {
         this.gameState = GameStage.combat;
         this.pcm.endPrep();
 
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
         this.combatManager.initializeCombat();
     }
 
-    private void handleCombat() {
+    public void handleCombat() {
         this.combatSched.runNUpdates();
     }
 
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
         this.onResultsStart();
     }
 
-    private void onResultsStart() {
+    public void onResultsStart() {
         this.combatManager.runSquaresReveal();
         string ciphertext = this.combatManager.encrypt(this.currentLevel[this.currentStage].getLevelCipher());
         this.combatManager.runCypherAnimation();
@@ -74,11 +74,11 @@ public class GameManager : MonoBehaviour
         //TODO: display encrypted text
     }
 
-    private void handleResults() {
+    public void handleResults() {
         this.rvm.handleResults();
     }
 
-    private void onResultsEnd() {
+    public void onResultsEnd() {
         this.rvm.onResultsEnd();
         this.currentStage++;
         this.gameState = GameStage.preperation;

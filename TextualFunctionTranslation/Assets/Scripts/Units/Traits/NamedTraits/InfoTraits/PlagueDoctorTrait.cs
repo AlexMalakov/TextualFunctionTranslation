@@ -12,11 +12,11 @@ public class PlagueDoctorTrait : InformationTrait
 
 
         Operation debuff = new Operation(OperationType.PostAdd, this.attackSpeedLossAmount, "Doctor Debuff");
-        killer.buffStat(BuffableStats.AttackSpeed, debuff);
+        killer.buffStat(BuffableStats.AttackSpeed, debuff, traitHaver);
 
         foreach(HexSquare s in squares) {
             if(s.getUnit() != null) {
-                s.getUnit().buffStat(BuffableStats.AttackSpeed, debuff);
+                s.getUnit().buffStat(BuffableStats.AttackSpeed, debuff, traitHaver);
             }
         }
     }
@@ -27,5 +27,9 @@ public class PlagueDoctorTrait : InformationTrait
 
     protected override int getMinimumForActive() {
         return 2;
+    }
+
+    public override List<int> getTraitTiering() {
+        return new List<int>{2};
     }
 }

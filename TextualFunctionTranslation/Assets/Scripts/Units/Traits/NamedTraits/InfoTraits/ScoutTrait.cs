@@ -25,7 +25,7 @@ public class ScoutTrait : InformationTrait
             //TODO: stun target
             
             float damage = this.getNumberActive() > 2 ? this.stunDamageLarge : this.stunDamageSmall;
-            target.takeDamage(damage);
+            target.takeDamage(damage, traitHaver);
 
             attackedUnits[traitHaver].Add(target);
             this.logSquare(target.getPosition());
@@ -38,6 +38,10 @@ public class ScoutTrait : InformationTrait
 
     protected override int getMinimumForActive() {
         return 2;
+    }
+
+    public override List<int> getTraitTiering() {
+        return new List<int>{2, 4};
     }
 
 }

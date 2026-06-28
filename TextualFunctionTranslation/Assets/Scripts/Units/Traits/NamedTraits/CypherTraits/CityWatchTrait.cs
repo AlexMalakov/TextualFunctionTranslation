@@ -56,13 +56,13 @@ public class CityWatchTrait : CypherTrait
         float amt = this.getNumberActive() > 2 ? this.healthBuff * this.fullTraitMultiplier : this.healthBuff;
         Operation buff = new Operation(OperationType.PreMultiply, amt, "city watch health buff");
         foreach(Unit u in leftBuff) {
-            u.buffStat(BuffableStats.Health, buff);
+            u.buffStat(BuffableStats.Health, buff, traitHaver);
         }
 
         amt = this.getNumberActive() > 2 ? this.damageBuff * this.fullTraitMultiplier : this.damageBuff;
         buff = new Operation(OperationType.PreMultiply, amt, "city watch damage buff");
         foreach(Unit u in rightBuff) {
-            u.buffStat(BuffableStats.Damage, buff);
+            u.buffStat(BuffableStats.Damage, buff, traitHaver);
         }
 
 
@@ -91,5 +91,9 @@ public class CityWatchTrait : CypherTrait
 
     protected override int getMinimumForActive() {
         return 2;
+    }
+
+    public override List<int> getTraitTiering() {
+        return new List<int>{2, 4};
     }
 }

@@ -20,11 +20,11 @@ public class RoyalGuardsTrait : CypherTrait
     public override void onCombatStart(Unit traitHaver){
         float amt = this.getNumberActive() > 2 ? this.count * this.healthPerFullCompStack : this.count * this.healthPerStack;
         Operation buff = new Operation(OperationType.PreAdd, amt, "royal guard health");
-        traitHaver.buffStat(BuffableStats.Health, buff);
+        traitHaver.buffStat(BuffableStats.Health, buff, traitHaver);
 
         amt = this.getNumberActive() > 2 ? this.count * this.damagePerFullCompStack : this.count * this.damagePerStack;
         buff = new Operation(OperationType.PreAdd, amt, "royal guard damage");
-        traitHaver.buffStat(BuffableStats.Damage, buff);
+        traitHaver.buffStat(BuffableStats.Damage, buff, traitHaver);
     }
 
     public override void onEnemyDefeat(Unit traitHaver, Unit target){
@@ -59,5 +59,9 @@ public class RoyalGuardsTrait : CypherTrait
 
     protected override int getMinimumForActive() {
         return 2;
+    }
+
+    public override List<int> getTraitTiering() {
+        return new List<int>{2,4};
     }
 }

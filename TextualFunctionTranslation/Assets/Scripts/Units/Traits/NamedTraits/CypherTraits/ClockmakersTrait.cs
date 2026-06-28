@@ -21,7 +21,7 @@ public class ClockmakersTrait : CypherTrait
         Operation buff = new Operation(OperationType.PreAdd, this.healthBoostAmount, "clockmaker health " + traitHaver.getName());
         foreach(HexSquare s in radCircle) {
             if(s.getUnit() != null && this.cm.sameOwner(s.getUnit(), traitHaver)) {
-                s.getUnit().buffStat(BuffableStats.Health, buff);
+                s.getUnit().buffStat(BuffableStats.Health, buff, traitHaver);
             }
         }
 
@@ -46,6 +46,10 @@ public class ClockmakersTrait : CypherTrait
 
     protected override int getMinimumForActive() {
         return 2;
+    }
+
+    public override List<int> getTraitTiering() {
+        return new List<int>{2, 4};
     }
 
 }

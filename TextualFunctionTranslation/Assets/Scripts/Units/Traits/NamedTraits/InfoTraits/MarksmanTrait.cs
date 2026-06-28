@@ -21,7 +21,7 @@ public class MarksmanTrait : InformationTrait
             float attackGain = this.getNumberActive() > 2 ? this.largeAttackGain : this.smallAttackGain;
             //TODO: make sure this buff actually aplies mid combat
             Operation buffOpp = new Operation(OperationType.Add, attackGain, "Marksman Shot Buff " + this.unitCounters[traitHaver]);
-            traitHaver.buffStat(BuffableStats.AttackSpeed, buffOpp);
+            traitHaver.buffStat(BuffableStats.AttackSpeed, buffOpp, traitHaver);
         } 
 
         this.unitCounters[traitHaver] = this.unitCounters[traitHaver] + 1;
@@ -37,6 +37,10 @@ public class MarksmanTrait : InformationTrait
 
     protected override int getMinimumForActive() {
         return 2;
+    }
+
+    public override List<int> getTraitTiering() {
+        return new List<int>{2, 4};
     }
 
 }

@@ -24,9 +24,9 @@ public class OutcastTrait : InformationTrait
         Operation speedBoost = new Operation(OperationType.Add, this.attackSpeedBoost, "Outcast Start Buff");
         Operation healthBoost = new Operation(OperationType.PreMultiply, this.healthBoost, "Outcast Start Buff");
         Operation damageBoost = new Operation(OperationType.PreMultiply, this.damageBoost, "Outcast Start Buff");
-        traitHaver.buffStat(BuffableStats.AttackSpeed, speedBoost);
-        traitHaver.buffStat(BuffableStats.Health, healthBoost);
-        traitHaver.buffStat(BuffableStats.Damage, damageBoost);
+        traitHaver.buffStat(BuffableStats.AttackSpeed, speedBoost, traitHaver);
+        traitHaver.buffStat(BuffableStats.Health, healthBoost, traitHaver);
+        traitHaver.buffStat(BuffableStats.Damage, damageBoost, traitHaver);
 
         foreach(HexSquare s in circle) {
             this.logSquare(s);
@@ -41,4 +41,7 @@ public class OutcastTrait : InformationTrait
         return 2;
     }
   
+    public override List<int> getTraitTiering() {
+        return new List<int>{2};
+    }
 }

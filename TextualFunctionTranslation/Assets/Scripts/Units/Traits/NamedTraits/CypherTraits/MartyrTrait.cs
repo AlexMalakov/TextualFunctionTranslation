@@ -58,8 +58,8 @@ public class MartyrTrait : CypherTrait
             if(u != null && this.cm.sameOwner(originUnit, u)) {
                 u.heal(heal);
             } else if(u != null) {
-                u.buffStat(BuffableStats.Damage, buff);
-                u.takeDamage(damage);
+                u.buffStat(BuffableStats.Damage, buff, originUnit);
+                u.takeDamage(damage, originUnit);
             }
             return;
         } 
@@ -70,8 +70,8 @@ public class MartyrTrait : CypherTrait
             if(u != null && this.cm.sameOwner(originUnit, u)) {
                 u.heal(heal);
             } else if(u != null) {
-                u.buffStat(BuffableStats.Damage, buff);
-                u.takeDamage(damage);
+                u.buffStat(BuffableStats.Damage, buff, originUnit);
+                u.takeDamage(damage, originUnit);
             }
 
             cypher.Add(new CharacterTransformation(squares[i], squares[i-1]));
@@ -106,5 +106,9 @@ public class MartyrTrait : CypherTrait
 
     protected override int getMinimumForActive() {
         return 1;
+    }
+
+    public override List<int> getTraitTiering() {
+        return new List<int>{1,2,3};
     }
 }

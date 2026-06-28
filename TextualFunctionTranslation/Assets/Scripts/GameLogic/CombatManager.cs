@@ -75,14 +75,6 @@ public class CombatManager : MonoBehaviour
     }
 
     public Unit requestAttackTarget(Unit attacker, Unit previousTarget) {
-        if(previousTarget.isDead()) {
-            this.combatLog.logEvent(new CombatEvent(attacker, previousTarget, CombatEventType.attack));
-            attacker.getRoleTrait().onEnemyDefeat(attacker, previousTarget);
-            attacker.getClassTrait().onEnemyDefeat(attacker, previousTarget);
-            attacker.getRoleTrait().onUnitDeath(previousTarget, attacker);
-            attacker.getClassTrait().onUnitDeath(previousTarget, attacker);
-        }
-
         Func<HexSquare, bool> getAttackableSquares = (HexSquare s) => {
             return s.getUnit() != null
                 //TODO: && can reach that unit?

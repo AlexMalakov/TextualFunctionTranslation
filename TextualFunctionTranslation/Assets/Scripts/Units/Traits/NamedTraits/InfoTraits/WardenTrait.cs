@@ -26,14 +26,14 @@ public class WardenTrait : InformationTrait
 
         if(leftSquare.isSquare()) {
             if(leftSquare.getUnit() != null) {
-                leftSquare.getUnit().buffStat(BuffableStats.Health, buffOpp);
+                leftSquare.getUnit().buffStat(BuffableStats.Health, buffOpp, traitHaver);
             }
             this.logSquare(leftSquare);
         }
 
         if(rightSquare.isSquare()) {
             if(rightSquare.getUnit() != null) {
-                rightSquare.getUnit().buffStat(BuffableStats.Health, buffOpp);
+                rightSquare.getUnit().buffStat(BuffableStats.Health, buffOpp, traitHaver);
             }
             this.logSquare(rightSquare);
         }
@@ -45,6 +45,10 @@ public class WardenTrait : InformationTrait
 
     protected override int getMinimumForActive() {
         return 2;
+    }
+
+    public override List<int> getTraitTiering() {
+        return new List<int>{2, 4};
     }
 
 }

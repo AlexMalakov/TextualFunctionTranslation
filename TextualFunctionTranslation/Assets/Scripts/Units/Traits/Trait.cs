@@ -96,6 +96,8 @@ public abstract class Trait : MonoBehaviour
 
     protected abstract int getMinimumForActive();
 
+    public abstract List<int> getTraitTiering();
+
     public int getNumberActive() {
         return this.numberActive;
     }

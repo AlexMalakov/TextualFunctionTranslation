@@ -53,6 +53,7 @@ public abstract class Unit : MonoBehaviour
     [Header ("Objects")]
     [SerializeField] private CombatManager manager;
     [SerializeField] private Animator animator;
+    [SerializeField] private CombatLog combatLog;
     private HealthBarManager hpBar;
 
     //[Header ("Active Stats")]
@@ -195,7 +196,7 @@ public abstract class Unit : MonoBehaviour
         yield return new WaitForSeconds(this.attackWindup);
         if(!this.isDead()) {
             this.currentTarget.takeDamage(this.damageCalculator.calculate(), this);
-            this.log.logEvent(new CombatEvent(this, this.currentTarget, CombatEventType.attack));
+            this.combatLog.logEvent(new CombatEvent(this, this.currentTarget, CombatEventType.Attack));
             this.roleTrait.onUnitAttack(this, this.currentTarget);
             this.classTrait.onUnitAttack(this, this.currentTarget);
         }
@@ -279,13 +280,13 @@ public abstract class Unit : MonoBehaviour
         this.hpBar.updateDamage(in_damage);
 
         if(this.currentHealth <= 0) {
-            this.combatLog.logEvent(new CombatEvent(this, damage_from, CombatEventType.death));
-            this.combatLog.logEvent(new CombatEvent(damage_from, this, CombatEventType.kill));
+            this.combatLog.logEvent(new CombatEvent(this, damage_from, CombatEventType.Death));
+            this.combatLog.logEvent(new CombatEvent(damage_from, this, CombatEventType.Kill));
 
-            damage_from.getRoleTrait().onEnemyDefeat(attacker, previousTarget);
-            damage_from.getClassTrait().onEnemyDefeat(attacker, previousTarget);
-            this.getRoleTrait().onUnitDeath(previousTarget, attacker);
-            this.getClassTrait().onUnitDeath(previousTarget, attacker);
+            damage_from.getRoleTrait().onEnemyDefeat(damage_from, this);
+            damage_from.getClassTrait().onEnemyDefeat(damage_from, this);
+            this.getRoleTrait().onUnitDeath(this, damage_from);
+            this.getClassTrait().onUnitDeath(this, damage_from);
 
             this.onDeath();
             return;
@@ -300,7 +301,7 @@ public abstract class Unit : MonoBehaviour
             this.currentHealth = this.healthCalculator.calculate();
         }
 
-        this.hpBar.updateDamage(this.preHealth - this.currentHealth);
+        this.hpBar.updateDamage(preHealth - this.currentHealth);
     }
 
     //this does not give a unit a new square use carefully!
@@ -336,7 +337,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void buffStat(BuffableStats stat, Operation operation, Unit source) {
-        this.log.logEvent(new CombatEvent(source, this, CombatEventType.buff));
+        this.combatLog.logEvent(new CombatEvent(source, this, CombatEventType.Buff));
         switch(stat) {
             case BuffableStats.Health:
                 this.healthCalculator.addOperation(operation);

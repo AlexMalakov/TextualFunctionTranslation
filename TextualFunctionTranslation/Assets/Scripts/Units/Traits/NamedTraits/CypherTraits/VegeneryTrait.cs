@@ -37,4 +37,8 @@ public class VegeneryTrait : CypherTrait
     protected override int getMinimumForActive() {
         return 2;
     }
+
+    public override List<int> getTraitTiering() {
+        return new List<int>{2};
+    }
 }

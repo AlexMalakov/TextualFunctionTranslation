@@ -47,7 +47,7 @@ public class TraitDisplay : MonoBehaviour
 
     public void flashTrait() {
         img.color = new Color(255,0,0);
-        Invoke(nameof("unflashTrait"), .5f);
+        Invoke(nameof(unflashTrait), .5f);
     }
 
     private void unflashTrait() {

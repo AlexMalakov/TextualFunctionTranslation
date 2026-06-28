@@ -13,4 +13,8 @@ public class AnchorTrait : Trait
     protected override int getMinimumForActive() {
         return 2;
     }
+
+    public override List<int> getTraitTiering() {
+        return new List<int>{1,2,3,4};
+    }
 }

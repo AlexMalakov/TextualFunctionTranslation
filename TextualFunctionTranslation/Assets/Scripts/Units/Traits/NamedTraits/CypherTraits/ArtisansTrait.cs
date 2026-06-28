@@ -12,7 +12,7 @@ public class ArtisansTrait : CypherTrait
     public override void onEnemyDefeat(Unit traitHaver, Unit target){
         float amt = this.getNumberActive() == 1 ? this.damageAmountSmall : (this.getNumberActive() == 2 ? this.damageAmount : this.damageAmountLarge);
         Operation buff = new Operation(OperationType.PreMultiply, amt, "Artisan Stack for " + target.getName());
-        traitHaver.buffStat(BuffableStats.Damage, buff);
+        traitHaver.buffStat(BuffableStats.Damage, buff, traitHaver);
         traitHaver.heal(healAmount);
 
         List<CharacterTransformation> cypher = new List<CharacterTransformation>();
@@ -28,6 +28,10 @@ public class ArtisansTrait : CypherTrait
 
     protected override int getMinimumForActive() {
         return 1;
+    }
+
+    public override List<int> getTraitTiering() {
+        return new List<int>{1, 2, 3};
     }
 
 }
