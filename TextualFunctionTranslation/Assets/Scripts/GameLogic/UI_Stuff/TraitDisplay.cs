@@ -1,15 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TraitDisplay : MonoBehaviour
 {
     [SerializeField] private Player player;
     [SerializeField] private Player enemy;
-    [SerializeField] private Image img;
+    [SerializeField] private GameObject twPrefab;
 
-    [SerializeField] private GameObject traitDisplayWidgetPrefab;
     private List<Trait> playerTraits;
     private List<Trait> enemyTraits;
 
@@ -45,12 +43,10 @@ public class TraitDisplay : MonoBehaviour
         this.enemyTraits = enemyTraits;
     }
 
-    public void flashTrait() {
-        img.color = new Color(255,0,0);
-        Invoke(nameof(unflashTrait), .5f);
+    public TraitWidget createWidget() {
+        TraitWidget tw = Instantiate(twPrefab).GetComponent<TraitWidget>();
+        return tw;
     }
 
-    private void unflashTrait() {
-        img.color = new Color(0,255,0);
-    }
+    
 }

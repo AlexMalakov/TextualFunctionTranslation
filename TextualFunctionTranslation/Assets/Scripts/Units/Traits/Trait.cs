@@ -6,7 +6,8 @@ using UnityEngine;
 
 public abstract class Trait : MonoBehaviour
 {
-    [SerializeField] private TraitWidget tw;
+    [SerializeField] private TraitDisplay traitDisplay;
+    private TraitWidget tw;
     private string traitName;
     private int minimumForActivate;
     private int numberActive = 0;
@@ -22,6 +23,7 @@ public abstract class Trait : MonoBehaviour
     }
 
     public void Start() {
+        this.tw = traitDisplay.createWidget();
         this.tw.init(this);
     }
 
