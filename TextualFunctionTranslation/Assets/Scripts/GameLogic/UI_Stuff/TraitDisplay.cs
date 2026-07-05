@@ -69,5 +69,19 @@ public class TraitDisplay : MonoBehaviour
         rect.anchoredPosition = new Vector2(0, yOffset);
     }
 
-    
+    public IEnumerator playTraitAnim() {
+
+        List<Trait> playerActiveTraits = this.player.getUnitLayout().getActiveTraits();
+        List<Trait> enemyActiveTraits = this.enemy.getUnitLayout().getActiveTraits();
+
+        foreach(Trait t in playerActiveTraits.OrderByDescending(t => t.getTraitName())) {
+            t.getTraitWidget().flashTrait();
+            yield return new WaitForSeconds(.5f);
+        }
+
+        foreach(Trait t in enemyActiveTraits.OrderBy(t => t.getTraitName())) {
+            t.getTraitWidget().flashTrait();
+            yield return new WaitForSeconds(.5f);
+        }
+    }
 }

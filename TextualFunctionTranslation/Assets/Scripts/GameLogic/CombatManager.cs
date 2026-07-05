@@ -180,7 +180,7 @@ public class CombatManager : MonoBehaviour
     }
     
     public void runCypherAnimation() {
-        //TODO: this should start a coroutine I think?
+        StartCoroutine(this.traitDisplay.playTraitAnim());
     }
 
     private void traitPreCombat() {
