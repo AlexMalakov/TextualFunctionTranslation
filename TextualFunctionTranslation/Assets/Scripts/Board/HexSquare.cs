@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TMPro;
 
 public struct AxialCoord {
     public int q, r, s;
@@ -56,14 +57,18 @@ public struct OffsetCoord {
 
 public class HexSquare : MonoBehaviour
 {
+    [SerializeField] private TMP_Text text;
     private AxialCoord axc;
     private Unit unit;
+    private Color defaultColor;
 
     private char characterValue;
     
     public virtual void init(int x, int y, Vector3 hexPos) {
+        this.text.gameObject.SetActive(false);
         this.transform.position = hexPos;
         this.axc = new OffsetCoord(x, y).toAxial();
+        defaultColor = this.GetComponent<Renderer>().material.color;
     }
 
     public virtual List<AxialCoord> getNeighborCoords() {
@@ -114,7 +119,18 @@ public class HexSquare : MonoBehaviour
     }
 
     public void displayValue(bool toggle) {
-        //TODO: IMPLEMENT ME
+        this.text.gameObject.SetActive(toggle);
+    }
+
+    public void highlightSquare(float duration) {
+        this.GetComponent<Renderer>().material.color = new Color(255, 213, 128);
+        this.text.color = new Color(255, 0, 0);
+        Invoke(nameof(unhighlight), duration);
+    }
+    
+    private void unhighlight() {
+        this.GetComponent<Renderer>().material.color = this.defaultColor;
+        this.text.color = new Color(0, 0, 0);
     }
 
     public string toString() {

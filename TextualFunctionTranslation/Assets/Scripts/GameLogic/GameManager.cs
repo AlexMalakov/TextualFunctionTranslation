@@ -66,11 +66,15 @@ public class GameManager : MonoBehaviour
     }
 
     public void onResultsStart() {
-        this.combatManager.runSquaresReveal();
         string ciphertext = this.combatManager.encrypt(this.currentLevel[this.currentStage].getLevelCipher());
-        this.combatManager.runCypherAnimation();
+        StartCoroutine(this.runAnimations(ciphertext));
 
         this.rvm.onResultsStart();
+    }
+
+    private IEnumerator runAnimations(string cypherText) {
+        yield return this.combatManager.runCypherAnimation();
+        yield return this.combatManager.runSquaresReveal();
         //TODO: display encrypted text
     }
 

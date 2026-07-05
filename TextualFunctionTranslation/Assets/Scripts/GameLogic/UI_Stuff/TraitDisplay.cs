@@ -69,18 +69,35 @@ public class TraitDisplay : MonoBehaviour
         rect.anchoredPosition = new Vector2(0, yOffset);
     }
 
-    public IEnumerator playTraitAnim() {
+    public IEnumerator playCypherTraitAnim() {
 
-        List<Trait> playerActiveTraits = this.player.getUnitLayout().getActiveTraits();
-        List<Trait> enemyActiveTraits = this.enemy.getUnitLayout().getActiveTraits();
+        List<Trait> playerActiveCypherTraits = this.player.getUnitLayout().getActiveTraits().Where(t => t is CypherTrait).ToList();
+        List<Trait> enemyActiveCypherTraits = this.enemy.getUnitLayout().getActiveTraits().Where(t => t is CypherTrait).ToList();
 
-        foreach(Trait t in playerActiveTraits.OrderByDescending(t => t.getTraitName())) {
+        foreach(Trait t in playerActiveCypherTraits.OrderByDescending(t => t.getTraitName())) {
             t.getTraitWidget().flashTrait();
             yield return new WaitForSeconds(.5f);
         }
 
-        foreach(Trait t in enemyActiveTraits.OrderBy(t => t.getTraitName())) {
+        foreach(Trait t in enemyActiveCypherTraits.OrderBy(t => t.getTraitName())) {
             t.getTraitWidget().flashTrait();
+            yield return new WaitForSeconds(.5f);
+        }
+    }
+
+    public IEnumerator playTraitSquareReveal() {
+        List<Trait> playerActiveInfoTraits = this.player.getUnitLayout().getActiveTraits().Where(t => t is InformationTrait).ToList();
+        List<Trait> enemyActiveInfoTraits = this.enemy.getUnitLayout().getActiveTraits().Where(t => t is InformationTrait).ToList();
+
+        foreach(Trait t in playerActiveInfoTraits.OrderByDescending(t => t.getTraitName())) {
+            t.getTraitWidget().flashTrait();
+            t.runSquareReveal();
+            yield return new WaitForSeconds(.5f);
+        }
+
+        foreach(Trait t in enemyActiveInfoTraits.OrderBy(t => t.getTraitName())) {
+            t.getTraitWidget().flashTrait();
+            t.runSquareReveal();
             yield return new WaitForSeconds(.5f);
         }
     }

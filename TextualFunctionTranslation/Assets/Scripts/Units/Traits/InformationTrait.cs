@@ -16,10 +16,11 @@ public abstract class InformationTrait : Trait
     public override void runSquareReveal() {
         foreach(HexSquare sq in this.squaresToReveal) {
             sq.displayValue(true);
+            sq.highlightSquare(.5f);      
         }
     }
 
-    public void resetRevealedSquares() {
+    public override void resetRevealedSquares() {
         foreach(HexSquare sq in this.squaresToReveal) {
             sq.displayValue(false);
         }

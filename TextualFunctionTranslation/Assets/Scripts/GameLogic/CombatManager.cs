@@ -149,17 +149,8 @@ public class CombatManager : MonoBehaviour
         this.gameManager.onCombatEnd();
     }
 
-    public void runSquaresReveal() {
-
-        //TODO: sort alphabetically
-        foreach(Trait t in this.player.getUnitLayout().getActiveTraits()) {
-            t.runSquareReveal();
-        }
-        
-        //TODO: sort reverse alphabetically
-        foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits()) {
-            t.runSquareReveal();
-        }
+    public IEnumerator runSquaresReveal() {
+        yield return this.traitDisplay.playTraitSquareReveal();
         
     }
 
@@ -179,8 +170,8 @@ public class CombatManager : MonoBehaviour
         return new string(cypherArray);
     }
     
-    public void runCypherAnimation() {
-        StartCoroutine(this.traitDisplay.playTraitAnim());
+    public IEnumerator runCypherAnimation() {
+        yield return this.traitDisplay.playCypherTraitAnim();
     }
 
     private void traitPreCombat() {
@@ -188,9 +179,11 @@ public class CombatManager : MonoBehaviour
         //I just need to make sure all traits get their shit wiped at the end
 
         foreach(Trait t in this.player.getUnitLayout().getActiveTraits()) {
+            t.resetRevealedSquares();
             t.onPrecombatStart();
         }
         foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits()) {
+            t.resetRevealedSquares();
             t.onPrecombatStart();
         }
 
