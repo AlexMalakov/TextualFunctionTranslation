@@ -1,51 +1,72 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class TraitDisplay : MonoBehaviour
 {
     [SerializeField] private Player player;
     [SerializeField] private Player enemy;
     [SerializeField] private GameObject twPrefab;
+    [SerializeField] private Transform twParent;
 
-    private List<Trait> playerTraits;
-    private List<Trait> enemyTraits;
+    [SerializeField] private float spacing = 60f;
+    [SerializeField] private float sectionSpacing = 30f;
+
+    private List<TraitWidget> allWidgets;
+
+    private void clearFromBar() {
+        foreach(TraitWidget tw in this.allWidgets) {
+            tw.makeActive(false, -1);
+        }
+    }
 
     public void onUnitLayoutUpdate() {
-        //TODO: display all traits for player, enemy
+        clearFromBar();
 
-        List<Trait> playerTraits = this.player.getUnitLayout().getActiveTraits();
-        List<Trait> enemyTraits = this.enemy.getUnitLayout().getActiveTraits();
+        List<Trait> playerInActiveTraits = new List<Trait>();
+        List<Trait> playerActiveTraits = this.player.getUnitLayout().getActiveTraits();
+        List<Trait> enemyActiveTraits = this.enemy.getUnitLayout().getActiveTraits();
 
-        //TODO: sort alphabetically?
+        float y = 0;
 
         foreach(Unit u in this.player.getActiveUnits()) {
-            if(!playerTraits.Contains(u.getRoleTrait())) {
-                playerTraits.Add(u.getRoleTrait());
+            if(!playerActiveTraits.Contains(u.getRoleTrait()) && !playerInActiveTraits.Contains(u.getRoleTrait())) {
+                playerInActiveTraits.Add(u.getRoleTrait());
             }
 
-            if(!playerTraits.Contains(u.getClassTrait())) {
-                playerTraits.Add(u.getClassTrait());
-            }
-        }
-
-        foreach(Unit u in this.enemy.getActiveUnits()) {
-            if(!enemyTraits.Contains(u.getRoleTrait())) {
-                enemyTraits.Add(u.getRoleTrait());
-            }
-
-            if(!enemyTraits.Contains(u.getClassTrait())) {
-                enemyTraits.Add(u.getClassTrait());
+            if(!playerActiveTraits.Contains(u.getClassTrait()) && !playerInActiveTraits.Contains(u.getClassTrait())) {
+                playerInActiveTraits.Add(u.getClassTrait());
             }
         }
 
-        this.playerTraits = playerTraits;
-        this.enemyTraits = enemyTraits;
+        foreach(Trait t in enemyActiveTraits.OrderByDescending(t => t.getTraitName())) {
+            this.setupWidget(t.getTraitWidget(), y, 2);
+            y -= spacing;
+        }
+
+        foreach(Trait t in playerActiveTraits.OrderBy(t => t.getTraitName())) {
+            this.setupWidget(t.getTraitWidget(), y, 0);
+            y -= spacing;
+        }
+
+        foreach(Trait t in playerInActiveTraits.OrderBy(t => t.getTraitName())) {
+            this.setupWidget(t.getTraitWidget(), y, 1);
+            y -= spacing;
+        }
     }
 
     public TraitWidget createWidget() {
-        TraitWidget tw = Instantiate(twPrefab).GetComponent<TraitWidget>();
+        TraitWidget tw = Instantiate(twPrefab, this.twParent).GetComponent<TraitWidget>();
+        this.allWidgets.Add(tw);
         return tw;
+    }
+
+    private void setupWidget(TraitWidget tw, float yOffset, int activeNum) {
+        tw.makeActive(true, activeNum);
+
+        RectTransform rect = tw.GetComponent<RectTransform>();
+        rect.anchoredPosition = new Vector2(0, yOffset);
     }
 
     

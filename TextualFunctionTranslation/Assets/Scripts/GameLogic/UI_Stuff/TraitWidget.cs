@@ -23,28 +23,31 @@ public class TraitWidget : MonoBehaviour
             text = text + tier + " / ";
         }
         if(text.Length > 0) {
-            //TODO: remember how to do a substring in this language
+            text = text.Substring(0, text.Length-2);
         }
 
         this.traitTieringInfo.text = text;
     }
 
     public void update() {
-        this.traitCount.text = ""+this.trait.getNumberActive();
+        int numA = this.trait.getNumberActive();
+        this.traitCount.text = "" + numA;
 
-        int number = 0;
         string text = "";
+
+        int prevTier = 0;
         foreach(int tier in this.trait.getTraitTiering()) {
-            if(tier <= this.trait.getNumberActive()) {
-                number = tier;
-            } 
+            if(prevTier <= numA && tier > numA && prevTier != 0) {
+                text = text.Substring(0, text.Length - 4);
+                text = text + "<color=#FF0000>" + tier + "</color> / ";
+            }
+
+            prevTier = tier;
             text = text + tier + " / ";
         }
         if(text.Length > 0) {
-            //TODO: remember how to do a substring in this language
+            text = text.Substring(0, text.Length-2);
         }
-
-        //TODO: color based on trait tiering
 
         this.traitTieringInfo.text = text;
     }
@@ -56,5 +59,25 @@ public class TraitWidget : MonoBehaviour
 
     private void unflashTrait() {
         img.color = new Color(0,255,0);
+    }
+
+    //this being a number is bad but consider that its ui code so idc about good design
+    public void makeActive(bool isActive, int activeNum) { //-1 it's not even active, 0 it's player's and active 1 it's players and not active 2 it's enemies
+        switch(activeNum) {
+            case -1:
+                img.color = new Color(125,125,125);
+                break;
+            case 0:
+                img.color = new Color(125,160,125);
+                break;
+            case 1:
+                img.color = new Color(125,125,125);
+                break;
+            case 2:
+                img.color = new Color(160,125,125);
+                break;
+        }
+
+        this.gameObject.SetActive(isActive);
     }
 }
