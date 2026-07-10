@@ -23,7 +23,7 @@ public class Bench : MonoBehaviour
         return false;
     }
 
-    public BenchSlot addUnitToBench(Unit u) { //TODO either spawn unit in bench or move unit into bench
+    public BenchSlot addUnitToBench(Unit u) { //TO CHECK: unit always gets moved in to bench (as of writing this comment this is true)
         foreach(BenchSlot b in this.benchSlotPositions) {
             if(!b.isOccupied()) {
                 return b.insertUnit(u);

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 //idea: each pla
 public class CombatManager : MonoBehaviour
@@ -15,21 +16,43 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private CombatLog combatLog;
     [SerializeField] private TraitDisplay traitDisplay;
 
+    private List<Unit> units;
+
     //not very nice but it will make this unit division work better
     private int livingPlayerUnits = -1;
     private int livingEnemyUnits = -1;
-    private List<Unit> units;
 
-    public void initPlayers(PlayerUnitLayout enemyLayout) {
-        foreach(Unit u in this.units) {
+    public void initPlayers(PlayerUnitLayout enemyLayout, string allLeters) {
+        Debug.Log("hiiiii!");
+        Debug.Log("hiiiii2!");
+        this.player.init();
+        Debug.Log("hiiiii3!");
+        this.enemy.assignLayout(enemyLayout);
+        Debug.Log("hiiiii4!");
+        this.enemy.init();
+
+        Debug.Log("inits done!");
+
+        foreach(Unit u in this.player.getActiveUnits()) {
             u.getRoleTrait().wipeCount();
             u.getClassTrait().wipeCount();
         }
 
-        this.player.init();
-        this.enemy.assignLayout(enemyLayout);
+
+        foreach(Unit u in this.enemy.getActiveUnits()) {
+            u.getRoleTrait().wipeCount();
+            u.getClassTrait().wipeCount();
+        }
+
+        Debug.Log("active units activated!");
+
         this.traitDisplay.onUnitLayoutUpdate();
-        this.enemy.init();
+
+        Debug.Log("pre letters!");
+
+        this.board.assignLetters(allLeters);
+
+        Debug.Log("all done");
     }
 
     public void placeUnitsFromLayouts() {
@@ -43,7 +66,7 @@ public class CombatManager : MonoBehaviour
         this.units.AddRange(this.enemy.getActiveUnits());
         livingPlayerUnits = this.player.getActiveUnits().Count;
         livingEnemyUnits = this.enemy.getActiveUnits().Count;
-        this.units.Sort((a,b) => a.getDecisionPriority().CompareTo(b.getDecisionPriority())); //TODO: swap with inumerable.OrderBy to make this stable so its deterministic
+        this.units.OrderBy(u => u.getDecisionPriority());//TO CHECK: is this deterministic?
         //TODO: knob to tune: tiebreak behavior. Does player get to win ties?6
 
         this.placeUnitsFromLayouts();
@@ -157,13 +180,12 @@ public class CombatManager : MonoBehaviour
     public string encrypt(string plaintext) {
         char[] cypherArray = plaintext.ToCharArray();
 
-        //TODO: sort alphabetically
-        foreach(Trait t in this.player.getUnitLayout().getActiveTraits()) {
+        //TO CHECK: make sure this is same order as animations are
+        foreach(Trait t in this.player.getUnitLayout().getActiveTraits().OrderBy(t => t.getTraitName())) {
             t.runCypher(cypherArray);
         }
         
-        //TODO: sort reverse alphabetically
-        foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits()) {
+        foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits().OrderByDescending(t => t.getTraitName())) {
             t.runCypher(cypherArray);
         }
         

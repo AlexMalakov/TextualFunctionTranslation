@@ -29,11 +29,11 @@ public class ResultsRaycast : MonoBehaviour
         foreach(CombatEvent ce in uEvents) {
             switch(ce.eventType) {
                 case CombatEventType.Buff:
-                    //TODO highlight square of buffed unit, buff effect?
+                    //TODO highlight square of buffed unit, add buff effect particles?
                     sq = ce.colatPos;
                     break;
                 case CombatEventType.Kill:
-                    //TODO highlight square of killed unit, death effect?
+                    //TODO highlight square of killed unit, add death effect particles?
                     sq = ce.colatPos;
                     break;
                 case CombatEventType.Attack:

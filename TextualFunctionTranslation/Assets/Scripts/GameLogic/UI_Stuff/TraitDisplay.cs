@@ -13,7 +13,7 @@ public class TraitDisplay : MonoBehaviour
     [SerializeField] private float spacing = 60f;
     [SerializeField] private float sectionSpacing = 30f;
 
-    private List<TraitWidget> allWidgets;
+    private List<TraitWidget> allWidgets = new List<TraitWidget>();
 
     private void clearFromBar() {
         foreach(TraitWidget tw in this.allWidgets) {

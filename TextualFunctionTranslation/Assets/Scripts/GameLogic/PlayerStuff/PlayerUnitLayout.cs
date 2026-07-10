@@ -24,11 +24,14 @@ public class PlayerUnitLayout : MonoBehaviour
      
     //initializes the layout from starting layout, and sets up initial traits
     public void initLayout() {
+        Debug.Log("HI!");
         this.layout = new Dictionary<Unit, HexSquare>();
         foreach(USPair u in this.startingLayout) {
+            Debug.Log("aaaaaaaa!");
             this.layout.Add(u.unit, this.board.getHexAt(u.coord));
             this.addTrait(u.unit);
         }
+        Debug.Log("Done?");
     }
 
     //given a unit, add the role trait and class trait to the traits dic

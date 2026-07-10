@@ -30,14 +30,17 @@ public class GameManager : MonoBehaviour
             this.handleCombat();
         } else if(this.gameState == GameStage.preperation) {
             this.handlePreperation();
-        } else { //results TODO make it do stuff el em ef ay oh
+        } else {
             this.handleResults();
         }
     }
 
     public void onPreperationStart() {
+        Debug.Log("ON PREP START HOOK ME");
         this.board.initBoard();
-        this.combatManager.initPlayers(this.currentLevel[this.currentStage].getCombatLayout());
+        Debug.Log("BOARD INIT HOOK ME");
+        this.combatManager.initPlayers(this.currentLevel[this.currentStage].getCombatLayout(), this.currentLevel[currentStage].getAlphabet());
+        Debug.Log("PLAYERS INITED HOOK ME");
     }
 
     public void handlePreperation() {
@@ -60,7 +63,6 @@ public class GameManager : MonoBehaviour
     }
 
     public void onCombatEnd() {
-        //TODO tell combat manager to end comabt
         this.gameState = GameStage.result;
         this.onResultsStart();
     }

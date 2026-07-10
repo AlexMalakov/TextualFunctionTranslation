@@ -32,6 +32,14 @@ public class HexBoard : MonoBehaviour
         }
     }
 
+    public void assignLetters(string allLeters) {
+        for(int y = 0; y < 8; y++) {
+            for(int x = 0; x < ((y % 2 == 0) ? 6 : 7); x++) {
+                this.squares[x][y].assignChar(allLeters[8*y + x]);
+            }
+        }
+    }
+
     public HexSquare getHexAt(AxialCoord c) {
         return this.getHexAt(c.toOffset());
     }

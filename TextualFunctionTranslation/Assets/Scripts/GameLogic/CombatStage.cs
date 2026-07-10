@@ -8,6 +8,10 @@ public class CombatStage : MonoBehaviour
     [SerializeField] private PlayerUnitLayout opponentUnitLayout;
     [SerializeField] private int playerUnitCap;
 
+    [SerializeField] string alphabetOrderingPlayer;
+    [SerializeField] string alphabetOrderingEnemy;
+
+
     //TODO: each stage could have dialogue?
     //TODO: when saving is implemented, each stage shoudl also have an identifier for ezpzlemonsqueezy
 
@@ -23,6 +27,7 @@ public class CombatStage : MonoBehaviour
         return this.plainTextCipher;
     }
 
-
-
+    public string getAlphabet() {
+        return this.alphabetOrderingEnemy + this.alphabetOrderingPlayer;
+    }
 }
