@@ -39,7 +39,7 @@ public class TraitWidget : MonoBehaviour
         foreach(int tier in this.trait.getTraitTiering()) {
             if(prevTier <= numA && tier > numA && prevTier != 0) {
                 text = text.Substring(0, text.Length - 4);
-                text = text + "<color=#FF0000>" + tier + "</color> / ";
+                text = text + "<color=#FF0000>" + prevTier + "</color> / ";
             }
 
             prevTier = tier;
@@ -47,6 +47,10 @@ public class TraitWidget : MonoBehaviour
         }
         if(text.Length > 0) {
             text = text.Substring(0, text.Length-2);
+        }
+
+        if(this.trait.getTraitTiering().Count == 1 && numA >= prevTier) {
+            text = "<color=#FF0000>" + prevTier + "</color>";
         }
 
         this.traitTieringInfo.text = text;

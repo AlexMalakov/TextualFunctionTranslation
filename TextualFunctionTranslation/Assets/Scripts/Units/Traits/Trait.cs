@@ -68,6 +68,7 @@ public abstract class Trait : MonoBehaviour
     }
 
     public void wipeCount() {
+        Debug.Log("TRAIT COUNT WIPED!!!");
         this.numberActive = 0;
     }
 

@@ -33,9 +33,11 @@ public class HexBoard : MonoBehaviour
     }
 
     public void assignLetters(string allLeters) {
+        int counter = 0;
         for(int y = 0; y < 8; y++) {
             for(int x = 0; x < ((y % 2 == 0) ? 6 : 7); x++) {
-                this.squares[x][y].assignChar(allLeters[8*y + x]);
+                this.squares[y][x].assignChar(allLeters[counter]);
+                counter++;
             }
         }
     }

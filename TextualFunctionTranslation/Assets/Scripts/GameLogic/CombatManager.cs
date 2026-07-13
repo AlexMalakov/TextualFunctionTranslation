@@ -23,36 +23,32 @@ public class CombatManager : MonoBehaviour
     private int livingEnemyUnits = -1;
 
     public void initPlayers(PlayerUnitLayout enemyLayout, string allLeters) {
-        Debug.Log("hiiiii!");
-        Debug.Log("hiiiii2!");
         this.player.init();
-        Debug.Log("hiiiii3!");
         this.enemy.assignLayout(enemyLayout);
-        Debug.Log("hiiiii4!");
         this.enemy.init();
-
-        Debug.Log("inits done!");
 
         foreach(Unit u in this.player.getActiveUnits()) {
             u.getRoleTrait().wipeCount();
             u.getClassTrait().wipeCount();
         }
 
-
         foreach(Unit u in this.enemy.getActiveUnits()) {
             u.getRoleTrait().wipeCount();
             u.getClassTrait().wipeCount();
         }
 
-        Debug.Log("active units activated!");
+        foreach(Unit u in this.player.getActiveUnits()) {
+            u.getRoleTrait().registerUnit(true);
+            u.getClassTrait().registerUnit(true);
+        }
+
+        foreach(Unit u in this.enemy.getActiveUnits()) {
+            u.getRoleTrait().registerUnit(true);
+            u.getClassTrait().registerUnit(true);
+        }
 
         this.traitDisplay.onUnitLayoutUpdate();
-
-        Debug.Log("pre letters!");
-
         this.board.assignLetters(allLeters);
-
-        Debug.Log("all done");
     }
 
     public void placeUnitsFromLayouts() {

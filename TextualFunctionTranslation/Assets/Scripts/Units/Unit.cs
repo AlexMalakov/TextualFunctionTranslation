@@ -115,6 +115,16 @@ public abstract class Unit : MonoBehaviour
     }
 
     public virtual void checkUnitHasTask(CombatManager manager) {
+        // if(gameObject.name == "player_unit_3") {
+        //     Debug.Log("player_unit_3 + I THINK I AM AT: " + this.getPosition().toString() + " current unit? " + this.getPosition().getUnit());
+        // }
+
+        if(this.getPosition().getUnit() == null) {
+            Debug.Log("PLEASE HLEP " + gameObject.name);
+        } else {
+            Debug.Log("NO HLEP " + gameObject.name);
+        }
+
         if(this.isDead()) {
             return;
         }
@@ -150,7 +160,7 @@ public abstract class Unit : MonoBehaviour
         this.hpBar = hpBar;
         this.healthCalculator = new UnitNumericCalculator(this.health.getStat(this.starLevel));
         this.damageCalculator = new UnitNumericCalculator(this.damage.getStat(this.starLevel));
-        //TODO: init attack speed calculator
+        this.attackSpeedCalculator = new UnitNumericCalculator(1.0f); //TODO: make this stat real
 
         this.currentHealth = this.healthCalculator.calculate();
 
@@ -215,24 +225,24 @@ public abstract class Unit : MonoBehaviour
         HexSquare walkTo = this.manager.requestRoute(this, this.currentTarget);
         // Debug.Log(walkTo.toString() + "<--- walkTo" + this.curPosition.toString() + "<----- walk from");
         if(walkTo.isSquare()) {
-            this.getPosition().claimSquare(this, false);
-            walkTo.claimSquare(this, true);
             StartCoroutine(this.moveToTarget(walkTo));
             this.setLockout(this.timeBetweenMove);
         }
     }
 
     private IEnumerator moveToTarget(HexSquare walkTo) {
-        //TODO: play walking animation
+        this.getPosition().claimSquare(this, false);
+        walkTo.claimSquare(this, true);
+        this.curPosition = walkTo;
+
         while(isMoving) {
             this.requestOverride = true;
-            Debug.Log("waiting for an older move to abort!");
+            Debug.Log("waiting for an older move to abort! " + gameObject.name);
             yield return null;
         }
 
         this.animator.SetTrigger("Walk");
 
-        this.curPosition = walkTo;
         Vector3 lookAt = new Vector3(walkTo.transform.position.x, this.transform.position.y, walkTo.transform.position.z);
         transform.LookAt(lookAt);
         this.isMoving = true;
