@@ -15,6 +15,10 @@ public class CombatScheduler : MonoBehaviour
         combatTimePerTick = this.combatTickTime;
     }
 
+    public void onCombatStart() {
+        this.lastCheckIn = Time.time;
+    }
+
     public void runNUpdates() {
         float newCheckIn = Time.time;
 
@@ -22,11 +26,12 @@ public class CombatScheduler : MonoBehaviour
             return;
         }
 
-        for(int i = 1; i <= (newCheckIn - this.lastCheckIn)/combatTickTime; i++) {
+        int n = (newCheckIn - this.lastCheckIn)/combatTickTime;
+        for(int i = 1; i <= n; i++) {
             //call update?
             manager.runAttackFrame();
         }
 
-        lastCheckIn = newCheckIn;
+        lastCheckIn += combatTickTime * n;
     }
 }

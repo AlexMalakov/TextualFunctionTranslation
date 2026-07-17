@@ -36,11 +36,8 @@ public class GameManager : MonoBehaviour
     }
 
     public void onPreperationStart() {
-        Debug.Log("ON PREP START HOOK ME");
         this.board.initBoard();
-        Debug.Log("BOARD INIT HOOK ME");
         this.combatManager.initPlayers(this.currentLevel[this.currentStage].getCombatLayout(), this.currentLevel[currentStage].getAlphabet());
-        Debug.Log("PLAYERS INITED HOOK ME");
     }
 
     public void handlePreperation() {
@@ -56,6 +53,7 @@ public class GameManager : MonoBehaviour
 
     public void onCombatStart() {
         this.combatManager.initializeCombat();
+        this.combatSched.onCombatStart();
     }
 
     public void handleCombat() {

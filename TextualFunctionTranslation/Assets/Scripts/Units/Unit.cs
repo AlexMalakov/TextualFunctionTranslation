@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.CompilerServices;
 
 [System.Serializable]
 struct StarStats {
@@ -61,6 +62,7 @@ public abstract class Unit : MonoBehaviour
     private UnitNumericCalculator damageCalculator;
     private UnitNumericCalculator attackSpeedCalculator; //need a way to balance this?
 
+    private string mutatableDummy = "";
     private float currentHealth;
 
     private Unit currentTarget;
@@ -115,15 +117,9 @@ public abstract class Unit : MonoBehaviour
     }
 
     public virtual void checkUnitHasTask(CombatManager manager) {
-        // if(gameObject.name == "player_unit_3") {
-        //     Debug.Log("player_unit_3 + I THINK I AM AT: " + this.getPosition().toString() + " current unit? " + this.getPosition().getUnit());
+        // if(this.framesToPause == 0) {
+            // Debug.Log("I AM search me " + gameObject.name + " SOMEHOW AT THE START WITH ZERO? " + this.framesToPause);
         // }
-
-        if(this.getPosition().getUnit() == null) {
-            Debug.Log("PLEASE HLEP " + gameObject.name);
-        } else {
-            Debug.Log("NO HLEP " + gameObject.name);
-        }
 
         if(this.isDead()) {
             return;
@@ -135,18 +131,22 @@ public abstract class Unit : MonoBehaviour
         }
     
         if(this.framesToPause > 0) { //i am already doing a task
+            Debug.Log("I AM AKREADY MOVING! hi " + gameObject.name);
             this.updateLockout();
             return;
         }
         
         //i am not doing a task but have a target, so i am going to go to that target
         if(this.currentTarget == null) {
+            Debug.Log("I AM DOING NOTHING! hi " + gameObject.name);
             Debug.Log("IDLE!");
             this.beIdle();//do nothing for a couple of frames, try again after
         }else if(this.canReachTarget()) {
+            Debug.Log("I AM DOING ATTACKING! hi " + gameObject.name);
             Debug.Log("ATTACK!");
             StartCoroutine(this.unitAttack());
         } else {
+            Debug.Log("I AM DOING WALKING! hi " + gameObject.name);
             Debug.Log("WALK!");
             this.walkTowardsTarget();
         }
@@ -225,17 +225,25 @@ public abstract class Unit : MonoBehaviour
         HexSquare walkTo = this.manager.requestRoute(this, this.currentTarget);
         // Debug.Log(walkTo.toString() + "<--- walkTo" + this.curPosition.toString() + "<----- walk from");
         if(walkTo.isSquare()) {
-            StartCoroutine(this.moveToTarget(walkTo));
+            // Debug.Log(this.framesToPause + " lockout " + "I AM search me " + gameObject.name + " " + HexSquare.hexDist(this.curPosition, walkTo) + " | search me " + this.gameObject.name + " , " + this.curPosition.toString() + " , " + walkTo.toString());
+            // Debug.Log("I AM search me " + gameObject.name + " DUMMY CHECK PRE COROUTINE" + this.mutatableDummy); 
             this.setLockout(this.timeBetweenMove);
+            // Debug.Log("I AM search me " + gameObject.name + " SETTING LOCKOUT!!! DUMMY CHECK!! " + this.mutatableDummy);
+            StartCoroutine(this.moveToTarget(walkTo, this.framesToPause));
+            // Debug.Log("I AM search me " + gameObject.name + " COROUTINE STARTED!!!" + this.framesToPause);
         }
     }
 
-    private IEnumerator moveToTarget(HexSquare walkTo) {
+    private IEnumerator moveToTarget(HexSquare walkTo, int duration) {
+        // Debug.Log("I AM search me " + gameObject.name + " INSIDE THE COROUTINE " + this.framesToPause + "DUMMY CHECK! " + this.mutatableDummy);
         this.getPosition().claimSquare(this, false);
         walkTo.claimSquare(this, true);
         this.curPosition = walkTo;
+        Vector3 startPos = transform.position;
+        Vector3 dest = new Vector3(walkTo.transform.position.x, startPos.y, walkTo.transform.position.z);
 
-        while(isMoving) {
+        while(isMoving) { //TODO: Why do I happen? Should it be possible?
+            // Debug.Log("I AM search me " + gameObject.name + " TRYNA OVERRIDEDEEEEE");
             this.requestOverride = true;
             Debug.Log("waiting for an older move to abort! " + gameObject.name);
             yield return null;
@@ -247,22 +255,28 @@ public abstract class Unit : MonoBehaviour
         transform.LookAt(lookAt);
         this.isMoving = true;
         this.requestOverride = false;
-        Vector3 startPos = transform.position;
-        Vector3 dest = new Vector3(walkTo.transform.position.x, startPos.y, walkTo.transform.position.z);
 
-        float duration = this.timeBetweenMove;
-        float elapsed = 0f;
-
-        while(elapsed < duration) {
-            if(this.requestOverride) {
+        int prevFramesToPause = this.framesToPause; //in case it jumps back up somehow
+        while(this.framesToPause > 0) {
+            // Debug.Log("I AM search me " + gameObject.name + " AND IM INSIDE THE WHILE LOOP " + this.framesToPause);
+            if(this.framesToPause > prevFramesToPause) {
+                // Debug.Log("I AM search me " + gameObject.name + " Frames have been increased before we hit 0!!!!");
                 this.isMoving = false;
                 yield break;
             }
 
-            this.transform.position = Vector3.Lerp(startPos, dest, elapsed/duration);
-            elapsed += Time.deltaTime;
+            if(this.requestOverride) {
+                // Debug.Log("I AM search me " + gameObject.name + " gpt canceleledddf!!!!");
+                this.isMoving = false;
+                yield break;
+            }
+            
+            this.transform.position = Vector3.Lerp(startPos, dest, (duration - this.framesToPause)/(float)duration);
+            prevFramesToPause = this.framesToPause;
             yield return null;
         }
+
+        // Debug.Log("I AM search me " + gameObject.name + " AND I HAVE FINISHED A MOVE TO " + walkTo.toString());
 
         this.isMoving = false;
     }
@@ -273,10 +287,12 @@ public abstract class Unit : MonoBehaviour
     }
 
     private void setLockout(float duration) {
+        this.mutatableDummy += "HI I HAVE BEEN MUTATED ISN'T THAT CRAZY!    ";
         this.framesToPause = (int) (duration / CombatScheduler.combatTimePerTick);
     }
 
     private void updateLockout() {
+        this.mutatableDummy += "   wow lockout got dropped by one wild   ";
         this.framesToPause -= 1;
     }
 
