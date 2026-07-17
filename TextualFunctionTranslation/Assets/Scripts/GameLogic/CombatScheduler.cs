@@ -26,7 +26,7 @@ public class CombatScheduler : MonoBehaviour
             return;
         }
 
-        int n = (newCheckIn - this.lastCheckIn)/combatTickTime;
+        int n = (int)((newCheckIn - this.lastCheckIn)/combatTickTime);
         for(int i = 1; i <= n; i++) {
             //call update?
             manager.runAttackFrame();
