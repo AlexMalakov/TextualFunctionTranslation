@@ -280,12 +280,15 @@ public abstract class Unit : MonoBehaviour
         this.setLockout(.2f);
     }
 
-    private void setLockout(float duration) {
+    public void setLockout(float duration) {
         this.framesToPause = (int) (duration / CombatScheduler.combatTimePerTick);
+        this.currentState.update(this.framesToPause);
     }
 
     private void updateLockout() {
         this.framesToPause -= 1;
+
+        this.currentState.update(this.framesToPause);
     }
 
     public void takeDamage(float in_damage, Unit damage_from) {

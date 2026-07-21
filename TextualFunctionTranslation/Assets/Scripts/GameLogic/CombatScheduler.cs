@@ -34,4 +34,8 @@ public class CombatScheduler : MonoBehaviour
 
         lastCheckIn += combatTickTime * n;
     }
+
+    public static int timeToTicks(float time) {
+        return (int) (time / combatTimePerTick);
+    }
 }
