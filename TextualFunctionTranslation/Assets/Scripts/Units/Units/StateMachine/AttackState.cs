@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 enum AttackStage {
-    Cooldown = 0, Windup = 1, Swing = 2, Cancled = -1;
+    Cooldown = 0, Windup = 1, Swing = 2, Cancled = -1
 }
 
 public class AttackState : UnitActionState
@@ -48,7 +48,7 @@ public class AttackState : UnitActionState
             StartCoroutine(this.runWindup());
         } else if(this.frameLockout <= 0 && this.attackStage == AttackStage.Windup) {
             this.attackStage = AttackStage.Swing;
-            StartCoroutine(this.runSwing());
+            this.runSwing();
         }
     }
 

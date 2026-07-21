@@ -23,18 +23,8 @@ struct StarStats {
     }
 }
 
-// mnight want this might not want this
-// public struct StateData {
-//     public Unit target;
-//     public float attackSpeed;
-
-//     public StateData() {
-
-//     }
-// }
-
 public enum BuffableStats {
-    Health, Damage, AttackSpeed //idk about this one ngl but ill keep it for now
+    Health, Damage, AttackSpeed
 }
 
 public abstract class Unit : MonoBehaviour
@@ -77,9 +67,7 @@ public abstract class Unit : MonoBehaviour
     private Unit currentTarget;
     private HexSquare curPosition; //TODO: INIT ME?
 
-    private int framesToPause = 0;
-    private bool isMoving;
-    private bool requestOverride;
+    private UnitActionState currentState;
 
     public Unit setBlueprint(UnitBlueprint blueprint, CombatManager manager) {
         this.manager = manager;
@@ -111,6 +99,10 @@ public abstract class Unit : MonoBehaviour
         return this.unitBlueprint.unitCost;
     }
 
+    public HexSquare getPosition() {
+        return this.curPosition;
+    }
+
     public Trait getRoleTrait() {
         if(!this.roleTrait) { //this unit's trait is always known. It however cannot be retrieved until the factory is done. So this method can't be called during 'AWAKE'
             this.roleTrait = TraitFactory.getTrait(this.roleTraitName, this);
@@ -123,46 +115,6 @@ public abstract class Unit : MonoBehaviour
             this.classTrait = TraitFactory.getTrait(this.classTraitName, this);
         }
         return this.classTrait;
-    }
-
-    public virtual void checkUnitHasTask(CombatManager manager) {
-        // if(this.framesToPause == 0) {
-            // Debug.Log("I AM search me " + gameObject.name + " SOMEHOW AT THE START WITH ZERO? " + this.framesToPause);
-        // }
-
-        if(this.isDead()) {
-            return;
-        }
-
-        if(this.currentTarget == null || this.currentTarget.isDead() /* || distance(this, currentTarget) > range*/) {
-            this.currentTarget = this.manager.requestAttackTarget(this, this.currentTarget);
-            //problem: need to wait out animation
-        }
-    
-        if(this.framesToPause > 0) { //i am already doing a task
-            Debug.Log("I AM AKREADY MOVING! hi " + gameObject.name);
-            this.updateLockout();
-            return;
-        }
-        
-        //i am not doing a task but have a target, so i am going to go to that target
-        if(this.currentTarget == null) {
-            Debug.Log("I AM DOING NOTHING! hi " + gameObject.name);
-            Debug.Log("IDLE!");
-            this.beIdle();//do nothing for a couple of frames, try again after
-        }else if(this.canReachTarget()) {
-            Debug.Log("I AM DOING ATTACKING! hi " + gameObject.name);
-            Debug.Log("ATTACK!");
-            StartCoroutine(this.unitAttackWindup());
-        } else {
-            Debug.Log("I AM DOING WALKING! hi " + gameObject.name);
-            Debug.Log("WALK!");
-            this.walkTowardsTarget();
-        }
-    }
-
-    public HexSquare getPosition() {
-        return this.curPosition;
     }
 
     public void initUnit(HexSquare square, HealthBarManager hpBar, Transform hpCanvas) {
@@ -180,6 +132,33 @@ public abstract class Unit : MonoBehaviour
         this.placeUnitOnSquare(square);
     }
 
+    public virtual void triggerUpdate(CombatManager manager) {
+        if(this.isDead()) {
+            return;
+        }
+
+        //if we have no target or our target is dead: we want a new target
+        // idle/stun  - behave as is
+        // walk - behave as is
+        // attack: cancel attack
+
+        if(this.currentTarget == null || this.currentTarget.isDead() /* || distance(this, currentTarget) > range*/) {
+            this.currentTarget = this.manager.requestAttackTarget(this, this.currentTarget);
+            //problem: need to wait out animation
+        }
+
+        currentState.update();
+    }
+
+    public void requestStateSwap(UnitActionState state) {
+        if(this.currentTarget == null) {
+            state.swapStates(IDLE, null);
+        } else if(this.canReachTarget()) {
+            state.swapStates(ATTACK, this.currentTarget);
+        } else {
+            state.swapStates(WALK, this.currentTarget);
+        }
+    }
 
     public void onCombatEnd() {
         this.healthCalculator.wipe();
@@ -200,22 +179,6 @@ public abstract class Unit : MonoBehaviour
         this.unclaimSquare();
     }
 
-
-    private IEnumerator unitAttackWindup() {
-        //attack target
-        Vector3 lookAt = new Vector3(this.currentTarget.transform.position.x, this.transform.position.y, this.currentTarget.transform.position.z);
-        transform.LookAt(lookAt);
-        // this.currentTarget.takeDamage(this.damageCalculator.calculate(), this);
-
-        this.animator.SetTrigger("Attack");
-
-        this.setLockout(this.timeBetweenAttack);
-        yield return new WaitForSeconds(this.attackWindup);
-        if(!this.isDead()) {
-            attackTarget();
-        }
-    }
-
     public void attackTarget() {
         this.currentTarget.takeDamage(this.damageCalculator.calculate(), this);
         this.combatLog.logEvent(new CombatEvent(this, this.currentTarget, CombatEventType.Attack));
@@ -231,78 +194,8 @@ public abstract class Unit : MonoBehaviour
         return HexSquare.hexDist(this.getPosition(), this.currentTarget.getPosition()) <= this.range;
     }
 
-    //moev one square towards target
-    private void walkTowardsTarget() {
-        HexSquare walkTo = this.manager.requestRoute(this, this.currentTarget);
-        if(walkTo.isSquare()) {
-            this.setLockout(this.timeBetweenMove);
-            StartCoroutine(this.moveToTarget(walkTo, this.framesToPause));
-        }
-    }
-
     public void triggerAnimation(string trigger) {
         this.animator.SetTrigger(trigger);
-    }
-
-    private IEnumerator moveToTarget(HexSquare walkTo, int duration) {
-        this.getPosition().claimSquare(this, false);
-        walkTo.claimSquare(this, true);
-        this.curPosition = walkTo;
-        Vector3 startPos = transform.position;
-        Vector3 dest = new Vector3(walkTo.transform.position.x, startPos.y, walkTo.transform.position.z);
-
-        while(isMoving) { //TODO: Why do I happen? Should it be possible?
-            this.requestOverride = true;
-            Debug.Log("waiting for an older move to abort! " + gameObject.name);
-            yield return null;
-        }
-
-        this.animator.SetTrigger("Walk");
-
-        Vector3 lookAt = new Vector3(walkTo.transform.position.x, this.transform.position.y, walkTo.transform.position.z);
-        transform.LookAt(lookAt);
-        this.isMoving = true;
-        this.requestOverride = false;
-
-        int prevFramesToPause = this.framesToPause; //in case it jumps back up somehow
-        while(this.framesToPause > 0) {
-            // Debug.Log("I AM search me " + gameObject.name + " AND IM INSIDE THE WHILE LOOP " + this.framesToPause);
-            if(this.framesToPause > prevFramesToPause) {
-                // Debug.Log("I AM search me " + gameObject.name + " Frames have been increased before we hit 0!!!!");
-                this.isMoving = false;
-                yield break;
-            }
-
-            if(this.requestOverride) {
-                // Debug.Log("I AM search me " + gameObject.name + " gpt canceleledddf!!!!");
-                this.isMoving = false;
-                yield break;
-            }
-            
-            this.transform.position = Vector3.Lerp(startPos, dest, (duration - this.framesToPause)/(float)duration);
-            prevFramesToPause = this.framesToPause;
-            yield return null;
-        }
-
-        // Debug.Log("I AM search me " + gameObject.name + " AND I HAVE FINISHED A MOVE TO " + walkTo.toString());
-
-        this.isMoving = false;
-    }
-
-    private void beIdle() {
-        this.animator.SetTrigger("Idle");
-        this.setLockout(.2f);
-    }
-
-    public void setLockout(float duration) {
-        this.framesToPause = (int) (duration / CombatScheduler.combatTimePerTick);
-        this.currentState.update(this.framesToPause);
-    }
-
-    private void updateLockout() {
-        this.framesToPause -= 1;
-
-        this.currentState.update(this.framesToPause);
     }
 
     public void takeDamage(float in_damage, Unit damage_from) {

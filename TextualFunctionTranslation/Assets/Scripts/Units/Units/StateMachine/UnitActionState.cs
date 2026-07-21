@@ -27,8 +27,8 @@ public abstract class UnitActionState : MonoBehaviour
         }
     }
 
-    public void swapStates(UnitActionState swapTo) {
+    public void swapStates(UnitActionState swapTo, Unit curTarget) {
         this.onStateExit();
-        swapTo.onStateEnter(this);
+        swapTo.onStateEnter(this, curTarget);
     }
 }

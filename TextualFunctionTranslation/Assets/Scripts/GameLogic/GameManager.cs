@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
         this.combatManager.initPlayers(
             this.currentLevel[this.currentStage].getCombatLayout(),
             this.currentLevel[currentStage].getAlphabet(),
-            this.currentLevel[currentStage].getUnitCap()
+            this.currentLevel[currentStage].getMaxUnits()
         );
     }
 

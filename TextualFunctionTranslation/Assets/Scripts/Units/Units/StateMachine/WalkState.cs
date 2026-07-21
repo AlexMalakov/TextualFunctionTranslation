@@ -5,13 +5,16 @@ using UnityEngine;
 public class WalkState : UnitActionState
 {
     private int walkFrames;
+    private int rotFrames;
     private HexSquare walkTo;
     private Coroutine shwalkin;
     private Coroutine shrotatin;
     private Quaternion targetRot;
+    private bool rotAsigned = false;
 
-    public WalkState(float walkTine) : base() {
-        this.walkFrames = CombatScheduler.timeToTicks(walkTine);
+    public WalkState(float walkTime, float rotTime) : base() {
+        this.walkFrames = CombatScheduler.timeToTicks(walkTime);
+        this.rotFrames = CombatScheduler.timeToTicks(rotTime);
     }
 
     protected override void onStateEnter(UnitActionState stateFrom, Unit target) {
@@ -40,15 +43,15 @@ public class WalkState : UnitActionState
             this.shrotatin = null;
         }
 
-        if(this.targetRot != null) {
-            this.unitOwner.transform.LookAt(this.targetRot);
-            this.targetRot = null;
+        if(this.rotAsigned) {
+            this.unitOwner.transform.rotation = this.targetRot;
+            this.rotAsigned = false;
         }
 
         if(this.walkTo != null && this.walkTo.isSquare()) {
             Vector3 dest = new Vector3(this.walkTo.transform.position.x, this.unitOwner.transform.position.y, this.walkTo.transform.position.z);
             this.unitOwner.transform.position = dest;
-            this.this.walkTo = null;
+            this.walkTo = null;
         }
     }
 
@@ -63,7 +66,7 @@ public class WalkState : UnitActionState
         Vector3 dest = new Vector3(this.walkTo.transform.position.x, startPos.y, this.walkTo.transform.position.z);
 
         while(this.frameLockout > 0) {
-            float elap = (this.walkFrames - this.framesToPause)/(float)this.walkFrames;
+            float elap = (this.walkFrames - this.frameLockout)/(float)this.walkFrames;
             this.unitOwner.transform.position = Vector3.Lerp(startPos, dest, elap);
             yield return null;
         }
@@ -78,6 +81,7 @@ public class WalkState : UnitActionState
         direction.y = 0f;
         
         this.targetRot = Quaternion.LookRotation(direction);
+        this.rotAsigned = true;
 
         while(this.frameLockout > 0) {
             float elap = (this.rotFrames - this.frameLockout)/(float)this.rotFrames;

@@ -76,7 +76,7 @@ public class CombatManager : MonoBehaviour
     //check each unit every frame
     public void runAttackFrame() {
         foreach(Unit u in this.units) {
-            u.checkUnitHasTask(this);
+            u.triggerUpdate(this);
         }
     }
 

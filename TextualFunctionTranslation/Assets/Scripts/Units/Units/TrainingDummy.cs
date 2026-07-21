@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TrainingDummy : Unit
 {
-    public override void checkUnitHasTask(CombatManager manager) {
+    public override void triggerUpdate(CombatManager manager) {
         return;
     }
 }
