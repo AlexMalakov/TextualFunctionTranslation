@@ -24,7 +24,7 @@ public class IdleState : UnitActionState
             this.frameLockout = CombatScheduler.timeToTicks(timeStunned);
         } else {
             this.frameLockout = this.idleFrames;
-            //TODO: idle animation
+            this.unitOwner.triggerAnimation("idle");
         }
     }
 

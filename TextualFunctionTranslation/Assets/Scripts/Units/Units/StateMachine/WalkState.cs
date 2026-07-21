@@ -23,6 +23,7 @@ public class WalkState : UnitActionState
             this.frameLockout = this.walkFrames;
             shwalkin = StartCoroutine(walkToTarget());
             shrotatin = StartCoroutine(rotateToTarget()); //TODO: stupid chud coroutine
+            this.unitOwner.triggerAnimation("walk");
         }
     }
 
@@ -57,12 +58,10 @@ public class WalkState : UnitActionState
 
     protected override void runUpdate() {}
 
-
     private IEnumerator walkToTarget() {
         Vector3 startPos = this.unitOwner.transform.position;
         Vector3 dest = new Vector3(this.walkTo.transform.position.x, startPos.y, this.walkTo.transform.position.z);
 
-        //TODO: walk animation
         while(this.frameLockout > 0) {
             float elap = (this.walkFrames - this.framesToPause)/(float)this.walkFrames;
             this.unitOwner.transform.position = Vector3.Lerp(startPos, dest, elap);

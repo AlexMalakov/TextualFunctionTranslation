@@ -240,6 +240,10 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
+    public void triggerAnimation(string trigger) {
+        this.animator.SetTrigger(trigger);
+    }
+
     private IEnumerator moveToTarget(HexSquare walkTo, int duration) {
         this.getPosition().claimSquare(this, false);
         walkTo.claimSquare(this, true);
