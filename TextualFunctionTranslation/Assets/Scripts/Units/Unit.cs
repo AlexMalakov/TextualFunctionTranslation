@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.CompilerServices;
 
-[System.Serializable]
+[System.Serializable] //TODO: animations outside of combat
 struct StarStats {
     public float star1Stat;
     public float star2Stat;
@@ -22,6 +22,16 @@ struct StarStats {
         }
     }
 }
+
+// mnight want this might not want this
+// public struct StateData {
+//     public Unit target;
+//     public float attackSpeed;
+
+//     public StateData() {
+
+//     }
+// }
 
 public enum BuffableStats {
     Health, Damage, AttackSpeed //idk about this one ngl but ill keep it for now
@@ -202,15 +212,15 @@ public abstract class Unit : MonoBehaviour
         this.setLockout(this.timeBetweenAttack);
         yield return new WaitForSeconds(this.attackWindup);
         if(!this.isDead()) {
-            this.currentTarget.takeDamage(this.damageCalculator.calculate(), this);
-            this.combatLog.logEvent(new CombatEvent(this, this.currentTarget, CombatEventType.Attack));
-            this.roleTrait.onUnitAttack(this, this.currentTarget);
-            this.classTrait.onUnitAttack(this, this.currentTarget);
+            attackTarget();
         }
     }
 
-    private IEnumerator unitAttack() {
-
+    public void attackTarget() {
+        this.currentTarget.takeDamage(this.damageCalculator.calculate(), this);
+        this.combatLog.logEvent(new CombatEvent(this, this.currentTarget, CombatEventType.Attack));
+        this.roleTrait.onUnitAttack(this, this.currentTarget);
+        this.classTrait.onUnitAttack(this, this.currentTarget);
     }
 
     //returns true if target is in range

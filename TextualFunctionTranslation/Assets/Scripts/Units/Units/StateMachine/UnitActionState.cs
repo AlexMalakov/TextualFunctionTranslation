@@ -6,9 +6,10 @@ using UnityEngine;
 public abstract class UnitActionState : MonoBehaviour
 {
     protected int frameLockout;
-    private Unit unitOwner;
+    protected Unit unitOwner;
+    protected Unit target;
 
-    protected abstract void onStateEnter(UnitActionState stateFrom);
+    protected abstract void onStateEnter(UnitActionState stateFrom, Unit curTarget); //if the target changes then the state should abort no?
 
     protected abstract void onStateExit();
 

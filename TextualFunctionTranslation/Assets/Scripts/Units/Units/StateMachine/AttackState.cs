@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 enum AttackStage {
-    Cooldown = 0, Windup = 1, Swing = 2;
+    Cooldown = 0, Windup = 1, Swing = 2, Cancled = -1;
 }
 
 public class AttackState : UnitActionState
 {
-    private AttackStage attackStage = AttackStage.Cooldown;
+    private AttackStage attackStage = AttackStage.Cancled;
 
     private int cooldownFrames;
     private int windupFrames;
@@ -20,8 +20,9 @@ public class AttackState : UnitActionState
         this.swingFrames = CombatScheduler.timeToTicks(swingTime);
     }
 
-    protected override void onStateEnter(UnitActionState stateFrom) {
+    protected override void onStateEnter(UnitActionState stateFrom, Unit target) {
         //TODO: set cooldown time and windup time based on attackspeed dynamically
+        this.target = target;
 
         if(stateFrom is AttackState) {
             this.attackStage = AttackStage.Cooldown;
@@ -33,7 +34,7 @@ public class AttackState : UnitActionState
     }
 
     protected override void onStateExit() {
-        this.attackStage = AttackStage.Cooldown;
+        this.attackStage = AttackStage.Cancled;
         this.frameLockout = 0;
     }
 
@@ -41,7 +42,7 @@ public class AttackState : UnitActionState
         return this.frameLockout <= 0 && this.attackStage == AttackStage.Swing;
     }
 
-    protected override void runUpdate() {
+    protected override void runUpdate() { //TODO: on attack canceled handle it (insta swap to stun?)
         if(this.frameLockout <= 0 && this.attackStage == AttackStage.Cooldown) {
             this.attackStage = AttackStage.Windup;
             StartCoroutine(this.runWindup());
@@ -55,20 +56,33 @@ public class AttackState : UnitActionState
         this.frameLockout = this.cooldownFrames;
     }
 
-    private IEnumerator runWindup() {
-        this.frameLockout = this.windupFrames;
+    private Quaternion getTargetRot() {
+        Vector3 direction = this.target.transform.position - this.unitOwner.transform.position;
+        direction.y = 0f;
 
-        //look at the target
-
-        //play the windup animation
+        return Quaternion.LookRotation(direction);
     }
 
-    private IEnumerator runSwing() {
+    private IEnumerator runWindup() {
+        this.frameLockout = this.windupFrames;
+        //TODO: windup animation
+
+        while(this.frameLockout > 0 && this.attackStage == AttackStage.Windup) {
+            //TODO: check if attack is cancel
+            float ratio = (this.windupFrames - this.frameLockout) / (float)this.windupFrames;
+            this.unitOwner.transform.rotation = Quaternion.Slerp(this.unitOwner.transform.rotation, getTargetRot(), ratio);
+            yield return null;
+        }
+        
+        this.unitOwner.transform.rotation = getTargetRot();
+        
+    }
+
+    //cannot be canceled anymore
+    private void runSwing() {
         this.frameLockout = this.swingFrames;
-
-        //deal damage
-
-        //play animation
+        //TODO: swing animation
+        this.unitOwner.attackTarget();
     }
 
     
