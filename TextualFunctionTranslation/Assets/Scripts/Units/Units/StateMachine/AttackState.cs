@@ -21,12 +21,14 @@ public class AttackState : UnitActionState
     }
 
     protected override void onStateEnter(UnitActionState stateFrom) {
+        //TODO: set cooldown time and windup time based on attackspeed dynamically
+
         if(stateFrom is AttackState) {
             this.attackStage = AttackStage.Cooldown;
-            this.frameLockout = cooldownFrames;
+            this.runCooldown();
         } else {
             this.attackStage = AttackStage.Windup;
-            this.
+            StartCoroutine(this.runWindup()); //TODO: this will need to get replaced by my coroutine runner gah
         }
     }
 
@@ -35,26 +37,38 @@ public class AttackState : UnitActionState
         this.frameLockout = 0;
     }
 
-    protected abstract bool readyToSwap() {
+    protected override bool readyToSwap() {
         return this.frameLockout <= 0 && this.attackStage == AttackStage.Swing;
     }
 
-    protected abstract void runUpdate() {
+    protected override void runUpdate() {
         if(this.frameLockout <= 0 && this.attackStage == AttackStage.Cooldown) {
             this.attackStage = AttackStage.Windup;
+            StartCoroutine(this.runWindup());
         } else if(this.frameLockout <= 0 && this.attackStage == AttackStage.Windup) {
             this.attackStage = AttackStage.Swing;
+            StartCoroutine(this.runSwing());
         }
-
-
     }
 
-    private void runWindup() {
-
+    private void runCooldown() {
+        this.frameLockout = this.cooldownFrames;
     }
 
-    private void runAttack() {
+    private IEnumerator runWindup() {
+        this.frameLockout = this.windupFrames;
 
+        //look at the target
+
+        //play the windup animation
+    }
+
+    private IEnumerator runSwing() {
+        this.frameLockout = this.swingFrames;
+
+        //deal damage
+
+        //play animation
     }
 
     
