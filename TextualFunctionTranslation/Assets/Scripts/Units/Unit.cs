@@ -62,7 +62,6 @@ public abstract class Unit : MonoBehaviour
     private UnitNumericCalculator damageCalculator;
     private UnitNumericCalculator attackSpeedCalculator; //need a way to balance this?
 
-    private string mutatableDummy = "";
     private float currentHealth;
 
     private Unit currentTarget;
@@ -144,7 +143,7 @@ public abstract class Unit : MonoBehaviour
         }else if(this.canReachTarget()) {
             Debug.Log("I AM DOING ATTACKING! hi " + gameObject.name);
             Debug.Log("ATTACK!");
-            StartCoroutine(this.unitAttack());
+            StartCoroutine(this.unitAttackWindup());
         } else {
             Debug.Log("I AM DOING WALKING! hi " + gameObject.name);
             Debug.Log("WALK!");
@@ -173,7 +172,6 @@ public abstract class Unit : MonoBehaviour
 
 
     public void onCombatEnd() {
-        //TODO: reset all buffs
         this.healthCalculator.wipe();
         this.damageCalculator.wipe();
         this.attackSpeedCalculator.wipe();
@@ -193,13 +191,12 @@ public abstract class Unit : MonoBehaviour
     }
 
 
-    private IEnumerator unitAttack() {
+    private IEnumerator unitAttackWindup() {
         //attack target
         Vector3 lookAt = new Vector3(this.currentTarget.transform.position.x, this.transform.position.y, this.currentTarget.transform.position.z);
         transform.LookAt(lookAt);
         // this.currentTarget.takeDamage(this.damageCalculator.calculate(), this);
 
-        //TODO: trigger animation
         this.animator.SetTrigger("Attack");
 
         this.setLockout(this.timeBetweenAttack);
@@ -210,6 +207,10 @@ public abstract class Unit : MonoBehaviour
             this.roleTrait.onUnitAttack(this, this.currentTarget);
             this.classTrait.onUnitAttack(this, this.currentTarget);
         }
+    }
+
+    private IEnumerator unitAttack() {
+
     }
 
     //returns true if target is in range
@@ -223,19 +224,13 @@ public abstract class Unit : MonoBehaviour
     //moev one square towards target
     private void walkTowardsTarget() {
         HexSquare walkTo = this.manager.requestRoute(this, this.currentTarget);
-        // Debug.Log(walkTo.toString() + "<--- walkTo" + this.curPosition.toString() + "<----- walk from");
         if(walkTo.isSquare()) {
-            // Debug.Log(this.framesToPause + " lockout " + "I AM search me " + gameObject.name + " " + HexSquare.hexDist(this.curPosition, walkTo) + " | search me " + this.gameObject.name + " , " + this.curPosition.toString() + " , " + walkTo.toString());
-            // Debug.Log("I AM search me " + gameObject.name + " DUMMY CHECK PRE COROUTINE" + this.mutatableDummy); 
             this.setLockout(this.timeBetweenMove);
-            // Debug.Log("I AM search me " + gameObject.name + " SETTING LOCKOUT!!! DUMMY CHECK!! " + this.mutatableDummy);
             StartCoroutine(this.moveToTarget(walkTo, this.framesToPause));
-            // Debug.Log("I AM search me " + gameObject.name + " COROUTINE STARTED!!!" + this.framesToPause);
         }
     }
 
     private IEnumerator moveToTarget(HexSquare walkTo, int duration) {
-        // Debug.Log("I AM search me " + gameObject.name + " INSIDE THE COROUTINE " + this.framesToPause + "DUMMY CHECK! " + this.mutatableDummy);
         this.getPosition().claimSquare(this, false);
         walkTo.claimSquare(this, true);
         this.curPosition = walkTo;
@@ -243,7 +238,6 @@ public abstract class Unit : MonoBehaviour
         Vector3 dest = new Vector3(walkTo.transform.position.x, startPos.y, walkTo.transform.position.z);
 
         while(isMoving) { //TODO: Why do I happen? Should it be possible?
-            // Debug.Log("I AM search me " + gameObject.name + " TRYNA OVERRIDEDEEEEE");
             this.requestOverride = true;
             Debug.Log("waiting for an older move to abort! " + gameObject.name);
             yield return null;
@@ -287,12 +281,10 @@ public abstract class Unit : MonoBehaviour
     }
 
     private void setLockout(float duration) {
-        this.mutatableDummy += "HI I HAVE BEEN MUTATED ISN'T THAT CRAZY!    ";
         this.framesToPause = (int) (duration / CombatScheduler.combatTimePerTick);
     }
 
     private void updateLockout() {
-        this.mutatableDummy += "   wow lockout got dropped by one wild   ";
         this.framesToPause -= 1;
     }
 

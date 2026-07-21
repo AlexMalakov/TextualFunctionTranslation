@@ -37,7 +37,11 @@ public class GameManager : MonoBehaviour
 
     public void onPreperationStart() {
         this.board.initBoard();
-        this.combatManager.initPlayers(this.currentLevel[this.currentStage].getCombatLayout(), this.currentLevel[currentStage].getAlphabet());
+        this.combatManager.initPlayers(
+            this.currentLevel[this.currentStage].getCombatLayout(),
+            this.currentLevel[currentStage].getAlphabet(),
+            this.currentLevel[currentStage].getUnitCap()
+        );
     }
 
     public void handlePreperation() {
@@ -69,13 +73,13 @@ public class GameManager : MonoBehaviour
         string ciphertext = this.combatManager.encrypt(this.currentLevel[this.currentStage].getLevelCipher());
         StartCoroutine(this.runAnimations(ciphertext));
 
-        this.rvm.onResultsStart();
+        this.rvm.onResultsStart(ciphertext);
     }
 
     private IEnumerator runAnimations(string cypherText) {
         yield return this.combatManager.runCypherAnimation();
         yield return this.combatManager.runSquaresReveal();
-        //TODO: display encrypted text
+        this.rvm.displayReview();
     }
 
     public void handleResults() {

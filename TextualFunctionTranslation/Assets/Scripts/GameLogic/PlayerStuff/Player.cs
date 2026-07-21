@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Bench bench;
     [SerializeField] private UnitMovementManager umm;
 
-    [SerializeField] private int unitCap; //TODO: upadte this based on the current round
+    [SerializeField] private int unitCap;
     [SerializeField] private int money = 0;
 
     public void init() {
@@ -20,6 +20,10 @@ public class Player : MonoBehaviour
 
     public void assignLayout(PlayerUnitLayout layout) {
         this.unitLayout = layout;
+    }
+
+    public void setUnitCap(int cap) {
+        this.unitCap = cap; //TODO: is it possible to exceed unit cap?
     }
 
     public bool canPurchaseUnit(string unitName, int unitCost) {

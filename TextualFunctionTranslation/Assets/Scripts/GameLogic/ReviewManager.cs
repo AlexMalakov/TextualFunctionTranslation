@@ -9,10 +9,9 @@ public class ReviewManager : MonoBehaviour
     [SerializeField] private CypherPopUpButton cypherButton;
     [SerializeField] private CypherTextDisplay display;
 
-    public void onResultsStart() {
+    public void onResultsStart(string txt) {
         this.gameStateButton.runResults(true);
-        this.cypherButton.setDisplay(true);
-        this.display.setDisplay(true);
+        this.display.setCypherText(txt);
     }
 
     public void handleResults() {
@@ -23,5 +22,10 @@ public class ReviewManager : MonoBehaviour
         this.gameStateButton.runResults(false);
         this.cypherButton.setDisplay(false);
         this.display.setDisplay(false);
+    }
+
+    public void displayReview() {
+        this.cypherButton.setDisplay(true);
+        this.display.setDisplay(true);
     }
 }

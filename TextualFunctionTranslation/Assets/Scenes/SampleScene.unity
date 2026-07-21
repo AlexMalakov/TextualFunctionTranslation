@@ -7169,8 +7169,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameStateButton: {fileID: 170355325}
-  cypherButton: {fileID: 0}
-  display: {fileID: 0}
+  cypherButton: {fileID: 288444440}
+  display: {fileID: 846241020}
 --- !u!43 &750049983
 Mesh:
   m_ObjectHideFlags: 0

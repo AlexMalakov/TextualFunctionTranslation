@@ -22,7 +22,8 @@ public class CombatManager : MonoBehaviour
     private int livingPlayerUnits = -1;
     private int livingEnemyUnits = -1;
 
-    public void initPlayers(PlayerUnitLayout enemyLayout, string allLeters) {
+    public void initPlayers(PlayerUnitLayout enemyLayout, string allLeters, int unitCap) {
+        this.player.setUnitCap(unitCap);
         this.player.init();
         this.enemy.assignLayout(enemyLayout);
         this.enemy.init();
