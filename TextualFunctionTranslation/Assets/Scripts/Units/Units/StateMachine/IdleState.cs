@@ -21,7 +21,7 @@ public class IdleState : UnitActionState
         }
     }
 
-    protected override void onStateExit() {
+    public override void onStateExit() {
         this.frameLockout = 0;
     }
 

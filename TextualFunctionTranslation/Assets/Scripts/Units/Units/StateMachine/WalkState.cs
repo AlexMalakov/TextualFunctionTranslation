@@ -30,7 +30,7 @@ public class WalkState : UnitActionState
         }
     }
 
-    protected override void onStateExit() {
+    public override void onStateExit() {
         this.frameLockout = 0;
 
         if(this.shwalkin != null) {

@@ -14,6 +14,8 @@ public class AttackState : UnitActionState
     private int windupFrames;
     private int swingFrames;
 
+    private Coroutine windupCoroutine;
+
     public AttackState(float cooldownTime, float windupTime, float swingTime) : base() {
         this.cooldownFrames = CombatScheduler.timeToTicks(cooldownTime);
         this.windupFrames = CombatScheduler.timeToTicks(windupTime);
@@ -30,20 +32,32 @@ public class AttackState : UnitActionState
             this.runCooldown();
         } else {
             this.attackStage = AttackStage.Windup;
-            StartCoroutine(this.runWindup()); //TODO: this will need to get replaced by my coroutine runner gah
+            this.windupCoroutine = StartCoroutine(this.runWindup()); //TODO: this will need to get replaced by my coroutine runner gah
         }
     }
 
-    protected override void onStateExit() {
+    public override void cancelAction() {
+        if(this.attackStage == AttackStage.Windup || this.attackStage == AttackStage.Cooldown) {
+            this.onStateExit(); //force quit the coroutine
+            //TODO: stun particles?
+        }
+    }
+
+    public override void onStateExit() {
+        if(this.windupCoroutine != null) {
+            StopCoroutine(this.windupCoroutine);
+            this.windupCoroutine = null;
+        }
+
         this.attackStage = AttackStage.Cancled;
         this.frameLockout = 0;
     }
 
     protected override bool readyToSwap() {
-        return this.frameLockout <= 0 && this.attackStage == AttackStage.Swing;
+        return (this.frameLockout <= 0 && this.attackStage == AttackStage.Swing) || this.attackStage == AttackStage.Cancled;
     }
 
-    protected override void runUpdate() { //TODO: on attack canceled handle it (insta swap to stun?)
+    protected override void runUpdate() {
         if(this.frameLockout <= 0 && this.attackStage == AttackStage.Cooldown) {
             this.attackStage = AttackStage.Windup;
             StartCoroutine(this.runWindup());

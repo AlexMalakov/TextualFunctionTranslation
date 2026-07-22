@@ -11,7 +11,10 @@ public abstract class UnitActionState : MonoBehaviour
 
     protected abstract void onStateEnter(UnitActionState stateFrom, StateDataContainer data); //if the target changes then the state should abort no?
 
-    protected abstract void onStateExit();
+    public abstract void onStateExit();
+
+    //Can't cancel a walk or stun, but can cancel an atatck
+    public virtual void cancelAction() {}
 
     protected abstract bool readyToSwap();
 
