@@ -9,7 +9,7 @@ public abstract class UnitActionState : MonoBehaviour
     protected Unit unitOwner;
     protected Unit target;
 
-    protected abstract void onStateEnter(UnitActionState stateFrom, Unit curTarget); //if the target changes then the state should abort no?
+    protected abstract void onStateEnter(UnitActionState stateFrom, StateDataContainer data); //if the target changes then the state should abort no?
 
     protected abstract void onStateExit();
 
@@ -27,8 +27,8 @@ public abstract class UnitActionState : MonoBehaviour
         }
     }
 
-    public void swapStates(UnitActionState swapTo, Unit curTarget) {
+    public void swapStates(UnitActionState swapTo, StateDataContainer data) {
         this.onStateExit();
-        swapTo.onStateEnter(this, curTarget);
+        swapTo.onStateEnter(this, data);
     }
 }

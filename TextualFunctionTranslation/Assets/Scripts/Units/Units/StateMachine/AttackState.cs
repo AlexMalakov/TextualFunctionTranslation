@@ -20,9 +20,10 @@ public class AttackState : UnitActionState
         this.swingFrames = CombatScheduler.timeToTicks(swingTime);
     }
 
-    protected override void onStateEnter(UnitActionState stateFrom, Unit target) {
+    protected override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
         //TODO: set cooldown time and windup time based on attackspeed dynamically
-        this.target = target;
+        this.target = data.unit;
+        float attackSpeedMultiplier = data.flt; //TODO: use me
 
         if(stateFrom is AttackState) {
             this.attackStage = AttackStage.Cooldown;

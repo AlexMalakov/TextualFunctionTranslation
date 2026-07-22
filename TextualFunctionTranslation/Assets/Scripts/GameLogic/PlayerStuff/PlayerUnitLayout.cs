@@ -101,15 +101,15 @@ public class PlayerUnitLayout : MonoBehaviour
                 StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, this.layout[swapper].transform, true));
                 StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, this.layout[u].transform, true));
 
-                swapper.placeUnitOnSquare(this.layout[u]);
-                u.placeUnitOnSquare(this.layout[swapper]);
+                swapper.placeUnitOnSquare(this.layout[u], true);
+                u.placeUnitOnSquare(this.layout[swapper], true);
 
                 this.layout[u] = square;
                 this.layout[swapper] = currentSquare;
             } else {
                 Debug.Log("UNIT LAYOUT UPDATE CASE SHIFT");
                 StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
-                u.placeUnitOnSquare(square);
+                u.placeUnitOnSquare(square, true);
                 this.layout[u] = square;
             }
         } else { //either we're adding a unit from the shop or moving a unit from the bench: If from the shop can't move it into a unit, if from the bench can do whatever
@@ -129,7 +129,7 @@ public class PlayerUnitLayout : MonoBehaviour
 
             } //for shop, unit needs to be instantiated already
             StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
-            u.placeUnitOnSquare(square);
+            u.placeUnitOnSquare(square, true);
             this.layout[u] = square;
             this.addTrait(u);
         }
@@ -143,7 +143,7 @@ public class PlayerUnitLayout : MonoBehaviour
             if(s.getUnit() == null) {
                 this.layout.Add(u, s);
                 this.addTrait(u);
-                u.placeUnitOnSquare(s);
+                u.placeUnitOnSquare(s, true);
                 return;
             }
         }
@@ -154,7 +154,7 @@ public class PlayerUnitLayout : MonoBehaviour
         this.layout.Add(u, destination);
         this.addTrait(u);
         StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, destination.transform, true));
-        u.placeUnitOnSquare(destination);
+        u.placeUnitOnSquare(destination, true);
         //this does not need to unclaim bench slots the bench can do that for you
     }
 

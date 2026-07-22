@@ -17,12 +17,12 @@ public class WalkState : UnitActionState
         this.rotFrames = CombatScheduler.timeToTicks(rotTime);
     }
 
-    protected override void onStateEnter(UnitActionState stateFrom, Unit target) {
-        this.target = target;
+    protected override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
+        this.target = data.unit;
+        this.walkTo = data.sq;
 
-        this.walkTo = this.unitOwner.manager.requestRoute(this.unitOwner, this.target);
-        if(walkTo != null && this.walkTo.isSquare()) {
-            this.unitOwner.walkingTo(this.walkTo); //should unclaim this.getPosition(), then shouold claim walkTo, then should set curPos = walkTo
+        if(this.walkTo != null && this.walkTo.isSquare()) {
+            this.unitOwner.placeUnitOnSquare(this.walkTo, false);
             this.frameLockout = this.walkFrames;
             shwalkin = StartCoroutine(walkToTarget());
             shrotatin = StartCoroutine(rotateToTarget()); //TODO: stupid chud coroutine

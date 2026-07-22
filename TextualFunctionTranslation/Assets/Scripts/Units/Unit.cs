@@ -27,6 +27,16 @@ public enum BuffableStats {
     Health, Damage, AttackSpeed
 }
 
+public struct StateDataContainer {
+    public Unit unit;
+    public HexSquare sq;
+    public float flt;
+
+    public StateDataContainer(Unit unit, HexSquare sq, float flt) {
+        this.unit = unit; this.sq = sq; this.flt = flt;
+    }
+}
+
 public abstract class Unit : MonoBehaviour
 {
     [Header ("Stats")]
@@ -129,11 +139,15 @@ public abstract class Unit : MonoBehaviour
 
         //TODO: this wont reflect the post buffed value
         this.hpBar.init(this.currentHealth, this.transform, hpCanvas);
-        this.placeUnitOnSquare(square);
+        this.placeUnitOnSquare(square, true);
     }
 
     public virtual void triggerUpdate(CombatManager manager) {
-        if(this.isDead()) {
+
+        if(this.currentState != null && this.isDead()) {
+            //TODO: cancel state, and end
+            return;
+        } else if(this.isDead()) {
             return;
         }
 
@@ -151,12 +165,14 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void requestStateSwap(UnitActionState state) {
+        StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, -1f);
         if(this.currentTarget == null) {
-            state.swapStates(IDLE, null);
+            state.swapStates(IDLE, stateData);
         } else if(this.canReachTarget()) {
-            state.swapStates(ATTACK, this.currentTarget);
+            state.swapStates(ATTACK, stateData);
         } else {
-            state.swapStates(WALK, this.currentTarget);
+            stateData.sq = this.unitOwner.manager.requestRoute(this.unitOwner, this.target);
+            state.swapStates(WALK, stateData);
         }
     }
 
@@ -166,19 +182,21 @@ public abstract class Unit : MonoBehaviour
         this.attackSpeedCalculator.wipe();
     }
 
-    public void placeUnitOnSquare(HexSquare square) {
+    public void placeUnitOnSquare(HexSquare square, bool move) {
         if(this.curPosition && this.curPosition.isSquare()) {
             this.curPosition.claimSquare(this, false);
         }
         this.curPosition = square;
         square.claimSquare(this, true);
-        this.transform.position = new Vector3(square.transform.position.x, this.transform.position.y, square.transform.position.z);
+
+        if(move) {
+            this.transform.position = new Vector3(square.transform.position.x, this.transform.position.y, square.transform.position.z);
+        }
     }
 
     public void placeUnitOnBench() {
         this.unclaimSquare();
     }
-
     public void attackTarget() {
         this.currentTarget.takeDamage(this.damageCalculator.calculate(), this);
         this.combatLog.logEvent(new CombatEvent(this, this.currentTarget, CombatEventType.Attack));
