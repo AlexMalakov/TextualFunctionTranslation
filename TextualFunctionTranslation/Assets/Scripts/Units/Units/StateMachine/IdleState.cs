@@ -11,7 +11,7 @@ public class IdleState : UnitActionState
     }
 
 
-    protected override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
+    public override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
         if(data.flt > 0f) {
             //TODO: stun particles
             this.frameLockout = CombatScheduler.timeToTicks(data.flt);

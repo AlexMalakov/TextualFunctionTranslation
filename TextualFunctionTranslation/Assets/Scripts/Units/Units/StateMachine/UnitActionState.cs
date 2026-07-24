@@ -9,12 +9,12 @@ public abstract class UnitActionState : MonoBehaviour
     protected Unit unitOwner;
     protected Unit target;
 
-    protected abstract void onStateEnter(UnitActionState stateFrom, StateDataContainer data); //if the target changes then the state should abort no?
+    public abstract void onStateEnter(UnitActionState stateFrom, StateDataContainer data); //if the target changes then the state should abort no?
 
     public abstract void onStateExit();
 
     //Can't cancel a walk or stun, but can cancel an atatck
-    public virtual void cancelAction() {}
+    public virtual bool cancelAction() {return false;}
 
     protected abstract bool readyToSwap();
 
@@ -26,7 +26,7 @@ public abstract class UnitActionState : MonoBehaviour
         this.runUpdate();
         
         if(this.readyToSwap()) {
-            this.unitOwner.requestStateSwap(this);
+            this.unitOwner.requestStateSwap();
         }
     }
 

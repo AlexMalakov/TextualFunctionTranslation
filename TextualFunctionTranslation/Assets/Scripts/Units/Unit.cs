@@ -165,30 +165,42 @@ public abstract class Unit : MonoBehaviour
             return;
         }
 
-        //if we have no target or our target is dead: we want a new target
-        //if we are attacking and our target moves out of range, we cancel attack as well
-        // idle/stun  - behave as is
-        // walk - behave as is
-        // attack: cancel attack
-
+        //if we have no target or our target is dead: we want a new target and we cancel our current action
         if(this.currentTarget == null || this.currentTarget.isDead() /* || distance(this, currentTarget) > range*/) {
             this.currentTarget = this.manager.requestAttackTarget(this, this.currentTarget);
-            //problem: need to wait out animation
+            if (this.currentState.cancelAction()) {
+                StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, .25f);
+                this.Idle.onStateEnter(this.currentState, stateData);
+                this.currentState = this.Idle;
+                
+            }
+        }
+
+        //try to cancel attack if the target is out of our range
+        if(this.currentTarget != null && this.range < HexSquare.hexDist(this.currentTarget.getPosition(), this.getPosition())) {
+            if (this.currentState.cancelAction()) {
+                StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, .25f);
+                this.Idle.onStateEnter(this.currentState, stateData);
+                this.currentState = this.Idle;
+            }
         }
 
         currentState.update();
     }
 
-    public void requestStateSwap(UnitActionState state) {
+    public void requestStateSwap() {
         StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, -1f);
         if(this.currentTarget == null) {
-            state.swapStates(this.Idle, stateData);
+            this.currentState.swapStates(this.Idle, stateData);
+            this.currentState = this.Idle;
         } else if(this.canReachTarget()) {
             stateData.flt = this.attackSpeedCalculator.calculate(); //give attack speed into attack
-            state.swapStates(this.Attack, stateData);
+            this.currentState.swapStates(this.Attack, stateData);
+            this.currentState = this.Attack;
         } else {
             stateData.sq = this.manager.requestRoute(this, this.currentTarget);
-            state.swapStates(this.Walk, stateData);
+            this.currentState.swapStates(this.Walk, stateData);
+            this.currentState = this.Walk;
         }
     }
 

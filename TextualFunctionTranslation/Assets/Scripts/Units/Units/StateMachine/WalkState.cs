@@ -17,7 +17,7 @@ public class WalkState : UnitActionState
         this.rotFrames = CombatScheduler.timeToTicks(GlobalData.TimeTurn);
     }
 
-    protected override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
+    public override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
         this.target = data.unit;
         this.walkTo = data.sq;
 

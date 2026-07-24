@@ -29,7 +29,7 @@ public class AttackState : UnitActionState
         this.minSwingFrames = CombatScheduler.timeToTicks(GlobalData.TimeMinWindup);
     }
 
-    protected override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
+    public override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
         this.target = data.unit;
         float ats = data.flt;
 
@@ -49,11 +49,13 @@ public class AttackState : UnitActionState
         }
     }
 
-    public override void cancelAction() {
+    public override bool cancelAction() {
         if(this.attackStage == AttackStage.Windup || this.attackStage == AttackStage.Cooldown) {
             this.onStateExit(); //force quit the coroutine
             //TODO: stun particles?
         }
+
+        return true;
     }
 
     public override void onStateExit() {
