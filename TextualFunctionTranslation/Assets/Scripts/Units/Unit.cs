@@ -42,6 +42,7 @@ public abstract class Unit : MonoBehaviour
     [Header ("Stats")]
     [SerializeField] private StarStats health;
     [SerializeField] private StarStats damage;
+    [SerializeField] private int attackSpeed = 1; //IDEA: attack speed is calculated as total attack frames / (total attack frames + attack speed)
     [SerializeField] private int range;
     [SerializeField] private string unitName;
 
@@ -142,7 +143,7 @@ public abstract class Unit : MonoBehaviour
         this.hpBar = hpBar;
         this.healthCalculator = new UnitNumericCalculator(this.health.getStat(this.starLevel));
         this.damageCalculator = new UnitNumericCalculator(this.damage.getStat(this.starLevel));
-        this.attackSpeedCalculator = new UnitNumericCalculator(1.0f); //TODO: make this stat real
+        this.attackSpeedCalculator = new UnitNumericCalculator((float)this.attackSpeed); //TODO: make this stat real
 
         this.currentHealth = this.healthCalculator.calculate();
 

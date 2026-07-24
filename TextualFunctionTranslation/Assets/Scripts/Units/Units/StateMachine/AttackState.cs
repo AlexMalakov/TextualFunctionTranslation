@@ -14,18 +14,31 @@ public class AttackState : UnitActionState
     private int windupFrames;
     private int swingFrames;
 
+    private int attackSpeedCooldownFrames;
+    private int attackSpeedWindupFrames;
+
+    private int minSwingFrames;
+
     private Coroutine windupCoroutine;
 
     public AttackState(float cooldownTime, float windupTime) : base() {
         this.cooldownFrames = CombatScheduler.timeToTicks(cooldownTime);
         this.windupFrames = CombatScheduler.timeToTicks(windupTime);
         this.swingFrames = CombatScheduler.timeToTicks(GlobalData.TimeSwing);
+
+        this.minSwingFrames = CombatScheduler.timeToTicks(GlobalData.TimeMinWindup);
     }
 
     protected override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
-        //TODO: set cooldown time and windup time based on attackspeed dynamically
         this.target = data.unit;
-        float attackSpeedMultiplier = data.flt; //TODO: use me
+        float ats = data.flt;
+
+        //be careful of the logic here
+        float wind = (windupFrames / (ats + windupFrames));
+        this.attackSpeedWindupFrames = (int)Mathf.Max(minSwingFrames, windupFrames * wind);
+
+        float cool = (cooldownFrames / (ats + cooldownFrames));
+        this.attackSpeedCooldownFrames = (int)(cooldownFrames * cool);
 
         if(stateFrom is AttackState) {
             this.attackStage = AttackStage.Cooldown;
@@ -68,7 +81,7 @@ public class AttackState : UnitActionState
     }
 
     private void runCooldown() {
-        this.frameLockout = this.cooldownFrames;
+        this.frameLockout = this.attackSpeedCooldownFrames;
     }
 
     private Quaternion getTargetRot() {
@@ -79,12 +92,12 @@ public class AttackState : UnitActionState
     }
 
     private IEnumerator runWindup() {
-        this.frameLockout = this.windupFrames;
+        this.frameLockout = this.attackSpeedWindupFrames;
         this.unitOwner.triggerAnimation("windup");
 
         while(this.frameLockout > 0 && this.attackStage == AttackStage.Windup) {
             //TODO: check if attack is cancel
-            float ratio = (this.windupFrames - this.frameLockout) / (float)this.windupFrames;
+            float ratio = (this.attackSpeedWindupFrames - this.frameLockout) / (float)this.attackSpeedWindupFrames;
             this.unitOwner.transform.rotation = Quaternion.Slerp(this.unitOwner.transform.rotation, getTargetRot(), ratio);
             yield return null;
         }
