@@ -12,9 +12,9 @@ public class WalkState : UnitActionState
     private Quaternion targetRot;
     private bool rotAsigned = false;
 
-    public WalkState(float walkTime, float rotTime) : base() {
-        this.walkFrames = CombatScheduler.timeToTicks(walkTime);
-        this.rotFrames = CombatScheduler.timeToTicks(rotTime);
+    public WalkState() : base() {
+        this.walkFrames = CombatScheduler.timeToTicks(GlobalData.TimeWalk);
+        this.rotFrames = CombatScheduler.timeToTicks(GlobalData.TimeTurn);
     }
 
     protected override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {

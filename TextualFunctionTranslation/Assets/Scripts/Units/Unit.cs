@@ -42,12 +42,13 @@ public abstract class Unit : MonoBehaviour
     [Header ("Stats")]
     [SerializeField] private StarStats health;
     [SerializeField] private StarStats damage;
-    [SerializeField] private float attackWindup;
-    [SerializeField] private float timeBetweenAttack;
-    [SerializeField] private float timeBetweenMove;
     [SerializeField] private int range;
     [SerializeField] private string unitName;
 
+    [Header ("State times")]
+    [SerializeField] private float attackWindupTime;
+    [SerializeField] private float attackCooldownTime;
+    
     [Header ("Traits")]
     [SerializeField] private string roleTraitName;
     [SerializeField] private string classTraitName;
@@ -77,7 +78,17 @@ public abstract class Unit : MonoBehaviour
     private Unit currentTarget;
     private HexSquare curPosition; //TODO: INIT ME?
 
+    //states
+    UnitActionState Walk;
+    UnitActionState Idle;
+    UnitActionState Attack;
     private UnitActionState currentState;
+
+    public void Start() {
+        this.Walk = new WalkState();
+        this.Idle = new IdleState();
+        this.Attack = new AttackState(this.attackCooldownTime, this.attackWindupTime);
+    }
 
     public Unit setBlueprint(UnitBlueprint blueprint, CombatManager manager) {
         this.manager = manager;
@@ -146,12 +157,15 @@ public abstract class Unit : MonoBehaviour
 
         if(this.currentState != null && this.isDead()) {
             //TODO: cancel state, and end
+            this.currentState.onStateExit();
+            this.currentState = null;
             return;
         } else if(this.isDead()) {
             return;
         }
 
         //if we have no target or our target is dead: we want a new target
+        //if we are attacking and our target moves out of range, we cancel attack as well
         // idle/stun  - behave as is
         // walk - behave as is
         // attack: cancel attack
@@ -167,12 +181,13 @@ public abstract class Unit : MonoBehaviour
     public void requestStateSwap(UnitActionState state) {
         StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, -1f);
         if(this.currentTarget == null) {
-            state.swapStates(IDLE, stateData);
+            state.swapStates(this.Idle, stateData);
         } else if(this.canReachTarget()) {
-            state.swapStates(ATTACK, stateData);
+            stateData.flt = this.attackSpeedCalculator.calculate(); //give attack speed into attack
+            state.swapStates(this.Attack, stateData);
         } else {
-            stateData.sq = this.unitOwner.manager.requestRoute(this.unitOwner, this.target);
-            state.swapStates(WALK, stateData);
+            stateData.sq = this.manager.requestRoute(this, this.currentTarget);
+            state.swapStates(this.Walk, stateData);
         }
     }
 
@@ -286,7 +301,7 @@ public abstract class Unit : MonoBehaviour
         this.combatLog.logEvent(new CombatEvent(source, this, CombatEventType.Buff));
         switch(stat) {
             case BuffableStats.Health:
-                this.healthCalculator.addOperation(operation);
+                this.healthCalculator.addOperation(operation); //TODO: scale hp bar by max hp
                 break;
             case BuffableStats.Damage:
                 this.damageCalculator.addOperation(operation);

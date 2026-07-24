@@ -16,10 +16,10 @@ public class AttackState : UnitActionState
 
     private Coroutine windupCoroutine;
 
-    public AttackState(float cooldownTime, float windupTime, float swingTime) : base() {
+    public AttackState(float cooldownTime, float windupTime) : base() {
         this.cooldownFrames = CombatScheduler.timeToTicks(cooldownTime);
         this.windupFrames = CombatScheduler.timeToTicks(windupTime);
-        this.swingFrames = CombatScheduler.timeToTicks(swingTime);
+        this.swingFrames = CombatScheduler.timeToTicks(GlobalData.TimeSwing);
     }
 
     protected override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
