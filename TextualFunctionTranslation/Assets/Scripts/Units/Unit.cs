@@ -169,7 +169,7 @@ public abstract class Unit : MonoBehaviour
         }
 
         //if we have no target or our target is dead: we want a new target and we cancel our current action
-        if(this.currentTarget == null || this.currentTarget.isDead() /* || distance(this, currentTarget) > range*/) {
+        if(this.currentTarget == null || this.currentTarget.isDead()) {
             this.currentTarget = this.manager.requestAttackTarget(this, this.currentTarget);
             if (this.currentState.cancelAction()) {
                 StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, .25f);
@@ -201,6 +201,10 @@ public abstract class Unit : MonoBehaviour
             this.currentState.swapStates(this.Attack, stateData);
             this.currentState = this.Attack;
         } else {
+            if(HexSquare.hexDist(this.currentTarget.getPosition(), this.getPosition()) > this.range) {
+                Unit newPossibleTarget = this.manager.requestAttackTarget(this, this.currentTarget);
+            }
+
             stateData.sq = this.manager.requestRoute(this, this.currentTarget);
             this.currentState.swapStates(this.Walk, stateData);
             this.currentState = this.Walk;

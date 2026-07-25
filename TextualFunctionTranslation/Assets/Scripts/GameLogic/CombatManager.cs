@@ -95,35 +95,27 @@ public class CombatManager : MonoBehaviour
     }
 
     public Unit requestAttackTarget(Unit attacker, Unit previousTarget) {
-        Func<HexSquare, bool> getAttackableSquares = (HexSquare s) => {
-            return s.getUnit() != null
-                //TODO: && can reach that unit?
-                && !sameOwner(attacker, s.getUnit());
-        };
-
-        List<HexSquare> possibleTargets = this.board.filterOperationOnSquares(getAttackableSquares);
-
         int bestTaunt = int.MinValue;
         int closestTarget = int.MaxValue;
         Unit target = null;
-        foreach(HexSquare s in possibleTargets) {
-            if(s.getUnit() == previousTarget) {
-                return previousTarget;
-            }
+        int prevDist = int.MaxValue;
 
-            if(HexSquare.hexDist(attacker.getPosition(), s) < closestTarget) {
-                target = s.getUnit();
-                bestTaunt = target.getTaunt();
-                closestTarget = HexSquare.hexDist(attacker.getPosition(), s);
-                continue;
-            }
-            if(s.getUnit().getTaunt() > bestTaunt) {
-                target = s.getUnit();
-                bestTaunt = target.getTaunt();
+        if(previousTarget != null && !previousTarget.isDead()) {
+            target = previousTarget;
+            bestTaunt = previousTarget.getTaunt();
+            closestTarget = HexSquare.hexDist(previousTarget.getPosition(), attacker.getPosition());
+            int prevDist = closestTarget;
+        }
+
+        foreach(Unit u in this.units) {
+            int d = HexSquare.hexDist(u.getPosition(), attacker.getPosition());
+            if(!sameOwner(attacker, u) && (closestTarget > d || (closestTarget == d && bestTaunt < u.getTaunt() && d < prevDist))) {
+                target = u;
+                bestTaunt = u.getTaunt();
+                closestTarget = d;
             }
         }
 
-        //TODO: handle might return null?
         return target;
     }
 

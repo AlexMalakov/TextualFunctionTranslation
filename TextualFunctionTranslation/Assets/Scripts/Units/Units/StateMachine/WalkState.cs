@@ -5,7 +5,7 @@ using UnityEngine;
 public class WalkState : UnitActionState
 {
     private int walkFrames;
-    private int rotFrames;
+    private float rotTime; //doesn't need to be in frames it's purely cosmetic
     private HexSquare walkTo;
     private Coroutine shwalkin;
     private Coroutine shrotatin;
@@ -14,7 +14,7 @@ public class WalkState : UnitActionState
 
     public WalkState(Unit u) : base(u) {
         this.walkFrames = CombatScheduler.timeToTicks(GlobalData.TimeWalk);
-        this.rotFrames = CombatScheduler.timeToTicks(GlobalData.TimeTurn);
+        this.rotTime = GlobalData.TimeTurn;
     }
 
     public override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
@@ -83,10 +83,11 @@ public class WalkState : UnitActionState
         this.targetRot = Quaternion.LookRotation(direction);
         this.rotAsigned = true;
 
-        while(this.frameLockout > 0) {
-            float elap = (this.rotFrames - this.frameLockout)/(float)this.rotFrames;
+        float elapsed = 0f;
 
-            this.unitOwner.transform.rotation = Quaternion.Slerp(startRot, this.targetRot, elap);
+        while(elapsed < this.rotTime) {
+            this.unitOwner.transform.rotation = Quaternion.Slerp(startRot, this.targetRot, elapsed/this.rotTime);
+            elapsed += Time.deltaTime;
             yield return null;
         }
 
