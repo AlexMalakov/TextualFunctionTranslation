@@ -9,6 +9,10 @@ public abstract class UnitActionState : MonoBehaviour
     protected Unit unitOwner;
     protected Unit target;
 
+    public UnitActionState(Unit u) {
+        this.unitOwner = u;
+    }
+
     public abstract void onStateEnter(UnitActionState stateFrom, StateDataContainer data); //if the target changes then the state should abort no?
 
     public abstract void onStateExit();

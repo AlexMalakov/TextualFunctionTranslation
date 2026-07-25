@@ -12,7 +12,7 @@ public class WalkState : UnitActionState
     private Quaternion targetRot;
     private bool rotAsigned = false;
 
-    public WalkState() : base() {
+    public WalkState(Unit u) : base(u) {
         this.walkFrames = CombatScheduler.timeToTicks(GlobalData.TimeWalk);
         this.rotFrames = CombatScheduler.timeToTicks(GlobalData.TimeTurn);
     }

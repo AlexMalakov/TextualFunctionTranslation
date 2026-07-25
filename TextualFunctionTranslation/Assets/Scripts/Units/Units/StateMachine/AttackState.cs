@@ -21,7 +21,7 @@ public class AttackState : UnitActionState
 
     private Coroutine windupCoroutine;
 
-    public AttackState(float cooldownTime, float windupTime) : base() {
+    public AttackState(Unit u, float cooldownTime, float windupTime) : base(u) {
         this.cooldownFrames = CombatScheduler.timeToTicks(cooldownTime);
         this.windupFrames = CombatScheduler.timeToTicks(windupTime);
         this.swingFrames = CombatScheduler.timeToTicks(GlobalData.TimeSwing);

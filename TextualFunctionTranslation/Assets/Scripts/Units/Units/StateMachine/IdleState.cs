@@ -6,7 +6,7 @@ public class IdleState : UnitActionState
 {
     private int idleFrames;
 
-    public IdleState() : base() {
+    public IdleState(Unit u) : base(u) {
         this.idleFrames = CombatScheduler.timeToTicks(GlobalData.TimeIdle);
     }
 

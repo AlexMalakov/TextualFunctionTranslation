@@ -22,7 +22,7 @@ public abstract class Trait : MonoBehaviour
         //TODO: ELSE DO STUFF !!!!!
     }
 
-    public void Start() {
+    public void Awake() { //I'm allowed to be an awake because I update trait widget by giving it myself, and static facts about myself
         this.tw = traitDisplay.createWidget();
         this.tw.init(this);
     }

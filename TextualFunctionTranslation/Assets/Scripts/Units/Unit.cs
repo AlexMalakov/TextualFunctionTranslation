@@ -86,9 +86,9 @@ public abstract class Unit : MonoBehaviour
     private UnitActionState currentState;
 
     public void Start() {
-        this.Walk = new WalkState();
-        this.Idle = new IdleState();
-        this.Attack = new AttackState(this.attackCooldownTime, this.attackWindupTime);
+        this.Walk = new WalkState(this);
+        this.Idle = new IdleState(this);
+        this.Attack = new AttackState(this, this.attackCooldownTime, this.attackWindupTime);
     }
 
     public Unit setBlueprint(UnitBlueprint blueprint, CombatManager manager) {
@@ -163,6 +163,9 @@ public abstract class Unit : MonoBehaviour
             return;
         } else if(this.isDead()) {
             return;
+        } else if(this.currentState == null) {
+            this.currentState = this.Idle;
+            this.requestStateSwap();
         }
 
         //if we have no target or our target is dead: we want a new target and we cancel our current action
