@@ -45,7 +45,7 @@ public class AttackState : UnitActionState
             this.runCooldown();
         } else {
             this.attackStage = AttackStage.Windup;
-            this.windupCoroutine = StartCoroutine(this.runWindup()); //TODO: this will need to get replaced by my coroutine runner gah
+            this.windupCoroutine = GlobalData.Larper.FakeStartCoroutine(new CoroutineableMethod(this.runWindup));
         }
     }
 
@@ -60,7 +60,7 @@ public class AttackState : UnitActionState
 
     public override void onStateExit() {
         if(this.windupCoroutine != null) {
-            StopCoroutine(this.windupCoroutine);
+            GlobalData.Larper.FakeStopCoroutine(this.windupCoroutine);
             this.windupCoroutine = null;
         }
 
@@ -75,7 +75,7 @@ public class AttackState : UnitActionState
     protected override void runUpdate() {
         if(this.frameLockout <= 0 && this.attackStage == AttackStage.Cooldown) {
             this.attackStage = AttackStage.Windup;
-            StartCoroutine(this.runWindup());
+            this.windupCoroutine = GlobalData.Larper.FakeStartCoroutine(new CoroutineableMethod(this.runWindup));
         } else if(this.frameLockout <= 0 && this.attackStage == AttackStage.Windup) {
             this.attackStage = AttackStage.Swing;
             this.runSwing();

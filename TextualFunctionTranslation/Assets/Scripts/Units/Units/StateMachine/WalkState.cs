@@ -23,9 +23,9 @@ public class WalkState : UnitActionState
 
         if(this.walkTo != null && this.walkTo.isSquare()) {
             this.unitOwner.placeUnitOnSquare(this.walkTo, false);
-            this.frameLockout = this.walkFrames;
-            shwalkin = StartCoroutine(walkToTarget());
-            shrotatin = StartCoroutine(rotateToTarget()); //TODO: stupid chud coroutine
+            this.frameLockout = this.walkFrames;  
+            shwalkin = GlobalData.Larper.FakeStartCoroutine(new CoroutineableMethod(this.walkToTarget));
+            shrotatin = GlobalData.Larper.FakeStartCoroutine(new CoroutineableMethod(this.rotateToTarget));
             this.unitOwner.triggerAnimation("walk");
         }
     }
@@ -34,12 +34,12 @@ public class WalkState : UnitActionState
         this.frameLockout = 0;
 
         if(this.shwalkin != null) {
-            StopCoroutine(this.shwalkin);
+            GlobalData.Larper.FakeStopCoroutine(this.shwalkin);
             this.shwalkin = null;
         }
 
         if(this.shrotatin != null) {
-            StopCoroutine(this.shrotatin);
+            GlobalData.Larper.FakeStopCoroutine(this.shrotatin);
             this.shrotatin = null;
         }
 

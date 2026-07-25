@@ -10,11 +10,15 @@ public class GlobalData : MonoBehaviour
     public static float TimeSwing;
     public static float TimeMinWindup;
 
+    public static MonoLarper Larper;
+
     [SerializeField] float idleTime;
     [SerializeField] float walkTime;
     [SerializeField] float turnTime;
     [SerializeField] float swingTime;
     [SerializeField] float windupMinTime;
+
+    [SerializeField] MonoLarper ml; //LARP FOR ME
 
     public void Awake() {
         TimeIdle = idleTime;
@@ -22,6 +26,7 @@ public class GlobalData : MonoBehaviour
         TimeTurn = turnTime;
         TimeSwing = swingTime;
         TimeMinWindup = windupMinTime;
+        Larper = ml;
     }
 
 }

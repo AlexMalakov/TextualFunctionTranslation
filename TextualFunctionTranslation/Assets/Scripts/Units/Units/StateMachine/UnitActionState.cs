@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //this might be super overengineered
-public abstract class UnitActionState : MonoBehaviour
+public abstract class UnitActionState
 {
     protected int frameLockout;
     protected Unit unitOwner;

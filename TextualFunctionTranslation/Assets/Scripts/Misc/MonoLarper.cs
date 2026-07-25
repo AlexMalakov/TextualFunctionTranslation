@@ -41,6 +41,10 @@ public class MonoLarper : MonoBehaviour
     public Coroutine FakeStartCoroutine(CoroutineableMethod coroutineMe) {
         return StartCoroutine(coroutineMe.execute());
     }
+    
+    public void FakeStopCoroutine(Coroutine uncoroutineMe) {
+        StopCoroutine(uncoroutineMe);
+    }
 
     public GameObject FakeInstantiate(GameObject obj, Vector3 position, Quaternion quaternion) {
         return Instantiate(obj, position, quaternion);
