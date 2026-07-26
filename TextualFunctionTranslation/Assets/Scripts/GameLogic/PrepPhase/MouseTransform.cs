@@ -74,6 +74,8 @@ public class MouseTransform : MonoBehaviour
             } else if(!square && closestBench != null) {
                 succeeded = this.humanPlayer.getBench().updateBenchLayout(this.unitDragging, closestBench.getSlotNum());
             }
+        } else {
+            succeeded = true;
         }
 
 
