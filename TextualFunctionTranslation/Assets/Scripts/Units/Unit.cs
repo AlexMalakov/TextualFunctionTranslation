@@ -213,6 +213,17 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void onCombatEnd() {
+        if(!this.isDead()) {
+            float rng = Random.Range(0f, 1f);
+            if(rng < .05) {
+                this.triggerAnimation("victory_dance");
+            } else if(rng < .4) {
+                this.triggerAnimation("victory_jump");
+            } else {
+                this.triggerAnimation("victory_clap");
+            }
+        }
+        
         this.healthCalculator.wipe();
         this.damageCalculator.wipe();
         this.attackSpeedCalculator.wipe();
