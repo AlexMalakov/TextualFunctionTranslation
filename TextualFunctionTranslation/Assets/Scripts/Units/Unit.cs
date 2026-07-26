@@ -307,13 +307,13 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void onDeath() {
-        //play dying animatiom?
+        this.triggerAnimation("death");
 
         this.manager.onUnitDeath(this);
         this.curPosition.claimSquare(this, false);
 
         //careful that this isn't called more than once
-        Invoke(nameof(die), .3f);
+        Invoke(nameof(die), 2.5f);
     }
 
     private void die() {

@@ -1808,7 +1808,7 @@ MonoBehaviour:
   decisionPriority: 2
   tauntAmount: 3
   manager: {fileID: 747084477}
-  animator: {fileID: 202618908}
+  animator: {fileID: 0}
   combatLog: {fileID: 747084482}
 --- !u!1 &185472234
 GameObject:
@@ -2644,11 +2644,6 @@ PrefabInstance:
 --- !u!4 &202618907 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e569be24db3e24e578cb8bc6afd49bf8, type: 3}
-  m_PrefabInstance: {fileID: 202618906}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &202618908 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: e569be24db3e24e578cb8bc6afd49bf8, type: 3}
   m_PrefabInstance: {fileID: 202618906}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &204478044
@@ -4751,11 +4746,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e569be24db3e24e578cb8bc6afd49bf8, type: 3}
   m_PrefabInstance: {fileID: 267552203}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &267552205 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: e569be24db3e24e578cb8bc6afd49bf8, type: 3}
-  m_PrefabInstance: {fileID: 267552203}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &282012090
 Mesh:
   m_ObjectHideFlags: 0
@@ -5068,11 +5058,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 288444438}
   m_CullTransparentMesh: 1
---- !u!95 &319168106 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: e569be24db3e24e578cb8bc6afd49bf8, type: 3}
-  m_PrefabInstance: {fileID: 1873109246}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &319168107 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e569be24db3e24e578cb8bc6afd49bf8, type: 3}
@@ -5973,7 +5958,7 @@ MonoBehaviour:
   decisionPriority: 2
   tauntAmount: 3
   manager: {fileID: 747084477}
-  animator: {fileID: 1978817481}
+  animator: {fileID: 0}
   combatLog: {fileID: 747084482}
 --- !u!1 &705507993
 GameObject:
@@ -10846,11 +10831,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e569be24db3e24e578cb8bc6afd49bf8, type: 3}
---- !u!95 &1076278905 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: e569be24db3e24e578cb8bc6afd49bf8, type: 3}
-  m_PrefabInstance: {fileID: 1076278904}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1076278906 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e569be24db3e24e578cb8bc6afd49bf8, type: 3}
@@ -13476,7 +13456,7 @@ MonoBehaviour:
   decisionPriority: 2
   tauntAmount: 3
   manager: {fileID: 747084477}
-  animator: {fileID: 319168106}
+  animator: {fileID: 0}
   combatLog: {fileID: 747084482}
 --- !u!1 &1425534195
 GameObject:
@@ -14130,7 +14110,7 @@ MonoBehaviour:
   decisionPriority: 2
   tauntAmount: 3
   manager: {fileID: 747084477}
-  animator: {fileID: 1857373296}
+  animator: {fileID: 0}
   combatLog: {fileID: 747084482}
 --- !u!4 &1773091191
 Transform:
@@ -15404,7 +15384,7 @@ MonoBehaviour:
   decisionPriority: 2
   tauntAmount: 3
   manager: {fileID: 747084477}
-  animator: {fileID: 1076278905}
+  animator: {fileID: 0}
   combatLog: {fileID: 747084482}
 --- !u!4 &1843151055
 Transform:
@@ -16122,11 +16102,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1981082359}
   m_SourcePrefab: {fileID: 100100000, guid: e569be24db3e24e578cb8bc6afd49bf8, type: 3}
---- !u!95 &1857373296 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: e569be24db3e24e578cb8bc6afd49bf8, type: 3}
-  m_PrefabInstance: {fileID: 1857373295}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1857373297 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e569be24db3e24e578cb8bc6afd49bf8, type: 3}
@@ -18080,11 +18055,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e569be24db3e24e578cb8bc6afd49bf8, type: 3}
   m_PrefabInstance: {fileID: 1978817479}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &1978817481 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: e569be24db3e24e578cb8bc6afd49bf8, type: 3}
-  m_PrefabInstance: {fileID: 1978817479}
-  m_PrefabAsset: {fileID: 0}
 --- !u!65 &1978817482
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19137,7 +19107,7 @@ MonoBehaviour:
   decisionPriority: 2
   tauntAmount: 3
   manager: {fileID: 747084477}
-  animator: {fileID: 267552205}
+  animator: {fileID: 0}
   combatLog: {fileID: 747084482}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
