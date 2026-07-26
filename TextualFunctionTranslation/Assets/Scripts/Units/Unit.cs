@@ -201,8 +201,9 @@ public abstract class Unit : MonoBehaviour
             this.currentState.swapStates(this.Attack, stateData);
             this.currentState = this.Attack;
         } else {
-            if(HexSquare.hexDist(this.currentTarget.getPosition(), this.getPosition()) > this.range) {
-                Unit newPossibleTarget = this.manager.requestAttackTarget(this, this.currentTarget);
+            Unit newPossibleTarget = this.manager.requestAttackTarget(this, this.currentTarget);
+            if(newPossibleTarget != null) {
+                this.currentTarget = newPossibleTarget; //target reassigned :'(
             }
 
             stateData.sq = this.manager.requestRoute(this, this.currentTarget);

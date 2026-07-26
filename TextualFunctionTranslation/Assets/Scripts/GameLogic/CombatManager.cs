@@ -76,7 +76,8 @@ public class CombatManager : MonoBehaviour
     //check each unit every frame
     public void runAttackFrame() {
         foreach(Unit u in this.units) {
-            u.triggerUpdate(this);
+            if(!u.isDead())
+                u.triggerUpdate(this);
         }
     }
 
@@ -104,10 +105,12 @@ public class CombatManager : MonoBehaviour
             target = previousTarget;
             bestTaunt = previousTarget.getTaunt();
             closestTarget = HexSquare.hexDist(previousTarget.getPosition(), attacker.getPosition());
-            int prevDist = closestTarget;
+            prevDist = closestTarget;
         }
 
         foreach(Unit u in this.units) {
+            if(u.isDead())
+                continue;
             int d = HexSquare.hexDist(u.getPosition(), attacker.getPosition());
             if(!sameOwner(attacker, u) && (closestTarget > d || (closestTarget == d && bestTaunt < u.getTaunt() && d < prevDist))) {
                 target = u;
@@ -137,7 +140,6 @@ public class CombatManager : MonoBehaviour
         } else {
             throw new Exception("im dead but not in any list something is wrong");
         }
-        units.Remove(u);
     }
 
     public void onCombatOver() {

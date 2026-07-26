@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator runAnimations(string cypherText) {
         yield return this.combatManager.runCypherAnimation();
+        yield return new WaitForSeconds(GlobalData.BetweenRevealDuration);
         yield return this.combatManager.runSquaresReveal();
         this.rvm.displayReview();
     }
