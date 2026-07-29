@@ -24,6 +24,8 @@ public class UnitMovementManager : MonoBehaviour
 
         Vector3 startPos = u.transform.position;
 
+        dest.y = startPos.y;
+
         float elapsed = 0f;
         float totalDur = !snap ? unitFastTime : (dest - startPos).magnitude / this.unitDragSnapSpeed;
 

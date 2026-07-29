@@ -6,6 +6,8 @@ public class CameraRayCast : MonoBehaviour
 {
     [SerializeField] private MouseTransform mt;
 
+    private bool toggle = false;
+
     public void checkUserInteraction() {
         if (Input.GetMouseButtonDown(0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -13,6 +15,7 @@ public class CameraRayCast : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit)) {
                 if (hit.collider.gameObject.GetComponentInParent<Unit>() != null) {
+                    toggle = true;
                     this.onUnitPressed(hit.collider.gameObject.GetComponentInParent<Unit>());
                 }
             }
@@ -21,8 +24,9 @@ public class CameraRayCast : MonoBehaviour
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit)) {
-                if (hit.collider.gameObject.GetComponentInParent<Unit>() != null) {
+                if (toggle) {
                     this.releaseUnit();
+                    toggle = false;
                 }
             }
         }

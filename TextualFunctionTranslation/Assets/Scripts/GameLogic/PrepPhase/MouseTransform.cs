@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MouseTransform : MonoBehaviour
 {
-    [SerializeField] private float liftHeight = 0.5f;
     [SerializeField] private float snapRadius = 1f;
     [SerializeField] private Player humanPlayer;
     private Plane dragPlane;
@@ -19,6 +18,8 @@ public class MouseTransform : MonoBehaviour
         if(!this.humanPlayer.ownsUnit(u)) {
             return;
         }
+
+        u.triggerAnimation("falling");
         this.humanPlayer.getUnitMoveManager().overrideMovement(u);
 
         this.initialPos = u.transform.position;
@@ -32,7 +33,7 @@ public class MouseTransform : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (dragPlane.Raycast(ray, out float enter)) {
             Vector3 point = ray.GetPoint(enter);
-            point.y += liftHeight;
+            point.y = this.initialPos.y;
             this.transform.position = point;
             this.unitDragging.transform.position = point;
         }
@@ -44,6 +45,7 @@ public class MouseTransform : MonoBehaviour
         //snapping logicL
         if(this.unitDragging != null) {
             Collider[] hits = Physics.OverlapSphere(this.transform.position, this.snapRadius);
+            this.unitDragging.triggerAnimation("landing");
 
             float closestObj = float.MaxValue;
             BenchSlot closestBench = null;

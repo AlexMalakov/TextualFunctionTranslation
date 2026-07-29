@@ -56,7 +56,7 @@ public abstract class Trait : MonoBehaviour
     //W polymorphism
     public virtual void runSquareReveal() {}
     public virtual void resetRevealedSquares() {}
-    public virtual void runCypher(char[] curCypherText) {}
+    public virtual char[] runCypher(char[] curCypherText) {return curCypherText;}
 
     public void registerUnit(bool addingUnit) {
         if(addingUnit)

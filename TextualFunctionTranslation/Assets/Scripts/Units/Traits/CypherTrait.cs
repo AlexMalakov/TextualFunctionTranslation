@@ -15,7 +15,7 @@ public class CharacterTransformation {
         char t = to.getCharValue();
         char f = from.getCharValue();
         for(int i = 0; i < cypherText.Length; i++) {
-            if (t == cypherText[i]) {
+            if (char.ToLower(t) == char.ToLower(cypherText[i])) {
                 outputArr[i] = f;
             }
         }
@@ -30,20 +30,27 @@ public abstract class CypherTrait : Trait
         this.cypher.AddRange(tr);
     }
 
-    public override void runCypher(char[] curCypherText) {
+    public override char[] runCypher(char[] curCypherText) {
         char[] newCypherText = new char[curCypherText.Length];
 
         foreach(CharacterTransformation ct in this.cypher) {
             ct.apply(newCypherText, curCypherText);
         }
 
+        int copy_count = 0;
+        int preserved = 0;
         for(int i = 0; i < curCypherText.Length; i++) {
-            if (newCypherText[i] != '\0') {
+            
+            if (newCypherText[i] == '\0') {
                 newCypherText[i] = curCypherText[i]; //if no transformation applied, then it's just identity
+                copy_count++;
+            } else {
+                preserved++;
             }
         }
-
+        
         this.cypher = new List<CharacterTransformation>();
+        return newCypherText;
     }
 }
 

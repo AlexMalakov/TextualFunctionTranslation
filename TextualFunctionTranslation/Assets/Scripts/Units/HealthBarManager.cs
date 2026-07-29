@@ -17,7 +17,7 @@ public class HealthBarManager : MonoBehaviour
     private Transform target;
     private Coroutine chipRoutine;
 
-    public void init(float maxHealth, Transform target, Transform canvasParent) {
+    public void init(float maxHealth, Transform target, Transform canvasParent) { //TODO: chunks to represent health
         this.transform.parent = canvasParent;
         this.currentHealth = maxHealth;
         this.maxHealth = maxHealth;
@@ -38,6 +38,18 @@ public class HealthBarManager : MonoBehaviour
             StopCoroutine(chipRoutine);
 
         chipRoutine = StartCoroutine(ChipDamage(targetFill));
+    }
+
+    public void updateMaxHealth(float newMaxHealth) {
+        float delta = newMaxHealth - this.maxHealth;
+        this.maxHealth = newMaxHealth;
+        if(delta > 0) {
+            this.currentHealth += delta;
+        }
+        this.currentHealth = Mathf.Min(this.currentHealth, this.maxHealth);
+
+        damageFill.fillAmount = this.currentHealth / this.maxHealth;
+        healthFill.fillAmount = this.currentHealth / this.maxHealth;
     }
 
     private IEnumerator ChipDamage(float targetFill) {

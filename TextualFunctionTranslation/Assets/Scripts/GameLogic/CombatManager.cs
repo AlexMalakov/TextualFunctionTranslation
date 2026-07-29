@@ -173,11 +173,11 @@ public class CombatManager : MonoBehaviour
 
         //TO CHECK: make sure this is same order as animations are
         foreach(Trait t in this.player.getUnitLayout().getActiveTraits().OrderBy(t => t.getTraitName())) {
-            t.runCypher(cypherArray);
+            cypherArray = t.runCypher(cypherArray);
         }
         
         foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits().OrderByDescending(t => t.getTraitName())) {
-            t.runCypher(cypherArray);
+            cypherArray = t.runCypher(cypherArray);
         }
         
         return new string(cypherArray);
@@ -209,5 +209,9 @@ public class CombatManager : MonoBehaviour
             u.getRoleTrait().preCombatFinal(u);
             u.getClassTrait().preCombatFinal(u);
         }
+    }
+
+    public void resetToPostCombat() {
+        
     }
 }

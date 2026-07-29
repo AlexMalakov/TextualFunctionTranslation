@@ -122,7 +122,7 @@ public class HexSquare : MonoBehaviour
     }
 
     public void assignChar(char c) {
-        //TODO: use me
+        this.characterValue = c;
         this.text.text = c + "";
     }
 

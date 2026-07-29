@@ -77,7 +77,7 @@ public abstract class Unit : MonoBehaviour
     private float currentHealth;
 
     private Unit currentTarget;
-    private HexSquare curPosition; //TODO: INIT ME?
+    private HexSquare curPosition;
 
     //states
     UnitActionState Walk;
@@ -139,17 +139,19 @@ public abstract class Unit : MonoBehaviour
         return this.classTrait;
     }
 
-    public void initUnit(HexSquare square, HealthBarManager hpBar, Transform hpCanvas) {
+    public void initUnit(HexSquare square, HealthBarManager hpBar, Transform hpCanvas) { //NOTE: this is called both at the start of prep and end of prep
+        if(this.hpBar != null) {
+            this.hpBar.onDeath();
+        }
         this.hpBar = hpBar;
         this.healthCalculator = new UnitNumericCalculator(this.health.getStat(this.starLevel));
         this.damageCalculator = new UnitNumericCalculator(this.damage.getStat(this.starLevel));
-        this.attackSpeedCalculator = new UnitNumericCalculator((float)this.attackSpeed); //TODO: make this stat real
+        this.attackSpeedCalculator = new UnitNumericCalculator((float)this.attackSpeed);
 
         this.currentHealth = this.healthCalculator.calculate();
 
         this.currentTarget = null;
 
-        //TODO: this wont reflect the post buffed value
         this.hpBar.init(this.currentHealth, this.transform, hpCanvas);
         this.placeUnitOnSquare(square, true);
     }
@@ -222,6 +224,8 @@ public abstract class Unit : MonoBehaviour
             } else {
                 this.triggerAnimation("victory_clap");
             }
+            this.hpBar.onDeath();
+            this.hpBar = null;
         }
         
         this.healthCalculator.wipe();
@@ -318,6 +322,7 @@ public abstract class Unit : MonoBehaviour
 
     private void die() {
         this.hpBar.onDeath();
+        this.hpBar = null;
         this.gameObject.SetActive(false);
     }
 
@@ -333,7 +338,12 @@ public abstract class Unit : MonoBehaviour
         this.combatLog.logEvent(new CombatEvent(source, this, CombatEventType.Buff));
         switch(stat) {
             case BuffableStats.Health:
-                this.healthCalculator.addOperation(operation); //TODO: scale hp bar by max hp
+                float oldMaxHp = this.healthCalculator.calculate();
+                this.healthCalculator.addOperation(operation);
+                float newMaxHp = this.healthCalculator.calculate();
+                this.currentHealth = Mathf.Min(this.currentHealth + Mathf.Max(newMaxHp - oldMaxHp, 0), newMaxHp);
+
+                this.hpBar.updateMaxHealth(newMaxHp); //TODO: other places this is updated?
                 break;
             case BuffableStats.Damage:
                 this.damageCalculator.addOperation(operation);
