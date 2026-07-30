@@ -69,6 +69,9 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private CombatLog combatLog;
     private HealthBarManager hpBar;
 
+    [Header ("VIsual")]
+    [SerializeField] private GameObject tombstonePrefab;
+
     //[Header ("Active Stats")]
     private UnitNumericCalculator healthCalculator;
     private UnitNumericCalculator damageCalculator;
@@ -89,6 +92,9 @@ public abstract class Unit : MonoBehaviour
         this.Walk = new WalkState(this);
         this.Idle = new IdleState(this);
         this.Attack = new AttackState(this, this.attackCooldownTime, this.attackWindupTime);
+
+        this.tombstonePrefab = Instantiate(this.tombstonePrefab, this.transform.position, Quaternion.Euler(0, 180, 0));
+        this.tombstonePrefab.SetActive(false);
     }
 
     public Unit setBlueprint(UnitBlueprint blueprint, CombatManager manager) {
@@ -154,6 +160,8 @@ public abstract class Unit : MonoBehaviour
 
         this.hpBar.init(this.currentHealth, this.transform, hpCanvas);
         this.placeUnitOnSquare(square, true);
+
+        this.tombstonePrefab.SetActive(false);
     }
 
     public virtual void triggerUpdate(CombatManager manager) {
@@ -314,7 +322,7 @@ public abstract class Unit : MonoBehaviour
         this.triggerAnimation("death");
 
         this.manager.onUnitDeath(this);
-        this.curPosition.claimSquare(this, false);
+        this.unclaimSquare();
 
         //careful that this isn't called more than once
         Invoke(nameof(die), 2.5f);
@@ -352,6 +360,10 @@ public abstract class Unit : MonoBehaviour
                 this.attackSpeedCalculator.addOperation(operation);
                 break;
         }
+    }
+
+    public void rotateTo(Quaternion newRotation) {
+        this.transform.rotation = newRotation;
     }
 
     /*

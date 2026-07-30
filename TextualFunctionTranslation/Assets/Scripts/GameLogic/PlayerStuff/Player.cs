@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerUnitLayout unitLayout;
     [SerializeField] private Bench bench;
     [SerializeField] private UnitMovementManager umm;
+    [SerializeField] private Quaternion unitRotation;
 
     [SerializeField] private int unitCap;
     [SerializeField] private int money = 0;
@@ -40,9 +41,11 @@ public class Player : MonoBehaviour
         }
         else if(this.bench.canAddUnitToBench()) {
             BenchSlot unitSlot = this.bench.addUnitToBench(u); //throws exception if it fails but shouldnt since im checking for room first
+            u.rotateTo(this.getUnitRotation(true));
             StartCoroutine(this.getUnitMoveManager().dragUnitTo(u, unitSlot.transform, false));
         } else {
             //don't need to? it gets auto dragged in
+            u.rotateTo(this.getUnitRotation(false));
             this.unitLayout.addUnitFromShop(u);
         }
     }
@@ -111,5 +114,9 @@ public class Player : MonoBehaviour
 
     public int getMaxCombatUnits() {
         return this.unitCap;
+    }
+
+    public Quaternion getUnitRotation(bool bench) {
+        return bench? this.unitRotation * Quaternion.Euler(0f, 180f, 0f) : this.unitRotation;
     }
 }

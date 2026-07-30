@@ -212,6 +212,16 @@ public class CombatManager : MonoBehaviour
     }
 
     public void resetToPostCombat() {
-        
+        Dictionary<Unit, HexSquare> startingPos = this.combatLog.getInitialPositions();
+
+        foreach(Unit u in this.units) { //TODO: make sure no new units end up in combat somehow -- lock playerunit layout when not in prep phase i think
+            if(startingPos.ContainsKey(u)) {
+                u.placeUnitOnSquare(startingPos[u], true); //TODO: reset direction they're facing
+                u.rotateTo((this.isPlayerUnit(u) ? this.player : this.enemy).getUnitRotation(false));
+                u.gameObject.SetActive(true);
+            } else {
+                Debug.Log("UNKNOWN KEY FROM UNIT " + u.gameObject.name);
+            }
+        }
     }
 }

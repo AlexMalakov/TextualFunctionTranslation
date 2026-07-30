@@ -65,6 +65,7 @@ MonoBehaviour:
   manager: {fileID: 0}
   animator: {fileID: 4082669603937779970}
   combatLog: {fileID: 0}
+  tombstonePrefab: {fileID: 6022145863667552075, guid: 4e5bc33c9c3fe49ee9617739695abebb, type: 3}
 --- !u!1001 &7620684264153005203
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -80,7 +80,7 @@ public class Bench : MonoBehaviour
                 HexSquare uPos = u.getPosition();
                 u.unclaimSquare();
                 this.player.getUnitLayout().addUnitFromBench(swapper, uPos);
-                // swapper.placeUnitOnSquare(uPos, true);
+                // swapper.placeUnitOnSquare(uPos, false);
                 // StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, uPos.transform, false));
             } else {
                 Debug.Log("BENCH LAYOUT UPDATE CASE EXTERNAL");
