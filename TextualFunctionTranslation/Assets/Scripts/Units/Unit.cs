@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.CompilerServices;
 
-[System.Serializable] //TODO: animations outside of combat
+[System.Serializable]
 struct StarStats {
     public float star1Stat;
     public float star2Stat;
@@ -253,6 +253,11 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
+    //purely cosmetic on a square
+    public void fakePlaceOnSquare(HexSquare square) {
+        this.transform.position = new Vector3(square.transform.position.x, this.transform.position.y, square.transform.position.z);
+    }
+
     public void placeUnitOnBench() {
         this.unclaimSquare();
     }
@@ -343,7 +348,6 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void buffStat(BuffableStats stat, Operation operation, Unit source) {
-        this.combatLog.logEvent(new CombatEvent(source, this, CombatEventType.Buff));
         switch(stat) {
             case BuffableStats.Health:
                 float oldMaxHp = this.healthCalculator.calculate();

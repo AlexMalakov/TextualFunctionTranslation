@@ -8,6 +8,7 @@ public class ReviewManager : MonoBehaviour
     [SerializeField] private GameStateButton gameStateButton;
     [SerializeField] private CypherPopUpButton cypherButton;
     [SerializeField] private CypherTextDisplay display;
+    [SerializeField] private ResultsRaycast moviePlayer;
 
     public void onResultsStart(string txt) {
         this.gameStateButton.runResults(true);
@@ -15,17 +16,19 @@ public class ReviewManager : MonoBehaviour
     }
 
     public void handleResults() {
-
+        moviePlayer.checkUserInteraction();
     }
 
     public void onResultsEnd() {
         this.gameStateButton.runResults(false);
         this.cypherButton.setDisplay(false);
         this.display.setDisplay(false);
+        this.moviePlayer.runResults(false);
     }
 
     public void displayReview() {
         this.cypherButton.setDisplay(true);
         this.display.setDisplay(true);
+        this.moviePlayer.runResults(true);
     }
 }

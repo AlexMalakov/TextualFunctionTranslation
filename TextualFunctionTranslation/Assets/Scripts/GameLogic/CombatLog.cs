@@ -4,7 +4,6 @@ using UnityEngine;
 
 
 public enum CombatEventType {
-    Buff,
     Kill,
     Attack,
     Death,
