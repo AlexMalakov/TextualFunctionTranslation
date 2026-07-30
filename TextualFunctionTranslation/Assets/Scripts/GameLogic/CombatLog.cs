@@ -47,6 +47,7 @@ public class CombatLog : MonoBehaviour
     public void logEvent(CombatEvent ev) {
         if(ev.eventType == CombatEventType.Attack) {
             if(!this.assistList.ContainsKey(ev.source)) {
+                this.log.Add(ev);
                 this.assistList.Add(ev.source, ev.colat);
             }
         } else {

@@ -16,8 +16,6 @@ public class ResultsRaycast : MonoBehaviour
 
     private Coroutine unitMovie;
 
-
-
     public void runResults(bool active) {
         this.inResultsPhase = active;
 
@@ -45,7 +43,6 @@ public class ResultsRaycast : MonoBehaviour
     }
 
     private void endMovie() {
-        //TODO: call hide event
         if(this.unitMovie != null) {
             hideEvent(this.curFrame);
             StopCoroutine(this.unitMovie);
@@ -66,21 +63,21 @@ public class ResultsRaycast : MonoBehaviour
             this.curFrame = events[pointer];
             this.showEvent(this.curFrame);
             yield return new WaitForSeconds(GlobalData.MovieFrameDuration);
-            pointer = (pointer + 1) % events.Count;
             this.hideEvent(events[pointer]);
+            pointer = (pointer + 1) % events.Count;
         }
     }
 
     private void showEvent(CombatEvent ev) {
         switch(ev.eventType) {
             case CombatEventType.Kill:
-                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "attack", "die");
+                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "windup", "death");
                 break;
             case CombatEventType.Attack:
-                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "attack", "combat_idle");
+                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "windup", "combat_idle");
                 break;
             case CombatEventType.Death:
-                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "die", "attack");
+                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "death", "windup");
                 break;
             case CombatEventType.Survival:
                 ev.source.gameObject.SetActive(true);

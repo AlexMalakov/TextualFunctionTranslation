@@ -9,6 +9,8 @@ public class ScoutTrait : InformationTrait
     [SerializeField] private float stunDamageSmall;
     [SerializeField] private float stunDamageLarge;
 
+    [SerializeField] private float stunDuration;
+
 
     public override void onPrecombatStart() {
         this.attackedUnits = new Dictionary<Unit, List<Unit>>();
@@ -22,7 +24,7 @@ public class ScoutTrait : InformationTrait
         List<Unit> scoutsStuns = this.attackedUnits[traitHaver];
 
         if(!scoutsStuns.Contains(target)) {
-            //TODO: stun target
+            target.stunUnit(this.stunDuration);
             
             float damage = this.getNumberActive() > 2 ? this.stunDamageLarge : this.stunDamageSmall;
             target.takeDamage(damage, traitHaver);

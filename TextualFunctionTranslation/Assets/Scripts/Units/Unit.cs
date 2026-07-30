@@ -222,6 +222,12 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
+    public void stunUnit(float stunDuration) {
+        StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, stunDuration);
+        this.currentState.swapStates(this.Idle, stateData);
+        this.currentState = this.Idle;
+    }
+
     public void onCombatEnd() {
         if(!this.isDead()) {
             float rng = Random.Range(0f, 1f);

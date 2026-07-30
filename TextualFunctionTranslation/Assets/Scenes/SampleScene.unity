@@ -3878,7 +3878,7 @@ PrefabInstance:
     - target: {fileID: 7782639986066558180, guid: dc33ab89a688d458e8a999ea6ef9477b, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: c1e63fc5fd69c478b9b49be5c6299d88, type: 2}
+      objectReference: {fileID: 2100000, guid: 4d071bad07ec141129a78159f73b51ed, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6099,6 +6099,7 @@ MonoBehaviour:
   gameStateButton: {fileID: 170355325}
   cypherButton: {fileID: 288444440}
   display: {fileID: 846241020}
+  moviePlayer: {fileID: 963194230}
 --- !u!114 &747084484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6119,6 +6120,7 @@ MonoBehaviour:
   squareRevealDur: 4
   cypherRevealDur: 4
   betweenRevealDur: 3
+  movieSceneDur: 2
   ml: {fileID: 747084485}
 --- !u!114 &747084485
 MonoBehaviour:
@@ -6492,6 +6494,7 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -6587,6 +6590,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mt: {fileID: 326832796}
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2856969ad98cf4114b8bc1447d90e1c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  log: {fileID: 747084482}
+  cm: {fileID: 747084477}
+  player: {fileID: 1395918876}
+  enemy: {fileID: 2012429344}
 --- !u!1 &970597214
 GameObject:
   m_ObjectHideFlags: 0
