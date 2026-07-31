@@ -13,6 +13,8 @@ public class Shop : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private List<ShopEntry> shopEntries;
     [SerializeField] private List<ShopButton> shopButtons;
+
+
     private int shopIndex = 0; //TODO: make sure on restarts this gets saved?
 
     void Start() { //sets initial entries, runs after factories have finished
