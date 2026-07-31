@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UniteEngine.UI;
+using UnityEngine.UI;
 using TMPro;
 
 public class StatusMessage : MonoBehaviour
@@ -31,7 +31,7 @@ public class StatusMessage : MonoBehaviour
         this.coroutine = StartCoroutine(runFade());
     }
 
-    private void runFade() {
+    private IEnumerator runFade() {
         this.gameObject.SetActive(true);
 
         float elapsed = 0f;

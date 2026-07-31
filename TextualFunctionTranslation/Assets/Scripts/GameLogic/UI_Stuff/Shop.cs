@@ -13,6 +13,7 @@ public class Shop : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private List<ShopEntry> shopEntries;
     [SerializeField] private List<ShopButton> shopButtons;
+    [SerializeField] private StatusMessage brokeNotifier;
 
 
     private int shopIndex = 0; //TODO: make sure on restarts this gets saved?
@@ -24,7 +25,7 @@ public class Shop : MonoBehaviour
     public void onUnitPurchased(UnitBlueprint ub) {
         if(!this.player.canPurchaseUnit(ub.unitName, ub.unitCost)) //TODO SWAP COST 
         {
-            //TODO: NOTIFY PLAYER THAT THEY ARE TOO BUM ASS POOR
+            this.brokeNotifier.displayMessage("YOU ARE TOO BROKE TO BUY THIS!");
             return;
         }
         
