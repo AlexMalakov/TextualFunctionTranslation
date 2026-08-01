@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class TraitVLayout : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private GameObject traitPrefab;
+    [SerializeField] private List<Trait> roleTraits;
+    [SerializeField] private GameObject roleParent;
+    [SerializeField] private List<Trait> classTraits;
+    [SerializeField] private GameObject classParent;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void Start() {
+        foreach(Trait t in this.roleTraits) {
+            GameObject nt = Instantiate(this.traitPrefab, this.roleParent.transform);
+            nt.GetComponent<TraitCodexButton>().init(t);
+        }
+
+        foreach(Trait t in this.classTraits) {
+            GameObject nt = Instantiate(this.traitPrefab, this.classParent.transform);
+            nt.GetComponent<TraitCodexButton>().init(t);
+        }
     }
 }

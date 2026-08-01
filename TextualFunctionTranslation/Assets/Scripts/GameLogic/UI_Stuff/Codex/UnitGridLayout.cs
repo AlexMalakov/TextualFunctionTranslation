@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class UnitGridLayout : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] private GameObject unitHolder;
+
+    public void Start()
     {
-        
+        foreach(UnitBlueprint bp in UnitFactory.getAllBlueprints()) {
+            GameObject newUnit = Instantiate(unitHolder, this.transform);
+            newUnit.GetComponent<UnitCodexButton>().init(bp);
+        }
     }
 }
