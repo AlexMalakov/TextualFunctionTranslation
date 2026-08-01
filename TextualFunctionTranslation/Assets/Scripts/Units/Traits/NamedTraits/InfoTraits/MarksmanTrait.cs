@@ -34,6 +34,11 @@ public class MarksmanTrait : InformationTrait
         return "marksman";
     }
 
+    public override string getTraitDescription() {
+        return ("The sharpest of shooters across the kingdom. Each marksman gains " + this.smallAttackGain + "/" + this.largeAttackGain
+        + " bonus attack speed after attacking 15 times, stacking infinitely.");
+    }
+
     protected override int getMinimumForActive() {
         return 2;
     }

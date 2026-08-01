@@ -131,6 +131,18 @@ public abstract class Unit : MonoBehaviour
         return this.curPosition;
     }
 
+    public float getMaxHealth(int starLevel) {
+        return this.health.getStat(starLevel);
+    }
+
+    public float getDamage(int starLevel) {
+        return this.damage.getStat(starLevel);
+    }
+
+    public float getAttackSpeed() { //TODO: calcualte as attacks per second
+        return this.attackSpeedCalculator.calculate();
+    }
+
     public Trait getRoleTrait() {
         if(!this.roleTrait) { //this unit's trait is always known. It however cannot be retrieved until the factory is done. So this method can't be called during 'AWAKE'
             this.roleTrait = TraitFactory.getTrait(this.roleTraitName, this);

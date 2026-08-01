@@ -47,6 +47,11 @@ public class AssasinsGuildTrait : CypherTrait
         return "assasins";
     }
 
+    public override string getTraitDescription() {
+        return ("A secretive assasins guild involved in all downfalls of all nobels and aristocrats in the kingdom. "
+                    + "At the start of combat jump to an unocupied square on the opponents side of the board.");
+    }
+
     protected override int getMinimumForActive() {
         return 2;
     }

@@ -89,6 +89,14 @@ public class CityWatchTrait : CypherTrait
         return "city watch";
     }
 
+    public override string getTraitDescription() {
+        return ("The reliable town guard that has been protecting the kingdom for hundreds of years. " 
+            + " Grants " + this.healthBuff + "/" + (this.healthBuff * this.fullTraitMultiplier)
+            + " health to the units in it's row on the left, and " 
+            + this.damageBuff +"/" + (this.damageBuff * this.fullTraitMultiplier) 
+            + " damage to the units on it's row on the right. The damage and health buffs are seperate but do not stack");
+    }
+
     protected override int getMinimumForActive() {
         return 2;
     }

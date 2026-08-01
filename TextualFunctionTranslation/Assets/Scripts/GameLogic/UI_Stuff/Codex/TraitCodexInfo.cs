@@ -14,7 +14,16 @@ public class TraitCodexInfo : MonoBehaviour
     
     public void showTrait(Trait t) {
         this.traitName.text = t.getTraitName();
-        this.traitBreakpoints.text = t.getTraitBreakpoints();
+
+        string text = "";
+        foreach(int teir in t.getTraitTiering()) {
+            text += teir + "/";
+        } 
+        if(text.Length > 0) {
+            text = text.Substring(0, text.Length-2);
+        }
+
+        this.traitBreakpoints.text = text;
         this.traitDescription.text = t.getTraitDescription();
 
         //TODO: trait image

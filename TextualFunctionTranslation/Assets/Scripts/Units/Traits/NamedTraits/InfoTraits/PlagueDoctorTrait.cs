@@ -25,6 +25,11 @@ public class PlagueDoctorTrait : InformationTrait
         return "doctor";
     }
 
+    public override string getTraitDescription() {
+        return ("An order of doctors who pretected the kingdom from a deadly plague, who have now been recruited to act as combat \"medics\"."
+                + " On death debuff their killer and all units in 1 square of them with" + attackSpeedLossAmount + " less attack speed. Does not stack.");
+    }
+
     protected override int getMinimumForActive() {
         return 2;
     }

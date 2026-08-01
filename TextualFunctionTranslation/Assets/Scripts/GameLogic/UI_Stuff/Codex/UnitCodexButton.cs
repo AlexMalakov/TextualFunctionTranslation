@@ -10,26 +10,26 @@ public class UnitCodexButton : MonoBehaviour
     //ok everyone say it with me "abstraction is for dorks!!!!"
     [SerializeField] private Button button;
     [SerializeField] private GameObject gridTab;
-    [SerializeField] private UnitCodeInfo uci;
+    [SerializeField] private UnitCodexInfo uci;
     [SerializeField] private TMP_Text text;
     [SerializeField] private Image image;
 
-    private Unit unit;
+    private UnitBlueprint ub;
 
     public void Awake() { //Awake because this doesn't affect other systems
         UnityEngine.UI.Button btn = button.GetComponent<UnityEngine.UI.Button>();
 		btn.onClick.AddListener(onButtonClick); //abstraction remaines for chumps
     }
 
-    public void init(Unit unit) {
-        this.unit = unit;
-        this.text.text = this.unit.getName();
+    public void init(UnitBlueprint ub) {
+        this.ub = ub;
+        this.text.text = this.ub.unitName;
         //TODO: assign trait icon
     }
 
     //mr president a sixth button script has hit the tower
     public void onButtonClick() {
         this.gridTab.SetActive(false);
-        this.uci.showUnit(this.unit);
+        this.uci.showUnit(this.ub);
     }
 }

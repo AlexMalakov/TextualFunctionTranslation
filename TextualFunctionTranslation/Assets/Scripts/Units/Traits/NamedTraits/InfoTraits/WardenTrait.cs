@@ -43,6 +43,11 @@ public class WardenTrait : InformationTrait
         return "warden";
     }
 
+    public override string getTraitDescription() {
+        return ("A brave and nobel order of knights, who pledged to protect the defenseless, and vanquish evil wherever they may find it."
+            + " Grants the two units behind it " + smallBoostAmount + "/" + largeBoostAmount + " bonus health. Does not stack.");
+    }
+
     protected override int getMinimumForActive() {
         return 2;
     }

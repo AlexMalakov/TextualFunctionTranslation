@@ -39,6 +39,11 @@ public class TrackerTrait : InformationTrait
         return "tracker";
     }
 
+    public override string getTraitDescription() { //TODO: buff?
+        return ("The kingdoms hunters, capable of following any prey for miles. Collect lenses and ___ on takedowns, "
+            + ". Can use lenses to uncover hidden energies on hexes of the battle field.");
+    }
+
     protected override int getMinimumForActive() {
         return 1;
     }

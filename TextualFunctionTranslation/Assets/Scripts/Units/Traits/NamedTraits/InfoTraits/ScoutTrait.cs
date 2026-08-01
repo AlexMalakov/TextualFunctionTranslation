@@ -38,6 +38,12 @@ public class ScoutTrait : InformationTrait
         return "scout";
     }
 
+    public override string getTraitDescription() {
+        return ("The bravest and fastest, acting as an warning system for the rest of the party. When a scout attacks a unit for the first time, "
+            + "their opponent is stunned for " + stunDuration + " seconds, and takes " + stunDamageSmall + "/" + stunDamageLarge + " damage. Units can be stunned"
+            + " ny multiple different scounts, but only once per scout.");
+    }
+
     protected override int getMinimumForActive() {
         return 2;
     }

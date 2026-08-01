@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MartyrTrait : CypherTrait
+public class TrollTrait : CypherTrait
 {
     [SerializeField] private CombatManager cm;
     [SerializeField] private float debuffAmountSmall;
@@ -51,7 +51,7 @@ public class MartyrTrait : CypherTrait
             heal = this.healPercentLarge;
         }
 
-        Operation buff = new Operation(OperationType.PostMultiply, debuff, "Martyr Debuff");
+        Operation buff = new Operation(OperationType.PostMultiply, debuff, "Troll Debuff");
 
         if(squares.Count == 1) {
             Unit u = squares[0].getUnit();
@@ -101,7 +101,15 @@ public class MartyrTrait : CypherTrait
     }
 
     public override string getTraitName() {
-        return "martyr";
+        return "troll";
+    }
+
+    public override string getTraitDescription() {
+        return ("A band of local trolls who recently discovered explosives. On death sends 6 projectile in each direction, traveling 2/3/4 hexes."
+                + " Allies hit by these projectiles heal for " + this.healPercentSmall + "/" + this.healPercent + "/" + this.healPercentLarge 
+                + " %health. Enemies hit by these projectiles take " + this.damageAmountSmall + "/" + this.damageAmount + "/" + damageAmountLarge
+                +" damage and debuffs damage by a multiplier of " + this.debuffAmountSmall + "/" + this.debuffAmount + "/" + this.debuffAmountLarge
+                + ". This debuff doesn't stack.");
     }
 
     protected override int getMinimumForActive() {

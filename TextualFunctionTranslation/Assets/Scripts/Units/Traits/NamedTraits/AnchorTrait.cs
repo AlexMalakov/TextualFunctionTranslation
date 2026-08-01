@@ -10,6 +10,10 @@ public class AnchorTrait : Trait
         return "outcast";
     }
 
+    public override string getTraitDescription() {
+        return "im not real";
+    }
+
     protected override int getMinimumForActive() {
         return 2;
     }

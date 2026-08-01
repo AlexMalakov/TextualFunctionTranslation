@@ -57,6 +57,15 @@ public class RoyalGuardsTrait : CypherTrait
         return "royal guards";
     }
 
+    public override string getTraitDescription() {
+        return ("An elite regiment of the kings own guards, and veterans of many of the kingdoms combats. Gains "
+            + healthPerStack + "/" + healthPerFullCompStack + " health and " + damagePerStack + "/" + damagePerFullCompStack
+            + " damage per stack of glory. For each succesfull combat, gain stacks carrying over into all future combats in the run. "
+            + " Gain " + this.killStackGainSmall + "/" + this.killStackGainLarge + " glory for each royal guard final blow, and "
+            + surviveStackGainSmall + "/" + surviveStackGainLarge + " glory for each surviving royal guard after a combat.");
+
+    }
+
     protected override int getMinimumForActive() {
         return 2;
     }

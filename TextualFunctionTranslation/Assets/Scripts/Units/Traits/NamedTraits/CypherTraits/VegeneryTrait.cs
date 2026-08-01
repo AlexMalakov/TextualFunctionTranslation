@@ -34,6 +34,11 @@ public class VegeneryTrait : CypherTrait
         return "vegenere";
     }
 
+    public override string getTraitDescription() {
+        return ("Brilliant inventors that have revolutionized the technology of the kingdom."
+            + " At the end of a succesfull combat recruit the left most unit in the shop from of cost.");
+    }
+
     protected override int getMinimumForActive() {
         return 2;
     }

@@ -48,6 +48,11 @@ public class DruidTrait : InformationTrait
         return "druid";
     }
 
+    public override string getTraitDescription() {
+        return ("A band of magicians in tune with the magic of the land. Spawn in ley lines on squares that give druids "
+            + statBoostAmountV + " and " + statBoostAmountV + " times more damage and health when starting combat on them.");
+    }
+
     protected override int getMinimumForActive() {
         return 2;
     }

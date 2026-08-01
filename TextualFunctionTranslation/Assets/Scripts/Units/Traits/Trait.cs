@@ -96,6 +96,7 @@ public abstract class Trait : MonoBehaviour
 
     //constructor work around cuz unity is a chud platform :(
     public abstract string getTraitName();
+    public abstract string getTraitDescription();
 
     protected abstract int getMinimumForActive();
 
@@ -112,7 +113,7 @@ royal guard 4
 artisan 3
 assasin 4
 night watch 4
-martyr 3
+goblin 3
 
 scout 4
 druid 3
@@ -124,12 +125,12 @@ plague doctor 2
 
 01 - scout | royal guard
 02 - scout | night watch
-03 - scout | martyr
+03 - scout | goblin
 04 - scout | assasin
-05 - druid | vegenery
+05 - druid | troll
 06 - druid | assasin
 07 - druid | artisan
-08 - warden | martyr
+08 - warden | goblin
 09 - warden | royal guard
 10 - warden | night watch
 11 - warden | clockmaker
@@ -138,7 +139,7 @@ plague doctor 2
 14 - marksman | clockmaker
 15 - marksman | vegenery
 16 - outcast | night watch
-17 - outcast | martyr
+17 - outcast | goblin
 18 - outcast | artisan
 19 - tracker | royal guard
 20 - tracker | assasin

@@ -36,6 +36,11 @@ public class OutcastTrait : InformationTrait
         return "outcast";
     }
 
+    public override string getTraitDescription() {
+        return ("The oddball citizens at the fringes of society. Gain " + this.healthBoost + " health, " + this.damageBoost + " damage, and" 
+                + this.attackSpeedBoost + " atttack speed when not starting combat not adjacent to any other units."); 
+    }
+
     protected override int getMinimumForActive() {
         return 2;
     }

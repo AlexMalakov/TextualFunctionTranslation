@@ -44,6 +44,11 @@ public class ClockmakersTrait : CypherTrait
         return "clockmaker";
     }
 
+    public override string getTraitDescription() {
+        return ("Talented mechanics that imbue their creations with magic to never lose the current time. Grants " 
+            + healthBoostAmount + " health to surrounding units in a 1/2 radius. Stacks from seperate clockmakers.");
+    }
+
     protected override int getMinimumForActive() {
         return 2;
     }
