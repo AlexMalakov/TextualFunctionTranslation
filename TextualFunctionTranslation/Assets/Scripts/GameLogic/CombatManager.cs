@@ -63,8 +63,7 @@ public class CombatManager : MonoBehaviour
         this.units.AddRange(this.enemy.getActiveUnits());
         livingPlayerUnits = this.player.getActiveUnits().Count;
         livingEnemyUnits = this.enemy.getActiveUnits().Count;
-        this.units.OrderBy(u => u.getDecisionPriority());//TO CHECK: is this deterministic?
-        //TODO: knob to tune: tiebreak behavior. Does player get to win ties?6
+        this.units.OrderBy(u => u.getDecisionPriority());//TODO CHECK: is this deterministic?
 
         this.placeUnitsFromLayouts();
 

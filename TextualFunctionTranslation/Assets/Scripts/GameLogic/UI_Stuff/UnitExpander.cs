@@ -13,6 +13,8 @@ public class UnitExpander : MonoBehaviour
     [SerializeField] private TraitCodexButton roleTrait;
     [SerializeField] private TraitCodexButton classTrait;
 
+    private Unit tracking;
+
 
     public void Start() {
         //unitIcon.sprite = defaultSprite;
@@ -30,27 +32,30 @@ public class UnitExpander : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit)) {
                 if (hit.collider.gameObject.GetComponentInParent<Unit>() != null) {
-                    this.assignUnit(hit.collider.gameObject.GetComponentInParent<Unit>());
+                    this.tracking = hit.collider.gameObject.GetComponentInParent<Unit>();
+                    this.refreshUnit();
                 }
             }
+        } else if(this.tracking != null) {
+            this.refreshUnit();
         }
     }
 
-    private void assignUnit(Unit u) {
+    private void refreshUnit() {
         //unitIcon.sprite = unitSprite;
         //TODO: healthbar
-        this.health_ratio.text = u.getCurHealth() + "/" + u.calcMaxHealth();
+        this.health_ratio.text = this.tracking.getCurHealth() + "/" + this.tracking.calcMaxHealth();
 
-        this.unit_stats.text = "\nDamage: " + u.calcDamage()
-                    + "\nAttack Speed: " + u.calcAttackSpeed()
-                    + "\nRange: " + u.getRange()
-                    + "\nDecision Order: " + u.getDecisionPriority()
-                    + "\nTaunt: " + u.getTaunt();
+        this.unit_stats.text = "\nDamage: " + this.tracking.calcDamage()
+                    + "\nAttack Speed: " + this.tracking.calcAttackSpeed()
+                    + "\nRange: " + this.tracking.getRange()
+                    + "\nDecision Order: " + this.tracking.getDecisionPriority()
+                    + "\nTaunt: " + this.tracking.getTaunt();
 
         this.roleTrait.gameObject.SetActive(true);
         this.classTrait.gameObject.SetActive(true);
-        this.roleTrait.init(u.getRoleTrait());
-        this.classTrait.init(u.getClassTrait());
+        this.roleTrait.init(this.tracking.getRoleTrait());
+        this.classTrait.init(this.tracking.getClassTrait());
     }
 
 

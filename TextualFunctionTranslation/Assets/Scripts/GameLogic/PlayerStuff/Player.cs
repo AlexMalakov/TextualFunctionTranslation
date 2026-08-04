@@ -6,27 +6,16 @@ using System;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private List<Unit> playersUnits;
-    [SerializeField] private PlayerUnitLayout unitLayout;
-    [SerializeField] private Bench bench;
-    [SerializeField] private UnitMovementManager umm;
+    [SerializeField] protected List<Unit> playersUnits;
+    [SerializeField] protected PlayerUnitLayout unitLayout;
     [SerializeField] private Quaternion unitRotation;
 
-    [SerializeField] private int unitCap;
-    [SerializeField] private int money = 0;
-    [SerializeField] private PlayerInfo pi;
-
-    public void init() {
+    public virtual void init() {
         this.unitLayout.initLayout();
-        this.pi.setDollars(this.money);
     }
 
     public void assignLayout(PlayerUnitLayout layout) {
         this.unitLayout = layout;
-    }
-
-    public void setUnitCap(int cap) {
-        this.unitCap = cap; //TODO: is it possible to exceed unit cap?
     }
 
     public bool canPurchaseUnit(string unitName, int unitCost) {

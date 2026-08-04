@@ -10,7 +10,7 @@ public class ShopEntry {
 
 public class Shop : MonoBehaviour
 {
-    [SerializeField] private Player player;
+    [SerializeField] private HumanPlayer player;
     [SerializeField] private List<ShopEntry> shopEntries;
     [SerializeField] private List<ShopButton> shopButtons;
     [SerializeField] private StatusMessage brokeNotifier;
