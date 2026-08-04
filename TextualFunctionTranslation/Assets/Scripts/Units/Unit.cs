@@ -143,6 +143,22 @@ public abstract class Unit : MonoBehaviour
         return this.attackSpeedCalculator.calculate();
     }
 
+    public float getCurHealth() {
+        return Mathf.Max(this.currentHealth, 0f);
+    }
+
+    public float calcMaxHealth() {
+        return this.healthCalculator.calculate();
+    }
+
+    public float calcDamage() {
+        return this.damageCalculator.calculate();
+    }
+
+    public float calcAttackSpeed() {
+        return (float) this.attackSpeedCalculator.calculate();
+    }
+
     public Trait getRoleTrait() {
         if(!this.roleTrait) { //this unit's trait is always known. It however cannot be retrieved until the factory is done. So this method can't be called during 'AWAKE'
             this.roleTrait = TraitFactory.getTrait(this.roleTraitName, this);
@@ -257,6 +273,7 @@ public abstract class Unit : MonoBehaviour
         this.healthCalculator.wipe();
         this.damageCalculator.wipe();
         this.attackSpeedCalculator.wipe();
+        this.currentHealth = this.healthCalculator.calculate();
     }
 
     public void placeUnitOnSquare(HexSquare square, bool move) {
