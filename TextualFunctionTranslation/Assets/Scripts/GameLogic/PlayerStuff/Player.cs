@@ -14,9 +14,11 @@ public class Player : MonoBehaviour
 
     [SerializeField] private int unitCap;
     [SerializeField] private int money = 0;
+    [SerializeField] private PlayerInfo pi;
 
     public void init() {
         this.unitLayout.initLayout();
+        this.pi.setDollars(this.money);
     }
 
     public void assignLayout(PlayerUnitLayout layout) {
@@ -33,6 +35,7 @@ public class Player : MonoBehaviour
 
     public void purchaseUnit(Unit u) { //TODO: Make sure unit actually arrives where it needs to
         this.money -= u.getCost();
+        this.pi.setDollars(this.money);
         this.playersUnits.Add(u);
 
         if(this.canMergeUnit(u.getName())) {
@@ -84,6 +87,7 @@ public class Player : MonoBehaviour
         this.playersUnits.Remove(u);
         this.bench.removeUnitFromBench(u);
         this.unitLayout.removeUnitFromLayout(u);
+        this.pi.setDollars(this.money);
         Destroy(u.gameObject);
     }
 

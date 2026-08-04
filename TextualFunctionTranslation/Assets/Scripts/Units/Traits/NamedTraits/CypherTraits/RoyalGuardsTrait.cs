@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RoyalGuardsTrait : CypherTrait
 {
+    [SerializeField] private PlayerInfo pi;
     [SerializeField] private CombatManager cm;
     [SerializeField] private float healthPerStack;
     [SerializeField] private float healthPerFullCompStack;
@@ -15,7 +16,9 @@ public class RoyalGuardsTrait : CypherTrait
     [SerializeField] private float surviveStackGainSmall = 5f;
     [SerializeField] private float surviveStackGainLarge = 8f;
     private int count = 0;
+    private int startCount = 0;
     //TODO: shouldnt persist across different runs
+    //TODO: on combat loss reset glory stacks
 
     public override void onCombatStart(Unit traitHaver){
         float amt = this.getNumberActive() > 2 ? this.count * this.healthPerFullCompStack : this.count * this.healthPerStack;
@@ -25,14 +28,18 @@ public class RoyalGuardsTrait : CypherTrait
         amt = this.getNumberActive() > 2 ? this.count * this.damagePerFullCompStack : this.count * this.damagePerStack;
         buff = new Operation(OperationType.PreAdd, amt, "royal guard damage");
         traitHaver.buffStat(BuffableStats.Damage, buff, traitHaver);
+
+        this.startCount = this.count;
     }
 
     public override void onEnemyDefeat(Unit traitHaver, Unit target){
         this.count += (int) (this.getNumberActive() > 2 ? this.killStackGainLarge : this.killStackGainSmall);
+        this.pi.setGloryStacks(this.count);
     }
 
     public override void onCombatSurvival(Unit traitHaver){
         this.count += (int) (this.getNumberActive() > 2 ? this.surviveStackGainLarge : this.surviveStackGainSmall);
+        this.pi.setGloryStacks(this.count);
     }
 
     public override void onCombatEnd(Unit traitHaver){

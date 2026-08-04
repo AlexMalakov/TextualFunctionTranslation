@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CombatManager combatManager;
     [SerializeField] private HexBoard board;
     [SerializeField] private List<CombatStage> currentLevel; 
+    [SerializeField] private PlayerInfo pi;
 
     private int currentStage = 0; //TODO: skip tutorial?
 
@@ -37,10 +38,11 @@ public class GameManager : MonoBehaviour
 
     public void onPreperationStart() {
         this.board.initBoard();
+        this.pi.setLevel(this.currentLevel[this.currentStage].getStageName());
         this.combatManager.initPlayers(
             this.currentLevel[this.currentStage].getCombatLayout(),
-            this.currentLevel[currentStage].getAlphabet(),
-            this.currentLevel[currentStage].getMaxUnits()
+            this.currentLevel[this.currentStage].getAlphabet(),
+            this.currentLevel[this.currentStage].getMaxUnits()
         );
     }
 

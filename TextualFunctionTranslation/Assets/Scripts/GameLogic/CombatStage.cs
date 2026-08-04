@@ -7,6 +7,7 @@ public class CombatStage : MonoBehaviour
     [SerializeField] private string plainTextCipher; //if you decompile this you are a poopoo head and also it won't help much brochacho
     [SerializeField] private PlayerUnitLayout opponentUnitLayout;
     [SerializeField] private int playerUnitCap;
+    [SerializeField] private string stageName;
 
     [SerializeField] string alphabetOrderingPlayer;
     [SerializeField] string alphabetOrderingEnemy;
@@ -29,5 +30,9 @@ public class CombatStage : MonoBehaviour
 
     public string getAlphabet() {
         return this.alphabetOrderingEnemy + this.alphabetOrderingPlayer;
+    }
+
+    public string getStageName() {
+        return this.stageName;
     }
 }

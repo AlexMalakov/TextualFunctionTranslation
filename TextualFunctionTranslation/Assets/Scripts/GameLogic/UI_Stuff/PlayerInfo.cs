@@ -5,12 +5,9 @@ using TMPro;
 
 public class PlayerInfo : MonoBehaviour
 {
-    [SerailizeField] private TMP_Text cur_level;
-    [SerailizeField] private TMP_Text glory_stacks;
-    [SerailizeField] private TMP_Text dollarie_doos;
-
-
-
+    [SerializeField] private TMP_Text cur_level;
+    [SerializeField] private TMP_Text glory_stacks;
+    [SerializeField] private TMP_Text dollarie_doos;
 
     public void setLevel(string level_name) {
         this.cur_level.text = level_name;

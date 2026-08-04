@@ -9094,6 +9094,7 @@ MonoBehaviour:
   board: {fileID: 558592343}
   currentLevel:
   - {fileID: 1376436484}
+  pi: {fileID: 1436576967}
   pcm: {fileID: 747084479}
   rvm: {fileID: 747084483}
 --- !u!114 &747084476
@@ -16601,6 +16602,7 @@ MonoBehaviour:
   plainTextCipher: abcdefghijklmnopqrstuvwxyz
   opponentUnitLayout: {fileID: 2012429345}
   playerUnitCap: 3
+  stageName: 
   alphabetOrderingPlayer: abcdefghijklmnopqrstuvwxyz
   alphabetOrderingEnemy: abcdefghijklmnopqrstuvwxyz
 --- !u!1 &1377811256
@@ -16788,6 +16790,7 @@ MonoBehaviour:
   unitRotation: {x: 0, y: 0, z: 0, w: 0}
   unitCap: 3
   money: 1
+  pi: {fileID: 1436576967}
 --- !u!114 &1395918877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17165,6 +17168,7 @@ GameObject:
   - component: {fileID: 1436576964}
   - component: {fileID: 1436576966}
   - component: {fileID: 1436576965}
+  - component: {fileID: 1436576967}
   m_Layer: 0
   m_Name: player bar
   m_TagString: Untagged
@@ -17230,6 +17234,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1436576963}
   m_CullTransparentMesh: 1
+--- !u!114 &1436576967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436576963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a81798d8d8f74c43b3533e25f37a7ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cur_level: {fileID: 650532086}
+  glory_stacks: {fileID: 1522308089}
+  dollarie_doos: {fileID: 1516161254}
 --- !u!1 &1438410766
 GameObject:
   m_ObjectHideFlags: 0
@@ -22046,6 +22065,7 @@ MonoBehaviour:
   unitRotation: {x: 0, y: 180, z: 0, w: 0}
   unitCap: 3
   money: 0
+  pi: {fileID: 0}
 --- !u!114 &2012429345
 MonoBehaviour:
   m_ObjectHideFlags: 0
