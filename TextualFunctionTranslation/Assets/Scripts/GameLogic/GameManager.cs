@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum GameStage {
-    preperation, combat, result
+    preperation, combat, result_loss, result_win
 }
 
 public class GameManager : MonoBehaviour
@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private HexBoard board;
     [SerializeField] private List<CombatStage> currentLevel; 
     [SerializeField] private PlayerInfo pi;
+
+    [SerializeField] private HumanPlayer player;
 
     private int currentStage = 0; //TODO: skip tutorial?
 
@@ -66,9 +68,20 @@ public class GameManager : MonoBehaviour
         this.combatSched.runNUpdates();
     }
 
+    public void restartLevel() {
+        //TODO: play you lose message
+        this.gameState = GameStage.result_loss;
+        this.onCombatEnd();
+    }
+
+    public void continueToNextLevel() {
+        this.gameState = GameStage.result_win;
+        this.onCombatEnd();
+    }
+
+
     public void onCombatEnd() {
-        this.gameState = GameStage.result;
-        this.onResultsStart();
+        this.onResultsStart(); //TODO button to reflect combat outcome
     }
 
     public void onResultsStart() {
@@ -91,9 +104,19 @@ public class GameManager : MonoBehaviour
     }
 
     public void onResultsEnd() {
-        this.rvm.onResultsEnd();
-        this.currentStage++;
-        this.gameState = GameStage.preperation;
-        this.onPreperationStart();
+        if(this.gameState == GameStage.result_win) {
+            this.rvm.onResultsEnd();
+            this.player.gainMoney(this.currentStage.getRewardMoney());
+            this.currentStage++;
+            this.gameState = GameStage.preperation;
+            this.onPreperationStart();
+        } else {
+            this.rvm.onResultsEnd();
+            this.player.loseCombat();
+            this.gameState = GameStage.preperation;
+            this.onPreperationStart();
+        }
+
+        
     }
 }

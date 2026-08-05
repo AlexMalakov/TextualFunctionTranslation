@@ -11,10 +11,16 @@ public class HumanPlayer : Player //player but has money and shit
     [SerializeField] private int money = 0;
     [SerializeField] private PlayerInfo pi;
 
+    private List<Unit> unitsCopy;
+
+    private int prevMoney = 0;
+
 
     public virtual void init() {
-        this.base.init();
+        base.init();
+        this.unitsCopy = new List<Unit>(this.playersUnits);
         this.pi.setDollars(this.money);
+        this.prevMoney = money;
     }
 
     public void setUnitCap(int cap) {
@@ -93,5 +99,17 @@ public class HumanPlayer : Player //player but has money and shit
 
     public int getMaxCombatUnits() {
         return this.unitCap;
+    }
+
+    public void loseCombat() {
+        for(int i = this.playersUnits.Count - 1; i >= 0; i--) {
+            if(!this.unitsCopy.Contains(this.playersUnits[i])) {
+                Unit pointer = this.playersUnits[i];
+                this.playersUnits.Remove(pointer);
+                pointer.destroyObject();
+            }
+        }
+        this.money = this.prevMoney;
+        this.pi.setDollars(this.money);
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 public class Bench : MonoBehaviour
 {
     [SerializeField] private List<BenchSlot> benchSlotPositions;
-    [SerializeField] private Player player;
+    [SerializeField] private HumanPlayer player;
 
     void Awake() { //Awake because this doesn't affect other systems
         for(int i = 0; i < this.benchSlotPositions.Count; i++) {

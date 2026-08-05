@@ -363,6 +363,8 @@ public abstract class Unit : MonoBehaviour
 
         this.manager.onUnitDeath(this);
         this.unclaimSquare();
+        //TODO: review unclaim square usage
+
 
         //careful that this isn't called more than once
         Invoke(nameof(die), 2.5f);
@@ -372,6 +374,18 @@ public abstract class Unit : MonoBehaviour
         this.hpBar.onDeath();
         this.hpBar = null;
         this.gameObject.SetActive(false);
+    }
+
+    public void destroyObject() {
+        if(this.hpBar != null) {
+            this.hpBar.onDeath();
+        }
+
+        if(this.curPosition != null) {
+            this.unclaimSquare();
+        }
+        
+        Destroy(this.gameObject);
     }
 
     public void mergeUnit() {

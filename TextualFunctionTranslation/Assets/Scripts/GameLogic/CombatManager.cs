@@ -7,7 +7,7 @@ using System.Linq;
 //idea: each pla
 public class CombatManager : MonoBehaviour
 {
-    [SerializeField] private Player player;
+    [SerializeField] private HumanPlayer player;
     [SerializeField] private Player enemy;
     [SerializeField] private HexBoard board;
     [SerializeField] private GameObject healthbarPrefab;
@@ -159,7 +159,11 @@ public class CombatManager : MonoBehaviour
             u.onCombatEnd();
         }
 
-        this.gameManager.onCombatEnd();
+        if(this.livingPlayerUnits <= 0) {
+            this.gameManager.restartLevel();
+        } else {
+            this.gameManager.onPlayerCombatWin();
+        }
     }
 
     public IEnumerator runSquaresReveal() {
