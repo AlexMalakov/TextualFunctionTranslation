@@ -1,0 +1,68 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+using UnityEngine.UI;
+using TMPro;
+
+[System.Serializable]
+public struct DialogueLine
+{
+    public string dialogue;
+    public string speaker;
+    public bool onTheLeft;
+}
+
+
+public class Dialogue : MonoBehaviour
+{
+    [SerializeField] private Dictionary<string, Image> nameToIcon;
+    [SerializeField] private List<DialogueLine> dialogueLines;
+    [SerializeField] private GameObject dialogueBox;
+    [SerializeField] private Image talkerSprite;
+    [SerializeField] private TMP_Text dialogue;
+
+    public void Awake() {
+        dialogueBox.SetActive(false);
+    }
+
+    private int curLine = 0;
+    private bool inDialogue = false;
+
+
+    public void startDialogue() {
+        this.inDialogue = true;
+        dialogueBox.SetActive(false);
+        this.showLine();
+    }
+
+    public void Update() {
+        if(inDialogue && Input.Input.GetKeyDown(KeyCode.Space)) {
+            this.curLine++;
+            this.showLine();
+        }
+    }
+
+    private void showLine() {
+        if(this.curLine >= this.dialogueLines.Count) {
+            this.endDialogue();
+            return;
+        }
+
+        this.dialogue.text = this.dialogueLines[this.curLine].dialogue;
+        this.talkerSprite.sprite = this.nameToIcon[this.dialogueLines[this.curLine].speaker];
+
+        if(this.dialogueLines[this.curLine].onTheLeft) {
+            this.dialogueBox.rectTransform.localScale  = new Vector3(1, 1, 1);
+        } else {
+            this.dialogueBox.rectTransform.localScale  = new Vector3(-1, 1, 1);
+        }
+    }
+
+    private void endDialogue() {
+        this.curLine = 0;
+        this.inDialogue = false;
+        this.dialogueBox.SetActive(false);
+        //TODO: notify caller that I am over
+    }
+}
