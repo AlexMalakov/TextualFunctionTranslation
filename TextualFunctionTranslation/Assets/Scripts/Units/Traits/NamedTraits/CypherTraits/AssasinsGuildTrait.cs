@@ -28,7 +28,8 @@ public class AssasinsGuildTrait : CypherTrait
         AxialCoord mirrored = traitHaver.getPosition().getCoords().getMirroredCoord();
 
         if(this.cm.getBoard().getHexAt(mirrored).getUnit() == null) {
-            //TODO: send cm to this square
+            traitHaver.placeUnitOnSquare(this.cm.getBoard().getHexAt(mirrored), false);
+            this.umm.boingTo(traitHaver, this.cm.getBoard().getHexAt(mirrored).transform.position);
             return;
         }
 
@@ -37,16 +38,15 @@ public class AssasinsGuildTrait : CypherTrait
             suspects.AddRange(this.getSquaresInRadius(this.cm.getBoard().getHexAt(mirrored), radius, this.cm.getBoard()));
             foreach(HexSquare s in suspects) {
                 if(s.getUnit() != null) {
-                    //TODO: send unit to this square
+                    traitHaver.placeUnitOnSquare(s, false);
+                    this.umm.boingTo(traitHaver, s.transform.position);
                     return;
                 }
             }
         }
     }
 
-    private void boing(HexSquare boingTo) {
-        
-    }
+
 
     public override string getTraitName() {
         return "assasins";
