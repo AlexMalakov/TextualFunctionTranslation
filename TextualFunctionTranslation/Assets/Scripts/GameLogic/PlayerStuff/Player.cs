@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
         return this.unitLayout.getActiveUnits();
     }
 
-    public PlayerUnitLayout getUnitLayout() {
+    public virtual PlayerUnitLayout getUnitLayout() {
         return this.unitLayout;
     }
 

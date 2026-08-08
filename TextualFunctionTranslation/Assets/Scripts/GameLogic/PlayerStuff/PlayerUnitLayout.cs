@@ -21,6 +21,15 @@ public class PlayerUnitLayout : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private HexBoard board;
     [SerializeField] private TraitDisplay traitDisplay;
+
+    private HumanPlayer humanPlayer;
+
+    public void Awake() {
+        //this is bad design, but unfortuantley since Im implementing mono I can't use constructor or polymorphism to get around this :(
+        if(player is HumanPlayer) {
+            this.humanPlayer = (HumanPlayer) player;
+        }
+    }
      
     //initializes the layout from starting layout, and sets up initial traits
     public void initLayout() {
@@ -76,10 +85,9 @@ public class PlayerUnitLayout : MonoBehaviour
     //return false if fails
     //this is ugly as shit but womp womp
     public bool attemptUpdateLayout(Unit u, HexSquare square) { //moves unit u inot square s
-
         //not my unit or not my destination square, then fail the movement
         if(!this.board.getPlayerSquares().Contains(square) || !this.player.ownsUnit(u) 
-            || (!this.layout.ContainsKey(u) && this.player.getMaxCombatUnits() <= this.layout.Count
+            || (!this.layout.ContainsKey(u) && this.humanPlayer.getMaxCombatUnits() <= this.layout.Count
                 && (square.getUnit() == null //we are at full capacity and trying to add another unit
                 //    || //or we are adding a unit from the shop, but maybe that's the shops responsibility to block?
                 )
@@ -98,8 +106,8 @@ public class PlayerUnitLayout : MonoBehaviour
                 
                 swapper.unclaimSquare();
 
-                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, this.layout[swapper].transform, true));
-                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, this.layout[u].transform, true));
+                StartCoroutine(this.humanPlayer.getUnitMoveManager().dragUnitTo(u, this.layout[swapper].transform, true));
+                StartCoroutine(this.humanPlayer.getUnitMoveManager().dragUnitTo(swapper, this.layout[u].transform, true));
 
                 swapper.placeUnitOnSquare(this.layout[u], false);
                 u.placeUnitOnSquare(this.layout[swapper], false);
@@ -108,7 +116,7 @@ public class PlayerUnitLayout : MonoBehaviour
                 this.layout[swapper] = currentSquare;
             } else {
                 Debug.Log("UNIT LAYOUT UPDATE CASE SHIFT");
-                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
+                StartCoroutine(this.humanPlayer.getUnitMoveManager().dragUnitTo(u, square.transform, true));
                 u.placeUnitOnSquare(square, false);
                 this.layout[u] = square;
             }
@@ -119,16 +127,16 @@ public class PlayerUnitLayout : MonoBehaviour
                 Unit swapper = square.getUnit();
                 swapper.unclaimSquare();
                 this.removeUnitFromLayout(swapper);
-                BenchSlot dest = this.player.getBench().addUnitToBench(swapper);
-                StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(swapper, dest.transform, false));
+                BenchSlot dest = this.humanPlayer.getBench().addUnitToBench(swapper);
+                StartCoroutine(this.humanPlayer.getUnitMoveManager().dragUnitTo(swapper, dest.transform, false));
             }
             
-            if(this.player.getBench().unitInBench(u)) { //unit from bench
+            if(this.humanPlayer.getBench().unitInBench(u)) { //unit from bench
                 //remove unit from the bench,
-                this.player.getBench().removeUnitFromBench(u);
+                this.humanPlayer.getBench().removeUnitFromBench(u);
 
             } //for shop, unit needs to be instantiated already
-            StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, square.transform, true));
+            StartCoroutine(this.humanPlayer.getUnitMoveManager().dragUnitTo(u, square.transform, true));
             u.placeUnitOnSquare(square, false);
             this.layout[u] = square;
             this.addTrait(u);
@@ -153,7 +161,7 @@ public class PlayerUnitLayout : MonoBehaviour
     public void addUnitFromBench(Unit u, HexSquare destination) {
         this.layout.Add(u, destination);
         this.addTrait(u);
-        StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, destination.transform, true));
+        StartCoroutine(this.humanPlayer.getUnitMoveManager().dragUnitTo(u, destination.transform, true));
         u.placeUnitOnSquare(destination, false);
         //this does not need to unclaim bench slots the bench can do that for you
     }

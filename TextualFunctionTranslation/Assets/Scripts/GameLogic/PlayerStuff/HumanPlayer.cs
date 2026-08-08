@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class HumanPlayer : Player //player but has money and shit
 {
@@ -25,6 +26,11 @@ public class HumanPlayer : Player //player but has money and shit
 
     public void setUnitCap(int cap) {
         this.unitCap = cap; //TODO: is it possible to exceed unit cap?
+    }
+
+    public void gainMoney(int payday) {
+        this.money += payday;
+        this.pi.setDollars(this.money);
     }
 
     public bool canPurchaseUnit(string unitName, int unitCost) {

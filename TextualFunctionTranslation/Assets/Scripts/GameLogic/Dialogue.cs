@@ -16,7 +16,7 @@ public struct DialogueLine
 
 public class Dialogue : MonoBehaviour
 {
-    [SerializeField] private Dictionary<string, Image> nameToIcon;
+    [SerializeField] private Dictionary<string, Sprite> nameToIcon;
     [SerializeField] private List<DialogueLine> dialogueLines;
     [SerializeField] private GameObject dialogueBox;
     [SerializeField] private Image talkerSprite;
@@ -37,7 +37,7 @@ public class Dialogue : MonoBehaviour
     }
 
     public void Update() {
-        if(inDialogue && Input.Input.GetKeyDown(KeyCode.Space)) {
+        if(inDialogue && Input.GetKeyDown(KeyCode.Space)) {
             this.curLine++;
             this.showLine();
         }

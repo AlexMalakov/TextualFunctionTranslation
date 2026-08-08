@@ -5,7 +5,7 @@ using UnityEngine;
 public class MouseTransform : MonoBehaviour
 {
     [SerializeField] private float snapRadius = 1f;
-    [SerializeField] private Player humanPlayer;
+    [SerializeField] private HumanPlayer humanPlayer;
     private Plane dragPlane;
     private Unit unitDragging;
     private Vector3 initialPos;
