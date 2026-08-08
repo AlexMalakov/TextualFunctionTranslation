@@ -39,6 +39,14 @@ public class GameManager : MonoBehaviour
     }
 
     public void onPreperationStart() {
+        if(this.currentLevel[this.currentStage].hasDialogue(false)) {
+            this.currentLevel[this.currentStage].getDialogue(false).startDialogue();
+        } else {
+            this.postPrepDialogue();
+        }
+    }
+
+    private void postPrepDialogue() {
         this.board.initBoard();
         this.pi.setLevel(this.currentLevel[this.currentStage].getStageName());
         this.combatManager.initPlayers(
@@ -85,6 +93,14 @@ public class GameManager : MonoBehaviour
     }
 
     public void onResultsStart() {
+        if(this.currentLevel[this.currentStage].hasDialogue(true)) {
+            this.currentLevel[this.currentStage].getDialogue(true).startDialogue();
+        } else {
+            this.postResultsDialogue();
+        }
+    }
+
+    private void postResultsDialogue() {
         string ciphertext = this.combatManager.encrypt(this.currentLevel[this.currentStage].getLevelCipher());
         StartCoroutine(this.runAnimationsAndSwap(ciphertext));
 
@@ -116,7 +132,13 @@ public class GameManager : MonoBehaviour
             this.gameState = GameStage.preperation;
             this.onPreperationStart();
         }
+    }
 
-        
+    public void doneYapping() {
+        if(this.gameState == GameStage.preperation) {
+            this.postPrepDialogue();
+        } else {
+            this.postResultsDialogue();
+        }
     }
 }

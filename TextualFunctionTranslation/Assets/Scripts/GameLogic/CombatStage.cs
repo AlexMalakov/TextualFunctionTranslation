@@ -10,8 +10,13 @@ public class CombatStage : MonoBehaviour
     [SerializeField] private string stageName;
     [SerializeField] private int rewardMoney;
 
-    [SerializeField] string alphabetOrderingPlayer;
-    [SerializeField] string alphabetOrderingEnemy;
+    [Header ("hex alphabets")]
+    [SerializeField] private string alphabetOrderingPlayer;
+    [SerializeField] private string alphabetOrderingEnemy;
+
+    [Header ("optional dialogue")]
+    [SerializeField] private Dialogue preStageDialogue;
+    [SerializeField] private Dialogue postStageDialogue;
 
 
     //TODO: each stage could have dialogue?
@@ -39,5 +44,13 @@ public class CombatStage : MonoBehaviour
 
     public int getRewardMoney() {
         return this.rewardMoney;
+    }
+
+    public bool hasDialogue(bool combatHappened) {
+        return (combatHappened && this.postStageDialogue != null) || (!combatHappened && this.preStageDialogue != null);
+    }
+
+    public Dialogue getDialogue(bool combatHappened) {
+        return combatHappened ? this.postStageDialogue : this.preStageDialogue;
     }
 }

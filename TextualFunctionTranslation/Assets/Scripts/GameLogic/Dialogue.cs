@@ -21,6 +21,7 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private GameObject dialogueBox;
     [SerializeField] private Image talkerSprite;
     [SerializeField] private TMP_Text dialogue;
+    [SerializeField] private GameManager gm;
 
     public void Awake() {
         dialogueBox.SetActive(false);
@@ -53,9 +54,9 @@ public class Dialogue : MonoBehaviour
         this.talkerSprite.sprite = this.nameToIcon[this.dialogueLines[this.curLine].speaker];
 
         if(this.dialogueLines[this.curLine].onTheLeft) {
-            this.dialogueBox.rectTransform.localScale  = new Vector3(1, 1, 1);
+            this.dialogueBox.GetComponent<RectTransform>().localScale  = new Vector3(1, 1, 1);
         } else {
-            this.dialogueBox.rectTransform.localScale  = new Vector3(-1, 1, 1);
+            this.dialogueBox.GetComponent<RectTransform>().localScale  = new Vector3(-1, 1, 1);
         }
     }
 
@@ -63,6 +64,6 @@ public class Dialogue : MonoBehaviour
         this.curLine = 0;
         this.inDialogue = false;
         this.dialogueBox.SetActive(false);
-        //TODO: notify caller that I am over
+        gm.doneYapping();
     }
 }
