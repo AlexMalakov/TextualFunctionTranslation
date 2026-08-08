@@ -11,6 +11,7 @@ public class HumanPlayer : Player //player but has money and shit
     [SerializeField] private int unitCap;
     [SerializeField] private int money = 0;
     [SerializeField] private PlayerInfo pi;
+    [SerializeField] private int lenseCount;
 
     private List<Unit> unitsCopy;
 
@@ -22,6 +23,7 @@ public class HumanPlayer : Player //player but has money and shit
         this.unitsCopy = new List<Unit>(this.playersUnits);
         this.pi.setDollars(this.money);
         this.prevMoney = money;
+        this.lenseCount = 0;
     }
 
     public void setUnitCap(int cap) {
@@ -117,5 +119,19 @@ public class HumanPlayer : Player //player but has money and shit
         }
         this.money = this.prevMoney;
         this.pi.setDollars(this.money);
+    }
+
+    public void gainLenses(int deltaL) {
+        if(deltaL > 0) {
+            //Little particle to show it went up
+        } else if(deltaL < 0) {
+            //Little particle to show it went down
+        }
+
+        this.lenseCount += deltaL;
+    }
+
+    public int getLenses() {
+        return this.lenseCount;
     }
 }

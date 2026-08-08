@@ -64,6 +64,7 @@ public class HexSquare : MonoBehaviour
     private Color defaultColor;
 
     private char characterValue;
+    private bool showing = false;
     
     public virtual void init(int x, int y, Vector3 hexPos) {
         this.text.gameObject.SetActive(false);
@@ -124,10 +125,16 @@ public class HexSquare : MonoBehaviour
     public void assignChar(char c) {
         this.characterValue = c;
         this.text.text = c + "";
+        this.showing = false;
     }
 
     public void displayValue(bool toggle) {
+        this.showing = toggle;
         this.text.gameObject.SetActive(toggle);
+    }
+
+    public bool isShowingChar() {
+        return this.showing;
     }
 
     public void highlightSquare(Color color, float duration) {
