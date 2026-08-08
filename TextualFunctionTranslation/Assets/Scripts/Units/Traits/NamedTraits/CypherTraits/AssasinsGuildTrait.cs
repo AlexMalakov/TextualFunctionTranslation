@@ -6,6 +6,7 @@ using System;
 public class AssasinsGuildTrait : CypherTrait
 {
     [SerializeField] private CombatManager cm;
+    [SerializeField] private UnitMovementManager umm;
     //on combat start, and on unit defeat?
 
     public override void onPrecombatStart() {
@@ -41,6 +42,10 @@ public class AssasinsGuildTrait : CypherTrait
                 }
             }
         }
+    }
+
+    private void boing(HexSquare boingTo) {
+        
     }
 
     public override string getTraitName() {

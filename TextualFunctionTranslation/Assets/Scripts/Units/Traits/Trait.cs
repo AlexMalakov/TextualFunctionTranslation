@@ -18,8 +18,6 @@ public abstract class Trait : MonoBehaviour
         }
 
         return true;
-
-        //TODO: ELSE DO STUFF !!!!!
     }
 
     public void Awake() { //I'm allowed to be an awake because I update trait widget by giving it myself, and static facts about myself
