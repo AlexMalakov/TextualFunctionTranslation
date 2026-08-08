@@ -5,7 +5,7 @@ using UnityEngine;
 class VegenereCharacterTransformation : CharacterTransformation {
     private string key;
 
-    public VegenereCharacterTransformation(HexSquare to, HexSquare from, string key) : base(to, from) {
+    public VegenereCharacterTransformation(string key) : base(null, null) {
         this.key = key;
     }
 
@@ -20,19 +20,18 @@ class VegenereCharacterTransformation : CharacterTransformation {
 
 public class VegeneryTrait : CypherTrait
 {
-    [SerializeField] private HumanPlayer humanPlayer;
     [SerializeField] private Shop shop;
 
     public void buyTopUnit() {
-        string unitName = "placeholder"; //todo: give this string a value
-        this.addToCypher(new List<CharacterTransformation>(){new VegenereCharacterTransformation(traitHaver.getPosition(), traitHaver.getPosition(), unitName)});
-    
+        string unitName = this.shop.getVigUnitName();
+        this.addToCypher(new List<CharacterTransformation>(){new VegenereCharacterTransformation(unitName)});
+        this.shop.giftVigUnit();
     }
 
     public void trashTopUnit() {
-        string unitName = "placeholder"; //todo: give this string a value
-        this.addToCypher(new List<CharacterTransformation>(){new VegenereCharacterTransformation(traitHaver.getPosition(), traitHaver.getPosition(), unitName)});
-    
+        string unitName = this.shop.getVigUnitName();
+        this.addToCypher(new List<CharacterTransformation>(){new VegenereCharacterTransformation(unitName)});
+        this.shop.trashVigUnit();
     }
 
     public override string getTraitName() {
@@ -41,7 +40,8 @@ public class VegeneryTrait : CypherTrait
 
     public override string getTraitDescription() {
         return ("Brilliant inventors that have revolutionized the technology of the kingdom."
-            + " At the end of a succesfull combat recruit the left most unit in the shop from of cost.");
+            + " At the end of a succesfull combat recruit the left most unit in the shop free of cost." +
+            " Unit is only recruited if there is space on your bench, otherwise the unit is lost.");
     }
 
     protected override int getMinimumForActive() {

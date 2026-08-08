@@ -39,9 +39,17 @@ public class HumanPlayer : Player //player but has money and shit
         return this.money >= unitCost && (this.bench.canAddUnitToBench() || this.unitLayout.getActiveUnits().Count < this.unitCap || this.canMergeUnit(unitName));
     }
 
+    public bool hasBenchSpace() {
+        return this.bench.canAddUnitToBench();
+    }
+
     public void purchaseUnit(Unit u) { //TODO: Make sure unit actually arrives where it needs to
         this.money -= u.getCost();
         this.pi.setDollars(this.money);
+        this.gainUnit(u);
+    }
+
+    public void gainUnit(Unit u) {
         this.playersUnits.Add(u);
 
         if(this.canMergeUnit(u.getName())) {

@@ -96,7 +96,7 @@ public class TraitDisplay : MonoBehaviour
 
         foreach(Trait t in playerActiveInfoTraits.OrderByDescending(t => t.getTraitName())) {
             if(t is TrackerTrait) {
-                ((TrackerTrait)t).giveLenses();
+                ((TrackerTrait)t).giveLenses(true);
             }
 
             t.getTraitWidget().flashTrait();
@@ -106,7 +106,7 @@ public class TraitDisplay : MonoBehaviour
 
         foreach(Trait t in enemyActiveInfoTraits.OrderBy(t => t.getTraitName())) {
             if(t is TrackerTrait) {
-                ((TrackerTrait)t).giveLenses();
+                ((TrackerTrait)t).giveLenses(false);
             }
 
             t.getTraitWidget().flashTrait();
