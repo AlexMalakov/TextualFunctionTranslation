@@ -93,7 +93,6 @@ public abstract class Trait : MonoBehaviour
 
     public virtual void onCombatEnd(Unit traitHaver){}
 
-
     //constructor work around cuz unity is a chud platform :(
     public abstract string getTraitName();
     public abstract string getTraitDescription();

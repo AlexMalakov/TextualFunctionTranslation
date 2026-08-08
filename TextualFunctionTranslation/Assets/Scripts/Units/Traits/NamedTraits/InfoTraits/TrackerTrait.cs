@@ -6,6 +6,7 @@ public class TrackerTrait : InformationTrait
 {
     private Dictionary<Unit, List<Unit>> assistMap;
     private int lenseCount;
+    [SerializeField] private HumanPlayer player;
 
     public override void onPrecombatStart() {
         this.lenseCount = 0;
@@ -31,8 +32,12 @@ public class TrackerTrait : InformationTrait
         }
     }
 
-    public override void onCombatEnd(Unit traitHaver) {
-        //TODO: give players lenses = this.lenseCount
+    public void giveLenses(bool isHuman) {
+        if(isHuman) {
+            this.player.gainLenses(this.lenseCount);
+        } else {
+            this.player.gainLenses(-this.lenseCount);
+        }
     }
 
     public override string getTraitName() {

@@ -20,14 +20,19 @@ class VegenereCharacterTransformation : CharacterTransformation {
 
 public class VegeneryTrait : CypherTrait
 {
+    [SerializeField] private HumanPlayer humanPlayer;
+    [SerializeField] private Shop shop;
 
-
-    public override void onCombatEnd(Unit traitHaver){
+    public void buyTopUnit() {
         string unitName = "placeholder"; //todo: give this string a value
-
-        //TODO: buy the placeholder unit
-
         this.addToCypher(new List<CharacterTransformation>(){new VegenereCharacterTransformation(traitHaver.getPosition(), traitHaver.getPosition(), unitName)});
+    
+    }
+
+    public void trashTopUnit() {
+        string unitName = "placeholder"; //todo: give this string a value
+        this.addToCypher(new List<CharacterTransformation>(){new VegenereCharacterTransformation(traitHaver.getPosition(), traitHaver.getPosition(), unitName)});
+    
     }
 
     public override string getTraitName() {

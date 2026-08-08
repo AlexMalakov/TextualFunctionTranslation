@@ -70,16 +70,21 @@ public class TraitDisplay : MonoBehaviour
     }
 
     public IEnumerator playCypherTraitAnim() {
-
         List<Trait> playerActiveCypherTraits = this.player.getUnitLayout().getActiveTraits().Where(t => t is CypherTrait).ToList();
         List<Trait> enemyActiveCypherTraits = this.enemy.getUnitLayout().getActiveTraits().Where(t => t is CypherTrait).ToList();
 
         foreach(Trait t in playerActiveCypherTraits.OrderByDescending(t => t.getTraitName())) {
+            if(t is VegeneryTrait) { //I'm sorry but this has to happen with the visual hurk (thats me vomiting i am vomiting)
+                ((VegeneryTrait)t).buyTopUnit();
+            }
             t.getTraitWidget().flashTrait();
             yield return new WaitForSeconds(.5f);
         }
 
         foreach(Trait t in enemyActiveCypherTraits.OrderBy(t => t.getTraitName())) {
+            if(t is VegeneryTrait) {
+                ((VegeneryTrait)t).trashTopUnit();
+            }
             t.getTraitWidget().flashTrait();
             yield return new WaitForSeconds(.5f);
         }
@@ -90,12 +95,20 @@ public class TraitDisplay : MonoBehaviour
         List<Trait> enemyActiveInfoTraits = this.enemy.getUnitLayout().getActiveTraits().Where(t => t is InformationTrait).ToList();
 
         foreach(Trait t in playerActiveInfoTraits.OrderByDescending(t => t.getTraitName())) {
+            if(t is TrackerTrait) {
+                ((TrackerTrait)t).giveLenses();
+            }
+
             t.getTraitWidget().flashTrait();
             t.runSquareReveal();
             yield return new WaitForSeconds(.5f);
         }
 
         foreach(Trait t in enemyActiveInfoTraits.OrderBy(t => t.getTraitName())) {
+            if(t is TrackerTrait) {
+                ((TrackerTrait)t).giveLenses();
+            }
+
             t.getTraitWidget().flashTrait();
             t.runSquareReveal();
             yield return new WaitForSeconds(.5f);
