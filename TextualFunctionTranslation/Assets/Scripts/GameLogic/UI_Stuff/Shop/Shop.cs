@@ -45,7 +45,7 @@ public class Shop : MonoBehaviour
     }
 
     public void giftVigUnit() {
-        if(this.player.hasBenchSpace()) {
+        if(this.player.hasBenchSpace(this.shopEntries[shopIndex].units[0])) {
             Unit u = UnitFactory.createUnit(this.shopEntries[shopIndex].units[0]);
             this.player.gainUnit(u);
             shopIndex++;

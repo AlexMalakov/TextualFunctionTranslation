@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PrecombatManager pcm;
     [SerializeField] private ReviewManager rvm;
 
+    private bool boardLocked = true;
+
     void Start() { //starts the game, runs after factories have finished
         this.onPreperationStart();
     }
@@ -38,6 +40,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public bool canModifyBoard() {
+        return this.boardLocked;
+    }
+
     public void onPreperationStart() {
         if(this.currentLevel[this.currentStage].hasDialogue(false)) {
             this.currentLevel[this.currentStage].getDialogue(false).startDialogue();
@@ -47,6 +53,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void postPrepDialogue() {
+        this.boardLocked = false;
         this.board.initBoard();
         this.pi.setLevel(this.currentLevel[this.currentStage].getStageName());
         this.combatManager.initPlayers(
@@ -63,12 +70,14 @@ public class GameManager : MonoBehaviour
     public void onPreperationEnd() {
         this.gameState = GameStage.combat;
         this.pcm.endPrep();
+        this.boardLocked = true;
 
-        this.onCombatStart();
+        StartCoroutine(this.onCombatStart());
     }
 
-    public void onCombatStart() {
+    public IEnumerator onCombatStart() {
         this.combatManager.initializeCombat();
+        yield return this.combatManager.precombatAnims();
         this.combatSched.onCombatStart();
     }
 

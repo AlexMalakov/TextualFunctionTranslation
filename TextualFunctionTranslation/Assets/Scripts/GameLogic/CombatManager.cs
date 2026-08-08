@@ -15,6 +15,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     [SerializeField] private CombatLog combatLog;
     [SerializeField] private TraitDisplay traitDisplay;
+    [SerializeField] private float precombatAnimTime = 2f;
 
     private List<Unit> units;
 
@@ -70,6 +71,14 @@ public class CombatManager : MonoBehaviour
         this.combatLog.initLog(this.units);
 
         this.traitPreCombat();
+    }
+
+    public IEnumerator precombatAnims() {
+        foreach(Unit u in this.units) {
+            u.triggerAnimation("draw_weapon"); //TODO: only can transition from idle, not from assasin jump >:( 
+        }
+
+        yield return new WaitForSeconds(precombatAnimTime);
     }
 
     //check each unit every frame

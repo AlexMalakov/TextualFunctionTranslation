@@ -7,6 +7,7 @@ public class HumanPlayer : Player //player but has money and shit
 {
     [SerializeField] private Bench bench;
     [SerializeField] private UnitMovementManager umm;
+    [SerializeField] private GameManager gm;
 
     [SerializeField] private int unitCap;
     [SerializeField] private int money = 0;
@@ -36,11 +37,20 @@ public class HumanPlayer : Player //player but has money and shit
     }
 
     public bool canPurchaseUnit(string unitName, int unitCost) {
-        return this.money >= unitCost && (this.bench.canAddUnitToBench() || this.unitLayout.getActiveUnits().Count < this.unitCap || this.canMergeUnit(unitName));
+        return this.money >= unitCost && (
+            (this.gm.canModifyBoard() 
+                && (this.bench.canAddUnitToBench() 
+                    || this.unitLayout.getActiveUnits().Count < this.unitCap 
+                    || this.canMergeUnit(unitName)
+                )
+            ) || (!this.gm.canModifyBoard()
+                &&  this.hasBenchSpace(unitName)
+            )
+        );
     }
 
-    public bool hasBenchSpace() {
-        return this.bench.canAddUnitToBench();
+    public bool hasBenchSpace(string unitName) {
+        return this.bench.canAddUnitToBench() || this.bench.hasStarLevel(unitName, 1)
     }
 
     public void purchaseUnit(Unit u) { //TODO: Make sure unit actually arrives where it needs to

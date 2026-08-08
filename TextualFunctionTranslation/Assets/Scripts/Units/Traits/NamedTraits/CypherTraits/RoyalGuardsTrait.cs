@@ -18,6 +18,7 @@ public class RoyalGuardsTrait : CypherTrait
     private int count = 0;
     private int startCount = 0;
     //TODO: shouldnt persist across different runs
+    //TODO: how does this work for the enemy player...
     //TODO: on combat loss reset glory stacks
 
     public override void onCombatStart(Unit traitHaver){
