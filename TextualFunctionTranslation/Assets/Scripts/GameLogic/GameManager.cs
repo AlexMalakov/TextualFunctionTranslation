@@ -106,7 +106,7 @@ public class GameManager : MonoBehaviour
     public void onResultsEnd() {
         if(this.gameState == GameStage.result_win) {
             this.rvm.onResultsEnd();
-            this.player.gainMoney(this.currentStage.getRewardMoney());
+            this.player.gainMoney(this.currentLevel[this.currentStage].getRewardMoney());
             this.currentStage++;
             this.gameState = GameStage.preperation;
             this.onPreperationStart();

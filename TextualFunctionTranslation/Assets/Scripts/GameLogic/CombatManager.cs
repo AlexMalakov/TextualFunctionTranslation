@@ -162,7 +162,7 @@ public class CombatManager : MonoBehaviour
         if(this.livingPlayerUnits <= 0) {
             this.gameManager.restartLevel();
         } else {
-            this.gameManager.onPlayerCombatWin();
+            this.gameManager.continueToNextLevel();
         }
     }
 

@@ -8,6 +8,7 @@ public class CombatStage : MonoBehaviour
     [SerializeField] private PlayerUnitLayout opponentUnitLayout;
     [SerializeField] private int playerUnitCap;
     [SerializeField] private string stageName;
+    [SerializeField] private int rewardMoney;
 
     [SerializeField] string alphabetOrderingPlayer;
     [SerializeField] string alphabetOrderingEnemy;
@@ -34,5 +35,9 @@ public class CombatStage : MonoBehaviour
 
     public string getStageName() {
         return this.stageName;
+    }
+
+    public int getRewardMoney() {
+        return this.rewardMoney;
     }
 }
