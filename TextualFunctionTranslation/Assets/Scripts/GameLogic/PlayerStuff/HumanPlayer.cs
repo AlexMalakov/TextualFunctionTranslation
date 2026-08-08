@@ -50,7 +50,7 @@ public class HumanPlayer : Player //player but has money and shit
     }
 
     public bool hasBenchSpace(string unitName) {
-        return this.bench.canAddUnitToBench() || this.bench.hasStarLevel(unitName, 1)
+        return this.bench.canAddUnitToBench() || this.bench.hasStarLevel(unitName, 1);
     }
 
     public void purchaseUnit(Unit u) { //TODO: Make sure unit actually arrives where it needs to

@@ -6,12 +6,11 @@ public class LenseItem : MonoBehaviour
 {
     
     [SerializeField] private HumanPlayer player;
+
     private bool lenseToggle = false;
 
-
-
-    private void toggleLenses() {
-        this.lenseToggle = !this.lenseToggle;
+    private void toggleLenses(bool status) {
+        this.lenseToggle = status;
     }
 
     public void checkUserInteraction() {
