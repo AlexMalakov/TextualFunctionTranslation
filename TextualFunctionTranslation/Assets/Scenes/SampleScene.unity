@@ -4995,7 +4995,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   snapRadius: 1
-  humanPlayer: {fileID: 1395918876}
+  humanPlayer: {fileID: 0}
 --- !u!4 &326832797
 Transform:
   m_ObjectHideFlags: 0
@@ -9095,6 +9095,8 @@ MonoBehaviour:
   currentLevel:
   - {fileID: 1376436484}
   pi: {fileID: 1436576967}
+  statusMessage: {fileID: 0}
+  player: {fileID: 0}
   pcm: {fileID: 747084479}
   rvm: {fileID: 747084483}
 --- !u!114 &747084476
@@ -9123,7 +9125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ca1cbe78e33c41dc9943a9998e5bfc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1395918876}
+  player: {fileID: 0}
   enemy: {fileID: 2012429344}
   board: {fileID: 558592343}
   healthbarPrefab: {fileID: 4031327038773622582, guid: f44647425961d4ae892a78035ce9709f, type: 3}
@@ -9131,6 +9133,7 @@ MonoBehaviour:
   gameManager: {fileID: 747084475}
   combatLog: {fileID: 747084482}
   traitDisplay: {fileID: 46474854}
+  precombatAnimTime: 2
 --- !u!4 &747084478
 Transform:
   m_ObjectHideFlags: 0
@@ -9233,6 +9236,7 @@ MonoBehaviour:
   cypherButton: {fileID: 288444440}
   display: {fileID: 846241020}
   moviePlayer: {fileID: 963194230}
+  lb: {fileID: 0}
 --- !u!114 &747084484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9303,7 +9307,7 @@ MonoBehaviour:
   - {fileID: 715290332}
   - {fileID: 16509609}
   - {fileID: 1057364507}
-  player: {fileID: 1395918876}
+  player: {fileID: 0}
 --- !u!4 &753563812
 Transform:
   m_ObjectHideFlags: 0
@@ -9502,7 +9506,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 3.2000122, y: 116.20001}
+  m_AnchoredPosition: {x: 3.2000732, y: 116.20001}
   m_SizeDelta: {x: -270, y: -335}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &799129773
@@ -9768,7 +9772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b77276862fd5449af9e57505046f4048, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1395918876}
+  player: {fileID: 0}
   shopEntries:
   - units:
     - test
@@ -16684,8 +16688,11 @@ MonoBehaviour:
   opponentUnitLayout: {fileID: 2012429345}
   playerUnitCap: 3
   stageName: 
+  rewardMoney: 0
   alphabetOrderingPlayer: abcdefghijklmnopqrstuvwxyz
   alphabetOrderingEnemy: abcdefghijklmnopqrstuvwxyz
+  preStageDialogue: {fileID: 0}
+  postStageDialogue: {fileID: 0}
 --- !u!1 &1377811256
 GameObject:
   m_ObjectHideFlags: 0
@@ -16866,12 +16873,7 @@ MonoBehaviour:
   - {fileID: 313927958}
   - {fileID: 1861480437}
   unitLayout: {fileID: 1395918877}
-  bench: {fileID: 753563811}
-  umm: {fileID: 1395918879}
   unitRotation: {x: 0, y: 0, z: 0, w: 0}
-  unitCap: 3
-  money: 1
-  pi: {fileID: 1436576967}
 --- !u!114 &1395918877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16931,6 +16933,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitDragSnapSpeed: 10
+  unitJumpSpeed: 0
+  boingMultiplicitiveHeight: 0
   unitFastTime: 0.1
 --- !u!1 &1396067340
 GameObject:
@@ -22141,12 +22145,7 @@ MonoBehaviour:
   - {fileID: 1212838985}
   - {fileID: 65832871}
   unitLayout: {fileID: 2012429345}
-  bench: {fileID: 0}
-  umm: {fileID: 0}
   unitRotation: {x: 0, y: 180, z: 0, w: 0}
-  unitCap: 3
-  money: 0
-  pi: {fileID: 0}
 --- !u!114 &2012429345
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private HexBoard board;
     [SerializeField] private List<CombatStage> currentLevel; 
     [SerializeField] private PlayerInfo pi;
+    [SerializeField] private StatusMessage statusMessage;
 
     [SerializeField] private HumanPlayer player;
 
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ReviewManager rvm;
 
     private bool boardLocked = true;
+    private bool savedResults = false; //TODO: this is stupid as fuck
 
     void Start() { //starts the game, runs after factories have finished
         this.onPreperationStart();
@@ -86,22 +88,24 @@ public class GameManager : MonoBehaviour
     }
 
     public void restartLevel() {
-        //TODO: play you lose message
+        this.statusMessage.displayMessage("YOU LOSE");
         this.gameState = GameStage.result_loss;
-        this.onCombatEnd();
+        this.onCombatEnd(false);
     }
 
     public void continueToNextLevel() {
         this.gameState = GameStage.result_win;
-        this.onCombatEnd();
+        this.onCombatEnd(true);
     }
 
 
-    public void onCombatEnd() {
-        this.onResultsStart(); //TODO button to reflect combat outcome
+    public void onCombatEnd(bool wonCombat) {
+        this.onResultsStart(wonCombat);
     }
 
-    public void onResultsStart() {
+    public void onResultsStart(bool wonCombat) {
+        // this.rvm.updateButton(wonCombat);
+        this.savedResults = wonCombat;
         if(this.currentLevel[this.currentStage].hasDialogue(true)) {
             this.currentLevel[this.currentStage].getDialogue(true).startDialogue();
         } else {
@@ -113,7 +117,7 @@ public class GameManager : MonoBehaviour
         string ciphertext = this.combatManager.encrypt(this.currentLevel[this.currentStage].getLevelCipher());
         StartCoroutine(this.runAnimationsAndSwap(ciphertext));
 
-        this.rvm.onResultsStart(ciphertext);
+        this.rvm.onResultsStart(ciphertext, this.savedResults);
     }
 
     private IEnumerator runAnimationsAndSwap(string cypherText) {

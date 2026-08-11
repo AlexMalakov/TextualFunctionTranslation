@@ -31,9 +31,9 @@ public class GameStateButton : MonoBehaviour
         this.isPrecombat = isEnabled;
     }
 
-    public void runResults(bool isEnabled) {
+    public void runResults(bool isEnabled, bool wonCombat) {
         this.gameObject.SetActive(isEnabled);
-        this.button_text.text = "next round";
+        this.button_text.text = wonCombat ? "next round" : "restart round";
         this.isResults = isEnabled;
     }
 }

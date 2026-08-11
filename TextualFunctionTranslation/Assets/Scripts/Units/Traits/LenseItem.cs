@@ -9,7 +9,7 @@ public class LenseItem : MonoBehaviour
 
     private bool lenseToggle = false;
 
-    private void toggleLenses(bool status) {
+    public void toggleLenses(bool status) {
         this.lenseToggle = status;
     }
 

@@ -11,10 +11,13 @@ public class ReviewManager : MonoBehaviour
     [SerializeField] private ResultsRaycast moviePlayer;
     [SerializeField] private LenseButton lb;
 
-    public void onResultsStart(string txt) {
-        this.gameStateButton.runResults(true);
+    public void onResultsStart(string txt, bool wonCombat) {
         this.display.setCypherText(txt);
-        this.lb.showButton(true;)
+        this.lb.showButton(true);
+    }
+
+    public void updateButton(bool wonCombat) {
+        this.gameStateButton.runResults(true, wonCombat);
     }
 
     public void handleResults() {
@@ -22,7 +25,7 @@ public class ReviewManager : MonoBehaviour
     }
 
     public void onResultsEnd() {
-        this.gameStateButton.runResults(false);
+        this.gameStateButton.runResults(false, true);
         this.cypherButton.setDisplay(false);
         this.display.setDisplay(false);
         this.moviePlayer.runResults(false);
