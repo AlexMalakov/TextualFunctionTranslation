@@ -23322,6 +23322,24 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 747084478}
     m_Modifications:
+    - target: {fileID: 236085973943825168, guid: d88c487124c4dcb428c1b4fe0b3e3052, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: f551bf2e7708b274785462f5f80d25ff, type: 2}
+    - target: {fileID: 236085973943825168, guid: d88c487124c4dcb428c1b4fe0b3e3052, type: 3}
+      propertyPath: m_WarningMessage
+      value: "\nBinding warning: Some generic clip(s) animate transforms that are
+        already bound by a Humanoid avatar. These transforms can only be changed
+        by Humanoid clips.\n\tTransform 'rootSkeleton'\n\tTransform 'R_thumbFinger_joint1'\n\tTransform
+        'L_midFinger_joint1'\n\tTransform 'L_wrist_joint'\n\tTransform 'R_ankle_joint'\n\tTransform
+        'L_pinkyFinger_joint1'\n\tTransform 'L_midFinger_joint2'\n\tTransform 'L_thumbFinger_joint1'\n\tTransform
+        'head_joint'\n\tTransform 'R_ball_joint'\n\tand more ...\n\tFrom animation
+        clip 'arrow'\n\tFrom animation clip 'cheer'\n\tFrom animation clip 'cheer2'\n\tFrom
+        animation clip 'clap'\n\tFrom animation clip 'clap2'\n\tFrom animation clip
+        'dance1'\n\tFrom animation clip 'dance2'\n\tFrom animation clip 'dance3'\n\tFrom
+        animation clip 'dance4'\n\tFrom animation clip 'death_sword'\n\tand more
+        ..."
+      objectReference: {fileID: 0}
     - target: {fileID: 4471660796380414505, guid: d88c487124c4dcb428c1b4fe0b3e3052, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.315
