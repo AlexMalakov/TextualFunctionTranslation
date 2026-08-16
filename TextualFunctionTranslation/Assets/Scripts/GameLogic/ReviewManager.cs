@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ReviewManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class ReviewManager : MonoBehaviour
     [SerializeField] private CypherTextDisplay display;
     [SerializeField] private ResultsRaycast moviePlayer;
     [SerializeField] private LenseButton lb;
+    [SerializeField] private List<TMP_Text> scramblableItems;
 
     public void onResultsStart(string txt, bool wonCombat) {
         this.display.setCypherText(txt);
@@ -36,5 +38,9 @@ public class ReviewManager : MonoBehaviour
         this.cypherButton.setDisplay(true);
         this.display.setDisplay(true);
         this.moviePlayer.runResults(true);
+    }
+
+    public List<TMP_Text> getRandomizerText() {
+        returnm this.scramblableItems;
     }
 }
