@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+public struct ReviewData {
+    public bool playerWon;
+    public bool randomizerSuvived;
+}
+
 public class ReviewManager : MonoBehaviour
 {
 
@@ -13,17 +18,52 @@ public class ReviewManager : MonoBehaviour
     [SerializeField] private LenseButton lb;
     [SerializeField] private List<TMP_Text> scramblableItems;
 
-    public void onResultsStart(string txt, bool wonCombat) {
+    private bool isScrambling = false;
+    private int randCounter = 0;
+    private int FRAMES_TILL_RAND = 5;
+
+    public void onResultsStart(string txt, ReviewData data) {
+        this.gameStateButton.runResults(true, data.playerWon);
         this.display.setCypherText(txt);
         this.lb.showButton(true);
+        this.isScrambling = data.randomizerSuvived;
+
+        if(this.isScrambling) {
+            this.scrambleAllTMP();
+        }
     }
 
-    public void updateButton(bool wonCombat) {
-        this.gameStateButton.runResults(true, wonCombat);
-    }
 
     public void handleResults() {
         moviePlayer.checkUserInteraction();
+
+        if(this.isScrambling) {
+            if(this.randCounter % this.FRAMES_TILL_RAND == 0) {
+                this.scrambleAllTMP();
+            }
+            
+            randCounter = (randCounter + 1) % this.FRAMES_TILL_RAND;
+        }
+    }
+
+    private void scrambleAllTMP() {
+        foreach(TMP_Text t in this.scramblableItems) {
+            t.text = this.scrambleString(t.text);
+        }
+    }
+
+    private string scrambleString(string input) {
+        char[] chars = input.ToCharArray();
+        
+        for (int i = 0; i < chars.Length; i++) {
+            if (chars[i] >= 'a' && chars[i] <= 'z') {
+                chars[i] = (char)Random.Range('a', 'z' + 1);
+            } else if (chars[i] >= 'A' && chars[i] <= 'Z') {
+                chars[i] = (char)Random.Range('A', 'Z' + 1);
+            }
+        }
+
+        return new string(chars);
     }
 
     public void onResultsEnd() {
@@ -41,6 +81,6 @@ public class ReviewManager : MonoBehaviour
     }
 
     public List<TMP_Text> getRandomizerText() {
-        returnm this.scramblableItems;
+        return this.scramblableItems;
     }
 }

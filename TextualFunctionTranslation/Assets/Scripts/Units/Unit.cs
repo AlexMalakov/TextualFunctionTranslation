@@ -74,12 +74,12 @@ public abstract class Unit : MonoBehaviour
 
     //[Header ("Active Stats")]
     private UnitNumericCalculator healthCalculator;
-    private UnitNumericCalculator damageCalculator;
-    private UnitNumericCalculator attackSpeedCalculator; //need a way to balance this?
+    protected UnitNumericCalculator damageCalculator;
+    protected UnitNumericCalculator attackSpeedCalculator; //need a way to balance this?
 
     private float currentHealth;
 
-    private Unit currentTarget;
+    protected Unit currentTarget;
     private HexSquare curPosition;
 
     //states
@@ -111,7 +111,7 @@ public abstract class Unit : MonoBehaviour
         return currentHealth <= 0.0;
     }
 
-    public int getRange() {
+    public virtual int getRange() {
         return this.range;
     }
 
@@ -139,7 +139,7 @@ public abstract class Unit : MonoBehaviour
         return this.damage.getStat(starLevel);
     }
 
-    public float getAttackSpeed() { //TODO: calcualte as attacks per second
+    public virtual float getAttackSpeed() { //TODO: calcualte as attacks per second
         return this.attackSpeedCalculator.calculate();
     }
 
@@ -151,7 +151,7 @@ public abstract class Unit : MonoBehaviour
         return this.healthCalculator.calculate();
     }
 
-    public float calcDamage() {
+    public virtual float calcDamage() {
         return this.damageCalculator.calculate();
     }
 
@@ -218,7 +218,7 @@ public abstract class Unit : MonoBehaviour
         }
 
         //try to cancel attack if the target is out of our range
-        if(this.currentTarget != null && this.range < HexSquare.hexDist(this.currentTarget.getPosition(), this.getPosition())) {
+        if(this.currentTarget != null && this.getRange() < HexSquare.hexDist(this.currentTarget.getPosition(), this.getPosition())) {
             if (this.currentState.cancelAction()) {
                 StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, .25f);
                 this.Idle.onStateEnter(this.currentState, stateData);
@@ -229,7 +229,7 @@ public abstract class Unit : MonoBehaviour
         currentState.update();
     }
 
-    public void requestStateSwap() {
+    public virtual void requestStateSwap() {
         StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, -1f);
         if(this.currentTarget == null) {
             this.currentState.swapStates(this.Idle, stateData);
@@ -297,7 +297,7 @@ public abstract class Unit : MonoBehaviour
         this.unclaimSquare();
     }
     public void attackTarget() {
-        this.currentTarget.takeDamage(this.damageCalculator.calculate(), this);
+        this.currentTarget.takeDamage(this.calcDamage(), this);
         this.combatLog.logEvent(new CombatEvent(this, this.currentTarget, CombatEventType.Attack));
         this.roleTrait.onUnitAttack(this, this.currentTarget);
         this.classTrait.onUnitAttack(this, this.currentTarget);
@@ -308,7 +308,7 @@ public abstract class Unit : MonoBehaviour
         if(this.currentTarget == null) {
             return false;
         }
-        return HexSquare.hexDist(this.getPosition(), this.currentTarget.getPosition()) <= this.range;
+        return HexSquare.hexDist(this.getPosition(), this.currentTarget.getPosition()) <= this.getRange();
     }
 
     public void triggerAnimation(string trigger) {

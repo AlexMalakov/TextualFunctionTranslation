@@ -23,6 +23,8 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private TMP_Text dialogue;
     [SerializeField] private GameManager gm;
 
+    private ReviewData reviewDataSave;
+
     public void Awake() {
         dialogueBox.SetActive(false);
     }
@@ -31,7 +33,8 @@ public class Dialogue : MonoBehaviour
     private bool inDialogue = false;
 
 
-    public void startDialogue() {
+    public void startDialogue(ReviewData rd) {
+        this.reviewDataSave = rd;
         this.inDialogue = true;
         dialogueBox.SetActive(false);
         this.showLine();
@@ -64,6 +67,6 @@ public class Dialogue : MonoBehaviour
         this.curLine = 0;
         this.inDialogue = false;
         this.dialogueBox.SetActive(false);
-        gm.doneYapping();
+        gm.doneYapping(this.reviewDataSave);
     }
 }

@@ -25,7 +25,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ReviewManager rvm;
 
     private bool boardLocked = true;
-    private bool savedResults = false; //TODO: this is stupid as fuck
 
     void Start() { //starts the game, runs after factories have finished
         this.onPreperationStart();
@@ -48,7 +47,7 @@ public class GameManager : MonoBehaviour
 
     public void onPreperationStart() {
         if(this.currentLevel[this.currentStage].hasDialogue(false)) {
-            this.currentLevel[this.currentStage].getDialogue(false).startDialogue();
+            this.currentLevel[this.currentStage].getDialogue(false).startDialogue(null);
         } else {
             this.postPrepDialogue();
         }
@@ -99,25 +98,24 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void onCombatEnd(bool wonCombat) {
-        this.onResultsStart(wonCombat);
+    public void onCombatEnd(bool wonCombat, bool randomizerSuvived) {
+        ReviewData rd = new ReviewData(wonCombat, randomizerSuvived);
+        this.onResultsStart(wonCombat, rd);
     }
 
-    public void onResultsStart(bool wonCombat) {
-        // this.rvm.updateButton(wonCombat);
-        this.savedResults = wonCombat;
+    public void onResultsStart(bool wonCombat, ReviewData rd) {
         if(this.currentLevel[this.currentStage].hasDialogue(true)) {
-            this.currentLevel[this.currentStage].getDialogue(true).startDialogue();
+            this.currentLevel[this.currentStage].getDialogue(true).startDialogue(rd);
         } else {
-            this.postResultsDialogue();
+            this.postResultsDialogue(rd);
         }
     }
 
-    private void postResultsDialogue() {
+    private void postResultsDialogue(ReviewData rd) {
         string ciphertext = this.combatManager.encrypt(this.currentLevel[this.currentStage].getLevelCipher());
         StartCoroutine(this.runAnimationsAndSwap(ciphertext));
 
-        this.rvm.onResultsStart(ciphertext, this.savedResults);
+        this.rvm.onResultsStart(ciphertext, rd);
     }
 
     private IEnumerator runAnimationsAndSwap(string cypherText) {
@@ -147,11 +145,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void doneYapping() {
+    public void doneYapping(ReviewData rd) {
         if(this.gameState == GameStage.preperation) {
             this.postPrepDialogue();
         } else {
-            this.postResultsDialogue();
+            this.postResultsDialogue(rd);
         }
     }
 }

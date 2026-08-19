@@ -17,6 +17,8 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private TraitDisplay traitDisplay;
     [SerializeField] private float precombatAnimTime = 2f;
 
+    [SerializeField] private ReviewManager rm;
+
     private List<Unit> units;
 
     //not very nice but it will make this unit division work better
@@ -157,6 +159,10 @@ public class CombatManager : MonoBehaviour
                 u.getClassTrait().onCombatSurvival(u);
 
                 this.combatLog.logEvent(new CombatEvent(u, u, CombatEventType.Survival));
+
+                if(u is Randomizer) {
+                    this.rm.
+                }
             }
 
             u.getRoleTrait().onCombatEnd(u);

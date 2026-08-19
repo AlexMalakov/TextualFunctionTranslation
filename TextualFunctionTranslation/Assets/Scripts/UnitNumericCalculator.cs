@@ -49,9 +49,13 @@ public class UnitNumericCalculator
     }
 
     public float calculate() {
+        return this.calculateFromN(this.val);
+    }
+
+    public float calculateFromN(float n) {
         this.operations.Sort((a, b) => a.type.CompareTo(b.type));
 
-        float carry = this.val;
+        float carry = n;
         foreach(Operation o in this.operations) {
             carry = o.apply(carry);
         }
