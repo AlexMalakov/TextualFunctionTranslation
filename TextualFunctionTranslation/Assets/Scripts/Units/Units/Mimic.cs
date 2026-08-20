@@ -12,5 +12,7 @@ public class Mimic : Unit
         return this.currentTarget != null ? this.currentTarget.getRange() : 1;
     }
 
-    //TODO: override attack speed
+    public override int calcAttackSpeed() {
+        return this.currentTarget != null ? this.currentTarget.getAttackSpeed();
+    }
 }

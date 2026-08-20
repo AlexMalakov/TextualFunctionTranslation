@@ -17,8 +17,6 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private TraitDisplay traitDisplay;
     [SerializeField] private float precombatAnimTime = 2f;
 
-    [SerializeField] private ReviewManager rm;
-
     private List<Unit> units;
 
     //not very nice but it will make this unit division work better
@@ -30,15 +28,21 @@ public class CombatManager : MonoBehaviour
         this.player.init();
         this.enemy.assignLayout(enemyLayout);
         this.enemy.init();
-
-        foreach(Unit u in this.player.getActiveUnits()) {
-            u.getRoleTrait().wipeCount();
-            u.getClassTrait().wipeCount();
+        
+        bool mimicPresent = false;
+        foreach(Unit u in this.enemy.getActiveUnits()) {
+            mimicPresent = mimicPresent || (u is Mimic);
         }
 
-        foreach(Unit u in this.enemy.getActiveUnits()) {
-            u.getRoleTrait().wipeCount();
-            u.getClassTrait().wipeCount();
+        foreach(Trait t in this.player.getAllTraits()) {
+            t.wipeCount();
+        }
+
+        foreach(Trait t in this.enemy.getAllTraits()) {
+            t.wipeCount();
+            if(mimicPresent) {
+                t.registerUnit(true);
+            }
         }
 
         foreach(Unit u in this.player.getActiveUnits()) {
@@ -132,6 +136,17 @@ public class CombatManager : MonoBehaviour
         return target;
     }
 
+    public Unit getRandomAttackTarget(System.Random rand) {
+        List<Unit> playerPool = new List<Unit>();
+        foreach(Unit u in this.units) {
+            if(this.isPlayerUnit(u) && !u.isDead()) {
+                playerPool.Add(u);
+            }
+        }
+
+        return playerPool[rand.Next(0, playerPool.Count)];
+    }
+
     public HexSquare requestRoute(Unit attacker, Unit target) {
         return this.board.pathfindToSquare(attacker.getPosition(), target.getPosition());
     }
@@ -153,6 +168,7 @@ public class CombatManager : MonoBehaviour
     }
 
     public void onCombatOver() {
+        bool randomizerSurvived = false;
         foreach(Unit u in this.units) {
             if(!u.isDead()) {
                 u.getRoleTrait().onCombatSurvival(u);
@@ -161,7 +177,7 @@ public class CombatManager : MonoBehaviour
                 this.combatLog.logEvent(new CombatEvent(u, u, CombatEventType.Survival));
 
                 if(u is Randomizer) {
-                    this.rm.
+                    randomizerSurvived = true;
                 }
             }
 
@@ -175,9 +191,9 @@ public class CombatManager : MonoBehaviour
         }
 
         if(this.livingPlayerUnits <= 0) {
-            this.gameManager.restartLevel();
+            this.gameManager.restartLevel(randomizerSurvived);
         } else {
-            this.gameManager.continueToNextLevel();
+            this.gameManager.continueToNextLevel(randomizerSurvived);
         }
     }
 

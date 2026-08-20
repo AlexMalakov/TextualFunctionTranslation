@@ -83,10 +83,10 @@ public abstract class Unit : MonoBehaviour
     private HexSquare curPosition;
 
     //states
-    UnitActionState Walk;
-    UnitActionState Idle;
-    UnitActionState Attack;
-    private UnitActionState currentState;
+    private UnitActionState Walk;
+    private UnitActionState Idle;
+    private UnitActionState Attack;
+    protected UnitActionState currentState;
 
     public void Start() {
         this.Walk = new WalkState(this);
@@ -235,19 +235,24 @@ public abstract class Unit : MonoBehaviour
             this.currentState.swapStates(this.Idle, stateData);
             this.currentState = this.Idle;
         } else if(this.canReachTarget()) {
-            stateData.flt = this.attackSpeedCalculator.calculate(); //give attack speed into attack
+            stateData.flt = this.calcAttackSpeed(); //give attack speed into attack
             this.currentState.swapStates(this.Attack, stateData);
             this.currentState = this.Attack;
         } else {
-            Unit newPossibleTarget = this.manager.requestAttackTarget(this, this.currentTarget);
-            if(newPossibleTarget != null) {
-                this.currentTarget = newPossibleTarget; //target reassigned :'(
-            }
-
-            stateData.sq = this.manager.requestRoute(this, this.currentTarget);
-            this.currentState.swapStates(this.Walk, stateData);
-            this.currentState = this.Walk;
+            this.reassignTargetAndWalk(stateData);
         }
+    }
+
+    //pulling this out ot override for randomizer pulling this out heeheehaw
+    protected void reassignTargetAndWalk(StateDataContainer stateData) {
+        Unit newPossibleTarget = this.manager.requestAttackTarget(this, this.currentTarget);
+        if(newPossibleTarget != null) {
+            this.currentTarget = newPossibleTarget; //target reassigned :'(
+        }
+
+        stateData.sq = this.manager.requestRoute(this, this.currentTarget);
+        this.currentState.swapStates(this.Walk, stateData);
+        this.currentState = this.Walk;
     }
 
     public void stunUnit(float stunDuration) {

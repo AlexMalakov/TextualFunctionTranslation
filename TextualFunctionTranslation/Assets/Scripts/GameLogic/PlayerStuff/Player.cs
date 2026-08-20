@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     [SerializeField] protected List<Unit> playersUnits;
     [SerializeField] protected PlayerUnitLayout unitLayout;
     [SerializeField] private Quaternion unitRotation;
+    [SerializeField] private List<Trait> allTraits;
 
     public virtual void init() {
         this.unitLayout.initLayout();
@@ -37,5 +38,9 @@ public class Player : MonoBehaviour
 
     public Quaternion getUnitRotation(bool bench) {
         return bench? this.unitRotation * Quaternion.Euler(0f, 180f, 0f) : this.unitRotation;
+    }
+
+    public List<Trait> getAllTraits() {
+        return this.allTraits;
     }
 }
