@@ -203,6 +203,20 @@ public class CombatManager : MonoBehaviour
     }
 
     public string encrypt(string plaintext) {
+        string ans = this.runEncrypt(plaintext);
+        
+        bool kingIsAlive = false;
+        foreach(Unit u in this.units) {
+            if(u is DemonKing) {
+                ans = this.runEncrypt(ans);
+                break;
+            }
+        }
+        
+        return ans;
+    }
+
+    private string runEncrypt(string plaintext) {
         char[] cypherArray = plaintext.ToCharArray();
 
         //TO CHECK: make sure this is same order as animations are
@@ -213,7 +227,7 @@ public class CombatManager : MonoBehaviour
         foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits().OrderByDescending(t => t.getTraitName())) {
             cypherArray = t.runCypher(cypherArray);
         }
-        
+
         return new string(cypherArray);
     }
     

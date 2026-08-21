@@ -31,6 +31,10 @@ public class HumanPlayer : Player //player but has money and shit
         this.unitCap = cap; //TODO: is it possible to exceed unit cap?
     }
 
+    public int getMoney() {
+        return this.money;
+    }
+
     public void gainMoney(int payday) {
         this.money += payday;
         this.pi.setDollars(this.money);

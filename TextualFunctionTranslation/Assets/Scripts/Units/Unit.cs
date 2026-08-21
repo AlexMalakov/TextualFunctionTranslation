@@ -69,9 +69,6 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private CombatLog combatLog;
     private HealthBarManager hpBar;
 
-    [Header ("VIsual")]
-    [SerializeField] private GameObject tombstonePrefab;
-
     //[Header ("Active Stats")]
     private UnitNumericCalculator healthCalculator;
     protected UnitNumericCalculator damageCalculator;
@@ -93,8 +90,6 @@ public abstract class Unit : MonoBehaviour
         this.Idle = new IdleState(this);
         this.Attack = new AttackState(this, this.attackCooldownTime, this.attackWindupTime);
 
-        this.tombstonePrefab = Instantiate(this.tombstonePrefab, this.transform.position, Quaternion.Euler(0, 180, 0));
-        this.tombstonePrefab.SetActive(false);
     }
 
     public Unit setBlueprint(UnitBlueprint blueprint, CombatManager manager) {
@@ -188,8 +183,6 @@ public abstract class Unit : MonoBehaviour
 
         this.hpBar.init(this.currentHealth, this.transform, hpCanvas);
         this.placeUnitOnSquare(square, true);
-
-        this.tombstonePrefab.SetActive(false);
     }
 
     public virtual void triggerUpdate(CombatManager manager) {
@@ -320,7 +313,7 @@ public abstract class Unit : MonoBehaviour
         this.animator.SetTrigger(trigger);
     }
 
-    public void takeDamage(float in_damage, Unit damage_from) {
+    public virtual void takeDamage(float in_damage, Unit damage_from) {
         if(this.isDead()) {
             Debug.Log("HITTING A DEAD!");
             return;
