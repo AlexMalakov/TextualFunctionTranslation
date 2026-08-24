@@ -4350,7 +4350,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &268845341
 Transform:
   m_ObjectHideFlags: 0
@@ -7739,100 +7739,100 @@ MonoBehaviour:
   curUnits:
   - unitName: lambert
     unitCost: 2
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: cf1eacec4324a4c92b9209560c0d058c, type: 3}
+    unitPrefab: {fileID: 3627120990021111851, guid: c820135be306043a5a22e974cd22a72e, type: 3}
   - unitName: aja
     unitCost: 4
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 8733dfbb3553f47eb9e2ea5774074ba4, type: 3}
+    unitPrefab: {fileID: 9214547953934175472, guid: 582579a67de964ff0bc6845fd5d68fd8, type: 3}
   - unitName: glumford
     unitCost: 5
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 5ff9aed0512984d2d9100d332030a50f, type: 3}
+    unitPrefab: {fileID: 237957838907158977, guid: 5e5ca9cfe45244ac0acb404e00379ebc, type: 3}
   - unitName: mortolimue
     unitCost: 4
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 494f3dd4326764dc597cdbe7d7828edc, type: 3}
+    unitPrefab: {fileID: 7838489863767665188, guid: aadbf897856fc4f4cbd09a7c886ff75d, type: 3}
   - unitName: glorpenzogg
     unitCost: 2
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 8ac4e31bd8a2747d5bcb856f13c1f0a3, type: 3}
+    unitPrefab: {fileID: 4613068967846722642, guid: 2cf716283482749339401ea77659309c, type: 3}
   - unitName: plonk
     unitCost: 3
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 92cc9d34e72ec4ae29672246b83108a7, type: 3}
+    unitPrefab: {fileID: 8131059177945033479, guid: f61d1e8b38a28479c825db9c889ef5b4, type: 3}
   - unitName: glupshitto
     unitCost: 4
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 7dff6a9a1f54140358c400ebd298108d, type: 3}
+    unitPrefab: {fileID: 6633746937197396907, guid: cc8c6343575d84cb2813742e1bedb069, type: 3}
   - unitName: groll
     unitCost: 3
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: e1adc3312d04243d6bea6459c7655cb1, type: 3}
+    unitPrefab: {fileID: 329016066331524829, guid: 7a7b6abe1536b49a4a57936f3b93da75, type: 3}
   - unitName: edric
     unitCost: 3
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: ecf620db445764d37a7a8d2f8aae5fde, type: 3}
+    unitPrefab: {fileID: 482797335781174186, guid: 6fe8724c4d92c4a26a13fc64b2e0e996, type: 3}
   - unitName: bromwyn
     unitCost: 2
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 6de169e1f664c4327b110d43e990c55c, type: 3}
+    unitPrefab: {fileID: 6552900015757429365, guid: 44e2434ba31fd4bed8d902d23fb3f855, type: 3}
   - unitName: geargobler
     unitCost: 4
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 17103d4b22b7a4410b6ed342a1545688, type: 3}
+    unitPrefab: {fileID: 1661109056068761189, guid: ad8707f43001b46fda0fe75bcce30a66, type: 3}
   - unitName: caven
     unitCost: 3
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 7a6591f017cba4d00a48dee1c61ed4ed, type: 3}
+    unitPrefab: {fileID: 3378399610875606750, guid: e6b3295d438ca4087b4b913351003940, type: 3}
   - unitName: elowen
     unitCost: 5
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: c2158aa257fc746ea9c6d361e8ae38b5, type: 3}
+    unitPrefab: {fileID: 3656967337710108739, guid: f4f543d04237a453cbfb534a188572e4, type: 3}
   - unitName: aldenmoor
     unitCost: 2
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 0af62712e4ad444629ef1e4632709da4, type: 3}
+    unitPrefab: {fileID: 7080946349497962433, guid: ace27696a49bf4f5e97151cb15787c10, type: 3}
   - unitName: pythagoriel
     unitCost: 3
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: cbe598e5be22846ff92e40889f620832, type: 3}
+    unitPrefab: {fileID: 7463683059496807054, guid: 6159eb242f7784a72970e691c96cd868, type: 3}
   - unitName: barnabas
     unitCost: 3
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: b5cda51bd150e424eb5103dffea8d612, type: 3}
+    unitPrefab: {fileID: 8404166030956715795, guid: 2af84b4a2266344de8a4684b3eeb6ebb, type: 3}
   - unitName: pog
     unitCost: 5
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: e51501d874be245409281bba876c352e, type: 3}
+    unitPrefab: {fileID: 6587443473190553031, guid: 22051558831af4e6690778b47c0c9c75, type: 3}
   - unitName: grumbloch
     unitCost: 2
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 081b6a578cca04660b896f890569ffec, type: 3}
+    unitPrefab: {fileID: 8312179279282575487, guid: 6a42570b1be4e4af5bf3ada46d5f7645, type: 3}
   - unitName: brim
     unitCost: 4
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 7cd81f1227304453faa51fe1f4e9ecf9, type: 3}
+    unitPrefab: {fileID: 5212008624229465246, guid: fce1da8462fab459db9bc79fa80ba701, type: 3}
   - unitName: maren
     unitCost: 3
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 1146d3817584a44d1a7b1417198fb01d, type: 3}
+    unitPrefab: {fileID: 4576012820701610908, guid: e1894b2f00f1c464d958cd6d55fec6c0, type: 3}
   - unitName: talitha
     unitCost: 2
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 1c7eb50aafe9d4651a295bfde9d2d6b7, type: 3}
+    unitPrefab: {fileID: 4114466048163282906, guid: 9dec0b859e887434a8661a38c5d62917, type: 3}
   - unitName: ingrid
     unitCost: 2
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 2aa863835cb3a41a1aaddc8f08f2f4e0, type: 3}
+    unitPrefab: {fileID: 7784528705384944039, guid: 1a3e1375caa094ebfb86a3ffaeb1bce5, type: 3}
   - unitName: sivara
     unitCost: 3
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: 0cdc7f743bbca4c94a026c3a9fc552c8, type: 3}
+    unitPrefab: {fileID: 8062571983823036234, guid: 22fffa31422414310b7be2522ce3ac89, type: 3}
   - unitName: jungus
     unitCost: 5
-    unitIcon: {fileID: 0}
-    unitPrefab: {fileID: 0}
+    unitIcon: {fileID: 21300000, guid: aac382ba4d2f043efbea4f9c8da076f7, type: 3}
+    unitPrefab: {fileID: 550068761662091784, guid: b263be0f02b0a4c778eaaacdd6657327, type: 3}
   cm: {fileID: 747084477}
 --- !u!1 &696879715
 GameObject:
@@ -19724,7 +19724,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1581382926
 Transform:
   m_ObjectHideFlags: 0
@@ -19930,7 +19930,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1601438039
 Transform:
   m_ObjectHideFlags: 0
