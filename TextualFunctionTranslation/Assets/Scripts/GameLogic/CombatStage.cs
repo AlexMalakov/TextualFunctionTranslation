@@ -44,11 +44,11 @@ public class CombatStage : MonoBehaviour
         return this.rewardMoney;
     }
 
-    public bool hasDialogue(bool combatHappened) {
+    public virtual bool hasDialogue(bool combatHappened) {
         return (combatHappened && this.postStageDialogue != null) || (!combatHappened && this.preStageDialogue != null);
     }
 
-    public Dialogue getDialogue(bool combatHappened) {
+    public virtual Dialogue getDialogue(bool combatHappened) {
         return combatHappened ? this.postStageDialogue : this.preStageDialogue;
     }
 }

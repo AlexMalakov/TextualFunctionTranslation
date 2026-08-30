@@ -16,20 +16,33 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CombatManager combatManager;
     [SerializeField] private HexBoard board;
     [SerializeField] private List<CombatStage> currentLevel; 
+    [SerializeField] private TutorialStage tut;
     [SerializeField] private PlayerInfo pi;
     [SerializeField] private StatusMessage statusMessage;
 
     [SerializeField] private HumanPlayer player;
 
-    private int currentStage = 0; //TODO: skip tutorial?
+    private int currentStage = 0;
+    private bool tutorialActive = true;
 
     [SerializeField] private PrecombatManager pcm;
     [SerializeField] private ReviewManager rvm;
+    [SerializeField] private SavedGameData data;
 
     private bool boardLocked = true;
 
     void Start() { //starts the game, runs after factories have finished
+        this.tutorialActive = this.data.showTutorial; //once tutorial starts you can't instantly skip it i think :)
+        if(!this.tutorial) {
+            //TODO: make sure player is equiped as if they did the tutorial
+        }
         this.onPreperationStart();
+    }
+
+
+    public void onTutorialOver() {
+        this.tutorialActive = false;
+        //TODO: proceed
     }
 
 
@@ -48,7 +61,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void onPreperationStart() {
-        if(this.currentLevel[this.currentStage].hasDialogue(false)) {
+        if(this.data.showDialogue && this.currentLevel[this.currentStage].hasDialogue(false)) {
             this.currentLevel[this.currentStage].getDialogue(false).startDialogue(null);
         } else {
             this.postPrepDialogue();
@@ -106,7 +119,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void onResultsStart(bool wonCombat, ReviewData rd) {
-        if(this.currentLevel[this.currentStage].hasDialogue(true)) {
+        if(this.data.showDialogue && this.currentLevel[this.currentStage].hasDialogue(true)) {
             this.currentLevel[this.currentStage].getDialogue(true).startDialogue(rd);
         } else {
             this.postResultsDialogue(rd);
