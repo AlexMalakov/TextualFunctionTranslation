@@ -21,11 +21,14 @@ public struct TutorialSection
 public class TutorialStage : CombatStage //this is poorly abstracted they have like not much in common tho :/
 {
     [SerializeField] private List<TutorialSection> sections;
+
     [SerializeField] private Shop shop;
     [SerializeField] private HexSquare squareToPlace;
     [SerializeField] private Unit unitToWatch;
     [SerializeField] private CypherPopUpButton scrollButton;
     [SerializeField] private GameStateButton combatButton;
+    [SerializeField] private CameraRayCast raycast;
+    [SerializeField] private ResultsRaycast movie;
 
     private int currentSection;
     private int pointerInSection;
@@ -33,6 +36,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     private bool started = false;
 
     //bad design ik but oh well this is a difficult thing to design smartly i feel
+    //as in I don't want to redesign everything for what is literally the last feature I will write
     private bool purchasedUnit;
     private bool placedUnit;
     private bool combatStarted;
@@ -48,51 +52,19 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
         return null;
     }
 
-    //TODO: On Prep start will call me :), inform prep manager that the tutorial is active?
-    public void startTutorial() {
+    public void startTutorial() { //wired
         this.started = true;
         this.currentSection = 0;
         this.pointerInSection = 0;
-
-        //TODO: disable everything
-        //TO DISABLE: shop, unit mouse moving, all real buttons
+        this.disableControls(true);
     }
 
-    private void disableControls() {
-        if(this.currentSection >= this.sections.Count) {
-            this.combatButton.tutorialLock(false);
-            this.shop.tutorialLock(false);
-            this.raycast.tutorialLock(false);
-            this.scrollButton.tutorialLock(false);
-            this.movie.tutorialLock(false);
-            return;
-        }
-
-        this.combatButton.tutorialLock(true);
-        this.shop.tutorialLock(true);
-        this.raycast.tutorialLock(true);
-        this.scrollButton.tutorialLock(true);
-        this.movie.tutorialLock(true);
-
-        switch(this.sections[this.currentSection].action) {
-            case TutorialAction.BuyUnit:
-                this.shop.tutorialLock(false);
-                break;
-            case TutorialAction.PlaceUnit:
-                this.raycast.tutorialLock(false);
-                break;
-            case TutorialAction.DoCombat:
-                this.combatButton.tutorialLock(false);
-                break;
-            case TutorialAction.InCombat:
-                break;
-            case TutorialAction.ReadScroll:
-                this.scrollButton.tutorialLock(false);
-                break;
-            case TutorialAction.ViewMovie:
-                this.movie.tutorialLock(false);
-                break;
-        }
+    private void disableControls(bool toggle) {
+        this.combatButton.tutorialLock(toggle);
+        this.shop.tutorialLock(toggle);
+        this.raycast.tutorialLock(toggle);
+        this.scrollButton.tutorialLock(toggle);
+        this.movie.tutorialLock(toggle);
     }
 
      //TODO: tie to game manager
@@ -118,26 +90,55 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
 
             if(this.pointerInSection < this.sections[this.currentSection].dialogue.Count) {
                 //TODO: show next dialogue
+            } else {
+                this.onDialogueOver();
             }
+        }
+    }
+
+    private void onDialogueOver() {
+        switch(this.sections[this.currentSection].action) {
+            case TutorialAction.BuyUnit:
+                this.shop.tutorialLock(false);
+                this.shop.tutorialFlash(true);
+                break;
+            case TutorialAction.PlaceUnit:
+                this.raycast.tutorialLock(false);
+                this.squareToPlace.tutorialFlash(true);
+                break;
+            case TutorialAction.DoCombat:
+                this.combatButton.tutorialLock(false);
+                this.combatButton.tutorialFlash(true);
+                break;
+            case TutorialAction.InCombat:
+                break;
+            case TutorialAction.ReadScroll:
+                this.scrollButton.tutorialLock(false);
+                this.scrollButton.tutorialFlash(true);
+                break;
+            case TutorialAction.ViewMovie:
+                this.movie.tutorialLock(false);
+                this.unitToWatch.getPosition().tutorialFlash(true);
+                break;
         }
     }
 
     private void checkSectionCondition() {
         switch(this.sections[this.currentSection].action) {
-            case TutorialAction.BuyUnit: //A one unit shop
+            case TutorialAction.BuyUnit: //A one unit shop, so no block needed
                 if(this.purchasedUnit) {
                     this.currentSection++;
                     this.pointerInSection = 0;
                     this.shop.tutorialFlash(false);
-                    this.squaredToPlace.tutorialFlash(true);
+                    this.shop.tutorialLock(true);
                 }
                 break;
-            case TutorialAction.PlaceUnit:
+            case TutorialAction.PlaceUnit: //block needed
                 if(this.placedUnit) {
                     this.currentSection++;
                     this.pointerInSection = 0;
                     this.squareToPlace.tutorialFlash(false);
-                    this.combatButton.tutorialFlash(true);
+                    this.raycast.tutorialLock(true);
                 }
                 break;
             case TutorialAction.DoCombat:
@@ -145,12 +146,12 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
                     this.currentSection++;
                     this.pointerInSection = 0;
                     this.combatButton.tutorialFlash(false);
+                    this.combatButton.tutorialLock(true);
                 }
                 break;
             case TutorialAction.InCombat:
                 if(this.combatOver) {
                     this.currentSection++;
-                    this.scrollButton.tutorialFlash(true);
                 }
                 break;
             case TutorialAction.ReadScroll:
@@ -158,19 +159,21 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
                     this.currentSection++;
                     this.pointerInSection = 0;
                     this.scrollButton.tutorialFlash(false);
-                    this.unitToWatch.getPosition().tutorialFlash(true);
+                    this.scrollButton.tutorialLock(true);
                 }
                 break;
-            case TutorialAction.ViewMovie:
+            case TutorialAction.ViewMovie: //block needed
                 if(this.movieViewed) {
-                    this.currentSection++;
+                    this.currentSection = 0;
                     this.pointerInSection = 0;
                     this.unitToWatch.getPosition().tutorialFlash(false);
-
-                    this.game.onTutorialOver();
+                    this.movie.tutorialLock(true);
+                    this.endTutorial();
                 }
                 break;
         }
+        
+        
     }
 
     public void onUnitBought() {
@@ -183,12 +186,12 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     }
 
     //I can only happen once we've purchased and placed a unit
-    public void onTutorialCombatStart() {
+    public void onTutorialCombatStart() { //wired
         this.combatStarted = true;
     }
 
     //I can only happen during scroll closed and movie viewed
-    public void onTutorialResultsStart() {
+    public void onTutorialResultsStart() { //wired
         this.combatOver = true;
     }
 
@@ -203,8 +206,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     }
 
     private void endTutorial() {
-        this.disableControls();
-        this.currentSection = 0;
+        this.disableControls(false);
         this.started = false;
         this.game.onTutorialOver(); //TODO: this doesn't end the stage this just undoes all controls
     }

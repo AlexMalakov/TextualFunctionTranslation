@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
         this.tutorialActive = this.data.showTutorial; //once tutorial starts you can't instantly skip it i think :)
         if(!this.tutorial) {
             //TODO: make sure player is equiped as if they did the tutorial
+        } else {
+            this.tut.startTutorial();
         }
         this.onPreperationStart();
     }
@@ -92,6 +94,9 @@ public class GameManager : MonoBehaviour
     }
 
     public IEnumerator onCombatStart() {
+        if(this.tutorialActive) {
+            this.tut.onTutorialCombatStart();
+        }
         this.combatManager.initializeCombat();
         yield return this.combatManager.precombatAnims();
         this.combatSched.onCombatStart();
@@ -119,6 +124,10 @@ public class GameManager : MonoBehaviour
     }
 
     public void onResultsStart(bool wonCombat, ReviewData rd) {
+        if(this.tutorialActive) {
+            this.tut.onTutorialResultsStart();
+        }
+        
         if(this.data.showDialogue && this.currentLevel[this.currentStage].hasDialogue(true)) {
             this.currentLevel[this.currentStage].getDialogue(true).startDialogue(rd);
         } else {
