@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
 
     void Start() { //starts the game, runs after factories have finished
         this.tutorialActive = this.data.showTutorial; //once tutorial starts you can't instantly skip it i think :)
-        if(!this.tutorial) {
+        if(!this.tutorialActive) {
             //TODO: make sure player is equiped as if they did the tutorial
         } else {
             this.tut.startTutorial();
@@ -106,15 +106,15 @@ public class GameManager : MonoBehaviour
         this.combatSched.runNUpdates();
     }
 
-    public void restartLevel() {
+    public void restartLevel(bool randomizerSurvived) {
         this.statusMessage.displayMessage("YOU LOSE");
         this.gameState = GameStage.result_loss;
-        this.onCombatEnd(false);
+        this.onCombatEnd(false, randomizerSurvived);
     }
 
-    public void continueToNextLevel() {
+    public void continueToNextLevel(bool randomizerSurvived) {
         this.gameState = GameStage.result_win;
-        this.onCombatEnd(true);
+        this.onCombatEnd(true, randomizerSurvived);
     }
 
 
@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
         if(this.tutorialActive) {
             this.tut.onTutorialResultsStart();
         }
-        
+
         if(this.data.showDialogue && this.currentLevel[this.currentStage].hasDialogue(true)) {
             this.currentLevel[this.currentStage].getDialogue(true).startDialogue(rd);
         } else {
@@ -169,11 +169,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void doneYapping(ReviewData rd) {
+    public void doneYapping(ReviewData? rd) {
         if(this.gameState == GameStage.preperation) {
             this.postPrepDialogue();
         } else {
-            this.postResultsDialogue(rd);
+            this.postResultsDialogue(rd.Value);
         }
     }
 }

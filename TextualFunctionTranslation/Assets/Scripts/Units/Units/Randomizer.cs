@@ -17,15 +17,15 @@ public class Randomizer : Unit
     private System.Random rng;
 
     public override float calcDamage() {
-        if(this.rng = null) {
+        if(this.rng == null) {
             this.rng = new System.Random(randomSeed);
         }
 
-        return this.damageCalculator.calculateFromN((float)this.rng.NextDouble(this.minDamage, this.maxDamage));
+        return this.damageCalculator.calculateFromN((float)this.rng.NextDouble() * (this.maxDamage - this.minDamage));
     }
 
     public System.Random getRandomizer() {
-        if(this.rng = null) {
+        if(this.rng == null) {
             this.rng = new System.Random(randomSeed);
         }
 
@@ -51,7 +51,7 @@ public class Randomizer : Unit
         if(this.currentState is AttackState) {
             this.manager.getRandomAttackTarget(this.rng);
 
-            if(this.rng = null) {
+            if(this.rng == null) {
                 this.rng = new System.Random(randomSeed);
             }
             this.currentRange = rng.Next(this.minRange, this.maxRange);
@@ -60,7 +60,7 @@ public class Randomizer : Unit
         base.requestStateSwap();
     }
 
-    public override void reassignTargetAndWalk(StateDataContainer stateData) {
+    protected override void reassignTargetAndWalk(StateDataContainer stateData) {
         //we don't try to get a closer target we just walk :)
         stateData.sq = this.manager.requestRoute(this, this.currentTarget);
         this.currentState.swapStates(this.Walk, stateData);

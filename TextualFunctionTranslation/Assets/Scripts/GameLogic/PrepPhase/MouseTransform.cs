@@ -6,9 +6,12 @@ public class MouseTransform : MonoBehaviour
 {
     [SerializeField] private float snapRadius = 1f;
     [SerializeField] private HumanPlayer humanPlayer;
+    [SerializeField] private TutorialStage tut;
     private Plane dragPlane;
     private Unit unitDragging;
     private Vector3 initialPos;
+
+    private bool tutorialCheckRequired = false;
 
     void Awake() { //Awake because this doesn't affect other systems
         this.dragPlane = new Plane(Vector3.up, Vector3.zero);
@@ -71,7 +74,14 @@ public class MouseTransform : MonoBehaviour
 
             
             //call update and see if it succeeded or not
-            if(square && closestSquare != null) {
+            if(this.tutorialCheckRequired && square && closestSquare != null && this.tut.isTutorialPlacement(closestSquare)) {
+                succeeded = this.humanPlayer.getUnitLayout().attemptUpdateLayout(this.unitDragging, closestSquare);
+                if(!succeeded) {
+                    this.tut.isTutorialPlacement(null);
+                }
+            } else if(this.tutorialCheckRequired) {
+                succeeded = false;
+            } else if(square && closestSquare != null) {
                 succeeded = this.humanPlayer.getUnitLayout().attemptUpdateLayout(this.unitDragging, closestSquare);
             } else if(!square && closestBench != null) {
                 succeeded = this.humanPlayer.getBench().updateBenchLayout(this.unitDragging, closestBench.getSlotNum());
@@ -85,5 +95,9 @@ public class MouseTransform : MonoBehaviour
             StartCoroutine(this.humanPlayer.getUnitMoveManager().dragUnitTo(this.unitDragging, this.initialPos, false));
         }
         this.unitDragging = null;
+    }
+
+    public void tutorialStarted(bool started) {
+        this.tutorialCheckRequired = started;
     }
 }

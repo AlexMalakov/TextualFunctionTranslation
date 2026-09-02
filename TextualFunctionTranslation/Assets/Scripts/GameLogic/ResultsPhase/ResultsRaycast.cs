@@ -10,6 +10,11 @@ public class ResultsRaycast : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private Player enemy;
 
+    [SerializeField] private TutorialStage tut;
+
+    private bool tutorialLockOn;
+    private bool tutorialActive;
+
     private bool inResultsPhase = false;
 
     private CombatEvent curFrame;
@@ -25,6 +30,13 @@ public class ResultsRaycast : MonoBehaviour
     }
 
     public void checkUserInteraction() {
+        if(this.tutorialLockOn) {
+            if(this.unitMovie != null) {
+                this.endMovie();
+            }
+            return;
+        }
+
         if (this.inResultsPhase && Input.GetMouseButtonDown(0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -52,6 +64,9 @@ public class ResultsRaycast : MonoBehaviour
     }
 
     private void onUnitPressed(Unit u) {
+        if(this.tutorialActive && !this.tut.onMovieEnded(u)) {
+            return;
+        }
         List<CombatEvent> uEvents = this.log.getUnitsEvents(u);
         this.cm.hideAllUnits();
         this.unitMovie = StartCoroutine(this.playUnitMovie(u, uEvents));
@@ -132,5 +147,13 @@ public class ResultsRaycast : MonoBehaviour
 
         u1.rotateTo((this.cm.isPlayerUnit(u1) ? this.player : this.enemy).getUnitRotation(false));
         u2.rotateTo((this.cm.isPlayerUnit(u2) ? this.player : this.enemy).getUnitRotation(false));
+    }
+
+    public void tutorialStarted(bool started) {
+        this.tutorialActive = started;
+    }
+
+    public void tutorialLock(bool lockOn) {
+        this.tutorialLockOn = lockOn;
     }
 }

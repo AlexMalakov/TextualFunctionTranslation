@@ -77,7 +77,7 @@ public class HeroCheck : MonoBehaviour
     private bool noDups() { //TODO: lets check active units isnt returning bench
         List<string> unitNames = new List<string>();
         foreach(Unit u in this.player.getActiveUnits()) {
-            if(unitName.Contains(u.getUnitName())) {
+            if(unitNames.Contains(u.getName())) {
                 return false;
             }
         }
@@ -106,7 +106,7 @@ public class HeroCheck : MonoBehaviour
     }
 
     private bool isSacrifice(Unit dead) {
-        return dead.getRoleTrait().getTraitName() == "goblin" || dead.getRoleTrait().getTraitName() == "plague doctor"
+        return dead.getRoleTrait().getTraitName() == "goblin" || dead.getRoleTrait().getTraitName() == "plague doctor";
     }
 
 }

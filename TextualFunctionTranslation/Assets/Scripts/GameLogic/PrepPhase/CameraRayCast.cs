@@ -7,8 +7,17 @@ public class CameraRayCast : MonoBehaviour
     [SerializeField] private MouseTransform mt;
 
     private bool toggle = false;
+    private bool tutorialLockOn = false;
 
     public void checkUserInteraction() {
+        if(this.tutorialLockOn) {
+            if(toggle) {
+                this.releaseUnit();
+                toggle = false;
+            }
+            return; //no interacting while 
+        }
+
         if (Input.GetMouseButtonDown(0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -32,6 +41,13 @@ public class CameraRayCast : MonoBehaviour
         }
     }
 
+    public void tutorialLock(bool lockActive) {
+        this.tutorialLockOn = lockActive;
+    }
+
+    public void tutorialStarted(bool started) {
+        this.mt.tutorialStarted(started);
+    }
 
     private void onUnitPressed(Unit u) {
         this.mt.startUnitDrag(u);

@@ -23,7 +23,7 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private TMP_Text dialogue;
     [SerializeField] private GameManager gm;
 
-    private ReviewData reviewDataSave;
+    private ReviewData? reviewDataSave;
 
     public void Awake() {
         dialogueBox.SetActive(false);
@@ -33,7 +33,7 @@ public class Dialogue : MonoBehaviour
     private bool inDialogue = false;
 
 
-    public void startDialogue(ReviewData rd) {
+    public void startDialogue(ReviewData? rd) {
         this.reviewDataSave = rd;
         this.inDialogue = true;
         dialogueBox.SetActive(false);

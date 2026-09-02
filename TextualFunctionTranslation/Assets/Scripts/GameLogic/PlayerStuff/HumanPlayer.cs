@@ -14,16 +14,20 @@ public class HumanPlayer : Player //player but has money and shit
     [SerializeField] private PlayerInfo pi;
     [SerializeField] private int lenseCount;
 
+    [SerializeField] private Shop shop;
+
     private List<Unit> unitsCopy;
 
     private int prevMoney = 0;
+    private int prevShopIndex = 0;
 
 
     public virtual void init() {
         base.init();
         this.unitsCopy = new List<Unit>(this.playersUnits);
         this.pi.setDollars(this.money);
-        this.prevMoney = money;
+        this.prevMoney = this.money;
+        this.prevShopIndex = this.shop.getShopIndex();
         this.lenseCount = 0;
     }
 
@@ -141,6 +145,7 @@ public class HumanPlayer : Player //player but has money and shit
         }
         this.money = this.prevMoney;
         this.pi.setDollars(this.money);
+        this.shop.setShopIndex(this.prevShopIndex);
     }
 
     public void gainLenses(int deltaL) {

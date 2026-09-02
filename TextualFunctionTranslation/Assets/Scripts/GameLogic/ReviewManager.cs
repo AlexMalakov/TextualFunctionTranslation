@@ -6,6 +6,11 @@ using TMPro;
 public struct ReviewData {
     public bool playerWon;
     public bool randomizerSuvived;
+
+    public ReviewData(bool playerWon, bool randomizerSuvived) {
+        this.playerWon = playerWon;
+        this.randomizerSuvived = randomizerSuvived;
+    }
 }
 
 public class ReviewManager : MonoBehaviour
@@ -54,7 +59,7 @@ public class ReviewManager : MonoBehaviour
 
     private string scrambleString(string input) {
         char[] chars = input.ToCharArray();
-        
+
         for (int i = 0; i < chars.Length; i++) {
             if (chars[i] >= 'a' && chars[i] <= 'z') {
                 chars[i] = (char)Random.Range('a', 'z' + 1);

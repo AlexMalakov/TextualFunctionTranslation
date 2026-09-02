@@ -14,7 +14,7 @@ public class DemonKing : Unit
             return;
         }
 
-        base.triggerUpdate();
+        base.triggerUpdate(manager);
     }
 
     public override void initUnit(HexSquare square, HealthBarManager hpBar, Transform hpCanvas) {
@@ -43,7 +43,7 @@ public class DemonKing : Unit
 
     public override void onDeath() {
         //TODO; say some even more aura shit
-        this.currentHealth = this.healthCalculator.calculate();
+        this.currentHealth = this.calcMaxHealth();
         //TODO: reset health bar back up to full >:)
 
     }

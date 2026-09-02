@@ -8,7 +8,9 @@ public enum TutorialAction {
     DoCombat,
     InCombat,
     ReadScroll,
-    ViewMovie
+    LenseUsed, //TODO add me
+    ViewMovie,
+    DialogueOver //TODO add me
 }
 
 [System.Serializable]
@@ -29,6 +31,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     [SerializeField] private GameStateButton combatButton;
     [SerializeField] private CameraRayCast raycast;
     [SerializeField] private ResultsRaycast movie;
+    [SerializeField] private GameManager game;
 
     private int currentSection;
     private int pointerInSection;
@@ -65,6 +68,10 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
         this.raycast.tutorialLock(toggle);
         this.scrollButton.tutorialLock(toggle);
         this.movie.tutorialLock(toggle);
+
+        this.shop.tutorialStarted(toggle);
+        this.raycast.tutorialStarted(toggle);
+        this.movie.tutorialStarted(toggle);
     }
 
      //TODO: tie to game manager
@@ -197,7 +204,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
 
 
     public void onScrollClosed() {
-        this.scrollClosed;
+        this.scrollClosed = true;
     }
 
     public bool onMovieEnded(Unit unitWatched) {

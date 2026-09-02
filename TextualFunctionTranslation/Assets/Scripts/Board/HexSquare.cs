@@ -65,6 +65,7 @@ public class HexSquare : MonoBehaviour
 
     private char characterValue;
     private bool showing = false;
+    private bool tutorialFlashOn = false;
     
     public virtual void init(int x, int y, Vector3 hexPos) {
         this.text.gameObject.SetActive(false);
@@ -141,6 +142,25 @@ public class HexSquare : MonoBehaviour
         this.render.material.color = color;
         this.text.color = new Color(255, 0, 0);
         Invoke(nameof(unhighlight), duration);
+    }
+
+    public void tutorialFlash(bool flashActive) {
+        this.tutorialFlashOn = flashActive;
+        if(flashActive) {
+            this.doFlash();
+        } else {
+            this.unhighlight();
+        }
+    }
+
+    private void doFlash() {
+        if(!this.tutorialFlashOn) {
+            this.unhighlight();
+            return;
+        }
+        this.highlightSquare(new Color(255, 0, 0), .5f); //TODO: pick a nice pretty color :)
+        Invoke(nameof(doFlash), .5f);
+
     }
     
     private void unhighlight() {

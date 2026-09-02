@@ -5,14 +5,14 @@ using UnityEngine;
 public class Mimic : Unit
 {
     public override float calcDamage() {
-        return this.currentTarget != null ? this.currentTarget.calcDamage() : this.damage;
+        return this.currentTarget != null ? this.currentTarget.calcDamage() : base.calcDamage();
     }
 
     public override int getRange() {
-        return this.currentTarget != null ? this.currentTarget.getRange() : 1;
+        return this.currentTarget != null ? this.currentTarget.getRange() : base.getRange();
     }
 
-    public override int calcAttackSpeed() {
-        return this.currentTarget != null ? this.currentTarget.getAttackSpeed();
+    public override float calcAttackSpeed() {
+        return this.currentTarget != null ? this.currentTarget.calcAttackSpeed() : base.calcAttackSpeed();
     }
 }

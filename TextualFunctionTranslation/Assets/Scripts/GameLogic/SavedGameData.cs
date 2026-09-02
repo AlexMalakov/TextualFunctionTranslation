@@ -15,13 +15,13 @@ public class SavedGameData : MonoBehaviour
         this.showDialogue = PlayerPrefs.GetInt("dialogue", 1) > 0;
     }
 
-    public bool setTutorialStatus(bool status) {
+    public void setTutorialStatus(bool status) {
         this.showTutorial = status;
         PlayerPrefs.SetInt("tutorial", status ? 1 : 0);
         PlayerPrefs.Save();
     }
 
-    public bool setDialogueStatus(bool status) {
+    public void setDialogueStatus(bool status) {
         this.showDialogue = status;
         PlayerPrefs.SetInt("dialogue", status ? 1 : 0);
         PlayerPrefs.Save();

@@ -16,9 +16,15 @@ public class ShopButton : MonoBehaviour
     [SerializeField] private TMP_Text unitCost;
     [SerializeField] private Image unitSprite;
 
+    [SerializeField] private Image image;
+
+    private bool tutFlashOn;
+    private Color color;
+
     public void Awake() { //Awake because this doesn't affect other systems
         UnityEngine.UI.Button btn = button.GetComponent<UnityEngine.UI.Button>();
 		btn.onClick.AddListener(onButtonClick);
+        this.color = image.color;
     }
 
     public void setOffering(UnitBlueprint unitBeingSold) {
@@ -31,6 +37,31 @@ public class ShopButton : MonoBehaviour
     public void onButtonClick() {
         Debug.Log("CLICKED!");
         this.shop.onUnitPurchased(this.unitBeingSold);
+    }
+
+    public void tutorialFlash(bool flashOn) {
+        this.tutFlashOn = flashOn;
+        if(flashOn) {
+            this.flash();
+        } else {
+            this.unflash();
+        }
+    }
+
+    private void flash() {
+        if(!this.tutFlashOn) {
+            return;
+        }
+        this.image.color = new Color(255, 0, 0);
+        Invoke(nameof(unflash), .5f);
+    }
+
+    private void unflash() {
+        this.image.color = this.color;
+
+        if(this.tutFlashOn) {
+            Invoke(nameof(flash), .5f);
+        }
     }
 
 }

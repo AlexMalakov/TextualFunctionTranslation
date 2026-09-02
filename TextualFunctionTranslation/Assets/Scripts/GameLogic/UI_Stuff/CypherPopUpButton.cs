@@ -11,10 +11,17 @@ public class CypherPopUpButton : MonoBehaviour
     [SerializeField] private CypherTextDisplay disp;
 
     [SerializeField] private TMP_Text buttonText;
+    [SerializeField] private Image image;
+
+    private bool tutorialLockOn = false;
+    private bool tutorialFlashOn = false;
+
+    private Color color;
 
     public void Awake() { //Awake because this doesn't affect other systems
         UnityEngine.UI.Button btn = button.GetComponent<UnityEngine.UI.Button>();
 		btn.onClick.AddListener(onButtonClick);
+        this.color = this.image.color;
     }
 
     public void onButtonClick() {
@@ -25,5 +32,32 @@ public class CypherPopUpButton : MonoBehaviour
 
     public void setDisplay(bool setMe) {
         this.gameObject.SetActive(setMe);
+    }
+
+    public void tutorialLock(bool lockOn) {
+        this.tutorialLockOn = lockOn;
+    }
+
+    public void tutorialFlash(bool startFlash) {
+        this.tutorialFlashOn = startFlash;
+        if(startFlash)
+            this.flash();
+        else
+            this.unflash();
+    }
+    
+    private void flash() {
+        if(!this.tutorialFlashOn)
+            return;
+        this.image.color = new Color(255, 0 ,0);
+
+        Invoke(nameof(unflash), .5f);
+    }   
+
+    private void unflash() {
+        this.image.color = this.color;
+        if(this.tutorialFlashOn) {
+            Invoke(nameof(flash), .5f);
+        }
     }
 }

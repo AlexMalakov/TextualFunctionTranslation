@@ -64,7 +64,7 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private int tauntAmount;
 
     [Header ("Objects")]
-    [SerializeField] private CombatManager manager;
+    [SerializeField] protected CombatManager manager;
     [SerializeField] private Animator animator;
     [SerializeField] private CombatLog combatLog;
     private HealthBarManager hpBar;
@@ -74,15 +74,15 @@ public abstract class Unit : MonoBehaviour
     protected UnitNumericCalculator damageCalculator;
     protected UnitNumericCalculator attackSpeedCalculator; //need a way to balance this?
 
-    private float currentHealth;
+    protected float currentHealth;
 
     protected Unit currentTarget;
     private HexSquare curPosition;
 
     //states
-    private UnitActionState Walk;
-    private UnitActionState Idle;
-    private UnitActionState Attack;
+    protected UnitActionState Walk;
+    protected UnitActionState Idle;
+    protected UnitActionState Attack;
     protected UnitActionState currentState;
 
     public void Start() {
@@ -134,8 +134,8 @@ public abstract class Unit : MonoBehaviour
         return this.damage.getStat(starLevel);
     }
 
-    public virtual float getAttackSpeed() { //TODO: calcualte as attacks per second
-        return this.attackSpeedCalculator.calculate();
+    public float getAttackSpeed() { //TODO: calcualte as attacks per second
+        return (float)this.attackSpeed;
     }
 
     public float getCurHealth() {
@@ -150,7 +150,7 @@ public abstract class Unit : MonoBehaviour
         return this.damageCalculator.calculate();
     }
 
-    public float calcAttackSpeed() {
+    public virtual float calcAttackSpeed() {
         return (float) this.attackSpeedCalculator.calculate();
     }
 
@@ -168,14 +168,14 @@ public abstract class Unit : MonoBehaviour
         return this.classTrait;
     }
 
-    public void initUnit(HexSquare square, HealthBarManager hpBar, Transform hpCanvas) { //NOTE: this is called both at the start of prep and end of prep
+    public virtual void initUnit(HexSquare square, HealthBarManager hpBar, Transform hpCanvas) { //NOTE: this is called both at the start of prep and end of prep
         if(this.hpBar != null) {
             this.hpBar.onDeath();
         }
         this.hpBar = hpBar;
         this.healthCalculator = new UnitNumericCalculator(this.health.getStat(this.starLevel));
         this.damageCalculator = new UnitNumericCalculator(this.damage.getStat(this.starLevel));
-        this.attackSpeedCalculator = new UnitNumericCalculator((float)this.attackSpeed);
+        this.attackSpeedCalculator = new UnitNumericCalculator((float)this.getAttackSpeed());
 
         this.currentHealth = this.healthCalculator.calculate();
 
@@ -237,7 +237,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     //pulling this out ot override for randomizer pulling this out heeheehaw
-    protected void reassignTargetAndWalk(StateDataContainer stateData) {
+    protected virtual void reassignTargetAndWalk(StateDataContainer stateData) {
         Unit newPossibleTarget = this.manager.requestAttackTarget(this, this.currentTarget);
         if(newPossibleTarget != null) {
             this.currentTarget = newPossibleTarget; //target reassigned :'(
@@ -356,7 +356,7 @@ public abstract class Unit : MonoBehaviour
         this.curPosition = null; //should prob be a null square but oh well
     }
 
-    public void onDeath() {
+    public virtual void onDeath() {
         this.triggerAnimation("death");
 
         this.manager.onUnitDeath(this);
