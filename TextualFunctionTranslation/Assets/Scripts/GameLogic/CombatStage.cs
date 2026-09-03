@@ -18,8 +18,6 @@ public class CombatStage : MonoBehaviour
     [SerializeField] private Dialogue preStageDialogue;
     [SerializeField] private Dialogue postStageDialogue;
 
-    //TODO: when saving is implemented, each stage shoudl also have an identifier for ezpzlemonsqueezy
-
     public PlayerUnitLayout getCombatLayout() {
         return this.opponentUnitLayout;
     }

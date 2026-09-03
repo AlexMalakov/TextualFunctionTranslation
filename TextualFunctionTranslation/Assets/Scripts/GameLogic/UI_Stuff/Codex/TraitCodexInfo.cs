@@ -26,7 +26,7 @@ public class TraitCodexInfo : MonoBehaviour
         this.traitBreakpoints.text = text;
         this.traitDescription.text = t.getTraitDescription();
 
-        //TODO: trait image
+        this.image.sprite = t.getTraitIcon();
         //TODO: units that have a trait
     }
 }

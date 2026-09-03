@@ -10,8 +10,6 @@ public class GameManager : MonoBehaviour
 {
     private GameStage gameState = GameStage.preperation;    
 
-    //TODO: make sure shop resets back to previous state on death
-
     [SerializeField] private CombatScheduler combatSched;
     [SerializeField] private CombatManager combatManager;
     [SerializeField] private HexBoard board;

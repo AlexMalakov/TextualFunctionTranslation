@@ -25,7 +25,7 @@ public class Shop : MonoBehaviour
 
     private int shopIndex = 0;
 
-    public void getShopIndex() {
+    public int getShopIndex() {
         return this.shopIndex;
     }
 

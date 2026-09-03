@@ -16,21 +16,31 @@ public class DruidTrait : InformationTrait
     //DOESN'T need to check amount just active
 
     public override void onPrecombatStart() { //this might run multiple times which may be annoying or slow | solution enemy wont have this trait ever
-        vowelSquares = new List<HexSquare>();
+        this.vowelSquares = new List<HexSquare>();
         char[] vowels = {'a', 'e', 'i', 'o', 'u'};
 
         foreach (HexSquare s in this.combatManager.getBoard().getPlayerSquares()) {
             if (vowels.Contains(s.getCharValue())) {
-                vowelSquares.Add(s);
+                this.vowelSquares.Add(s);
             } else if(s.getCharValue() == 'y') {
-                ySquare = s;
+                this.ySquare = s;
             }
         }
 
-        //TODO: highlight squares
+        foreach(HexSquare s in this.vowelSquares) {
+            s.showDruidInfluence(true, false);
+        }
+
+        this.ySquare.showDruidInfluence(true, true);
     }
 
     public override void onCombatStart(Unit traitHaver) {
+        foreach(HexSquare s in this.vowelSquares) {
+            s.showDruidInfluence(false, false);
+        }
+
+        this.ySquare.showDruidInfluence(false, true);
+
         if (vowelSquares.Contains(traitHaver.getPosition())) {
             Operation buffOpp = new Operation(OperationType.PreMultiply, this.statBoostAmountV, "Druid Start Buff");
             traitHaver.buffStat(BuffableStats.Damage, buffOpp, traitHaver);

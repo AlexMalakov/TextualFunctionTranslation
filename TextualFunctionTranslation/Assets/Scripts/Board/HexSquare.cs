@@ -141,7 +141,9 @@ public class HexSquare : MonoBehaviour
     public void highlightSquare(Color color, float duration) {
         this.render.material.color = color;
         this.text.color = new Color(255, 0, 0);
-        Invoke(nameof(unhighlight), duration);
+        if(duration > 0) {
+            Invoke(nameof(unhighlight), duration);
+        }
     }
 
     public void tutorialFlash(bool flashActive) {
@@ -171,5 +173,13 @@ public class HexSquare : MonoBehaviour
     public string toString() {
         // return this.getCoords().toOffset().x + ", " + this.getCoords().toOffset().y;
         return "OFFEST: " + this.getCoords().toOffset().x + ", " + this.getCoords().toOffset().y + " CUBIC: " + this.getCoords().q+ ", " + this.getCoords().r+ ", " + this.getCoords().s;
+    }
+
+    public void showDruidInfluence(bool enabled, bool special) {
+        if(!enabled) {
+            this.unhighlight();
+        } else {
+            this.highlightSquare(special ? new Color(255, 0, 255) : new Color(0, 255, 0), -1f);
+        }
     }
 }

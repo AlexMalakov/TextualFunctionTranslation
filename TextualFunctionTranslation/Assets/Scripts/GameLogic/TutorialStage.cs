@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public enum TutorialAction {
     BuyUnit,
@@ -32,6 +34,11 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     [SerializeField] private CameraRayCast raycast;
     [SerializeField] private ResultsRaycast movie;
     [SerializeField] private GameManager game;
+
+    [SerializeField] private GameObject dialogueBox;
+    [SerializeField] private Dictionary<string, Sprite> nameToIcon;    
+    [SerializeField] private Image talkerSprite;
+    [SerializeField] private TMP_Text dialogueText;
 
     private int currentSection;
     private int pointerInSection;
@@ -92,12 +99,21 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
 
     private void nextDialogue() {
         if(this.pointerInSection < this.sections[this.currentSection].dialogue.Count) {
+            this.dialogueBox.SetActive(true);
             this.pointerInSection++;
-            //TODO: hide current dialogue
 
             if(this.pointerInSection < this.sections[this.currentSection].dialogue.Count) {
-                //TODO: show next dialogue
+                DialogueLine nextLine = this.sections[this.currentSection].dialogue[this.pointerInSection];
+                this.dialogueText.text = nextLine.dialogue;
+                this.talkerSprite.sprite = this.nameToIcon[nextLine.speaker];
+
+                if(nextLine.onTheLeft) {
+                    this.dialogueBox.GetComponent<RectTransform>().localScale  = new Vector3(1, 1, 1);
+                } else {
+                    this.dialogueBox.GetComponent<RectTransform>().localScale  = new Vector3(-1, 1, 1);
+                }
             } else {
+                this.dialogueBox.SetActive(false);
                 this.onDialogueOver();
             }
         }

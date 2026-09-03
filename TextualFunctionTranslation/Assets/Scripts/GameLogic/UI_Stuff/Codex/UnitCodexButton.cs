@@ -24,7 +24,7 @@ public class UnitCodexButton : MonoBehaviour
     public void init(UnitBlueprint ub) {
         this.ub = ub;
         this.text.text = this.ub.unitName;
-        //TODO: assign trait icon
+        this.image.sprite = this.ub.unitIcon;
     }
 
     //mr president a sixth button script has hit the tower

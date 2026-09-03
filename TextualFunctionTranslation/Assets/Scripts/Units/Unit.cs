@@ -67,6 +67,7 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected CombatManager manager;
     [SerializeField] private Animator animator;
     [SerializeField] private CombatLog combatLog;
+    [SerializeField] private Sprite unitIcon;
     private HealthBarManager hpBar;
 
     //[Header ("Active Stats")]
@@ -166,6 +167,10 @@ public abstract class Unit : MonoBehaviour
             this.classTrait = TraitFactory.getTrait(this.classTraitName, this);
         }
         return this.classTrait;
+    }
+
+    public Sprite getUnitIcon() {
+        return this.unitIcon;
     }
 
     public virtual void initUnit(HexSquare square, HealthBarManager hpBar, Transform hpCanvas) { //NOTE: this is called both at the start of prep and end of prep
