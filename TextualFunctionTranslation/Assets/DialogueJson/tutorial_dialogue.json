@@ -1,0 +1,227 @@
+[
+    {
+        "section": "buyUnit",
+        "dialogue": [
+            {
+                "text": "Your highness, the demon lord's army sieges our walls. We can't hold out any longer. It's time to fight. Do you remember everything I taught you?",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            },
+            {
+                "text": "yes Timble, I'm ready.",
+                "speaker": "You",
+                "on_the_left": true,
+                "randomize": false
+            },
+            {
+                "text": "I know you are, but please bear with me majesty. I promised your father you would be fully prepared for when this day happened.",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            },
+            {
+                "text": "To defend our kingdom, you will need to field an army, Sire. Start by recruiting some soldiers from the barracks. Make sure you have the required funds, you will need to pay them for their service.",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            },
+            {
+                "text": "yes Timble, I know this!",
+                "speaker": "You",
+                "on_the_left": true,
+                "randomize": false
+            }
+        ]
+    },
+    {
+        "section": "placeUnit",
+        "dialogue": [
+            {
+                "text": "Excellent job your highness, PLACEHOLDER will serve you well. Place the recruit onto the battlefield. Let's use this position to start.",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            }
+        ]
+    },
+    {
+        "section": "startCombat",
+        "dialogue": [
+            {
+                "text": "Unit position is very important, as it lets units support each other and complete their functions.",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            },
+            {
+                "text": "Generally, you should consider placing higher-damage higher-range units in your backline, and higher health lower damage and range units in your frontline.",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            },
+            {
+                "text": "All units have traits, and getting more units of a certain trait will boost the trait's effect.",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            },
+            {
+                "text": "Recruiting the same unit multiple times will also strengthen it. Useful to remember as you build your army.",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            },
+            {
+                "text": "THEY'RE AT OUR GATES TIMBLE! WE DON'T HAVE TIME FOR THIS!",
+                "speaker": "You",
+                "on_the_left": true,
+                "randomize": false
+            },
+            {
+                "text": "very well, send out the army, sire.",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            }
+        ]
+    },
+    {
+        "section": "postCombat",
+        "dialogue": []
+    },
+    {
+        "section": "viewScroll",
+        "dialogue": [
+            {
+                "text": "A well fought victory my lord. Wait... what's that?",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            },
+            {
+                "text": "Wait...",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            },
+            {
+                "text": "What's that?",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            }
+        ]
+    },
+    {
+        "section": "useLense",
+        "dialogue": [
+            {
+                "text": "Interesting... It looks like some kind of secret message. Do you think we can read it Timble?",
+                "speaker": "You",
+                "on_the_left": true,
+                "randomize": false
+            },
+            {
+                "text": "The battlefield is pulsing with magic, your majesty. Perhaps that's the key to decode it.",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            },
+            {
+                "text": "Look Timble, some runes have been revealed by our outcast!!!",
+                "speaker": "You",
+                "on_the_left": true,
+                "randomize": false
+            },
+            {
+                "text": "Excellent observation, Sire. Our Trackers also made us some lenses we might be able to use as well. Let's try using them to reveal another rune.",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            }
+        ]
+    },
+    {
+        "section": "viewMovie",
+        "dialogue": [
+            {
+                "text": "Fascinating, I've asked the local wizard to reveal the rest of the runes. I wonder if we can use them to read the message.",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            },
+            {
+                "text": "...",
+                "speaker": "You",
+                "on_the_left": true,
+                "randomize": false
+            },
+            {
+                "text": "Timble...",
+                "speaker": "You",
+                "on_the_left": true,
+                "randomize": false
+            },
+            {
+                "text": "...",
+                "speaker": "You",
+                "on_the_left": true,
+                "randomize": false
+            },
+            {
+                "text": "I never learned how to read :(",
+                "speaker": "You",
+                "on_the_left": true,
+                "randomize": false
+            },
+            {
+                "text": "That's ok your majesty, do your best, and make sure to sound the words out.",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            },
+            {
+                "text": ":(",
+                "speaker": "You",
+                "on_the_left": true,
+                "randomize": false
+            },
+            {
+                "text": "No matter, as you battle you may need to evolve your strategy. Press on this unit to review its actions. Click off once you know how they contributed.",
+                "speaker": "Timble",
+                "on_the_left": false,
+                "randomize": false
+            },
+            {
+                "text": "What is a click, Timble?",
+                "speaker": "You",
+                "on_the_left": true,
+                "randomize": false
+            }
+        ]
+    },
+    {
+        "section": "dialogueOver",
+        "dialogue": [
+            {
+                "text": "Are you ready, highness?",
+                "speaker": "You",
+                "on_the_left": true,
+                "randomize": false
+            },
+            {
+                "text": "Yes, are we done now Timble?",
+                "speaker": "You",
+                "on_the_left": true,
+                "randomize": false
+            },
+            {
+                "text": "Yes sire, it's time to venture forth and vanquish the demon lord's armies.",
+                "speaker": "You",
+                "on_the_left": true,
+                "randomize": false
+            }
+        ]
+    }
+]

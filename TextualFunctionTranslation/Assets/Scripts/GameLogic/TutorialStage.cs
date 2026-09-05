@@ -34,6 +34,8 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     [SerializeField] private CameraRayCast raycast;
     [SerializeField] private ResultsRaycast movie;
     [SerializeField] private GameManager game;
+    [SerializeField] private LenseItem lense;
+    [SerializeField] private HexSquare squareToLense;
 
     [SerializeField] private GameObject dialogueBox;
     [SerializeField] private Dictionary<string, Sprite> nameToIcon;    
@@ -52,6 +54,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     private bool combatStarted;
     private bool combatOver;
     private bool scrollClosed;
+    private bool lenseUsed;
     private bool movieViewed;
 
     public override bool hasDialogue(bool combatHappened) {
@@ -75,6 +78,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
         this.raycast.tutorialLock(toggle);
         this.scrollButton.tutorialLock(toggle);
         this.movie.tutorialLock(toggle);
+        this.lense.tutorialLock(toggle);
 
         this.shop.tutorialStarted(toggle);
         this.raycast.tutorialStarted(toggle);
@@ -135,6 +139,10 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
                 break;
             case TutorialAction.InCombat:
                 break;
+            case TutorialAction.LenseUsed:
+                this.squareToLense.tutorialFlash(true);
+                this.lense.tutorialLock(false);
+                break;
             case TutorialAction.ReadScroll:
                 this.scrollButton.tutorialLock(false);
                 this.scrollButton.tutorialFlash(true);
@@ -185,14 +193,24 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
                     this.scrollButton.tutorialLock(true);
                 }
                 break;
+            case TutorialAction.LenseUsed:
+                if(this.lenseUsed) {
+                    this.currentSection++;
+                    this.pointerInSection = 0;
+                    this.squareToLense.tutorialFlash(false);
+                    this.lense.tutorialLock(true);
+                }
+                break;
             case TutorialAction.ViewMovie: //block needed
                 if(this.movieViewed) {
                     this.currentSection = 0;
                     this.pointerInSection = 0;
                     this.unitToWatch.getPosition().tutorialFlash(false);
                     this.movie.tutorialLock(true);
-                    this.endTutorial();
                 }
+                break;
+            case TutorialAction.DialogueOver:
+                this.endTutorial();
                 break;
         }
         
@@ -221,6 +239,11 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
 
     public void onScrollClosed() {
         this.scrollClosed = true;
+    }
+
+    public bool onLenseUse(HexSquare s) {
+        this.lenseUsed = this.lenseUsed || (s == this.squareToLense);
+        return this.lenseUsed;
     }
 
     public bool onMovieEnded(Unit unitWatched) {
