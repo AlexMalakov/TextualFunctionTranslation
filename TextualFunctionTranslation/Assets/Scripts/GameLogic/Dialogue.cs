@@ -29,6 +29,10 @@ public class Dialogue : MonoBehaviour
         dialogueBox.SetActive(false);
     }
 
+    public void setDialogueLines(List<DialogueLine> lines) {
+        this.dialogueLines = lines;
+    }
+
     private int curLine = 0;
     private bool inDialogue = false;
 

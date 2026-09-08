@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public struct SectionDialogue
+{
+    public string level_name;
+    public List<DialogueLine> dialogue;
+}
+
 public class CombatStage : MonoBehaviour
 {
     [SerializeField] private string plainTextCipher; //if you decompile this you are a poopoo head and also it won't help much brochacho
@@ -48,5 +55,9 @@ public class CombatStage : MonoBehaviour
 
     public virtual Dialogue getDialogue(bool combatHappened) {
         return combatHappened ? this.postStageDialogue : this.preStageDialogue;
+    }
+
+    public void setDialogue(List<DialogueLine> dialogue) {
+        this.preStageDialogue.setDialogueLines(dialogue);
     }
 }

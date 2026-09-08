@@ -13,8 +13,6 @@ public class HexBoard : MonoBehaviour
     [Header ("object placement")]
     [SerializeField] float xoffset;
     [SerializeField] float yoffset;
-    
-
 
     //create a hex board that will be used
     public void initBoard() {
@@ -85,5 +83,13 @@ public class HexBoard : MonoBehaviour
 
     public List<HexSquare> getPlayerSquares() {
         return this.humanSquares;
+    }
+
+    public void revealAllSquares() {
+        foreach(List<HexSquare> sqrs in this.squares) {
+            foreach(HexSquare s in sqrs) {
+                s.displayValue(true);
+            }
+        }
     }
 }

@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private StatusMessage statusMessage;
 
     [SerializeField] private HumanPlayer player;
+    [SerializeField] private TextAsset dialogueJson;
 
     private int currentStage = 0;
     private bool tutorialActive = true;
@@ -28,6 +29,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SavedGameData data;
 
     private bool boardLocked = true;
+
+    public void Awake() {
+        List<SectionDialogue> dialoguePerSection = JsonUtility.FromJson<List<SectionDialogue>>(dialogueJson.text);
+        foreach(SectionDialogue sd in dialoguePerSection) {
+            foreach(CombatStage s in this.currentLevel) {
+                if(s.getStageName() == sd.level_name) {
+                    s.setDialogue(sd.dialogue);
+                }
+            }
+        }
+    }
 
     void Start() { //starts the game, runs after factories have finished
         this.tutorialActive = this.data.showTutorial; //once tutorial starts you can't instantly skip it i think :)

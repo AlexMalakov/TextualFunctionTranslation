@@ -1,1 +1,421 @@
-{"hello": "world"}
+    [
+        {
+            "level_name": "level 1",
+            "dialogue": [
+                {
+                    "text": "When your father fought the dark lord, he had hoped to recruit a brave hero to lead and inspire the troops.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "I've heard of him. Don't think I ever met him though.",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "I doubt you would have. I only met him after we lost the battle. He was the only man in the barracks.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "I don't remember his name, but he stayed in town for a week.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "Do you think he would have been strong enough to help?",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "Undoubtedly.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "On his first day in the local tavern he told the townsfolk about his many great conquests. He only battles the strongest of foes, and scoffed at anyone who wasn't willing to take on the same challenges.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "Is the demon king enough of a challange for him?",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "Yes, that's why he came to town. Unfortunately he was too late.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                }
+            ]
+        },
+        {
+            "level_name": "level 2",
+            "dialogue": [
+                {
+                    "text": "What was this hero like?",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "He was a very kind person. He spent his second day with the oddballs of the village. He never let them be alone.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "That's very admirable.",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "Very, your majesty. He made a lot of friends that week.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "And he's never come back to see them?",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "No, although perhaps he might someday.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                }
+            ]
+        },
+        {
+            "level_name": "level 3",
+            "dialogue": [
+                {
+                    "text": "We're on a roll Timble, I feel like nothing can stop us. ",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "Careful, your majesty. We don't know what surprises this journey might hold.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "CaREfuL, yOUR maJeStY. wE dON’t KnOW wHat sUrPRisES tHiS jOURneY miGhT hoLd.",
+                    "speaker": "Mimic",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "What the hell?",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "wHaT thE HeLl?",
+                    "speaker": "Mimic",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "This reminds me... the hero hated these things. Went on a tirade over his dislike of copycats.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "ThIS rEmINdS mE... tHe hERo hATeD tHESE tHinGs. wEnT On A tIrADe ovER hIS diSLIkE oF cOpYCatS.",
+                    "speaker": "Mimic",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "He did?",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "hE dID?",
+                    "speaker": "Mimic",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "Yeah. Also why he refused to train with the new recruits on his third day. Kept mumbling about armies \"suppressing individuality\".",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "YeAH. aLso WhY hE rEFusED to TrAIn wItH ThE nEW reCRUiTs oN HiS thIRD daY. kEPt MuMBliNg aBoUT ArMIeS \"SuPpREsSinG iNdiViDUAliTY\".",
+                    "speaker": "Mimic",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "This is getting annoying, let's kill this thing.",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                }
+            ]
+        },
+        {
+            "level_name": "level 4",
+            "dialogue": [
+                {
+                    "text": "What else was the hero up to, Timble?",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "Plenty, your majesty.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "I got the sense that he was very reverent. On his fourth day, he assisted the townsfolk in burying the dead.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "Were there many?",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "Many. Your fathers campaign had few survivors.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "That night he visited each soldier's grave. He spent equal time at all except one. I was told that they had sacrificed themself to save several comrades. They were the first to fall in our final battle.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "I hope our campaign doesn’t end like fathers.",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                }
+            ]
+        },
+        {
+            "level_name": "level 5",
+            "dialogue": [
+                {
+                    "text": "You said he was in town for a week but have only told me of four days, what was the fifth like, Timble?",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "The fifth day we celebrated a festival in the local village. Some of the townspeople were playing games in the tavern that evening. He joined them, although I'm forgetting which games he played.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "hiitsmetherandomizersuperexcitedtomeetyouallsmile",
+                    "speaker": "Randomizer",
+                    "on_the_left": false,
+                    "randomize": true
+                },
+                {
+                    "text": "Huh... I guess these things are a reminder. He wouldn't touch games with any randomness or luck. Ended up just playing chess.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "hiitsstillmetherandomizerithinkwearegoingtogetalongandbebestfriendsisurehopeurnotgonnabeatmeupshockedface",
+                    "speaker": "Randomizer",
+                    "on_the_left": false,
+                    "randomize": true
+                },
+                {
+                    "text": "Was he any good?",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "I'm not sure he fully understood the rules of the game. He spent every match obsessively defending all his pieces. No piece was unguarded.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "Fascinating.",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "heyguysrandomizerherewhyareyouabouttoattackmepleasedontattackmesobbingface",
+                    "speaker": "Randomizer",
+                    "on_the_left": false,
+                    "randomize": true
+                }
+            ]
+        },
+        {
+            "level_name": "level 6",
+            "dialogue": [
+                {
+                    "text": "We've come so far, Timble.",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "We have, your highness. Would you like me to tell you about the sixth day?",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "Please.",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "The sixth day was a strange one, since up until that point he had been very friendly with all the townsfolk.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "Did someone do something to him?",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "The opposite, actually, sire. He picked a fight with one of the merchants. Accused him of hoarding money and underpaying his guard.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "Was the merchant really doing all that?",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "I don't know. I haven't checked the merchant's balance sheets.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                }
+            ]
+        },
+        {
+            "level_name": "boss",
+            "dialogue": [
+                {
+                    "text": "How are you feeling, sire? Are you ready for the final battle of our campaign?",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "Nervous, Timble. I guess I was hoping that hero you've been telling me about would have joined us by now.",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "The hero came too late to help your father. I suspect he'll always come too late to help you too.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "So that's it? Just us and the army?",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "Yes, but perhaps we don't need him. On his last day, the hero visited me before he left.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "Did he tell you anything important!?!?",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "He told me he had spoken with the demon king. That he could understand him. And then he told me we all need to be understood by someone.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "That's what he said? It's...",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "Corny.",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "Yes sire, that's what he told me.",
+                    "speaker": "Timble",
+                    "on_the_left": false,
+                    "randomize": false
+                },
+                {
+                    "text": "Huh...",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "...",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                },
+                {
+                    "text": "Well, I guess we've come this far. Better start preparing for the battle.",
+                    "speaker": "You",
+                    "on_the_left": true,
+                    "randomize": false
+                }
+            ]
+        }
+    ]

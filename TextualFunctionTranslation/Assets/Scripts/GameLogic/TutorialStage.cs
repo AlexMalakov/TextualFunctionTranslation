@@ -5,26 +5,26 @@ using UnityEngine.UI;
 using TMPro;
 
 public enum TutorialAction {
-    BuyUnit,
-    PlaceUnit,
-    DoCombat,
-    InCombat,
-    ReadScroll,
-    LenseUsed, //TODO add me
-    ViewMovie,
-    DialogueOver //TODO add me
+    BuyUnit = 0,
+    PlaceUnit = 1,
+    DoCombat = 2,
+    InCombat = 3,
+    ReadScroll = 4,
+    LenseUsed = 5,
+    ViewMovie = 6,
+    DialogueOver = 7
 }
 
 [System.Serializable]
 public struct TutorialSection
 {
     public List<DialogueLine> dialogue;
-    public TutorialAction action;
+    public TutorialAction section;
 }
 
 public class TutorialStage : CombatStage //this is poorly abstracted they have like not much in common tho :/
 {
-    [SerializeField] private List<TutorialSection> sections;
+    [SerializeField] private TextAsset tutorialDialogueLoad;
 
     [SerializeField] private Shop shop;
     [SerializeField] private HexSquare squareToPlace;
@@ -36,12 +36,14 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     [SerializeField] private GameManager game;
     [SerializeField] private LenseItem lense;
     [SerializeField] private HexSquare squareToLense;
+    [SerializeField] private HexBoard board;
 
     [SerializeField] private GameObject dialogueBox;
     [SerializeField] private Dictionary<string, Sprite> nameToIcon;    
     [SerializeField] private Image talkerSprite;
     [SerializeField] private TMP_Text dialogueText;
 
+    private List<TutorialSection> sections;
     private int currentSection;
     private int pointerInSection;
     
@@ -63,6 +65,10 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
 
     public override Dialogue getDialogue(bool combatHappened) {
         return null;
+    }
+
+    public void Awake() { //can be an awake because it just loads sections
+        this.sections = JsonUtility.FromJson<List<TutorialSection>>(tutorialDialogueLoad.text);
     }
 
     public void startTutorial() { //wired
@@ -124,7 +130,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     }
 
     private void onDialogueOver() {
-        switch(this.sections[this.currentSection].action) {
+        switch(this.sections[this.currentSection].section) {
             case TutorialAction.BuyUnit:
                 this.shop.tutorialLock(false);
                 this.shop.tutorialFlash(true);
@@ -155,7 +161,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     }
 
     private void checkSectionCondition() {
-        switch(this.sections[this.currentSection].action) {
+        switch(this.sections[this.currentSection].section) {
             case TutorialAction.BuyUnit: //A one unit shop, so no block needed
                 if(this.purchasedUnit) {
                     this.currentSection++;
@@ -199,6 +205,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
                     this.pointerInSection = 0;
                     this.squareToLense.tutorialFlash(false);
                     this.lense.tutorialLock(true);
+                    this.board.revealAllSquares(); //After lense is used dialogue gives the player all squares revealed :)
                 }
                 break;
             case TutorialAction.ViewMovie: //block needed
