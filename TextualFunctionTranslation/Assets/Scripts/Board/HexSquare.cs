@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using TMPro;
 
+[System.Serializable]
 public struct AxialCoord {
     public int q, r, s;
 
@@ -35,6 +36,10 @@ public struct AxialCoord {
         int mirroredS = -(mirroredR + mirroredQ);
 
         return new AxialCoord(mirroredQ, mirroredR, mirroredS);
+    }
+
+    public bool equal(AxialCoord o) {
+        return this.q == o.q && this.r == o.r;
     }
 }
 
@@ -99,7 +104,7 @@ public class HexSquare : MonoBehaviour
     //returns distance between two hexSquares
     public static int hexDist(HexSquare s1, HexSquare s2) {
         AxialCoord s1c = s1.getCoords();
-        AxialCoord s2c = s2.getCoords();
+        AxialCoord s2c = s2.getCoords(); 
         return (Mathf.Abs(s1c.q - s2c.q) + Mathf.Abs(s1c.r - s2c.r) + Mathf.Abs(s1c.s - s2c.s))/2;
     }
 
@@ -132,6 +137,7 @@ public class HexSquare : MonoBehaviour
     public void displayValue(bool toggle) {
         this.showing = toggle;
         this.text.gameObject.SetActive(toggle);
+        this.text.color = new Color(255f, 165f, 0f);
     }
 
     public bool isShowingChar() {

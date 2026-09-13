@@ -6,17 +6,19 @@ using System;
 public class TraitFactory : MonoBehaviour
 {
     [SerializeField] private CombatManager cm;
-    [SerializeField] private List<Trait> playerTraits;
-    [SerializeField] private List<Trait> enemyTraits;
 
+    [SerializeField] private Player player;
+    [SerializeField] private Player enemy;
     private static List<Trait> staticPlayerTraits;
     private static List<Trait> staticEnemyTraits;
     private static CombatManager staticCM;
 
     public void Awake() { //Awake because this needs to run first
-        staticPlayerTraits = this.playerTraits;
-        staticEnemyTraits = this.enemyTraits;
+        staticPlayerTraits = this.player.getAllTraits();
+        staticEnemyTraits = this.enemy.getAllTraits();
         staticCM = cm;
+
+        Debug.Log("I AM ON GAMEOBJECT" + gameObject.name);
     }
 
     public static Trait getTrait(string t_name, Unit traitGetter) {

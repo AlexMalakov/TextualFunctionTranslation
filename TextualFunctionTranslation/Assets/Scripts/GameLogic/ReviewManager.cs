@@ -22,6 +22,7 @@ public class ReviewManager : MonoBehaviour
     [SerializeField] private ResultsRaycast moviePlayer;
     [SerializeField] private LenseButton lb;
     [SerializeField] private List<TMP_Text> scramblableItems;
+    [SerializeField] private LenseItem li;
 
     private bool isScrambling = false;
     private int randCounter = 0;
@@ -40,7 +41,8 @@ public class ReviewManager : MonoBehaviour
 
 
     public void handleResults() {
-        moviePlayer.checkUserInteraction();
+        this.moviePlayer.checkUserInteraction();
+        this.li.checkUserInteraction();
 
         if(this.isScrambling) {
             if(this.randCounter % this.FRAMES_TILL_RAND == 0) {

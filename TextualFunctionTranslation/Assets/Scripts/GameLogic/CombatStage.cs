@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
+public struct LevelDialogue
+{
+    public List<SectionDialogue> levels;
+}
+
+
+[System.Serializable]
 public struct SectionDialogue
 {
     public string level_name;

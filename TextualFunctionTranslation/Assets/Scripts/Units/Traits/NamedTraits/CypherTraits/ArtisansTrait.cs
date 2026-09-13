@@ -23,7 +23,7 @@ public class ArtisansTrait : CypherTrait
     }
 
     public override string getTraitName() {
-        return "artisans";
+        return "artisan";
     }
 
     public override string getTraitDescription() {

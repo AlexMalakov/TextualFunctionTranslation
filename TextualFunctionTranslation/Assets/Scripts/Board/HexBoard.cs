@@ -86,6 +86,10 @@ public class HexBoard : MonoBehaviour
     }
 
     public void revealAllSquares() {
+        Invoke(nameof(delayAllSqaureReveal), 3.5f); //Don't want an insta reveal   
+    }
+
+    private void delayAllSqaureReveal() {
         foreach(List<HexSquare> sqrs in this.squares) {
             foreach(HexSquare s in sqrs) {
                 s.displayValue(true);

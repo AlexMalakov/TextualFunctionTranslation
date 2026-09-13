@@ -197,6 +197,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4541887801855173107, guid: 8b7f1ccff62d140eebeb84b1cc94dbf9, type: 3}
   m_PrefabInstance: {fileID: 2496617909998379465}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &3810584005373080773 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1604457070128059660, guid: 8b7f1ccff62d140eebeb84b1cc94dbf9, type: 3}
+  m_PrefabInstance: {fileID: 2496617909998379465}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7097962420030723094
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -205,6 +210,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 3810584005373080773}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: unitIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: b5cda51bd150e424eb5103dffea8d612, type: 3}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: unitName
       value: barnabas
@@ -215,7 +228,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: classTraitName
-      value: night watch
+      value: city watch
       objectReference: {fileID: 0}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: tombstonePrefab
@@ -225,6 +238,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: barnabas
       objectReference: {fileID: 0}
+    - target: {fileID: 5786661636417849749, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 3810584005373080773}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.7
@@ -239,19 +256,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9999976
       objectReference: {fileID: 0}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.002181689
       objectReference: {fileID: 0}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -259,7 +276,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

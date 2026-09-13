@@ -65,9 +65,9 @@ public abstract class Unit : MonoBehaviour
 
     [Header ("Objects")]
     [SerializeField] protected CombatManager manager;
-    [SerializeField] private Animator animator;
     [SerializeField] private CombatLog combatLog;
     [SerializeField] private Sprite unitIcon;
+    [SerializeField] private AnimationController ac;
     private HealthBarManager hpBar;
 
     //[Header ("Active Stats")]
@@ -90,12 +90,18 @@ public abstract class Unit : MonoBehaviour
         this.Walk = new WalkState(this);
         this.Idle = new IdleState(this);
         this.Attack = new AttackState(this, this.attackCooldownTime, this.attackWindupTime);
-
+        this.fixY();
     }
 
-    public Unit setBlueprint(UnitBlueprint blueprint, CombatManager manager) {
+    private void fixY() {
+        this.transform.position = new Vector3(this.transform.position.x, .25f, this.transform.position.y);//heehee i did a hardcode
+    }
+
+    public Unit setBlueprint(UnitBlueprint blueprint, CombatManager manager, CombatLog log) {
         this.manager = manager;
         this.unitBlueprint = blueprint;
+        this.combatLog = log;
+        this.fixY();
         return this;
     }
 
@@ -315,7 +321,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void triggerAnimation(string trigger) {
-        this.animator.SetTrigger(trigger);
+        this.ac.triggerAnimation(trigger);
     }
 
     public virtual void takeDamage(float in_damage, Unit damage_from) {

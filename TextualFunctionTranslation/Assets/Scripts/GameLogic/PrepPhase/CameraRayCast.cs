@@ -15,15 +15,19 @@ public class CameraRayCast : MonoBehaviour
                 this.releaseUnit();
                 toggle = false;
             }
+
+            Debug.Log("BLOCKED BY JAMES");
             return; //no interacting while 
         }
 
         if (Input.GetMouseButtonDown(0)) {
+            Debug.Log("LABRONZE");
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit)) {
                 if (hit.collider.gameObject.GetComponentInParent<Unit>() != null) {
+                    Debug.Log("UNIT!!!!");
                     toggle = true;
                     this.onUnitPressed(hit.collider.gameObject.GetComponentInParent<Unit>());
                 }

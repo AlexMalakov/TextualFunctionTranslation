@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public enum TutorialAction {
     BuyUnit = 0,
@@ -13,6 +14,11 @@ public enum TutorialAction {
     LenseUsed = 5,
     ViewMovie = 6,
     DialogueOver = 7
+}
+
+[System.Serializable]
+public struct TutorialJsonLoad {
+    public List<TutorialSection> sections;
 }
 
 [System.Serializable]
@@ -27,19 +33,22 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     [SerializeField] private TextAsset tutorialDialogueLoad;
 
     [SerializeField] private Shop shop;
-    [SerializeField] private HexSquare squareToPlace;
-    [SerializeField] private Unit unitToWatch;
+    [SerializeField] private AxialCoord cordsToPlace;
+    [SerializeField] private string unitToWatch;
     [SerializeField] private CypherPopUpButton scrollButton;
     [SerializeField] private GameStateButton combatButton;
     [SerializeField] private CameraRayCast raycast;
     [SerializeField] private ResultsRaycast movie;
     [SerializeField] private GameManager game;
     [SerializeField] private LenseItem lense;
-    [SerializeField] private HexSquare squareToLense;
+    [SerializeField] private AxialCoord cordsToLense;
     [SerializeField] private HexBoard board;
+    [SerializeField] private HumanPlayer player;
+    [SerializeField] private BenchSlot leftMostSlot;
+    [SerializeField] private string unitToMove;
 
     [SerializeField] private GameObject dialogueBox;
-    [SerializeField] private Dictionary<string, Sprite> nameToIcon;    
+    [SerializeField] private List<DialogueIconMap> nameToIcon;    
     [SerializeField] private Image talkerSprite;
     [SerializeField] private TMP_Text dialogueText;
 
@@ -68,7 +77,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     }
 
     public void Awake() { //can be an awake because it just loads sections
-        this.sections = JsonUtility.FromJson<List<TutorialSection>>(tutorialDialogueLoad.text);
+        this.sections = JsonUtility.FromJson<TutorialJsonLoad>(tutorialDialogueLoad.text).sections;
     }
 
     public void startTutorial() { //wired
@@ -76,6 +85,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
         this.currentSection = 0;
         this.pointerInSection = 0;
         this.disableControls(true);
+        this.startDialogue();
     }
 
     private void disableControls(bool toggle) {
@@ -89,6 +99,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
         this.shop.tutorialStarted(toggle);
         this.raycast.tutorialStarted(toggle);
         this.movie.tutorialStarted(toggle);
+        this.lense.tutorialStarted(toggle);
     }
 
      //TODO: tie to game manager
@@ -107,20 +118,34 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
         }
     }
 
+    private void startDialogue() {
+        this.dialogueBox.SetActive(true);
+        if(this.sections[this.currentSection].dialogue.Count > 0) {
+            DialogueLine nextLine = this.sections[this.currentSection].dialogue[0];
+            this.dialogueText.text = nextLine.text;
+            this.talkerSprite.sprite = this.nameToIcon.First(x => x.name == nextLine.speaker).icon;
+
+            if(nextLine.on_the_left) {
+                this.talkerSprite.GetComponent<RectTransform>().localScale  = new Vector3(1, 1, 1);
+            } else {
+                this.talkerSprite.GetComponent<RectTransform>().localScale  = new Vector3(-1, 1, 1);
+            }
+        }
+    }
+
     private void nextDialogue() {
         if(this.pointerInSection < this.sections[this.currentSection].dialogue.Count) {
-            this.dialogueBox.SetActive(true);
             this.pointerInSection++;
 
             if(this.pointerInSection < this.sections[this.currentSection].dialogue.Count) {
                 DialogueLine nextLine = this.sections[this.currentSection].dialogue[this.pointerInSection];
-                this.dialogueText.text = nextLine.dialogue;
-                this.talkerSprite.sprite = this.nameToIcon[nextLine.speaker];
+                this.dialogueText.text = nextLine.text;
+                this.talkerSprite.sprite = this.nameToIcon.First(x => x.name == nextLine.speaker).icon;
 
-                if(nextLine.onTheLeft) {
-                    this.dialogueBox.GetComponent<RectTransform>().localScale  = new Vector3(1, 1, 1);
+                if(nextLine.on_the_left) {
+                    this.talkerSprite.GetComponent<RectTransform>().localScale  = new Vector3(1, 1, 1);
                 } else {
-                    this.dialogueBox.GetComponent<RectTransform>().localScale  = new Vector3(-1, 1, 1);
+                    this.talkerSprite.GetComponent<RectTransform>().localScale  = new Vector3(-1, 1, 1);
                 }
             } else {
                 this.dialogueBox.SetActive(false);
@@ -137,7 +162,8 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
                 break;
             case TutorialAction.PlaceUnit:
                 this.raycast.tutorialLock(false);
-                this.squareToPlace.tutorialFlash(true);
+                this.board.getHexAt(this.cordsToPlace).tutorialFlash(true);
+                this.leftMostSlot.tutorialFlash(true);
                 break;
             case TutorialAction.DoCombat:
                 this.combatButton.tutorialLock(false);
@@ -146,7 +172,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
             case TutorialAction.InCombat:
                 break;
             case TutorialAction.LenseUsed:
-                this.squareToLense.tutorialFlash(true);
+                this.board.getHexAt(this.cordsToLense).tutorialFlash(true);
                 this.lense.tutorialLock(false);
                 break;
             case TutorialAction.ReadScroll:
@@ -155,7 +181,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
                 break;
             case TutorialAction.ViewMovie:
                 this.movie.tutorialLock(false);
-                this.unitToWatch.getPosition().tutorialFlash(true);
+                this.player.getUnitWithName(this.unitToWatch).getPosition().tutorialFlash(true);
                 break;
         }
     }
@@ -166,6 +192,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
                 if(this.purchasedUnit) {
                     this.currentSection++;
                     this.pointerInSection = 0;
+                    this.startDialogue();
                     this.shop.tutorialFlash(false);
                     this.shop.tutorialLock(true);
                 }
@@ -174,14 +201,17 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
                 if(this.placedUnit) {
                     this.currentSection++;
                     this.pointerInSection = 0;
-                    this.squareToPlace.tutorialFlash(false);
+                    this.startDialogue();
+                    this.board.getHexAt(this.cordsToPlace).tutorialFlash(false);
                     this.raycast.tutorialLock(true);
+                    this.leftMostSlot.tutorialFlash(false);
                 }
                 break;
             case TutorialAction.DoCombat:
                 if(this.combatStarted) {
                     this.currentSection++;
                     this.pointerInSection = 0;
+                    this.startDialogue();
                     this.combatButton.tutorialFlash(false);
                     this.combatButton.tutorialLock(true);
                 }
@@ -189,12 +219,14 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
             case TutorialAction.InCombat:
                 if(this.combatOver) {
                     this.currentSection++;
+                    this.startDialogue();
                 }
                 break;
             case TutorialAction.ReadScroll:
                 if(this.scrollClosed) {
                     this.currentSection++;
                     this.pointerInSection = 0;
+                    this.startDialogue();
                     this.scrollButton.tutorialFlash(false);
                     this.scrollButton.tutorialLock(true);
                 }
@@ -203,16 +235,18 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
                 if(this.lenseUsed) {
                     this.currentSection++;
                     this.pointerInSection = 0;
-                    this.squareToLense.tutorialFlash(false);
+                    this.startDialogue();
+                    this.board.getHexAt(this.cordsToLense).tutorialFlash(false);
                     this.lense.tutorialLock(true);
                     this.board.revealAllSquares(); //After lense is used dialogue gives the player all squares revealed :)
                 }
                 break;
             case TutorialAction.ViewMovie: //block needed
                 if(this.movieViewed) {
-                    this.currentSection = 0;
+                    this.currentSection++;
                     this.pointerInSection = 0;
-                    this.unitToWatch.getPosition().tutorialFlash(false);
+                    this.startDialogue();
+                    this.player.getUnitWithName(unitToWatch).getPosition().tutorialFlash(false);
                     this.movie.tutorialLock(true);
                 }
                 break;
@@ -228,8 +262,8 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
         this.purchasedUnit = true;
     }
 
-    public bool isTutorialPlacement(HexSquare dest) {
-        this.placedUnit = this.placedUnit || (this.squareToPlace == dest);
+    public bool isTutorialPlacement(HexSquare dest, Unit moved) {
+        this.placedUnit = this.placedUnit || (this.cordsToPlace.equal(dest.getCoords()) && moved.getName() == this.unitToMove);
         return this.placedUnit;
     }
 
@@ -249,13 +283,16 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     }
 
     public bool onLenseUse(HexSquare s) {
-        this.lenseUsed = this.lenseUsed || (s == this.squareToLense);
+        this.lenseUsed = this.lenseUsed || (s.getCoords().equal(this.cordsToLense));
         return this.lenseUsed;
     }
 
-    public bool onMovieEnded(Unit unitWatched) {
-        this.movieViewed = this.movieViewed || (this.unitToWatch == unitWatched);
-        return this.movieViewed;
+    public bool isMovieUnit(Unit unitWatched) {
+        return this.unitToWatch == unitWatched.getName();
+    }
+
+    public void onMovieEnded() {
+        this.movieViewed = true;
     }
 
     private void endTutorial() {

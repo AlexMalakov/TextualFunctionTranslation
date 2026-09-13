@@ -74,10 +74,10 @@ public class MouseTransform : MonoBehaviour
 
             
             //call update and see if it succeeded or not
-            if(this.tutorialCheckRequired && square && closestSquare != null && this.tut.isTutorialPlacement(closestSquare)) {
+            if(this.tutorialCheckRequired && square && closestSquare != null && this.tut.isTutorialPlacement(closestSquare, this.unitDragging)) {
                 succeeded = this.humanPlayer.getUnitLayout().attemptUpdateLayout(this.unitDragging, closestSquare);
                 if(!succeeded) {
-                    this.tut.isTutorialPlacement(null);
+                    this.tut.isTutorialPlacement(null, this.unitDragging);
                 }
             } else if(this.tutorialCheckRequired) {
                 succeeded = false;

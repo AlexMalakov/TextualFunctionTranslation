@@ -19,6 +19,11 @@ public class Player : MonoBehaviour
         this.unitLayout = layout;
     }
 
+    public void claimUnitsFromLayout() {
+        this.playersUnits.Clear();
+        this.playersUnits.AddRange(this.unitLayout.getActiveUnits());
+    }
+
     public List<Unit> getActiveUnits() {
         return this.unitLayout.getActiveUnits();
     }

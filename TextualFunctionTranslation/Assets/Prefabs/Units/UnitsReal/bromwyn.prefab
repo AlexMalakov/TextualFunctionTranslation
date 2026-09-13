@@ -20,6 +20,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 6e85404fb7f5042978349c3c42f4c603, type: 2}
+    - target: {fileID: 7327186651599681902, guid: e509c24df044f4e09975b8b26749c837, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: f551bf2e7708b274785462f5f80d25ff, type: 2}
     - target: {fileID: 8086233515293090431, guid: e509c24df044f4e09975b8b26749c837, type: 3}
       propertyPath: m_Name
       value: F_Fighter
@@ -81,6 +85,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e509c24df044f4e09975b8b26749c837, type: 3}
+--- !u!95 &7426046414220838704 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7327186651599681902, guid: e509c24df044f4e09975b8b26749c837, type: 3}
+  m_PrefabInstance: {fileID: 189706086316998238}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8778142982406669979 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8895667159654955205, guid: e509c24df044f4e09975b8b26749c837, type: 3}
@@ -95,6 +104,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 7426046414220838704}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: unitIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: 6de169e1f664c4327b110d43e990c55c, type: 3}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: unitName
       value: bromwyn
       objectReference: {fileID: 0}
@@ -104,7 +121,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: classTraitName
-      value: night watch
+      value: city watch
       objectReference: {fileID: 0}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: tombstonePrefab
@@ -114,6 +131,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bromwyn
       objectReference: {fileID: 0}
+    - target: {fileID: 5786661636417849749, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 7426046414220838704}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.39
@@ -128,19 +149,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9999976
       objectReference: {fileID: 0}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.002181689
       objectReference: {fileID: 0}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -148,7 +169,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

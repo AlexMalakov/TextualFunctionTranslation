@@ -24,7 +24,7 @@ public class TraitCodexButton : MonoBehaviour
     public void init(Trait trait) {
         this.trait = trait;
         this.text.text = this.trait.getTraitName();
-        this.image.sprite = this.trait.getTraitIcon();
+        // this.image.sprite = this.trait.getTraitIcon(); //TODO: uncomment me once traits have icons
     }
 
     //mr president a fifth button script has hit the tower

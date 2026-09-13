@@ -4,19 +4,28 @@ using UnityEngine;
 
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 [System.Serializable]
 public struct DialogueLine
 {
-    public string dialogue;
+    public string text;
     public string speaker;
-    public bool onTheLeft;
+    public bool on_the_left;
+    public string randomize;
+}
+
+[System.Serializable]
+public struct DialogueIconMap
+{
+    public string name;
+    public Sprite icon;
 }
 
 
 public class Dialogue : MonoBehaviour
 {
-    [SerializeField] private Dictionary<string, Sprite> nameToIcon;
+    [SerializeField] private List<DialogueIconMap> nameToIcon;
     [SerializeField] private List<DialogueLine> dialogueLines;
     [SerializeField] private GameObject dialogueBox;
     [SerializeField] private Image talkerSprite;
@@ -57,13 +66,13 @@ public class Dialogue : MonoBehaviour
             return;
         }
 
-        this.dialogue.text = this.dialogueLines[this.curLine].dialogue;
-        this.talkerSprite.sprite = this.nameToIcon[this.dialogueLines[this.curLine].speaker];
+        this.dialogue.text = this.dialogueLines[this.curLine].text;
+        this.talkerSprite.sprite = this.nameToIcon.First(x => x.name == this.dialogueLines[this.curLine].speaker).icon;
 
-        if(this.dialogueLines[this.curLine].onTheLeft) {
-            this.dialogueBox.GetComponent<RectTransform>().localScale  = new Vector3(1, 1, 1);
+        if(this.dialogueLines[this.curLine].on_the_left) {
+            this.talkerSprite.GetComponent<RectTransform>().localScale  = new Vector3(1, 1, 1);
         } else {
-            this.dialogueBox.GetComponent<RectTransform>().localScale  = new Vector3(-1, 1, 1);
+            this.talkerSprite.GetComponent<RectTransform>().localScale  = new Vector3(-1, 1, 1);
         }
     }
 

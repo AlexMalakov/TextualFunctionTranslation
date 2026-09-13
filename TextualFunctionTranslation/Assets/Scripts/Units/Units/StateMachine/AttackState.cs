@@ -95,7 +95,7 @@ public class AttackState : UnitActionState
 
     private IEnumerator runWindup() {
         this.frameLockout = this.attackSpeedWindupFrames;
-        this.unitOwner.triggerAnimation("windup");
+        this.unitOwner.triggerAnimation("windup_attack");
 
         while(this.frameLockout > 0 && this.attackStage == AttackStage.Windup) {
             //TODO: check if attack is cancel
@@ -111,7 +111,7 @@ public class AttackState : UnitActionState
     //cannot be canceled anymore
     private void runSwing() {
         this.frameLockout = this.swingFrames;
-        this.unitOwner.triggerAnimation("swing");
+        this.unitOwner.triggerAnimation("attack");
         this.unitOwner.attackTarget();
     }
 

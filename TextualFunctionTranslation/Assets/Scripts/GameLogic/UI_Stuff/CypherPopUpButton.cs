@@ -12,6 +12,7 @@ public class CypherPopUpButton : MonoBehaviour
 
     [SerializeField] private TMP_Text buttonText;
     [SerializeField] private Image image;
+    [SerializeField] private TutorialStage tut;
 
     private bool tutorialLockOn = false;
     private bool tutorialFlashOn = false;
@@ -25,6 +26,10 @@ public class CypherPopUpButton : MonoBehaviour
     }
 
     public void onButtonClick() {
+        if(this.tutorialLockOn) {
+            return;
+        }
+        this.tut.onScrollClosed();
         bool status = this.disp.toggleDisplay();
 
         buttonText.text = status ? "hide scroll" : "show scroll";

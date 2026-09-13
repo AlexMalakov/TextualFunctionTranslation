@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     private bool boardLocked = true;
 
     public void Awake() {
-        List<SectionDialogue> dialoguePerSection = JsonUtility.FromJson<List<SectionDialogue>>(dialogueJson.text);
+        List<SectionDialogue> dialoguePerSection = JsonUtility.FromJson<LevelDialogue>(dialogueJson.text).levels;
         foreach(SectionDialogue sd in dialoguePerSection) {
             foreach(CombatStage s in this.currentLevel) {
                 if(s.getStageName() == sd.level_name) {
@@ -44,11 +44,20 @@ public class GameManager : MonoBehaviour
     void Start() { //starts the game, runs after factories have finished
         this.tutorialActive = this.data.showTutorial; //once tutorial starts you can't instantly skip it i think :)
         if(!this.tutorialActive) {
+            this.player.gainMoney(GlobalData.StartingMoney + this.tut.getRewardMoney());
             //TODO: make sure player is equiped as if they did the tutorial
         } else {
+            this.player.gainMoney(GlobalData.StartingMoney);
             this.tut.startTutorial();
         }
         this.onPreperationStart();
+    }
+
+    private CombatStage getCurrentLevel() {
+        if(this.tutorialActive) {
+            return this.tut;
+        }
+        return this.currentLevel[this.currentStage];
     }
 
 
@@ -73,8 +82,8 @@ public class GameManager : MonoBehaviour
     }
 
     public void onPreperationStart() {
-        if(this.data.showDialogue && this.currentLevel[this.currentStage].hasDialogue(false)) {
-            this.currentLevel[this.currentStage].getDialogue(false).startDialogue(null);
+        if(this.data.showDialogue && this.getCurrentLevel().hasDialogue(false)) {
+            this.getCurrentLevel().getDialogue(false).startDialogue(null);
         } else {
             this.postPrepDialogue();
         }
@@ -83,11 +92,11 @@ public class GameManager : MonoBehaviour
     private void postPrepDialogue() {
         this.boardLocked = false;
         this.board.initBoard();
-        this.pi.setLevel(this.currentLevel[this.currentStage].getStageName());
+        this.pi.setLevel(this.getCurrentLevel().getStageName());
         this.combatManager.initPlayers(
-            this.currentLevel[this.currentStage].getCombatLayout(),
-            this.currentLevel[this.currentStage].getAlphabet(),
-            this.currentLevel[this.currentStage].getMaxUnits()
+            this.getCurrentLevel().getCombatLayout(),
+            this.getCurrentLevel().getAlphabet(),
+            this.getCurrentLevel().getMaxUnits()
         );
     }
 
@@ -129,24 +138,21 @@ public class GameManager : MonoBehaviour
 
 
     public void onCombatEnd(bool wonCombat, bool randomizerSuvived) {
+        this.combatSched.combatOver();
         ReviewData rd = new ReviewData(wonCombat, randomizerSuvived);
         this.onResultsStart(wonCombat, rd);
     }
 
     public void onResultsStart(bool wonCombat, ReviewData rd) {
-        if(this.tutorialActive) {
-            this.tut.onTutorialResultsStart();
-        }
-
-        if(this.data.showDialogue && this.currentLevel[this.currentStage].hasDialogue(true)) {
-            this.currentLevel[this.currentStage].getDialogue(true).startDialogue(rd);
+        if(this.data.showDialogue && this.getCurrentLevel().hasDialogue(true)) {
+            this.getCurrentLevel().getDialogue(true).startDialogue(rd);
         } else {
             this.postResultsDialogue(rd);
         }
     }
 
     private void postResultsDialogue(ReviewData rd) {
-        string ciphertext = this.combatManager.encrypt(this.currentLevel[this.currentStage].getLevelCipher());
+        string ciphertext = this.combatManager.encrypt(this.getCurrentLevel().getLevelCipher());
         StartCoroutine(this.runAnimationsAndSwap(ciphertext));
 
         this.rvm.onResultsStart(ciphertext, rd);
@@ -156,6 +162,9 @@ public class GameManager : MonoBehaviour
         yield return this.combatManager.runCypherAnimation();
         yield return new WaitForSeconds(GlobalData.BetweenRevealDuration);
         yield return this.combatManager.runSquaresReveal();
+        if(this.tutorialActive) {
+            this.tut.onTutorialResultsStart();
+        }
         this.rvm.displayReview();
         this.combatManager.resetToPostCombat();
     }
@@ -167,7 +176,7 @@ public class GameManager : MonoBehaviour
     public void onResultsEnd() {
         if(this.gameState == GameStage.result_win) {
             this.rvm.onResultsEnd();
-            this.player.gainMoney(this.currentLevel[this.currentStage].getRewardMoney());
+            this.player.gainMoney(this.getCurrentLevel().getRewardMoney());
             this.currentStage++;
             this.gameState = GameStage.preperation;
             this.onPreperationStart();

@@ -22,7 +22,7 @@ public class HumanPlayer : Player //player but has money and shit
     private int prevShopIndex = 0;
 
 
-    public virtual void init() {
+    public override void init() {
         base.init();
         this.unitsCopy = new List<Unit>(this.playersUnits);
         this.pi.setDollars(this.money);
@@ -156,9 +156,20 @@ public class HumanPlayer : Player //player but has money and shit
         }
 
         this.lenseCount += deltaL;
+        this.pi.setLenseCount(this.lenseCount);
     }
 
     public int getLenses() {
         return this.lenseCount;
+    }
+
+    public Unit getUnitWithName(string name) {
+        foreach(Unit u in this.unitLayout.getActiveUnits()) {
+            if(u.getName() == name) {
+                return u;
+            }
+        }
+
+        return null;
     }
 }

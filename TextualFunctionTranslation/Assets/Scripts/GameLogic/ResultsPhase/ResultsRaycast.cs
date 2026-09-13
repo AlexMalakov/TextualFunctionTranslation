@@ -57,6 +57,7 @@ public class ResultsRaycast : MonoBehaviour
     private void endMovie() {
         if(this.unitMovie != null) {
             hideEvent(this.curFrame);
+            this.tut.onMovieEnded();
             StopCoroutine(this.unitMovie);
             this.unitMovie = null;
             this.cm.resetToPostCombat();
@@ -64,7 +65,7 @@ public class ResultsRaycast : MonoBehaviour
     }
 
     private void onUnitPressed(Unit u) {
-        if(this.tutorialActive && !this.tut.onMovieEnded(u)) {
+        if(this.tutorialActive && !this.tut.isMovieUnit(u)) {
             return;
         }
         List<CombatEvent> uEvents = this.log.getUnitsEvents(u);
@@ -86,13 +87,13 @@ public class ResultsRaycast : MonoBehaviour
     private void showEvent(CombatEvent ev) {
         switch(ev.eventType) {
             case CombatEventType.Kill:
-                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "windup", "death");
+                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "windup_attack", "death");
                 break;
             case CombatEventType.Attack:
-                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "windup", "combat_idle");
+                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "windup_attack", "idle_combat");
                 break;
             case CombatEventType.Death:
-                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "death", "windup");
+                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "death", "windup_attack");
                 break;
             case CombatEventType.Survival:
                 ev.source.gameObject.SetActive(true);

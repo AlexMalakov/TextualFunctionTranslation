@@ -31,7 +31,7 @@ public class ShopButton : MonoBehaviour
         this.unitBeingSold = unitBeingSold;
         unitCost.text = "" + unitBeingSold.unitCost;
         unitName.text = unitBeingSold.unitName;
-        //TODO: set unit sprite
+        this.unitSprite.sprite = unitBeingSold.unitIcon;
     }
 
     public void onButtonClick() {

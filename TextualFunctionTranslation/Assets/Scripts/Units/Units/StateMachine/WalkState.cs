@@ -26,7 +26,7 @@ public class WalkState : UnitActionState
             this.frameLockout = this.walkFrames;  
             shwalkin = GlobalData.Larper.FakeStartCoroutine(new CoroutineableMethod(this.walkToTarget));
             shrotatin = GlobalData.Larper.FakeStartCoroutine(new CoroutineableMethod(this.rotateToTarget));
-            this.unitOwner.triggerAnimation("walk");
+            this.unitOwner.triggerAnimation("run");
         }
     }
 

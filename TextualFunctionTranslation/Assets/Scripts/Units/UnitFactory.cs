@@ -15,13 +15,16 @@ public class UnitFactory : MonoBehaviour
 {
     [SerializeField] private List<UnitBlueprint> curUnits;
     [SerializeField] private CombatManager cm;
+    [SerializeField] private CombatLog log;
     private static CombatManager com;
+    private static CombatLog logg;
 
     static List<UnitBlueprint> units;
 
     public void Awake() { //Awake because this needs to run first
         units = this.curUnits;
         com = cm;
+        logg = log;
     }
 
     public static List<UnitBlueprint> getAllBlueprints() {
@@ -32,7 +35,7 @@ public class UnitFactory : MonoBehaviour
     public static Unit createUnit(string unitName) {
         foreach(UnitBlueprint up in units) {
             if(up.unitName == unitName) {
-                return Instantiate(up.unitPrefab).GetComponent<Unit>().setBlueprint(up, com);
+                return Instantiate(up.unitPrefab).GetComponent<Unit>().setBlueprint(up, com, logg);
             }
         }
 

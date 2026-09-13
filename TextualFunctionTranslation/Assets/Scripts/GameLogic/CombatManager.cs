@@ -28,6 +28,7 @@ public class CombatManager : MonoBehaviour
         this.player.init();
         this.enemy.assignLayout(enemyLayout);
         this.enemy.init();
+        this.enemy.claimUnitsFromLayout();
         
         bool mimicPresent = false;
         foreach(Unit u in this.enemy.getActiveUnits()) {
@@ -152,6 +153,14 @@ public class CombatManager : MonoBehaviour
     }
 
     public void onUnitDeath(Unit u) {
+        foreach(Trait t in this.player.getUnitLayout().getActiveTraits().OrderBy(t => t.getTraitName())) {
+            t.informAllOffDeath(u);
+        }
+
+        foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits().OrderBy(t => t.getTraitName())) {
+            t.informAllOffDeath(u);
+        }
+
         if(player.ownsUnit(u)) {
             this.livingPlayerUnits--;
             if(livingPlayerUnits <= 0) {
@@ -205,7 +214,6 @@ public class CombatManager : MonoBehaviour
     public string encrypt(string plaintext) {
         string ans = this.runEncrypt(plaintext);
         
-        bool kingIsAlive = false;
         foreach(Unit u in this.units) {
             if(u is DemonKing) {
                 ans = this.runEncrypt(ans);

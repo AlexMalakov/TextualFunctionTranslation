@@ -55,11 +55,14 @@ public class Shop : MonoBehaviour
 
         if(!this.player.canPurchaseUnit(ub.unitName, ub.unitCost)) //TODO SWAP COST 
         {
+            this.brokeNotifier.gameObject.SetActive(true);
             this.brokeNotifier.displayMessage("YOU ARE TOO BROKE TO BUY THIS!");
             return;
         }
         
+        
         Unit u = UnitFactory.createUnit(ub.unitName);
+        Debug.Log("UNIT CREATED AT Y" + u.transform.position.y);
         this.player.purchaseUnit(u);
         
         if(this.tutorialActive) {

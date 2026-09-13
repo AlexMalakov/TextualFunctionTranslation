@@ -10,6 +10,7 @@ public class CombatScheduler : MonoBehaviour
     public static float combatTimePerTick;
 
     private float lastCheckIn;
+    private bool started = false;
 
     public void Awake() { //Awake because this doesn't affect other systems
         combatTimePerTick = this.combatTickTime;
@@ -17,9 +18,17 @@ public class CombatScheduler : MonoBehaviour
 
     public void onCombatStart() {
         this.lastCheckIn = Time.time;
+        this.started = true;
+    }
+
+    public void combatOver() {
+        this.started = false;
     }
 
     public void runNUpdates() {
+        if(!started) {
+            return;
+        }
         float newCheckIn = Time.time;
 
         if((newCheckIn - this.lastCheckIn)/combatTickTime < 1) {

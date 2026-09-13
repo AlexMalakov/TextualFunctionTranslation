@@ -11,11 +11,9 @@ public class HeroCheck : MonoBehaviour
     //TODO: wire up
 
     private bool failed = false;
-    private bool done = false;
 
     public void precombatCheck() {
         this.failed = false; //reset
-        this.done = false;
 
         if(!this.checkKing()) {
             this.failed = true;

@@ -16,6 +16,8 @@ public class GlobalData : MonoBehaviour
 
     public static float MovieFrameDuration;
 
+    public static int StartingMoney;
+
     [Header ("larper <3")]
     public static MonoLarper Larper;
 
@@ -32,6 +34,9 @@ public class GlobalData : MonoBehaviour
     [SerializeField] float betweenRevealDur;
     [SerializeField] float movieSceneDur;
 
+    [Header ("game start")]
+    [SerializeField] int startingMoney;
+
 
     [SerializeField] MonoLarper ml; //LARP FOR ME
 
@@ -46,6 +51,7 @@ public class GlobalData : MonoBehaviour
         CypherRevealDuration = cypherRevealDur;
         BetweenRevealDuration = betweenRevealDur;
         MovieFrameDuration = movieSceneDur;
+        StartingMoney = startingMoney;
     }
 
 }
