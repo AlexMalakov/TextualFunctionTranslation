@@ -21,6 +21,14 @@ public class BugList
     *
     *   - Gross blinking: Hex squares don't blink correctly, the textmesh font is also getting blinked with square...
     *
+    *   - Unit rotation is incorrect
+    *
+    *   - Reset hex square reveals
+    *
+    *
+    *   - Tracker incorrect lense amount it seems (2 assists = 1 lense???)
+    *
+    *
     * 
     * Shit Features:
     *   - Lense toggle button is a terrible idea, also need some visualization over squares for the review stage so you're not just clicky clicky

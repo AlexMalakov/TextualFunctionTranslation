@@ -19,6 +19,15 @@ public class Player : MonoBehaviour
         this.unitLayout = layout;
     }
 
+    public void wipeLayoutUnits() {
+        this.unitLayout = null;
+        for(int i = 0; i < this.playersUnits.Count; i++) {
+            this.playersUnits[i].destroyObject();
+        }
+
+        this.playersUnits = new List<Unit>();
+    }
+
     public void claimUnitsFromLayout() {
         this.playersUnits.Clear();
         this.playersUnits.AddRange(this.unitLayout.getActiveUnits());

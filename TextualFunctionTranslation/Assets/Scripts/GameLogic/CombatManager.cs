@@ -206,6 +206,10 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    public void wipeEnemyLayout() {
+        this.enemy.wipeLayoutUnits();
+    }
+
     public IEnumerator runSquaresReveal() {
         yield return this.traitDisplay.playTraitSquareReveal();
         

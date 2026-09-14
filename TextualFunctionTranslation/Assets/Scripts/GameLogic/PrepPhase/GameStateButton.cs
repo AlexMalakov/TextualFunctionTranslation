@@ -31,7 +31,7 @@ public class GameStateButton : MonoBehaviour
         if(isPrecombat) {
             this.game.onPreperationEnd();
         } else if(isResults){
-            this.game.onResultsEnd();
+            this.game.onResultsEnd(true);
         }
     }
 

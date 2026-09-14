@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
 
     private int currentStage = 0;
     private bool tutorialActive = true;
+    private bool blockPlusPlus = false; //sometimes you just write stupid shit...
 
     [SerializeField] private PrecombatManager pcm;
     [SerializeField] private ReviewManager rvm;
@@ -63,7 +64,7 @@ public class GameManager : MonoBehaviour
 
     public void onTutorialOver() {
         this.tutorialActive = false;
-        //TODO: proceed
+        this.blockPlusPlus = true;
     }
 
 
@@ -82,6 +83,15 @@ public class GameManager : MonoBehaviour
     }
 
     public void onPreperationStart() {
+
+        this.board.initBoard();
+        this.pi.setLevel(this.getCurrentLevel().getStageName());
+        this.combatManager.initPlayers(
+            this.getCurrentLevel().getCombatLayout(),
+            this.getCurrentLevel().getAlphabet(),
+            this.getCurrentLevel().getMaxUnits()
+        );
+
         if(this.data.showDialogue && this.getCurrentLevel().hasDialogue(false)) {
             this.getCurrentLevel().getDialogue(false).startDialogue(null);
         } else {
@@ -91,13 +101,6 @@ public class GameManager : MonoBehaviour
 
     private void postPrepDialogue() {
         this.boardLocked = false;
-        this.board.initBoard();
-        this.pi.setLevel(this.getCurrentLevel().getStageName());
-        this.combatManager.initPlayers(
-            this.getCurrentLevel().getCombatLayout(),
-            this.getCurrentLevel().getAlphabet(),
-            this.getCurrentLevel().getMaxUnits()
-        );
     }
 
     public void handlePreperation() {
@@ -173,12 +176,17 @@ public class GameManager : MonoBehaviour
         this.rvm.handleResults();
     }
 
-    public void onResultsEnd() {
-        if(this.gameState == GameStage.result_win) {
+    public void onResultsEnd(bool nextStage) {
+        if(this.gameState == GameStage.result_win && nextStage) {
             this.rvm.onResultsEnd();
             this.player.gainMoney(this.getCurrentLevel().getRewardMoney());
-            this.currentStage++;
+            if(this.blockPlusPlus) {//"sometimes you just write stupid shit..." shut up dork this is brilliant
+                this.blockPlusPlus = false;
+            } else {
+                this.currentStage++;
+            }
             this.gameState = GameStage.preperation;
+            this.combatManager.wipeEnemyLayout();
             this.onPreperationStart();
         } else {
             this.rvm.onResultsEnd();

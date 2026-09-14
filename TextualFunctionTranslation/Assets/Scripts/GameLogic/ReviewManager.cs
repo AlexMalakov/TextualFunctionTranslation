@@ -23,6 +23,7 @@ public class ReviewManager : MonoBehaviour
     [SerializeField] private LenseButton lb;
     [SerializeField] private List<TMP_Text> scramblableItems;
     [SerializeField] private LenseItem li;
+    [SerializeField] private RetryLevelButton retry;
 
     private bool isScrambling = false;
     private int randCounter = 0;
@@ -33,6 +34,7 @@ public class ReviewManager : MonoBehaviour
         this.display.setCypherText(txt);
         this.lb.showButton(true);
         this.isScrambling = data.randomizerSuvived;
+        this.retry.showUp(true);
 
         if(this.isScrambling) {
             this.scrambleAllTMP();
@@ -79,6 +81,7 @@ public class ReviewManager : MonoBehaviour
         this.display.setDisplay(false);
         this.moviePlayer.runResults(false);
         this.lb.showButton(false);
+        this.retry.showUp(false);
     }
 
     public void displayReview() {

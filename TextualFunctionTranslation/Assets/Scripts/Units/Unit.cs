@@ -390,6 +390,11 @@ public abstract class Unit : MonoBehaviour
             this.hpBar.onDeath();
         }
 
+        if(this.currentState != null) {
+            this.currentState.cancelAction();
+            this.currentState = null;
+        }
+
         if(this.curPosition != null) {
             this.unclaimSquare();
         }
