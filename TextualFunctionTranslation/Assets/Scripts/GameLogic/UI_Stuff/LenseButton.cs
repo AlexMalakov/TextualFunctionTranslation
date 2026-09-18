@@ -9,6 +9,7 @@ public class LenseButton : MonoBehaviour // +1
     //ok everyone say it with me "abstraction is for dorks!!!!"
     [SerializeField] private Button button;
     [SerializeField] private LenseItem li;
+    [SerializeField] private ButtonCover buttonCover;
 
     private bool lenseStatus = false;
 
@@ -19,17 +20,21 @@ public class LenseButton : MonoBehaviour // +1
 		btn.onClick.AddListener(onButtonClick); //abstraction remaines for chumps
     }
 
-    public void showButton(bool status) {
+    public void showButton(bool status) { //TODO use the cover
         if(lenseStatus) {
             this.onButtonClick();
         }
 
-        this.gameObject.SetActive(status);
+        this.buttonCover.coverButton(!status);
     }
 
     //mr president a seventh button script has hit the tower
     public void onButtonClick() {
         this.lenseStatus = !this.lenseStatus;
         this.li.toggleLenses(lenseStatus);
+    }
+
+    public void flash(bool startFlash) {
+        this.buttonCover.flash(startFlash);
     }
 }

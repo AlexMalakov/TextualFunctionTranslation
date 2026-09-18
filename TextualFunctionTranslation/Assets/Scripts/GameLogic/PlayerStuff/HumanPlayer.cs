@@ -49,7 +49,7 @@ public class HumanPlayer : Player //player but has money and shit
             (this.gm.canModifyBoard() 
                 && (this.bench.canAddUnitToBench() 
                     || this.unitLayout.getActiveUnits().Count < this.unitCap 
-                    || this.canMergeUnit(unitName)
+                    || this.canMergeUnit(null, unitName)
                 )
             ) || (!this.gm.canModifyBoard()
                 &&  this.hasBenchSpace(unitName)
@@ -58,7 +58,7 @@ public class HumanPlayer : Player //player but has money and shit
     }
 
     public bool hasBenchSpace(string unitName) {
-        return this.bench.canAddUnitToBench() || this.bench.hasStarLevel(unitName, 1);
+        return this.bench.canAddUnitToBench() || this.bench.hasAnotherStarLevel(null, unitName, 1);
     }
 
     public void purchaseUnit(Unit u) { //TODO: Make sure unit actually arrives where it needs to
@@ -70,7 +70,7 @@ public class HumanPlayer : Player //player but has money and shit
     public void gainUnit(Unit u) {
         this.playersUnits.Add(u);
 
-        if(this.canMergeUnit(u.getName())) {
+        if(this.canMergeUnit(u, u.getName())) {
             //don't need to move unit because it will get exploded by the merge
             this.mergeUnit(u, 1);
         }
@@ -85,29 +85,35 @@ public class HumanPlayer : Player //player but has money and shit
         }
     }
 
-    public bool canMergeUnit(string unitName) {
-        return this.bench.hasStarLevel(unitName, 1) || this.unitLayout.hasStarLevel(unitName, 1);
+    public bool canMergeUnit(Unit mergeMe, string unitName) {
+        return this.bench.hasAnotherStarLevel(mergeMe, unitName, 1) || this.unitLayout.hasAnotherStarLevel(mergeMe, unitName, 1);
     }
 
     //recursively merge until can no longer merge any longer
     private void mergeUnit(Unit u, int starLevel) {
         Unit mergeTo;
-        if(this.bench.hasStarLevel(u.getName(), starLevel)) {
-            mergeTo = this.bench.getStarLevel(u.getName(), starLevel);
-        } else if(this.unitLayout.hasStarLevel(u.getName(), starLevel)){
-            mergeTo = this.unitLayout.getStarLevel(u.getName(), starLevel);
-            
+        if(this.bench.hasAnotherStarLevel(u, u.getName(), starLevel)) {
+            mergeTo = this.bench.getAnotherStarLevel(u, u.getName(), starLevel);
+        } else if(this.unitLayout.hasAnotherStarLevel(u, u.getName(), starLevel)){
+            mergeTo = this.unitLayout.getAnotherStarLevel(u, u.getName(), starLevel);
         } else {
             return;
         }
-        this.killUnitInMerge(u, mergeTo);
+
+        Debug.Log("MERGE CHECK!!!!!!");
+        if(mergeTo == u) {
+            Debug.Log("DODGED IT");
+            return;
+        }
+
+        StartCoroutine(this.killUnitInMerge(u, mergeTo));
         mergeTo.mergeUnit();
         this.mergeUnit(mergeTo, ++starLevel);
     }
 
     private IEnumerator killUnitInMerge(Unit preMerge, Unit postMerge) {
         yield return this.umm.dragUnitTo(preMerge, postMerge.transform.position, false);
-        Destroy(preMerge);
+        preMerge.destroyObject();
     }
 
     public void sellUnit(Unit u) {

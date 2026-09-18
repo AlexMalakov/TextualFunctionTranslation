@@ -61,6 +61,7 @@ public class AttackState : UnitActionState
     public override void onStateExit() {
         if(this.windupCoroutine != null) {
             GlobalData.Larper.FakeStopCoroutine(this.windupCoroutine);
+            Debug.Log("COROUTINE EXECUTED!!!!" + this.unitOwner.gameObject.name);
             this.windupCoroutine = null;
         }
 
@@ -99,8 +100,10 @@ public class AttackState : UnitActionState
 
         while(this.frameLockout > 0 && this.attackStage == AttackStage.Windup) {
             //TODO: check if attack is cancel
+            
             float ratio = (this.attackSpeedWindupFrames - this.frameLockout) / (float)this.attackSpeedWindupFrames;
             this.unitOwner.transform.rotation = Quaternion.Slerp(this.unitOwner.transform.rotation, getTargetRot(), ratio);
+            
             yield return null;
         }
         

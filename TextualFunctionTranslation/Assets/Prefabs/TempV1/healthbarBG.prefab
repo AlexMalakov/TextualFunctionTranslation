@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthFill: {fileID: 7453024471714718916}
   damageFill: {fileID: 6231164681046273348}
-  worldOffset: {x: 0, y: 0.8, z: 0}
+  worldOffset: {x: 0, y: 2.4, z: 0}
   chipDelay: 1
   chipSpeed: 2
 --- !u!1 &5256481123572715783

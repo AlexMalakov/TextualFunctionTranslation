@@ -8,7 +8,7 @@ public class HealthBarManager : MonoBehaviour
     [SerializeField] private Image healthFill;
     [SerializeField] private Image damageFill;
 
-    [SerializeField] private Vector3 worldOffset = new Vector3(0, 2f, 0);
+    [SerializeField] private Vector3 worldOffset = new Vector3(0, 3f, 0);
     [SerializeField] private float chipDelay = 0.15f;
     [SerializeField] private float chipSpeed = 2f;
 

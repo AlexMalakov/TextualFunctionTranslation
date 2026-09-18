@@ -11,8 +11,8 @@ public class SavedGameData : MonoBehaviour
     //TODO: combat speed slider?
 
     public void Awake() {
-        this.showTutorial = PlayerPrefs.GetInt("tutorial", 1) > 0;
-        this.showDialogue = PlayerPrefs.GetInt("dialogue", 1) > 0;
+        // this.showTutorial = PlayerPrefs.GetInt("tutorial", 1) > 0;
+        // this.showDialogue = PlayerPrefs.GetInt("dialogue", 1) > 0;
     }
 
     public void setTutorialStatus(bool status) {

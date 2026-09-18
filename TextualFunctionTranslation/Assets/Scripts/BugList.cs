@@ -24,17 +24,23 @@ public class BugList
     *   - Unit rotation is incorrect
     *
     *   - Reset hex square reveals
-    *
-    *
+    *   
     *   - Tracker incorrect lense amount it seems (2 assists = 1 lense???)
     *
+    *   - new animation bug - in combat sometimes the attack animations never trigger?
     *
+    *   - merging crashes the fucking game aaaaaaa
+    *       - ok basically - a unit merges into a new unit (intentional)
+    *       - but then merges into itself (unintentional) 
     * 
+    *   - merged unit got one shot
+    *
+    *
     * Shit Features:
     *   - Lense toggle button is a terrible idea, also need some visualization over squares for the review stage so you're not just clicky clicky
     *   - Need more depth in tutorial, need to explain initiative, taunt, range, money
     *   - Wire up randomized: true dialogue ot randomizer effect lol
     *
-    *
+    * UI overhaul
     */
 }

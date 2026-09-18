@@ -33,12 +33,15 @@ public class PlayerUnitLayout : MonoBehaviour
      
     //initializes the layout from starting layout, and sets up initial traits
     public void initLayout() {
+        if(this.layout != null) {
+            return;
+        }
+
         this.layout = new Dictionary<Unit, HexSquare>();
         foreach(USPair u in this.startingLayout) {
             this.layout.Add(u.unit, this.board.getHexAt(u.coord));
             this.addTrait(u.unit);
         }
-        Debug.Log("Done?");
     }
 
     //given a unit, add the role trait and class trait to the traits dic
@@ -189,13 +192,13 @@ public class PlayerUnitLayout : MonoBehaviour
         return this.layout;
     }
 
-    public bool hasStarLevel(string unitName, int starLevel) {
-        return this.getStarLevel(unitName, starLevel) != null;
+    public bool hasAnotherStarLevel(Unit notMe, string unitName, int starLevel) {
+        return this.getAnotherStarLevel(notMe, unitName, starLevel) != null;
     }
 
-    public Unit getStarLevel(string unitName, int starLevel) {
+    public Unit getAnotherStarLevel(Unit notMe, string unitName, int starLevel) {
         foreach(Unit u in this.layout.Keys) {
-            if(u.getName() == unitName  && u.getMergeLevel() == starLevel) {
+            if(u != notMe && u.getName() == unitName && u.getMergeLevel() == starLevel) {
                 return u;
             }
         }

@@ -94,13 +94,13 @@ public class Bench : MonoBehaviour
         return true;
     }
 
-    public bool hasStarLevel(string unitName, int starLevel) {
-        return this.getStarLevel(unitName, starLevel) != null;
+    public bool hasAnotherStarLevel(Unit notMe, string unitName, int starLevel) {
+        return this.getAnotherStarLevel(notMe, unitName, starLevel) != null;
     }
 
-    public Unit getStarLevel(string unitName, int starLevel) {
+    public Unit getAnotherStarLevel(Unit notMe, string unitName, int starLevel) {
         foreach(BenchSlot b in this.benchSlotPositions) {
-            if(b.getUnit() && b.getUnit().getName() == unitName  && b.getUnit().getMergeLevel() == starLevel) {
+            if(b.getUnit() && b.getUnit() != notMe && b.getUnit().getName() == unitName  && b.getUnit().getMergeLevel() == starLevel) {
                 return b.getUnit();
             }
         }

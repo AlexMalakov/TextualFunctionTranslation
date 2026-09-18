@@ -14,8 +14,11 @@ public class CypherPopUpButton : MonoBehaviour
     [SerializeField] private Image image;
     [SerializeField] private TutorialStage tut;
 
+    [SerializeField] private ButtonCover buttonCover;
+
     private bool tutorialLockOn = false;
-    private bool tutorialFlashOn = false;
+
+    private bool canBePressed;
 
     private Color color;
 
@@ -26,7 +29,7 @@ public class CypherPopUpButton : MonoBehaviour
     }
 
     public void onButtonClick() {
-        if(this.tutorialLockOn) {
+        if(this.tutorialLockOn && !this.canBePressed) {
             return;
         }
         this.tut.onScrollClosed();
@@ -36,33 +39,16 @@ public class CypherPopUpButton : MonoBehaviour
     }
 
     public void setDisplay(bool setMe) {
-        this.gameObject.SetActive(setMe);
+        this.canBePressed = setMe;
+        this.buttonCover.coverButton(!setMe); //DO MROE
     }
 
     public void tutorialLock(bool lockOn) {
         this.tutorialLockOn = lockOn;
+        this.buttonCover.coverButton(!lockOn);
     }
 
     public void tutorialFlash(bool startFlash) {
-        this.tutorialFlashOn = startFlash;
-        if(startFlash)
-            this.flash();
-        else
-            this.unflash();
-    }
-    
-    private void flash() {
-        if(!this.tutorialFlashOn)
-            return;
-        this.image.color = new Color(255, 0 ,0);
-
-        Invoke(nameof(unflash), .5f);
-    }   
-
-    private void unflash() {
-        this.image.color = this.color;
-        if(this.tutorialFlashOn) {
-            Invoke(nameof(flash), .5f);
-        }
+        this.buttonCover.flash(startFlash);
     }
 }
