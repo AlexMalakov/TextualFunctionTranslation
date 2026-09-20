@@ -62,7 +62,6 @@ public class Shop : MonoBehaviour
         
         
         Unit u = UnitFactory.createUnit(ub.unitName);
-        Debug.Log("UNIT CREATED AT Y" + u.transform.position.y);
         this.player.purchaseUnit(u);
         
         if(this.tutorialActive) {
@@ -76,7 +75,7 @@ public class Shop : MonoBehaviour
 
     private void updateEntries(ShopEntry curEntry) {
         for(int i = 0; i < this.shopButtons.Count; i++) {
-            this.shopButtons[i].setOffering(UnitFactory.lookupBlueprint(this.shopEntries[shopIndex].units[i]));
+            this.shopButtons[i].setOffering(UnitFactory.lookupBlueprint(curEntry.units[i]));
         }
     }
 
@@ -102,6 +101,10 @@ public class Shop : MonoBehaviour
 
     public void tutorialLock(bool lockOn) {
         this.tutorialLockOn = lockOn;
+
+        foreach(ShopButton be in this.shopButtons) {
+            be.tutorialLockStatus(lockOn);
+        }
     }
 
     public void tutorialFlash(bool flashOn) {

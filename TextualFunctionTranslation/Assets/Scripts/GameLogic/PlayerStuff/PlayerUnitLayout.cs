@@ -149,6 +149,7 @@ public class PlayerUnitLayout : MonoBehaviour
         return true;
     }
 
+
     public void addUnitFromShop(Unit u) {
         foreach(HexSquare s in this.board.getPlayerSquares()) {
             if(s.getUnit() == null) {
@@ -170,9 +171,10 @@ public class PlayerUnitLayout : MonoBehaviour
     }
 
     public void removeUnitFromLayout(Unit u) {
-        this.layout.Remove(u);
-
-        this.removeTrait(u);
+        if(this.layout.ContainsKey(u)) {
+            this.layout.Remove(u);
+            this.removeTrait(u);
+        }
     }
 
     public List<Unit> getActiveUnits() {

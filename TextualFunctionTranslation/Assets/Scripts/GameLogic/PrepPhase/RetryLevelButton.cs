@@ -9,10 +9,11 @@ public class RetryLevelButton : MonoBehaviour //number 6 lets fucking goooooo
 {
     //ok everyone say it with me "abstraction is for dorks!!!!"
     [SerializeField] private Button button;
-    [SerializeField] private GameObject screenCover;
+    [SerializeField] private ButtonCover buttonCover;
     [SerializeField] private GameManager gm;
 
     private bool works = true;
+    private bool lockOn;
 
     private Trait trait;
 
@@ -23,7 +24,7 @@ public class RetryLevelButton : MonoBehaviour //number 6 lets fucking goooooo
 
     //mr president a fifth button script has hit the tower
     public void onButtonClick() {
-        if(!this.works) {
+        if(!this.works || this.lockOn) {
             return;
         }
         this.gm.onResultsEnd(false);
@@ -31,6 +32,11 @@ public class RetryLevelButton : MonoBehaviour //number 6 lets fucking goooooo
 
     public void enableButton(bool enabled) {
         this.works = enabled;
-        this.screenCover.SetActive(!enabled);
+        this.buttonCover.coverButton(enabled && !lockOn);
+    }
+
+    public void tutorialLock(bool lockOn) {
+        this.lockOn = lockOn;
+        this.buttonCover.coverButton(!lockOn);
     }
 }

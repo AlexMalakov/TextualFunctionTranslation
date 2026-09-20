@@ -49,8 +49,11 @@ public abstract class CypherTrait : Trait
             }
         }
         
-        this.cypher = new List<CharacterTransformation>();
         return newCypherText;
+    }
+
+    public override void resetCypher() {
+        this.cypher = new List<CharacterTransformation>();
     }
 }
 

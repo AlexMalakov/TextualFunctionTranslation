@@ -11,7 +11,6 @@ public class CypherPopUpButton : MonoBehaviour
     [SerializeField] private CypherTextDisplay disp;
 
     [SerializeField] private TMP_Text buttonText;
-    [SerializeField] private Image image;
     [SerializeField] private TutorialStage tut;
 
     [SerializeField] private ButtonCover buttonCover;
@@ -25,7 +24,6 @@ public class CypherPopUpButton : MonoBehaviour
     public void Awake() { //Awake because this doesn't affect other systems
         UnityEngine.UI.Button btn = button.GetComponent<UnityEngine.UI.Button>();
 		btn.onClick.AddListener(onButtonClick);
-        this.color = this.image.color;
     }
 
     public void onButtonClick() {
@@ -40,7 +38,7 @@ public class CypherPopUpButton : MonoBehaviour
 
     public void setDisplay(bool setMe) {
         this.canBePressed = setMe;
-        this.buttonCover.coverButton(!setMe); //DO MROE
+        this.buttonCover.coverButton(setMe);
     }
 
     public void tutorialLock(bool lockOn) {
@@ -49,6 +47,6 @@ public class CypherPopUpButton : MonoBehaviour
     }
 
     public void tutorialFlash(bool startFlash) {
-        this.buttonCover.flash(startFlash);
+        this.buttonCover.flashButton(startFlash);
     }
 }

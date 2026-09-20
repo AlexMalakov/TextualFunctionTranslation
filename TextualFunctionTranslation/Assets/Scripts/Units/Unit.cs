@@ -56,7 +56,7 @@ public abstract class Unit : MonoBehaviour
     private Trait roleTrait;
     private Trait classTrait;
 
-    private UnitBlueprint unitBlueprint;
+    [SerializeField] private UnitBlueprint unitBlueprint;
     private int starLevel = 1;
 
     [Header ("Hidden stats")]
@@ -86,6 +86,8 @@ public abstract class Unit : MonoBehaviour
     protected UnitActionState Attack;
     protected UnitActionState currentState;
 
+    private bool combatEnd = true;
+
     public void Start() {
         this.Walk = new WalkState(this);
         this.Idle = new IdleState(this);
@@ -102,6 +104,8 @@ public abstract class Unit : MonoBehaviour
         this.unitBlueprint = blueprint;
         this.combatLog = log;
         this.fixY();
+        this.resetStats();
+        this.manager.requestHealthBar(this);
         return this;
     }
 
@@ -126,7 +130,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     public int getCost() {
-        return this.unitBlueprint.unitCost;
+        return this.unitBlueprint.unitCost * (int)Mathf.Pow(2, this.starLevel - 1);
     }
 
     public HexSquare getPosition() {
@@ -180,20 +184,31 @@ public abstract class Unit : MonoBehaviour
     }
 
     public virtual void initUnit(HexSquare square, HealthBarManager hpBar, Transform hpCanvas) { //NOTE: this is called both at the start of prep and end of prep
-        if(this.hpBar != null) {
-            this.hpBar.onDeath();
-        }
-        this.hpBar = hpBar;
+        this.resetStats();
+        this.assignHpBar(hpBar, hpCanvas);
+        this.currentTarget = null;
+        this.placeUnitOnSquare(square, true);
+        this.combatEnd = false;
+    }
+
+    private void resetStats() {
         this.healthCalculator = new UnitNumericCalculator(this.health.getStat(this.starLevel));
         this.damageCalculator = new UnitNumericCalculator(this.damage.getStat(this.starLevel));
         this.attackSpeedCalculator = new UnitNumericCalculator((float)this.getAttackSpeed());
 
         this.currentHealth = this.healthCalculator.calculate();
+    }
 
-        this.currentTarget = null;
+    public void assignHpBar(HealthBarManager hpBar, Transform hpCanvas) {
+        if(this.hpBar != null) {
+            this.hpBar.onDeath();
+        }
 
-        this.hpBar.init(this.currentHealth, this.transform, hpCanvas);
-        this.placeUnitOnSquare(square, true);
+        this.healthCalculator = new UnitNumericCalculator(this.health.getStat(this.starLevel));
+        this.currentHealth = this.healthCalculator.calculate();
+
+        this.hpBar = hpBar;
+        this.hpBar.init(this.currentHealth, this.starLevel, this.transform, hpCanvas);
     }
 
     public virtual void triggerUpdate(CombatManager manager) {
@@ -203,7 +218,7 @@ public abstract class Unit : MonoBehaviour
             this.currentState.onStateExit();
             this.currentState = null;
             return;
-        } else if(this.isDead()) {
+        } else if(this.isDead() || this.combatEnd) {
             return;
         } else if(this.currentState == null) {
             this.currentState = this.Idle;
@@ -221,7 +236,6 @@ public abstract class Unit : MonoBehaviour
             }
         }
 
-        //try to cancel attack if the target is out of our range
         if(this.currentTarget != null && this.getRange() < HexSquare.hexDist(this.currentTarget.getPosition(), this.getPosition())) {
             if (this.currentState.cancelAction()) {
                 StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, .25f);
@@ -230,7 +244,7 @@ public abstract class Unit : MonoBehaviour
             }
         }
 
-        currentState.update();
+        currentState.triggerUpdate();
     }
 
     public virtual void requestStateSwap() {
@@ -279,14 +293,19 @@ public abstract class Unit : MonoBehaviour
             this.hpBar = null;
         }
 
+        // Debug.Log("WE ARE ATTACKING A NULL BUT COMBAT ENDED HERE");
+
         this.Walk.cancelAction();
         this.Idle.cancelAction();
         this.Attack.cancelAction();
+        this.currentState = this.Idle;
+        this.combatEnd = true;
         
         this.healthCalculator.wipe();
         this.damageCalculator.wipe();
         this.attackSpeedCalculator.wipe();
         this.currentHealth = this.healthCalculator.calculate();
+        this.currentTarget = null;
     }
 
     public void placeUnitOnSquare(HexSquare square, bool move) {
@@ -310,10 +329,14 @@ public abstract class Unit : MonoBehaviour
         this.unclaimSquare();
     }
     public void attackTarget() {
-        this.currentTarget.takeDamage(this.calcDamage(), this);
+        // if(this.combatEnd) {
+        //     return;
+        // }
+
         this.combatLog.logEvent(new CombatEvent(this, this.currentTarget, CombatEventType.Attack));
-        this.roleTrait.onUnitAttack(this, this.currentTarget);
-        this.classTrait.onUnitAttack(this, this.currentTarget);
+        CombatManager.callTraitMethod(this.getRoleTrait(), this.getRoleTrait().onUnitAttack, this, this.currentTarget);
+        CombatManager.callTraitMethod(this.getClassTrait(), this.getClassTrait().onUnitAttack, this, this.currentTarget);
+        this.currentTarget.takeDamage(this.calcDamage(), this);
     }
 
     //returns true if target is in range
@@ -330,7 +353,6 @@ public abstract class Unit : MonoBehaviour
 
     public virtual void takeDamage(float in_damage, Unit damage_from) {
         if(this.isDead()) {
-            Debug.Log("HITTING A DEAD!");
             return;
         }
 
@@ -341,10 +363,11 @@ public abstract class Unit : MonoBehaviour
             this.combatLog.logEvent(new CombatEvent(this, damage_from, CombatEventType.Death));
             this.combatLog.logEvent(new CombatEvent(damage_from, this, CombatEventType.Kill));
 
-            damage_from.getRoleTrait().onEnemyDefeat(damage_from, this);
-            damage_from.getClassTrait().onEnemyDefeat(damage_from, this);
-            this.getRoleTrait().onUnitDeath(this, damage_from);
-            this.getClassTrait().onUnitDeath(this, damage_from);
+            CombatManager.callTraitMethod(damage_from.getRoleTrait(), damage_from.getRoleTrait().onEnemyDefeat, damage_from, this);
+            CombatManager.callTraitMethod(damage_from.getClassTrait(), damage_from.getClassTrait().onEnemyDefeat, damage_from, this);
+
+            CombatManager.callTraitMethod(this.getRoleTrait(), this.getRoleTrait().onUnitDeath, this, damage_from);
+            CombatManager.callTraitMethod(this.getClassTrait(), this.getClassTrait().onUnitDeath, this, damage_from);
 
             this.onDeath();
             return;
@@ -408,6 +431,9 @@ public abstract class Unit : MonoBehaviour
 
     public void mergeUnit() {
         this.starLevel += 1;
+
+        this.resetStats();
+        this.hpBar.updateMaxHealth(this.currentHealth, this.starLevel);
     }
 
     public int getMergeLevel() {
@@ -422,7 +448,7 @@ public abstract class Unit : MonoBehaviour
                 float newMaxHp = this.healthCalculator.calculate();
                 this.currentHealth = Mathf.Min(this.currentHealth + Mathf.Max(newMaxHp - oldMaxHp, 0), newMaxHp);
 
-                this.hpBar.updateMaxHealth(newMaxHp); //TODO: other places this is updated?
+                this.hpBar.updateMaxHealth(newMaxHp, this.starLevel); //TODO: other places this is updated?
                 break;
             case BuffableStats.Damage:
                 this.damageCalculator.addOperation(operation);

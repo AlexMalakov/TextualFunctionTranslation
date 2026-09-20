@@ -63,10 +63,9 @@ public struct OffsetCoord {
 public class HexSquare : MonoBehaviour
 {
     [SerializeField] private TMP_Text text;
-    [SerializeField] private Renderer render;
+    [SerializeField] private GameObject flashMe;
     private AxialCoord axc;
     private Unit unit;
-    private Color defaultColor;
 
     private char characterValue;
     private bool showing = false;
@@ -74,9 +73,13 @@ public class HexSquare : MonoBehaviour
     
     public virtual void init(int x, int y, Vector3 hexPos) {
         this.text.gameObject.SetActive(false);
+        if(y >= 4) {
+            this.text.color = new Color(0, 255, 0);
+        } else {
+            this.text.color = new Color(255, 0, 0);
+        }
         this.transform.position = hexPos;
         this.axc = new OffsetCoord(x, y).toAxial();
-        defaultColor = this.render.material.color;
     }
 
     public virtual List<AxialCoord> getNeighborCoords() {
@@ -137,7 +140,6 @@ public class HexSquare : MonoBehaviour
     public void displayValue(bool toggle) {
         this.showing = toggle;
         this.text.gameObject.SetActive(toggle);
-        this.text.color = new Color(255f, 165f, 0f);
     }
 
     public bool isShowingChar() {
@@ -145,8 +147,8 @@ public class HexSquare : MonoBehaviour
     }
 
     public void highlightSquare(Color color, float duration) {
-        this.render.material.color = color;
-        this.text.color = new Color(255, 0, 0);
+        this.flashMe.SetActive(true);
+        this.flashMe.GetComponent<Renderer>().material.color = color;
         if(duration > 0) {
             Invoke(nameof(unhighlight), duration);
         }
@@ -166,14 +168,13 @@ public class HexSquare : MonoBehaviour
             this.unhighlight();
             return;
         }
-        this.highlightSquare(new Color(255, 0, 0), .5f); //TODO: pick a nice pretty color :)
-        Invoke(nameof(doFlash), .5f);
+        this.highlightSquare(new Color(255, 0, 0), .5f);
+        Invoke(nameof(doFlash), 1f);
 
     }
     
     private void unhighlight() {
-        this.render.material.color = this.defaultColor;
-        this.text.color = new Color(0, 0, 0);
+        this.flashMe.SetActive(false);
     }
 
     public string toString() {
@@ -182,6 +183,7 @@ public class HexSquare : MonoBehaviour
     }
 
     public void showDruidInfluence(bool enabled, bool special) {
+        //TODO: make me look prettier
         if(!enabled) {
             this.unhighlight();
         } else {

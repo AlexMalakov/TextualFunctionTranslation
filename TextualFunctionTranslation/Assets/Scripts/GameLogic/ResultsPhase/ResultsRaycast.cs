@@ -87,13 +87,13 @@ public class ResultsRaycast : MonoBehaviour
     private void showEvent(CombatEvent ev) {
         switch(ev.eventType) {
             case CombatEventType.Kill:
-                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "windup_attack", "death");
+                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "movie_attack", "death");
                 break;
             case CombatEventType.Attack:
-                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "windup_attack", "idle_combat");
+                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "movie_attack", "idle_combat");
                 break;
             case CombatEventType.Death:
-                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "death", "windup_attack");
+                this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "death", "movie_attack");
                 break;
             case CombatEventType.Survival:
                 ev.source.gameObject.SetActive(true);

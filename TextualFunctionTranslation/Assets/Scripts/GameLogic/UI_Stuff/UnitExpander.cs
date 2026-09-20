@@ -9,6 +9,7 @@ public class UnitExpander : MonoBehaviour
     [SerializeField] private Image unitIcon;
     [SerializeField] private TMP_Text health_ratio;
     [SerializeField] private TMP_Text unit_stats;
+    [SerializeField] private TMP_Text unit_name;
 
     [SerializeField] private TraitCodexButton roleTrait;
     [SerializeField] private TraitCodexButton classTrait;
@@ -21,8 +22,8 @@ public class UnitExpander : MonoBehaviour
         this.health_ratio.text = "";
         this.unit_stats.text = "";
 
-        this.roleTrait.gameObject.SetActive(false);
-        this.classTrait.gameObject.SetActive(false);
+        // this.roleTrait.gameObject.SetActive(false); //TODO: enable me :)
+        // this.classTrait.gameObject.SetActive(false);
     }
 
     public void Update() {
@@ -42,7 +43,9 @@ public class UnitExpander : MonoBehaviour
     }
 
     private void refreshUnit() {
-        //unitIcon.sprite = unitSprite;
+        this.unitIcon.sprite = tracking.getUnitIcon();
+        this.unit_name.text = tracking.getName();
+        
         //TODO: healthbar
         this.health_ratio.text = this.tracking.getCurHealth() + "/" + this.tracking.calcMaxHealth();
 
@@ -52,10 +55,10 @@ public class UnitExpander : MonoBehaviour
                     + "\nDecision Order: " + this.tracking.getDecisionPriority()
                     + "\nTaunt: " + this.tracking.getTaunt();
 
-        this.roleTrait.gameObject.SetActive(true);
-        this.classTrait.gameObject.SetActive(true);
-        this.roleTrait.init(this.tracking.getRoleTrait());
-        this.classTrait.init(this.tracking.getClassTrait());
+        // this.roleTrait.gameObject.SetActive(true);
+        // this.classTrait.gameObject.SetActive(true);
+        // this.roleTrait.init(this.tracking.getRoleTrait());
+        // this.classTrait.init(this.tracking.getClassTrait());
     }
 
 

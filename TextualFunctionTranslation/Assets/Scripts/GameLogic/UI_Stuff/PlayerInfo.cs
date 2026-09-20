@@ -6,6 +6,7 @@ using TMPro;
 public class PlayerInfo : MonoBehaviour
 {
     [SerializeField] private TMP_Text cur_level;
+    [SerializeField] private TMP_Text enemy_glory_stacks;
     [SerializeField] private TMP_Text glory_stacks;
     [SerializeField] private TMP_Text lense_count;
     [SerializeField] private TMP_Text dollarie_doos;
@@ -22,6 +23,10 @@ public class PlayerInfo : MonoBehaviour
 
     public void setGloryStacks(int stackCount) {
         this.glory_stacks.text = stackCount + "";
+    }
+
+    public void setEnemyGloryStacks(int stackCount) {
+        this.enemy_glory_stacks.text = stackCount + "";
     }
 
     public void setDollars(int dollary_doos) {

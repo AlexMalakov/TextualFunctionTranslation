@@ -6,7 +6,9 @@ public class MouseTransform : MonoBehaviour
 {
     [SerializeField] private float snapRadius = 1f;
     [SerializeField] private HumanPlayer humanPlayer;
+    [SerializeField] private LevelViewer levelView;
     [SerializeField] private TutorialStage tut;
+    [SerializeField] private UnitSellDock sellDock;
     private Plane dragPlane;
     private Unit unitDragging;
     private Vector3 initialPos;
@@ -24,6 +26,7 @@ public class MouseTransform : MonoBehaviour
 
         u.triggerAnimation("falling");
         this.humanPlayer.getUnitMoveManager().overrideMovement(u);
+        this.sellDock.isUnitBeingDragged(true, u);
 
         this.initialPos = u.transform.position;
         this.unitDragging = u;
@@ -45,6 +48,10 @@ public class MouseTransform : MonoBehaviour
     public void endUnitDrag() {
         bool succeeded = false;
 
+        if(this.sellDock.isGoingToSellUnit()) {
+            succeeded = true;
+            this.unitDragging = null;
+        }
         //snapping logicL
         if(this.unitDragging != null) {
             Collider[] hits = Physics.OverlapSphere(this.transform.position, this.snapRadius);
@@ -93,7 +100,11 @@ public class MouseTransform : MonoBehaviour
 
         if(!succeeded) {
             StartCoroutine(this.humanPlayer.getUnitMoveManager().dragUnitTo(this.unitDragging, this.initialPos, false));
+        } else {
+            this.levelView.onUnitLayoutUpdate(this.humanPlayer.getActiveUnits().Count, this.humanPlayer.getUnitCap());
         }
+
+        this.sellDock.isUnitBeingDragged(false, null);
         this.unitDragging = null;
     }
 

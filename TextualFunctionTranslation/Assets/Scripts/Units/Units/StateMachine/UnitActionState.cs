@@ -24,7 +24,7 @@ public abstract class UnitActionState
 
     protected abstract void runUpdate();
 
-    public void update() {
+    public void triggerUpdate() {
         this.frameLockout--;
 
         this.runUpdate();

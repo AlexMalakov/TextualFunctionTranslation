@@ -8,13 +8,15 @@ public class ButtonCover : MonoBehaviour
     private bool flashing = false;
     [SerializeField] private Color disabledColor;
     [SerializeField] private Color flashColor;
-    [SerializableField] private Image image; 
+    [SerializeField] private Image imageToF; 
+    [SerializeField] private Color colorToTrait;
 
     public void flashButton(bool isFlashing) {
         this.flashing = isFlashing;
 
         if(isFlashing) {
-            this.image.color = flashColor;
+            this.imageToF.enabled = true;
+            this.imageToF.color = flashColor;
             this.flash();
         } else {
             this.unflash();
@@ -25,21 +27,27 @@ public class ButtonCover : MonoBehaviour
         if(!this.flashing) {
             return;
         }
-        this.image.enabled = false;
+        this.imageToF.enabled = true;
         Invoke(nameof(unflash), .5f);
     }
 
     private void unflash() {
-
-        this.image.enabled = false;
+        this.imageToF.enabled = false;
 
         if(this.flashing) {
             Invoke(nameof(flash), .5f);
         }
     }
 
-    public bool coverButton(bool buttonIsEnabled) {
-        this.image.color = disabledColor;
-        this.image.enabled = !buttonIsEnabled;
+    public void coverButton(bool buttonIsEnabled) {
+        this.imageToF.color = disabledColor;
+        this.imageToF.enabled = !buttonIsEnabled;
+    }
+
+    public void flashTrait() {
+        this.imageToF.enabled = true;
+        this.imageToF.color = colorToTrait;
+
+        Invoke(nameof(unflash), .5f); //TODO - i should be a setting
     }
 }

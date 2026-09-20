@@ -34,7 +34,7 @@ public class ReviewManager : MonoBehaviour
         this.display.setCypherText(txt);
         this.lb.showButton(true);
         this.isScrambling = data.randomizerSuvived;
-        this.retry.showUp(true);
+        this.retry.enableButton(true);
 
         if(this.isScrambling) {
             this.scrambleAllTMP();
@@ -81,7 +81,7 @@ public class ReviewManager : MonoBehaviour
         this.display.setDisplay(false);
         this.moviePlayer.runResults(false);
         this.lb.showButton(false);
-        this.retry.showUp(false);
+        this.retry.enableButton(false);
     }
 
     public void displayReview() {

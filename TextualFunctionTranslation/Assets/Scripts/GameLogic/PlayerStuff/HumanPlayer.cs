@@ -35,6 +35,10 @@ public class HumanPlayer : Player //player but has money and shit
         this.unitCap = cap; //TODO: is it possible to exceed unit cap?
     }
 
+    public int getUnitCap() {
+        return this.unitCap;
+    }
+
     public int getMoney() {
         return this.money;
     }
@@ -126,7 +130,7 @@ public class HumanPlayer : Player //player but has money and shit
         this.bench.removeUnitFromBench(u);
         this.unitLayout.removeUnitFromLayout(u);
         this.pi.setDollars(this.money);
-        Destroy(u.gameObject);
+        u.destroyObject();
     }
 
     public Bench getBench() {

@@ -14,6 +14,7 @@ public class LenseButton : MonoBehaviour // +1
     private bool lenseStatus = false;
 
     private UnitBlueprint ub;
+    private bool lockOn;
 
     public void Awake() { //Awake because this doesn't affect other systems
         UnityEngine.UI.Button btn = button.GetComponent<UnityEngine.UI.Button>();
@@ -25,16 +26,24 @@ public class LenseButton : MonoBehaviour // +1
             this.onButtonClick();
         }
 
-        this.buttonCover.coverButton(!status);
+        this.buttonCover.coverButton(status);
     }
 
     //mr president a seventh button script has hit the tower
     public void onButtonClick() {
+        if(lockOn) {
+            return;
+        }
         this.lenseStatus = !this.lenseStatus;
         this.li.toggleLenses(lenseStatus);
     }
 
     public void flash(bool startFlash) {
-        this.buttonCover.flash(startFlash);
+        this.buttonCover.flashButton(startFlash);
+    }
+
+    public void tutorialLock(bool lockOn) {
+        this.lockOn = lockOn;
+        this.buttonCover.coverButton(!lockOn);
     }
 }

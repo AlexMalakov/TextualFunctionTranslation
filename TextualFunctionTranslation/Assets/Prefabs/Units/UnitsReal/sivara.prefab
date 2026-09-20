@@ -6,7 +6,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 746860350527810744}
+    m_TransformParent: {fileID: 4636772969950265796}
     m_Modifications:
     - target: {fileID: 5489180350625590798, guid: c458b43018edc5c4d8cc033ebc2ac916, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -18,11 +18,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6658097809633858913, guid: c458b43018edc5c4d8cc033ebc2ac916, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 1.7785447
       objectReference: {fileID: 0}
     - target: {fileID: 6658097809633858913, guid: c458b43018edc5c4d8cc033ebc2ac916, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.019
+      value: -0.020684779
       objectReference: {fileID: 0}
     - target: {fileID: 6658097809633858913, guid: c458b43018edc5c4d8cc033ebc2ac916, type: 3}
       propertyPath: m_LocalPosition.z
@@ -30,19 +30,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6658097809633858913, guid: c458b43018edc5c4d8cc033ebc2ac916, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: -0.505713
       objectReference: {fileID: 0}
     - target: {fileID: 6658097809633858913, guid: c458b43018edc5c4d8cc033ebc2ac916, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.49422103
       objectReference: {fileID: 0}
     - target: {fileID: 6658097809633858913, guid: c458b43018edc5c4d8cc033ebc2ac916, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.505713
       objectReference: {fileID: 0}
     - target: {fileID: 6658097809633858913, guid: c458b43018edc5c4d8cc033ebc2ac916, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: -0.49422103
       objectReference: {fileID: 0}
     - target: {fileID: 6658097809633858913, guid: c458b43018edc5c4d8cc033ebc2ac916, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -147,7 +147,7 @@ PrefabInstance:
     - {fileID: 588832633632535838, guid: 9707dc6c7d7b041288b6968368b1b3d5, type: 3}
     - {fileID: 6584742372962036006, guid: 9707dc6c7d7b041288b6968368b1b3d5, type: 3}
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 8728656618295629686, guid: 9707dc6c7d7b041288b6968368b1b3d5, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 3685680665318390282, guid: 9707dc6c7d7b041288b6968368b1b3d5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 632383474803499347}
     m_AddedComponents: []
@@ -160,6 +160,11 @@ Transform:
 --- !u!95 &1812511920565742046 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7662978702328484368, guid: 9707dc6c7d7b041288b6968368b1b3d5, type: 3}
+  m_PrefabInstance: {fileID: 8322383257330465742}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4636772969950265796 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3685680665318390282, guid: 9707dc6c7d7b041288b6968368b1b3d5, type: 3}
   m_PrefabInstance: {fileID: 8322383257330465742}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8774311476750799951
@@ -194,6 +199,10 @@ PrefabInstance:
       propertyPath: tombstonePrefab
       value: 
       objectReference: {fileID: 6022145863667552075, guid: 4e5bc33c9c3fe49ee9617739695abebb, type: 3}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: decisionPriority
+      value: 23
+      objectReference: {fileID: 0}
     - target: {fileID: 1594449420069669637, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_Name
       value: sivara

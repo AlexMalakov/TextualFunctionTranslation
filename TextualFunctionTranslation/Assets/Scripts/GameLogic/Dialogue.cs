@@ -25,18 +25,11 @@ public struct DialogueIconMap
 
 public class Dialogue : MonoBehaviour
 {
-    [SerializeField] private List<DialogueIconMap> nameToIcon;
     [SerializeField] private List<DialogueLine> dialogueLines;
-    [SerializeField] private GameObject dialogueBox;
-    [SerializeField] private Image talkerSprite;
-    [SerializeField] private TMP_Text dialogue;
     [SerializeField] private GameManager gm;
+    [SerializeField] private DialogueUiController dia;
 
     private ReviewData? reviewDataSave;
-
-    public void Awake() {
-        dialogueBox.SetActive(false);
-    }
 
     public void setDialogueLines(List<DialogueLine> lines) {
         this.dialogueLines = lines;
@@ -49,7 +42,6 @@ public class Dialogue : MonoBehaviour
     public void startDialogue(ReviewData? rd) {
         this.reviewDataSave = rd;
         this.inDialogue = true;
-        dialogueBox.SetActive(false);
         this.showLine();
     }
 
@@ -66,20 +58,13 @@ public class Dialogue : MonoBehaviour
             return;
         }
 
-        this.dialogue.text = this.dialogueLines[this.curLine].text;
-        this.talkerSprite.sprite = this.nameToIcon.First(x => x.name == this.dialogueLines[this.curLine].speaker).icon;
-
-        if(this.dialogueLines[this.curLine].on_the_left) {
-            this.talkerSprite.GetComponent<RectTransform>().localScale  = new Vector3(1, 1, 1);
-        } else {
-            this.talkerSprite.GetComponent<RectTransform>().localScale  = new Vector3(-1, 1, 1);
-        }
+        this.dia.displayLine(this.dialogueLines[this.curLine].on_the_left, this.dialogueLines[this.curLine].speaker, this.dialogueLines[this.curLine].text);
     }
 
     private void endDialogue() {
         this.curLine = 0;
         this.inDialogue = false;
-        this.dialogueBox.SetActive(false);
+        this.dia.hideDialogue();
         gm.doneYapping(this.reviewDataSave);
     }
 }

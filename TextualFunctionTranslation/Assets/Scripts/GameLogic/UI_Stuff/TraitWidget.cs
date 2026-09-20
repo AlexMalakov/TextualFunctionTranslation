@@ -10,7 +10,8 @@ public class TraitWidget : MonoBehaviour
     [SerializeField] private TMP_Text traitCount;
     [SerializeField] private TMP_Text traitName;
     [SerializeField] private TMP_Text traitTieringInfo;
-    [SerializeField] private Image img;
+    [SerializeField] private ButtonCover cover;
+    [SerializeField] private GameObject activeBorder;
 
 
     public void init(Trait t) {
@@ -56,32 +57,14 @@ public class TraitWidget : MonoBehaviour
         this.traitTieringInfo.text = text;
     }
 
-    public void flashTrait() {
-        img.color = new Color(255,0,0);
-        Invoke(nameof(unflashTrait), .5f);
-    }
 
-    private void unflashTrait() {
-        img.color = new Color(0,255,0);
+    public void flashTrait() {
+        this.cover.flashTrait();
     }
 
     //this being a number is bad but consider that its ui code so idc about good design
-    public void makeActive(bool isActive, int activeNum) { //-1 it's not even active, 0 it's player's and active 1 it's players and not active 2 it's enemies
-        switch(activeNum) {
-            case -1:
-                img.color = new Color(125,125,125);
-                break;
-            case 0:
-                img.color = new Color(125,160,125);
-                break;
-            case 1:
-                img.color = new Color(125,125,125);
-                break;
-            case 2:
-                img.color = new Color(160,125,125);
-                break;
-        }
-
+    public void makeActive(bool isActive, bool enoughForProc) {
         this.gameObject.SetActive(isActive);
+        this.activeBorder.SetActive(enoughForProc);
     }
 }

@@ -96,4 +96,12 @@ public class HexBoard : MonoBehaviour
             }
         }
     }
+
+    public void hideAllSquares() {
+        foreach(List<HexSquare> sqrs in this.squares) {
+            foreach(HexSquare s in sqrs) {
+                s.displayValue(false);
+            }
+        }
+    }
 }

@@ -80,6 +80,10 @@ public class CombatManager : MonoBehaviour
         this.traitPreCombat();
     }
 
+    public void requestHealthBar(Unit u) {
+        u.assignHpBar(Instantiate(this.healthbarPrefab).GetComponent<HealthBarManager>(), this.hpCanvas);
+    }
+
     public IEnumerator precombatAnims() {
         foreach(Unit u in this.units) {
             u.triggerAnimation("draw_weapon"); //TODO: only can transition from idle, not from assasin jump >:( 
@@ -154,11 +158,11 @@ public class CombatManager : MonoBehaviour
 
     public void onUnitDeath(Unit u) {
         foreach(Trait t in this.player.getUnitLayout().getActiveTraits().OrderBy(t => t.getTraitName())) {
-            t.informAllOffDeath(u);
+            callTraitMethod(t, t.informAllOffDeath, u);
         }
 
         foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits().OrderBy(t => t.getTraitName())) {
-            t.informAllOffDeath(u);
+            callTraitMethod(t, t.informAllOffDeath, u);
         }
 
         if(player.ownsUnit(u)) {
@@ -180,8 +184,8 @@ public class CombatManager : MonoBehaviour
         bool randomizerSurvived = false;
         foreach(Unit u in this.units) {
             if(!u.isDead()) {
-                u.getRoleTrait().onCombatSurvival(u);
-                u.getClassTrait().onCombatSurvival(u);
+                callTraitMethod(u.getRoleTrait(), u.getRoleTrait().onCombatSurvival, u);
+                callTraitMethod(u.getClassTrait(), u.getClassTrait().onCombatSurvival, u);
 
                 this.combatLog.logEvent(new CombatEvent(u, u, CombatEventType.Survival));
 
@@ -190,9 +194,8 @@ public class CombatManager : MonoBehaviour
                 }
             }
 
-            u.getRoleTrait().onCombatEnd(u);
-            u.getClassTrait().onCombatEnd(u);
-
+            callTraitMethod(u.getRoleTrait(), u.getRoleTrait().onCombatEnd, u);
+            callTraitMethod(u.getClassTrait(), u.getClassTrait().onCombatEnd, u);
         }
 
         foreach(Unit u in this.units) {
@@ -229,15 +232,24 @@ public class CombatManager : MonoBehaviour
     }
 
     private string runEncrypt(string plaintext) {
+        string alphabet = "abcdefghijklmnopqrstuvwxyz";
+        char[] alphabetArray = alphabet.ToCharArray();
+        Debug.Log("encryption test: CAPTURING SUBSTITUTION USING ALPHABET: " + alphabet);
+
         char[] cypherArray = plaintext.ToCharArray();
 
         //TO CHECK: make sure this is same order as animations are
         foreach(Trait t in this.player.getUnitLayout().getActiveTraits().OrderBy(t => t.getTraitName())) {
             cypherArray = t.runCypher(cypherArray);
+            Debug.Log("encryption test: ENCRYPTED WITH TRAIT " + t.gameObject.name);
+            alphabetArray = t.runCypher(alphabetArray);
+            Debug.Log("encryption test: ENCRYPTED WITH TRAIT " + new string(alphabetArray));
         }
         
         foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits().OrderByDescending(t => t.getTraitName())) {
             cypherArray = t.runCypher(cypherArray);
+            alphabetArray = t.runCypher(alphabetArray);
+            Debug.Log("encryption test: ENCRYPTED WITH TRAIT " + new string(alphabetArray));
         }
 
         return new string(cypherArray);
@@ -251,23 +263,27 @@ public class CombatManager : MonoBehaviour
         //ok so briliant idea: since cypher is only called on active traits, i can just have these methods get pinged constantly for inactive traits
         //I just need to make sure all traits get their shit wiped at the end
 
+        //This idea is not briliant these like provide buffs and shit bro like what are we doing...
+
         foreach(Trait t in this.player.getUnitLayout().getActiveTraits()) {
             t.resetRevealedSquares();
-            t.onPrecombatStart();
+            t.resetCypher();
+            callTraitMethod(t, t.onPrecombatStart);
         }
         foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits()) {
             t.resetRevealedSquares();
-            t.onPrecombatStart();
+            t.resetCypher();
+            callTraitMethod(t, t.onPrecombatStart);
         }
 
         foreach(Unit u in this.units) {
-            u.getRoleTrait().onCombatStart(u);
-            u.getClassTrait().onCombatStart(u);
+            callTraitMethod(u.getRoleTrait(), u.getRoleTrait().onCombatStart, u);
+            callTraitMethod(u.getClassTrait(), u.getClassTrait().onCombatStart, u);
         }
 
         foreach(Unit u in this.units) {
-            u.getRoleTrait().preCombatFinal(u);
-            u.getClassTrait().preCombatFinal(u);
+            callTraitMethod(u.getRoleTrait(), u.getRoleTrait().preCombatFinal, u);
+            callTraitMethod(u.getClassTrait(), u.getClassTrait().preCombatFinal, u);
         }
     }
 
@@ -293,6 +309,22 @@ public class CombatManager : MonoBehaviour
             } else {
                 Debug.Log("UNKNOWN KEY FROM UNIT " + u.gameObject.name);
             }
+        }
+    }
+
+    public static void callTraitMethod(Trait t, Action<Unit, Unit> traitFunc, Unit arg1, Unit arg2) {
+        if(t.attemptActivate(t.getNumberActive())) {
+            traitFunc(arg1, arg2);
+        }
+    }
+    public static void callTraitMethod(Trait t, Action<Unit> traitFunc, Unit arg1) {
+        if(t.attemptActivate(t.getNumberActive())) {
+            traitFunc(arg1);
+        }
+    }
+    public static void callTraitMethod(Trait t, Action traitFunc) {
+        if(t.attemptActivate(t.getNumberActive())) {
+            traitFunc();
         }
     }
 }

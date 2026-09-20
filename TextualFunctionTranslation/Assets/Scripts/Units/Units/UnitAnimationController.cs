@@ -15,6 +15,11 @@ public class AnimationController : MonoBehaviour
         animator.SetTrigger("idle");
     }
 
+    private void OnEnable() {
+        animator.SetInteger("ATTACK_TYPE", this.attackType);
+        // animator.SetTrigger("idle");
+    }
+
     public void Update() {
         this.randomIdle = Random.Range(0, 4);
         animator.SetInteger("idle_random", this.randomIdle);

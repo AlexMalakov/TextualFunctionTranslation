@@ -31,12 +31,12 @@ public struct CombatEvent {
 public class CombatLog : MonoBehaviour
 {
     private Dictionary<Unit, HexSquare> initialPositions;
-    private Dictionary<Unit, Unit> assistList;
+    private Dictionary<Unit, List<Unit>> assistList;
     private List<CombatEvent> log;
 
     public void initLog(List<Unit> units) {
         this.initialPositions = new Dictionary<Unit, HexSquare>();
-        this.assistList = new Dictionary<Unit, Unit>();
+        this.assistList = new Dictionary<Unit, List<Unit>>();
         this.log = new List<CombatEvent>();
 
         foreach(Unit u in units) {
@@ -46,9 +46,14 @@ public class CombatLog : MonoBehaviour
 
     public void logEvent(CombatEvent ev) {
         if(ev.eventType == CombatEventType.Attack) {
-            if(!this.assistList.ContainsKey(ev.source)) {
+            if(this.assistList.ContainsKey(ev.source)) {
+                if(!this.assistList[ev.source].Contains(ev.colat)) {
+                    this.log.Add(ev);
+                    this.assistList[ev.source].Add(ev.colat);
+                }
+            } else {
                 this.log.Add(ev);
-                this.assistList.Add(ev.source, ev.colat);
+                this.assistList.Add(ev.source, new List<Unit>(){ev.colat});
             }
         } else {
             this.log.Add(ev);

@@ -7,21 +7,20 @@ using TMPro;
 public class GameStateButton : MonoBehaviour
 {
     [SerializeField] private Button button;
-    [SerializeField] private Image image;
     [SerializeField] private GameManager game;
     [SerializeField] private TMP_Text button_text;
+    [SerializeField] private ButtonCover cover;
     private bool isPrecombat = false;
     private bool isResults = false;
+    private bool isEnabled = true;
 
     private bool tutorialLockOn = false;
-    private bool tutorialFlashOn = false;
 
-    private Color color;
 
     public void Awake() { //Awake because this doesn't affect other systems
         UnityEngine.UI.Button btn = button.GetComponent<UnityEngine.UI.Button>();
 		btn.onClick.AddListener(onButtonClick);
-        this.color = image.color;
+        this.isEnabled = true;
     }
 
     public void onButtonClick() {
@@ -36,42 +35,27 @@ public class GameStateButton : MonoBehaviour
     }
 
     public void runPrecombat(bool isEnabled) {
-        this.gameObject.SetActive(isEnabled);
+        this.isEnabled = isEnabled;
+        this.cover.coverButton(isEnabled && !this.tutorialLockOn);
         this.button_text.text = "start combat";
         this.isPrecombat = isEnabled;
     }
 
     public void runResults(bool isEnabled, bool wonCombat) {
-        this.gameObject.SetActive(isEnabled);
+        this.isEnabled = isEnabled;
+        this.cover.coverButton(isEnabled && !this.tutorialLockOn);
         this.button_text.text = wonCombat ? "next round" : "restart round";
         this.isResults = isEnabled;
     }
 
     public void tutorialLock(bool lockOn) {
         this.tutorialLockOn = lockOn;
+        this.cover.coverButton(!lockOn);
     }
 
     public void tutorialFlash(bool startFlash) {
-        this.tutorialFlashOn = startFlash;
-        if(startFlash)
-            this.flash();
-        else
-            this.unflash();
+        this.cover.flashButton(startFlash);
     }
 
-    private void flash() {
-        if(!this.tutorialFlashOn)
-            return;
-        this.image.color = new Color(255, 0 ,0);
-
-        Invoke(nameof(unflash), .5f);
-    }   
-
-    private void unflash() {
-        this.image.color = this.color;
-        if(this.tutorialFlashOn) {
-            Invoke(nameof(flash), .5f);
-        }
-    }
 }
 

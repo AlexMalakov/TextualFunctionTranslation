@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 public class BenchSlot : MonoBehaviour
 {
-    [SerializeField] private Renderer render;
+    [SerializeField] private GameObject blinkMe;
+
     private Unit unit;
     private int slotNum;
     private bool flashing;
-    private Color defaultColor;
 
     public void init(int slotNum) {
         this.slotNum = slotNum;
-        this.defaultColor = this.render.material.color;
     }
 
     public bool isOccupied() {
@@ -49,12 +48,12 @@ public class BenchSlot : MonoBehaviour
         if(!this.flashing) {
             return;
         }
-        this.render.material.color = new Color(255f, 0f, 0f);
+        this.blinkMe.SetActive(true);
         Invoke(nameof(flashOff), .5f);
     }
 
     private void flashOff() {
-        this.GetComponent<Renderer>().material.color = this.defaultColor;
+        this.blinkMe.SetActive(false);
 
         if(this.flashing) {
             Invoke(nameof(flashOn), .5f);

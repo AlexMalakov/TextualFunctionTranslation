@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private HumanPlayer player;
     [SerializeField] private TextAsset dialogueJson;
+    [SerializeField] private LevelViewer levelView;
+
+    [SerializeField] private RoyalGuardsTrait enemyRG;
 
     private int currentStage = 0;
     private bool tutorialActive = true;
@@ -83,9 +86,11 @@ public class GameManager : MonoBehaviour
     }
 
     public void onPreperationStart() {
-
         this.board.initBoard();
         this.pi.setLevel(this.getCurrentLevel().getStageName());
+        this.pi.setEnemyGloryStacks(this.getCurrentLevel().getEnemyGloryStacks());
+        this.enemyRG.loadLevelStacks(this.getCurrentLevel().getEnemyGloryStacks());
+
         this.combatManager.initPlayers(
             this.getCurrentLevel().getCombatLayout(),
             this.getCurrentLevel().getAlphabet(),
@@ -97,6 +102,8 @@ public class GameManager : MonoBehaviour
         } else {
             this.postPrepDialogue();
         }
+
+        this.levelView.onLevelStart(this.getCurrentLevel().getRewardMoney(), this.player.getActiveUnits().Count, this.getCurrentLevel().getMaxUnits());
     }
 
     private void postPrepDialogue() {
@@ -177,8 +184,8 @@ public class GameManager : MonoBehaviour
     }
 
     public void onResultsEnd(bool nextStage) {
+        this.rvm.onResultsEnd();
         if(this.gameState == GameStage.result_win && nextStage) {
-            this.rvm.onResultsEnd();
             this.player.gainMoney(this.getCurrentLevel().getRewardMoney());
             if(this.blockPlusPlus) {//"sometimes you just write stupid shit..." shut up dork this is brilliant
                 this.blockPlusPlus = false;
@@ -187,13 +194,12 @@ public class GameManager : MonoBehaviour
             }
             this.gameState = GameStage.preperation;
             this.combatManager.wipeEnemyLayout();
-            this.onPreperationStart();
         } else {
-            this.rvm.onResultsEnd();
             this.player.loseCombat();
             this.gameState = GameStage.preperation;
-            this.onPreperationStart();
         }
+        this.board.hideAllSquares();
+        this.onPreperationStart();
     }
 
     public void doneYapping(ReviewData? rd) {

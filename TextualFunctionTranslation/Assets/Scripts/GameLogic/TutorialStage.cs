@@ -45,12 +45,15 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     [SerializeField] private HexBoard board;
     [SerializeField] private HumanPlayer player;
     [SerializeField] private BenchSlot leftMostSlot;
+    [SerializeField] private RetryLevelButton retry;
+    [SerializeField] private ButtonObjectHider codexButtonTrait;
+    [SerializeField] private UnitSellDock sellDock;
+    [SerializeField] private ButtonObjectHider codexButtonUnit;
+    [SerializeField] private LenseButton lb;
     [SerializeField] private string unitToMove;
 
-    [SerializeField] private GameObject dialogueBox;
-    [SerializeField] private List<DialogueIconMap> nameToIcon;    
-    [SerializeField] private Image talkerSprite;
-    [SerializeField] private TMP_Text dialogueText;
+
+    [SerializeField] private DialogueUiController dia;
 
     private List<TutorialSection> sections;
     private int currentSection;
@@ -94,7 +97,12 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
         this.raycast.tutorialLock(toggle);
         this.scrollButton.tutorialLock(toggle);
         this.movie.tutorialLock(toggle);
+        this.lb.tutorialLock(toggle);
         this.lense.tutorialLock(toggle);
+        this.retry.tutorialLock(toggle); //society if i abstracted all this garbage
+        this.codexButtonUnit.tutorialLock(toggle);
+        this.codexButtonTrait.tutorialLock(toggle);
+        this.sellDock.tutorialLock(toggle);
 
         this.shop.tutorialStarted(toggle);
         this.raycast.tutorialStarted(toggle);
@@ -119,17 +127,10 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     }
 
     private void startDialogue() {
-        this.dialogueBox.SetActive(true);
         if(this.sections[this.currentSection].dialogue.Count > 0) {
-            DialogueLine nextLine = this.sections[this.currentSection].dialogue[0];
-            this.dialogueText.text = nextLine.text;
-            this.talkerSprite.sprite = this.nameToIcon.First(x => x.name == nextLine.speaker).icon;
+            DialogueLine nextLine = this.sections[this.currentSection].dialogue[this.pointerInSection];
 
-            if(nextLine.on_the_left) {
-                this.talkerSprite.GetComponent<RectTransform>().localScale  = new Vector3(1, 1, 1);
-            } else {
-                this.talkerSprite.GetComponent<RectTransform>().localScale  = new Vector3(-1, 1, 1);
-            }
+            this.dia.displayLine(nextLine.on_the_left, nextLine.speaker, nextLine.text);
         }
     }
 
@@ -139,16 +140,9 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
 
             if(this.pointerInSection < this.sections[this.currentSection].dialogue.Count) {
                 DialogueLine nextLine = this.sections[this.currentSection].dialogue[this.pointerInSection];
-                this.dialogueText.text = nextLine.text;
-                this.talkerSprite.sprite = this.nameToIcon.First(x => x.name == nextLine.speaker).icon;
-
-                if(nextLine.on_the_left) {
-                    this.talkerSprite.GetComponent<RectTransform>().localScale  = new Vector3(1, 1, 1);
-                } else {
-                    this.talkerSprite.GetComponent<RectTransform>().localScale  = new Vector3(-1, 1, 1);
-                }
+                dia.displayLine(nextLine.on_the_left, nextLine.speaker, nextLine.text);
             } else {
-                this.dialogueBox.SetActive(false);
+                this.dia.hideDialogue();
                 this.onDialogueOver();
             }
         }
@@ -174,6 +168,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
             case TutorialAction.LenseUsed:
                 this.board.getHexAt(this.cordsToLense).tutorialFlash(true);
                 this.lense.tutorialLock(false);
+                this.lb.tutorialLock(false);
                 break;
             case TutorialAction.ReadScroll:
                 this.scrollButton.tutorialLock(false);
@@ -238,6 +233,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
                     this.startDialogue();
                     this.board.getHexAt(this.cordsToLense).tutorialFlash(false);
                     this.lense.tutorialLock(true);
+                    this.lb.tutorialLock(true);
                     this.board.revealAllSquares(); //After lense is used dialogue gives the player all squares revealed :)
                 }
                 break;

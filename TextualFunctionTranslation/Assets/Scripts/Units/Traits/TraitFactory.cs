@@ -17,8 +17,6 @@ public class TraitFactory : MonoBehaviour
         staticPlayerTraits = this.player.getAllTraits();
         staticEnemyTraits = this.enemy.getAllTraits();
         staticCM = cm;
-
-        Debug.Log("I AM ON GAMEOBJECT" + gameObject.name);
     }
 
     public static Trait getTrait(string t_name, Unit traitGetter) {

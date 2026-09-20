@@ -8,21 +8,17 @@ public abstract class Trait : MonoBehaviour
 {
     [SerializeField] private TraitDisplay traitDisplay;
     [SerializeField] private Sprite traitIcon;
+    [SerializeField] private bool playersTrait;
     private TraitWidget tw;
     private string traitName;
-    private int minimumForActivate;
     private int numberActive = 0;
     
     public bool attemptActivate(int numUnits) {
-        if(numUnits < this.minimumForActivate) {
-            return false;
-        }
-
-        return true;
+        return numUnits >= this.getMinimumForActive();
     }
 
     public void Awake() { //I'm allowed to be an awake because I update trait widget by giving it myself, and static facts about myself
-        this.tw = traitDisplay.createWidget();
+        this.tw = traitDisplay.createWidget(playersTrait);
         this.tw.init(this);
     }
 
@@ -55,6 +51,7 @@ public abstract class Trait : MonoBehaviour
     //W polymorphism
     public virtual void runSquareReveal() {}
     public virtual void resetRevealedSquares() {}
+    public virtual void resetCypher() {}
     public virtual char[] runCypher(char[] curCypherText) {return curCypherText;}
 
     public void registerUnit(bool addingUnit) {
@@ -78,8 +75,6 @@ public abstract class Trait : MonoBehaviour
     public virtual void onUnitAttack(Unit traitHaver, Unit target){} //target not needed but correct to have 
 
     public virtual void onEnemyDefeat(Unit traitHaver, Unit target){}
-
-    public virtual void onArbitraryDeath(Unit traitHaver, Unit target){}
 
     public virtual void onCombatSurvival(Unit traitHaver){}
 

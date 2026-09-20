@@ -23,6 +23,7 @@ public class CombatStage : MonoBehaviour
     [SerializeField] private int playerUnitCap;
     [SerializeField] private string stageName;
     [SerializeField] private int rewardMoney;
+    [SerializeField] private int enemyGloryStacks;
 
     [Header ("hex alphabets")]
     [SerializeField] private string alphabetOrderingPlayer;
@@ -54,6 +55,10 @@ public class CombatStage : MonoBehaviour
 
     public int getRewardMoney() {
         return this.rewardMoney;
+    }
+
+    public int getEnemyGloryStacks() {
+        return this.enemyGloryStacks;
     }
 
     public virtual bool hasDialogue(bool combatHappened) {

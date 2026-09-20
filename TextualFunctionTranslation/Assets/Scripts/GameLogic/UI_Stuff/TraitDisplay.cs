@@ -8,16 +8,22 @@ public class TraitDisplay : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private Player enemy;
     [SerializeField] private GameObject twPrefab;
-    [SerializeField] private Transform twParent;
+    [SerializeField] private Transform playerParent;
+    [SerializeField] private Transform enemyParent;
 
     [SerializeField] private float spacing = 60f;
     [SerializeField] private float sectionSpacing = 30f;
 
-    private List<TraitWidget> allWidgets = new List<TraitWidget>();
+    private List<TraitWidget> playerWidgets = new List<TraitWidget>();
+    private List<TraitWidget> enemyWidgets = new List<TraitWidget>();
 
     private void clearFromBar() {
-        foreach(TraitWidget tw in this.allWidgets) {
-            tw.makeActive(false, -1);
+        foreach(TraitWidget tw in this.playerWidgets) {
+            tw.makeActive(false, false);
+        }
+
+        foreach(TraitWidget tw in this.enemyWidgets) {
+            tw.makeActive(false, false);
         }
     }
 
@@ -41,29 +47,53 @@ public class TraitDisplay : MonoBehaviour
         }
 
         foreach(Trait t in enemyActiveTraits.OrderByDescending(t => t.getTraitName())) {
-            this.setupWidget(t.getTraitWidget(), y, 2);
+            this.setupWidget(t.getTraitWidget(), y, true);
             y -= spacing;
         }
 
         foreach(Trait t in playerActiveTraits.OrderBy(t => t.getTraitName())) {
-            this.setupWidget(t.getTraitWidget(), y, 0);
+            this.setupWidget(t.getTraitWidget(), y, true);
             y -= spacing;
         }
 
         foreach(Trait t in playerInActiveTraits.OrderBy(t => t.getTraitName())) {
-            this.setupWidget(t.getTraitWidget(), y, 1);
+            this.setupWidget(t.getTraitWidget(), y, false);
             y -= spacing;
+        }
+
+        int counter = 0;
+        foreach(Trait t in playerActiveTraits.OrderBy(t => t.getTraitName())) {
+            t.getTraitWidget().transform.SetSiblingIndex(counter);
+            counter++;
+        }
+
+        foreach(Trait t in playerInActiveTraits.OrderBy(t => t.getTraitName())) {
+            t.getTraitWidget().transform.SetSiblingIndex(counter);
+            counter++;
+        }
+
+        counter = 0;
+        foreach(Trait t in playerInActiveTraits.OrderByDescending(t => t.getTraitName())) {
+            t.getTraitWidget().transform.SetSiblingIndex(counter);
+            counter++;
         }
     }
 
-    public TraitWidget createWidget() {
-        TraitWidget tw = Instantiate(twPrefab, this.twParent).GetComponent<TraitWidget>();
-        this.allWidgets.Add(tw);
-        return tw;
+
+    public TraitWidget createWidget(bool playersTrait) {
+        if(playersTrait) {
+            TraitWidget tw = Instantiate(twPrefab, this.playerParent).GetComponent<TraitWidget>();
+            this.playerWidgets.Add(tw);
+            return tw;
+        } else {
+            TraitWidget tw = Instantiate(twPrefab, this.enemyParent).GetComponent<TraitWidget>();
+            this.enemyWidgets.Add(tw);
+            return tw;
+        }
     }
 
-    private void setupWidget(TraitWidget tw, float yOffset, int activeNum) {
-        tw.makeActive(true, activeNum);
+    private void setupWidget(TraitWidget tw, float yOffset, bool isEnoughForActive) {
+        tw.makeActive(true, isEnoughForActive);
 
         RectTransform rect = tw.GetComponent<RectTransform>();
         rect.anchoredPosition = new Vector2(0, yOffset);
