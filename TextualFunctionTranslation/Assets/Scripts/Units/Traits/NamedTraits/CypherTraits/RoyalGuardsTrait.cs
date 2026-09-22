@@ -2,6 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//faking another cypher can't be bothered doing it legit is super ass
+class CaesarCharacterTransformation : CharacterTransformation {
+    private int key;
+
+    public CaesarCharacterTransformation(int key) : base(null, null) {
+        this.key = key;
+    }
+
+    public override void apply(char[] outputArr, char[] cypherText) {
+        Debug.Log("Caesar encryption: key" + this.key + " | input: " + new string(cypherText));
+        for(int i = 0; i < cypherText.Length; i++) {
+            outputArr[i] = (char)((((int)cypherText[i] + this.key - (int)'a') % 26) + (int)'a');
+        }
+    }
+}
+
 public class RoyalGuardsTrait : CypherTrait
 {
     [SerializeField] private PlayerInfo pi;
@@ -57,26 +74,13 @@ public class RoyalGuardsTrait : CypherTrait
         }
     }
 
-    public override void onCombatEnd(Unit traitHaver){
-        List<HexSquare> ps = this.cm.getBoard().getPlayerSquares();
-        Dictionary<char, HexSquare> charToSq = new Dictionary<char, HexSquare>();
-
-        foreach(HexSquare s in ps) {
-            charToSq.Add(s.getCharValue(), s);
-        }
-
-        List<CharacterTransformation> cypher = new List<CharacterTransformation>();
-
-        foreach(char c in charToSq.Keys) {
-            char toC = (char)((((int)c + this.count) % 26 ) + (int)'a');
-            cypher.Add(new CharacterTransformation(charToSq[toC], charToSq[c]));
-        }
-
-        this.addToCypher(cypher);
+    public override void onCombatEnd() {
+        CharacterTransformation salad = new CaesarCharacterTransformation(this.count);
+        this.addToCypher(new List<CharacterTransformation>(){salad});
     }
 
     public override string getTraitName() {
-        return "royal guards";
+        return "royal guard";
     }
 
     public override string getTraitDescription() {

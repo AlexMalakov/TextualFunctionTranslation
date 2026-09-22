@@ -31,11 +31,12 @@ public struct AxialCoord {
     }
 
     public AxialCoord getMirroredCoord() {
-        int mirroredQ = 4 - this.q;
-        int mirroredR = 7 - this.r;
-        int mirroredS = -(mirroredR + mirroredQ);
-
-        return new AxialCoord(mirroredQ, mirroredR, mirroredS);
+        OffsetCoord preM = this.toOffset();
+        if(preM.y <= 3) {
+            return new OffsetCoord(preM.x, preM.y + 4).toAxial();
+        } else {
+            return new OffsetCoord(preM.x, preM.y - 4).toAxial();
+        }
     }
 
     public bool equal(AxialCoord o) {

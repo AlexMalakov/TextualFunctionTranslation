@@ -264,6 +264,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: range
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: animator
       value: 
       objectReference: {fileID: 7243202855217934423}
@@ -274,6 +278,14 @@ PrefabInstance:
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: unitName
       value: ingrid
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: attackSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: tauntAmount
+      value: 94
       objectReference: {fileID: 0}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: roleTraitName
@@ -288,9 +300,57 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6022145863667552075, guid: 4e5bc33c9c3fe49ee9617739695abebb, type: 3}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
-      propertyPath: decisionPriority
-      value: 15
+      propertyPath: attackWindupTime
+      value: 0.6
       objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: damage.star1Stat
+      value: 49
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: damage.star2Stat
+      value: 83
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: damage.star3Stat
+      value: 142
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: decisionPriority
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: health.star1Stat
+      value: 875
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: health.star2Stat
+      value: 1500
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: health.star3Stat
+      value: 2550
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: attackCooldownTime
+      value: 1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: unitBlueprint.unitCost
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: unitBlueprint.unitIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: 2aa863835cb3a41a1aaddc8f08f2f4e0, type: 3}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: unitBlueprint.unitName
+      value: ingrid
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: unitBlueprint.unitPrefab
+      value: 
+      objectReference: {fileID: 7784528705384944039}
     - target: {fileID: 1594449420069669637, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_Name
       value: ingrid
@@ -354,5 +414,10 @@ PrefabInstance:
 --- !u!4 &600195526414792813 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+  m_PrefabInstance: {fileID: 8802475488495377058}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7784528705384944039 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1594449420069669637, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
   m_PrefabInstance: {fileID: 8802475488495377058}
   m_PrefabAsset: {fileID: 0}

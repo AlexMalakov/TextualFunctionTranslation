@@ -71,6 +71,7 @@ public class UnitMovementManager : MonoBehaviour
             yield return null;
         }
 
+        u.triggerAnimation("landing");
         this.draggedUnits.Remove(u);
     }
 }

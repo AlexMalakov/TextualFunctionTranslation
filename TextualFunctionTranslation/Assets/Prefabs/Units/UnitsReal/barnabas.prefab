@@ -223,6 +223,10 @@ PrefabInstance:
       value: barnabas
       objectReference: {fileID: 0}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: tauntAmount
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: roleTraitName
       value: outcast
       objectReference: {fileID: 0}
@@ -235,9 +239,57 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6022145863667552075, guid: 4e5bc33c9c3fe49ee9617739695abebb, type: 3}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
-      propertyPath: decisionPriority
-      value: 3
+      propertyPath: attackWindupTime
+      value: 0.65
       objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: damage.star1Stat
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: damage.star2Stat
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: damage.star3Stat
+      value: 145
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: decisionPriority
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: health.star1Stat
+      value: 650
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: health.star2Stat
+      value: 1100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: health.star3Stat
+      value: 1875
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: attackCooldownTime
+      value: 1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: unitBlueprint.unitCost
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: unitBlueprint.unitIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: b5cda51bd150e424eb5103dffea8d612, type: 3}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: unitBlueprint.unitName
+      value: barnabas
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: unitBlueprint.unitPrefab
+      value: 
+      objectReference: {fileID: 8404166030956715795}
     - target: {fileID: 1594449420069669637, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_Name
       value: barnabas
@@ -297,5 +349,10 @@ PrefabInstance:
 --- !u!4 &1224408735097698009 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+  m_PrefabInstance: {fileID: 7097962420030723094}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8404166030956715795 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1594449420069669637, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
   m_PrefabInstance: {fileID: 7097962420030723094}
   m_PrefabAsset: {fileID: 0}

@@ -192,6 +192,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: range
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: animator
       value: 
       objectReference: {fileID: 5693272670389283348}
@@ -216,21 +220,57 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6022145863667552075, guid: 4e5bc33c9c3fe49ee9617739695abebb, type: 3}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: attackWindupTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: damage.star1Stat
-      value: 10
+      value: 51
       objectReference: {fileID: 0}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: damage.star2Stat
-      value: 20
+      value: 87
       objectReference: {fileID: 0}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: damage.star3Stat
-      value: 30
+      value: 148
       objectReference: {fileID: 0}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: decisionPriority
       value: 24
       objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: health.star1Stat
+      value: 625
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: health.star2Stat
+      value: 1075
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: health.star3Stat
+      value: 1825
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: attackCooldownTime
+      value: 1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: unitBlueprint.unitCost
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: unitBlueprint.unitIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: 1c7eb50aafe9d4651a295bfde9d2d6b7, type: 3}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: unitBlueprint.unitName
+      value: talitha
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+      propertyPath: unitBlueprint.unitPrefab
+      value: 
+      objectReference: {fileID: 4114466048163282906}
     - target: {fileID: 1594449420069669637, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: m_Name
       value: talitha
@@ -287,6 +327,11 @@ PrefabInstance:
       addedObject: {fileID: 5899211946657082303}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+--- !u!1 &4114466048163282906 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1594449420069669637, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+  m_PrefabInstance: {fileID: 3402779988623750367}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6721028887806678544 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}

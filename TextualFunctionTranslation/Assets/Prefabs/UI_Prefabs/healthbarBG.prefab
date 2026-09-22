@@ -179,7 +179,7 @@ MonoBehaviour:
   chipDelay: 1
   chipSpeed: 2
   dividerStart: 15
-  healthPerChunk: 50
+  healthPerChunk: 250
   dividerWidth: 0.05
   minDividerWidth: 0.003
   dividerWidthReduction: 0.0005

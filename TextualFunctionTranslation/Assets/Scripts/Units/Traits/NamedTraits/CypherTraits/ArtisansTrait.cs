@@ -27,7 +27,7 @@ public class ArtisansTrait : CypherTrait
     }
 
     public override string getTraitDescription() {
-        return ("Talented and precise craftsmen. On takedown gain " + damageAmountSmall +"/"+ damageAmount +"/."+  damageAmountLarge 
+        return ("Talented and precise craftsmen. On kill or assist gain " + damageAmountSmall +"/"+ damageAmount +"/."+  damageAmountLarge 
             + " damage and regenerate a " + healAmount + " health. Stacks in combat infinitely.");
     }
 

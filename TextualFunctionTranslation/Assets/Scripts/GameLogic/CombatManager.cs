@@ -86,7 +86,7 @@ public class CombatManager : MonoBehaviour
 
     public IEnumerator precombatAnims() {
         foreach(Unit u in this.units) {
-            u.triggerAnimation("draw_weapon"); //TODO: only can transition from idle, not from assasin jump >:( 
+            u.triggerAnimation("draw_weapon"); //TODO: only can transition from idle, not from assassin jump >:( 
         }
 
         yield return new WaitForSeconds(precombatAnimTime);
@@ -193,9 +193,14 @@ public class CombatManager : MonoBehaviour
                     randomizerSurvived = true;
                 }
             }
+        }
 
-            callTraitMethod(u.getRoleTrait(), u.getRoleTrait().onCombatEnd, u);
-            callTraitMethod(u.getClassTrait(), u.getClassTrait().onCombatEnd, u);
+        foreach(Trait t in this.player.getUnitLayout().getActiveTraits()) {
+            callTraitMethod(t, t.onCombatEnd);
+        }
+
+        foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits()) {
+            callTraitMethod(t, t.onCombatEnd);
         }
 
         foreach(Unit u in this.units) {
@@ -241,15 +246,21 @@ public class CombatManager : MonoBehaviour
         //TO CHECK: make sure this is same order as animations are
         foreach(Trait t in this.player.getUnitLayout().getActiveTraits().OrderBy(t => t.getTraitName())) {
             cypherArray = t.runCypher(cypherArray);
-            Debug.Log("encryption test: ENCRYPTED WITH TRAIT " + t.gameObject.name);
-            alphabetArray = t.runCypher(alphabetArray);
-            Debug.Log("encryption test: ENCRYPTED WITH TRAIT " + new string(alphabetArray));
+            if(t is CypherTrait) {
+                Debug.Log("encryption test: ENCRYPTED WITH TRAIT " + t.gameObject.name);
+                alphabetArray = t.runCypher(alphabetArray);
+                Debug.Log("encryption test: ENCRYPTED WITH TRAIT " + new string(alphabetArray));
+            }
+            
         }
         
         foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits().OrderByDescending(t => t.getTraitName())) {
             cypherArray = t.runCypher(cypherArray);
-            alphabetArray = t.runCypher(alphabetArray);
-            Debug.Log("encryption test: ENCRYPTED WITH TRAIT " + new string(alphabetArray));
+            if(t is CypherTrait) {
+                Debug.Log("encryption test: ENCRYPTED WITH TRAIT " + t.gameObject.name);
+                alphabetArray = t.runCypher(alphabetArray);
+                Debug.Log("encryption test: ENCRYPTED WITH TRAIT " + new string(alphabetArray));
+            }
         }
 
         return new string(cypherArray);

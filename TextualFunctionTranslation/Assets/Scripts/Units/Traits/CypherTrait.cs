@@ -24,36 +24,36 @@ public class CharacterTransformation {
 
 public abstract class CypherTrait : Trait
 {
-    private List<CharacterTransformation> cypher = new List<CharacterTransformation>();
+    //new design desision - cypher's don't stack within a trait, so we're going to treat each trait's cypher submission as a single closed loop addition
+    private List<List<CharacterTransformation>> cyphers = new List<List<CharacterTransformation>>();
 
-    protected void addToCypher(List<CharacterTransformation> tr) {
-        this.cypher.AddRange(tr);
+    protected void addToCypher(List<CharacterTransformation> tr) { //adds a completed loop transformation onto the cypher
+        this.cyphers.Add(tr);
     }
 
     public override char[] runCypher(char[] curCypherText) {
-        char[] newCypherText = new char[curCypherText.Length];
+        foreach(List<CharacterTransformation> completeTransformation in this.cyphers) {
+            char[] newCypherText = new char[curCypherText.Length];
 
-        foreach(CharacterTransformation ct in this.cypher) {
-            ct.apply(newCypherText, curCypherText);
-        }
-
-        int copy_count = 0;
-        int preserved = 0;
-        for(int i = 0; i < curCypherText.Length; i++) {
-            
-            if (newCypherText[i] == '\0') {
-                newCypherText[i] = curCypherText[i]; //if no transformation applied, then it's just identity
-                copy_count++;
-            } else {
-                preserved++;
+            foreach(CharacterTransformation ct in completeTransformation) {
+                ct.apply(newCypherText, curCypherText);
             }
+
+            for(int i = 0; i < curCypherText.Length; i++) {
+                if (newCypherText[i] == '\0') {
+                    newCypherText[i] = curCypherText[i]; //if no transformation applied, then it's just identity
+                }
+            }
+
+            curCypherText = newCypherText;
         }
         
-        return newCypherText;
+        return curCypherText;
     }
 
     public override void resetCypher() {
-        this.cypher = new List<CharacterTransformation>();
+        this.cyphers = new List<List<CharacterTransformation>>();
+
     }
 }
 

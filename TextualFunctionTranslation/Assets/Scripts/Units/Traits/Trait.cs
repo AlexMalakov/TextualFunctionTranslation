@@ -26,22 +26,28 @@ public abstract class Trait : MonoBehaviour
         return this.tw;
     }
 
+    //dude this was absurdly bugged so i fully rewrote it lmaooo
     protected List<HexSquare> getSquaresInRadius(HexSquare centerSq, int radius, HexBoard board) {
         List<HexSquare> squares = new List<HexSquare>();
         AxialCoord center = centerSq.getCoords();
-        AxialCoord[] possibleNeighbors = {
-            new AxialCoord(center.q + radius, center.r - radius, center.s),
-            new AxialCoord(center.q + radius, center.r, center.s - radius),
-            new AxialCoord(center.q - radius, center.r + radius, center.s),
-            new AxialCoord(center.q, center.r + radius, center.s - radius),
-            new AxialCoord(center.q - radius, center.r, center.s + radius),
-            new AxialCoord(center.q, center.r - radius, center.s + radius),
+        AxialCoord[] directions = {
+            new AxialCoord(1, -1, 0), 
+            new AxialCoord(1, 0, -1),
+            new AxialCoord(0, 1, -1),
+            new AxialCoord(-1, 1, 0),
+            new AxialCoord(-1, 0, 1),
+            new AxialCoord(0, -1, 1),
         };
 
-        foreach(AxialCoord c in possibleNeighbors) {
-            HexSquare sq = board.getHexAt(c);
-            if(sq.isSquare()) {
-                squares.Add(sq);
+        AxialCoord walk = new AxialCoord(center.q - radius, center.r, center.s + radius);
+
+        foreach(AxialCoord walkDir in directions) {
+            for(int i = 0; i < radius; i++) {
+                HexSquare sq = board.getHexAt(walk);
+                if(sq.isSquare()) {
+                    squares.Add(sq);
+                }
+                walk = new AxialCoord(walk.q + walkDir.q, walk.r + walkDir.r, walk.s + walkDir.s);
             }
         }
 
@@ -85,7 +91,7 @@ public abstract class Trait : MonoBehaviour
 
     public virtual void preCombatFinal(Unit traitHaver) {}
 
-    public virtual void onCombatEnd(Unit traitHaver){}
+    public virtual void onCombatEnd(){}
 
     //constructor work around cuz unity is a chud platform :(
     public abstract string getTraitName();
@@ -108,7 +114,7 @@ vegenery 2
 clockmaker 4
 royal guard 4
 artisan 3
-assasin 4
+assassin 4
 night watch 4
 goblin 3
 
@@ -123,9 +129,9 @@ plague doctor 2
 01 - scout | royal guard
 02 - scout | night watch
 03 - scout | goblin
-04 - scout | assasin
+04 - scout | assassin
 05 - druid | troll
-06 - druid | assasin
+06 - druid | assassin
 07 - druid | artisan
 08 - warden | goblin
 09 - warden | royal guard
@@ -139,10 +145,10 @@ plague doctor 2
 17 - outcast | goblin
 18 - outcast | artisan
 19 - tracker | royal guard
-20 - tracker | assasin
+20 - tracker | assassin
 21 - tracker | night watch
 22 - tracker | clockmaker
-23 - plague doctor | assasin
+23 - plague doctor | assassin
 24 - plague doctor | clockmaker
 */
 }

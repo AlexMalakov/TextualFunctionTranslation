@@ -10,8 +10,8 @@ public class AttackState : UnitActionState
 {
     private AttackStage attackStage = AttackStage.Cancled;
 
-    private int cooldownFrames;
-    private int windupFrames;
+    private float cooldownTime;
+    private float windupTime;
     private int swingFrames;
 
     private int attackSpeedCooldownFrames;
@@ -22,23 +22,23 @@ public class AttackState : UnitActionState
     private Coroutine windupCoroutine;
 
     public AttackState(Unit u, float cooldownTime, float windupTime) : base(u) {
-        this.cooldownFrames = CombatScheduler.timeToTicks(cooldownTime);
-        this.windupFrames = CombatScheduler.timeToTicks(windupTime);
         this.swingFrames = CombatScheduler.timeToTicks(GlobalData.TimeSwing);
+        this.cooldownTime = cooldownTime;
+        this.windupTime = windupTime;
 
         this.minSwingFrames = CombatScheduler.timeToTicks(GlobalData.TimeMinWindup);
     }
 
     public override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
         this.target = data.unit;
-        float ats = data.flt;
+        float ats = Mathf.Max(data.flt, .1f);
 
         //be careful of the logic here
-        float wind = (windupFrames / (ats + windupFrames));
-        this.attackSpeedWindupFrames = (int)Mathf.Max(minSwingFrames, windupFrames * wind);
+        float wind = (windupTime / Mathf.Pow(ats, .7f));
+        this.attackSpeedWindupFrames = (int)Mathf.Max(minSwingFrames, CombatScheduler.timeToTicks(wind));;
 
-        float cool = (cooldownFrames / (ats + cooldownFrames));
-        this.attackSpeedCooldownFrames = (int)(cooldownFrames * cool);
+        float cool = (cooldownTime / Mathf.Pow(ats, .7f));
+        this.attackSpeedCooldownFrames = (int)(CombatScheduler.timeToTicks(cool));
 
         if(stateFrom is AttackState) {
             this.attackStage = AttackStage.Cooldown;
