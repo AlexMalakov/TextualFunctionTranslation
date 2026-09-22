@@ -60,7 +60,7 @@ public abstract class Trait : MonoBehaviour
     public virtual void resetCypher() {}
     public virtual char[] runCypher(char[] curCypherText) {return curCypherText;}
 
-    public void registerUnit(bool addingUnit) {
+    public virtual void registerUnit(bool addingUnit) {
         if(addingUnit)
             this.numberActive++;
         else

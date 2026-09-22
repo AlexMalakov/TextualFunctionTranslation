@@ -36,7 +36,7 @@ public class VegeneryTrait : CypherTrait
     }
 
     public override string getTraitName() {
-        return "vegenere";
+        return "vigenery";
     }
 
     public override string getTraitDescription() {

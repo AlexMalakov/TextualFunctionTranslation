@@ -13,7 +13,8 @@ public class IdleState : UnitActionState
 
     public override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
         if(data.flt > 0f) {
-            //TODO: stun particles
+            if(data.stunned)
+                this.unitOwner.showStunParticles(data.flt);
             this.frameLockout = CombatScheduler.timeToTicks(data.flt);
         } else {
             this.frameLockout = this.idleFrames;

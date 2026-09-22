@@ -38,7 +38,7 @@ public class Randomizer : Unit
         if(!this.isDead() && this.currentState != null && (this.currentTarget == null || this.currentTarget.isDead())) {
             this.currentTarget = this.manager.getRandomAttackTarget(this.rng);
             if(this.currentState.cancelAction()) {
-                StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, .25f);
+                StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, .25f, false);
                 this.Idle.onStateEnter(this.currentState, stateData);
                 this.currentState = this.Idle;
             }

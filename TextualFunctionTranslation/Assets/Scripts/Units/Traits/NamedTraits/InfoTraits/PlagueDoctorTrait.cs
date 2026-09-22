@@ -22,7 +22,7 @@ public class PlagueDoctorTrait : InformationTrait
     }
 
     public override string getTraitName() {
-        return "doctor";
+        return "plague doctor";
     }
 
     public override string getTraitDescription() {

@@ -24,13 +24,13 @@ public class ScoutTrait : InformationTrait
         List<Unit> scoutsStuns = this.attackedUnits[traitHaver];
 
         if(!scoutsStuns.Contains(target)) {
+            this.logSquare(target.getPosition());
             target.stunUnit(this.stunDuration);
             
             float damage = this.getNumberActive() > 2 ? this.stunDamageLarge : this.stunDamageSmall;
             target.takeDamage(damage, traitHaver);
 
             attackedUnits[traitHaver].Add(target);
-            this.logSquare(target.getPosition());
         }
     }
 

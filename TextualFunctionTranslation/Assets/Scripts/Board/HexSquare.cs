@@ -65,6 +65,7 @@ public class HexSquare : MonoBehaviour
 {
     [SerializeField] private TMP_Text text;
     [SerializeField] private GameObject flashMe;
+    [SerializeField] private ParticleManager particle;
     private AxialCoord axc;
     private Unit unit;
 
@@ -183,12 +184,7 @@ public class HexSquare : MonoBehaviour
         return "OFFEST: " + this.getCoords().toOffset().x + ", " + this.getCoords().toOffset().y + " CUBIC: " + this.getCoords().q+ ", " + this.getCoords().r+ ", " + this.getCoords().s;
     }
 
-    public void showDruidInfluence(bool enabled, bool special) {
-        //TODO: make me look prettier
-        if(!enabled) {
-            this.unhighlight();
-        } else {
-            this.highlightSquare(special ? new Color(255, 0, 255) : new Color(0, 255, 0), -1f);
-        }
+    public void showDruidInfluence(GameObject particle) {
+        particle.transform.position = this.transform.position + Vector3.up * .5f;
     }
 }

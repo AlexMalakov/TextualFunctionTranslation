@@ -24,6 +24,8 @@ public class CombatManager : MonoBehaviour
     private int livingEnemyUnits = -1;
 
     public void initPlayers(PlayerUnitLayout enemyLayout, string allLeters, int unitCap) {
+        this.board.assignLetters(allLeters);
+
         this.player.setUnitCap(unitCap);
         this.player.init();
         this.enemy.assignLayout(enemyLayout);
@@ -57,7 +59,6 @@ public class CombatManager : MonoBehaviour
         }
 
         this.traitDisplay.onUnitLayoutUpdate();
-        this.board.assignLetters(allLeters);
     }
 
     public void placeUnitsFromLayouts() {

@@ -28,6 +28,7 @@ public class StatusMessage : MonoBehaviour
         }
 
         this.text.text = msg;
+        this.gameObject.SetActive(true);
         this.coroutine = StartCoroutine(runFade());
     }
 

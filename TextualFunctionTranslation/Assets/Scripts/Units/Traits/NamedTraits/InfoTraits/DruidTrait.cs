@@ -6,20 +6,29 @@ using System.Linq;
 public class DruidTrait : InformationTrait
 {
     [SerializeField] private CombatManager combatManager;
+    [SerializeField] private ParticleManager pm;
+    [SerializeField] private Player traitPlayer;
     [SerializeField] private float statBoostAmountV;
     [SerializeField] private float statBoostAmountY;
 
     private List<HexSquare> vowelSquares;
     private HexSquare ySquare;
 
-    //NOTE: THIS TRAIT IS ONLY USABLE FOR THE PLAYER
-    //DOESN'T need to check amount just active
+    public override void registerUnit(bool addingUnit) {
+        base.registerUnit(addingUnit);
 
-    public override void onPrecombatStart() { //this might run multiple times which may be annoying or slow | solution enemy wont have this trait ever
+        pm.hideLeaves(this.traitPlayer is HumanPlayer);
+        if(this.getMinimumForActive() <= this.getNumberActive()) {
+            this.activateDruidSquares();
+        }
+    }
+
+    private void activateDruidSquares() {
         this.vowelSquares = new List<HexSquare>();
         char[] vowels = {'a', 'e', 'i', 'o', 'u'};
 
-        foreach (HexSquare s in this.combatManager.getBoard().getPlayerSquares()) {
+        foreach (HexSquare s in (this.traitPlayer is HumanPlayer) ? this.combatManager.getBoard().getPlayerSquares() : this.combatManager.getBoard().getEnemySquares()) {
+            Debug.Log("S CHAR VAL: " + s.getCharValue());
             if (vowels.Contains(s.getCharValue())) {
                 this.vowelSquares.Add(s);
             } else if(s.getCharValue() == 'y') {
@@ -27,20 +36,22 @@ public class DruidTrait : InformationTrait
             }
         }
 
-        foreach(HexSquare s in this.vowelSquares) {
-            s.showDruidInfluence(true, false);
+        if(this.vowelSquares.Count == 0) {
+            return;
         }
 
-        this.ySquare.showDruidInfluence(true, true);
+        Debug.Log("VOWELS FOUND: " + this.vowelSquares.Count);
+
+        List<GameObject> leafParticles = this.pm.requestLeaf(this.traitPlayer is HumanPlayer);
+
+        for(int i = 0; i < 5; i++) {
+            this.vowelSquares[i].showDruidInfluence(leafParticles[i+1]);
+        }
+
+        this.ySquare.showDruidInfluence(leafParticles[0]);
     }
 
     public override void onCombatStart(Unit traitHaver) {
-        foreach(HexSquare s in this.vowelSquares) {
-            s.showDruidInfluence(false, false);
-        }
-
-        this.ySquare.showDruidInfluence(false, true);
-
         if (vowelSquares.Contains(traitHaver.getPosition())) {
             Operation buffOpp = new Operation(OperationType.PreMultiply, this.statBoostAmountV, "Druid Start Buff");
             traitHaver.buffStat(BuffableStats.Damage, buffOpp, traitHaver);

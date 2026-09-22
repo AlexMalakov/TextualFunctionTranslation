@@ -31,9 +31,10 @@ public struct StateDataContainer {
     public Unit unit;
     public HexSquare sq;
     public float flt;
+    public bool stunned;
 
-    public StateDataContainer(Unit unit, HexSquare sq, float flt) {
-        this.unit = unit; this.sq = sq; this.flt = flt;
+    public StateDataContainer(Unit unit, HexSquare sq, float flt, bool stunned) {
+        this.unit = unit; this.sq = sq; this.flt = flt; this.stunned = stunned;
     }
 }
 
@@ -65,6 +66,7 @@ public abstract class Unit : MonoBehaviour
 
     [Header ("Objects")]
     [SerializeField] protected CombatManager manager;
+    [SerializeField] private ParticleManager pm;
     [SerializeField] private CombatLog combatLog;
     [SerializeField] private Sprite unitIcon;
     [SerializeField] private AnimationController ac;
@@ -99,10 +101,11 @@ public abstract class Unit : MonoBehaviour
         this.transform.position = new Vector3(this.transform.position.x, .25f, this.transform.position.y);//heehee i did a hardcode
     }
 
-    public Unit setBlueprint(UnitBlueprint blueprint, CombatManager manager, CombatLog log) {
+    public Unit setBlueprint(UnitBlueprint blueprint, CombatManager manager, CombatLog log, ParticleManager pm) {
         this.manager = manager;
         this.unitBlueprint = blueprint;
         this.combatLog = log;
+        this.pm = pm;
         this.fixY();
         this.resetStats();
         this.manager.requestHealthBar(this);
@@ -229,7 +232,7 @@ public abstract class Unit : MonoBehaviour
         if(this.currentTarget == null || this.currentTarget.isDead()) {
             this.currentTarget = this.manager.requestAttackTarget(this, this.currentTarget);
             if (this.currentState.cancelAction()) {
-                StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, .25f);
+                StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, .25f, false);
                 this.Idle.onStateEnter(this.currentState, stateData);
                 this.currentState = this.Idle;
                 
@@ -238,7 +241,7 @@ public abstract class Unit : MonoBehaviour
 
         if(this.currentTarget != null && this.getRange() < HexSquare.hexDist(this.currentTarget.getPosition(), this.getPosition())) {
             if (this.currentState.cancelAction()) {
-                StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, .25f);
+                StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, .25f, false);
                 this.Idle.onStateEnter(this.currentState, stateData);
                 this.currentState = this.Idle;
             }
@@ -248,7 +251,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     public virtual void requestStateSwap() {
-        StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, -1f);
+        StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, -1f, false);
         if(this.currentTarget == null) {
             this.currentState.swapStates(this.Idle, stateData);
             this.currentState = this.Idle;
@@ -274,7 +277,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void stunUnit(float stunDuration) {
-        StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, stunDuration);
+        StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, stunDuration, true);
         this.currentState.swapStates(this.Idle, stateData);
         this.currentState = this.Idle;
     }
@@ -398,6 +401,7 @@ public abstract class Unit : MonoBehaviour
         this.triggerAnimation("death");
 
         this.manager.onUnitDeath(this);
+        this.pm.unassignStar(this);
         this.unclaimSquare();
         //TODO: review unclaim square usage
 
@@ -461,6 +465,14 @@ public abstract class Unit : MonoBehaviour
 
     public void rotateTo(Quaternion newRotation) {
         this.transform.rotation = newRotation;
+    }
+
+    public void showStunParticles(float stunDuration) {
+        this.pm.requestStar(this, stunDuration);
+    }
+
+    public void stunOver() {
+        this.pm.unassignStar(this);
     }
 
     /*

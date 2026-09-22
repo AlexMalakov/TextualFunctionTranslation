@@ -157,18 +157,18 @@ public class GameManager : MonoBehaviour
         if(this.data.showDialogue && this.getCurrentLevel().hasDialogue(true)) {
             this.getCurrentLevel().getDialogue(true).startDialogue(rd);
         } else {
-            this.postResultsDialogue(rd);
+            StartCoroutine(this.postResultsDialogue(rd));
         }
     }
 
-    private void postResultsDialogue(ReviewData rd) {
-        string ciphertext = this.combatManager.encrypt(this.getCurrentLevel().getLevelCipher());
-        StartCoroutine(this.runAnimationsAndSwap(ciphertext));
+    private IEnumerator postResultsDialogue(ReviewData rd) {
+        yield return StartCoroutine(this.runAnimationsAndSwap());
 
+        string ciphertext = this.combatManager.encrypt(this.getCurrentLevel().getLevelCipher());
         this.rvm.onResultsStart(ciphertext, rd);
     }
 
-    private IEnumerator runAnimationsAndSwap(string cypherText) {
+    private IEnumerator runAnimationsAndSwap() {
         yield return this.combatManager.runCypherAnimation();
         yield return new WaitForSeconds(GlobalData.BetweenRevealDuration);
         yield return this.combatManager.runSquaresReveal();
@@ -206,7 +206,7 @@ public class GameManager : MonoBehaviour
         if(this.gameState == GameStage.preperation) {
             this.postPrepDialogue();
         } else {
-            this.postResultsDialogue(rd.Value);
+            StartCoroutine(this.postResultsDialogue(rd.Value));
         }
     }
 }

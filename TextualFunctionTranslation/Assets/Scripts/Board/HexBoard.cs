@@ -7,6 +7,7 @@ public class HexBoard : MonoBehaviour
 {
     List<List<HexSquare>> squares = new List<List<HexSquare>>();
     List<HexSquare> humanSquares = new List<HexSquare>();
+    List<HexSquare> enemySquares = new List<HexSquare>();
     [SerializeField] private GameObject hexSquarePrefab;
     [SerializeField] private NullSquare nullSQ;
 
@@ -24,6 +25,8 @@ public class HexBoard : MonoBehaviour
 
                 if(y >= 4) {
                     this.humanSquares.Add(lis[lis.Count - 1]);
+                } else {
+                    this.enemySquares.Add(lis[lis.Count - 1]);
                 }
             }
             this.squares.Add(lis);
@@ -83,6 +86,10 @@ public class HexBoard : MonoBehaviour
 
     public List<HexSquare> getPlayerSquares() {
         return this.humanSquares;
+    }
+
+    public List<HexSquare> getEnemySquares() {
+        return this.enemySquares;
     }
 
     public void revealAllSquares() {
