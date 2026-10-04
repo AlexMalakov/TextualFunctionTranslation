@@ -50,9 +50,9 @@ public class AttackState : UnitActionState
     }
 
     public override bool cancelAction() {
+        base.cancelAction();
         if(this.attackStage == AttackStage.Windup || this.attackStage == AttackStage.Cooldown) {
             this.onStateExit(); //force quit the coroutine
-            //TODO: stun particles?
         }
 
         return true;
@@ -99,8 +99,6 @@ public class AttackState : UnitActionState
         this.unitOwner.triggerAnimation("windup_attack");
 
         while(this.frameLockout > 0 && this.attackStage == AttackStage.Windup) {
-            //TODO: check if attack is cancel
-            
             float ratio = (this.attackSpeedWindupFrames - this.frameLockout) / (float)this.attackSpeedWindupFrames;
             this.unitOwner.transform.rotation = Quaternion.Slerp(this.unitOwner.transform.rotation, getTargetRot(), ratio);
             
@@ -113,6 +111,10 @@ public class AttackState : UnitActionState
 
     //cannot be canceled anymore
     private void runSwing() {
+        if(!this.unitOwner.canAttackTarget()) {
+            this.frameLockout = 0;
+            return;
+        }
         this.frameLockout = this.swingFrames;
         this.unitOwner.triggerAnimation("attack");
         this.unitOwner.attackTarget();

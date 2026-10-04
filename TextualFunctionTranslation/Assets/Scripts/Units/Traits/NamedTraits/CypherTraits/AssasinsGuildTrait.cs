@@ -25,6 +25,8 @@ public class AssasinsGuildTrait : CypherTrait
     }
 
     public override void preCombatFinal(Unit traitHaver) {
+        this.log.logEvent(new CombatEvent(traitHaver, traitHaver, CombatEventType.Start));
+
         AxialCoord mirrored = traitHaver.getPosition().getCoords().getMirroredCoord();
         OffsetCoord readable = mirrored.toOffset();
         if(this.cm.getBoard().getHexAt(mirrored).getUnit() == null) {
@@ -37,7 +39,7 @@ public class AssasinsGuildTrait : CypherTrait
         for(int radius = 1; radius < 8; radius++) { //8 is overkill lets be real here
             suspects.AddRange(this.getSquaresInRadius(this.cm.getBoard().getHexAt(mirrored), radius, this.cm.getBoard()));
             foreach(HexSquare s in suspects) {
-                if(s.getUnit() != null) {
+                if(s.getUnit() == null) {
                     traitHaver.placeUnitOnSquare(s, false);
                     StartCoroutine(this.umm.boingTo(traitHaver, s.transform.position));
                     return;
@@ -52,12 +54,16 @@ public class AssasinsGuildTrait : CypherTrait
         return "assassin";
     }
 
-    public override string getTraitDescription() {
-        return ("A secretive assassins guild involved in all downfalls of all nobels and aristocrats in the kingdom. "
-                    + "At the start of combat jump to an unocupied square on the opponents side of the board.");
+    public override string getTraitNarrative() {
+        return "A secrative guild of cut-throats and assassins.";
     }
 
-    protected override int getMinimumForActive() {
+    public override string getTraitEffect() {
+        return "At the start of combat, leaps to the other size. Gains 3/5 seconds of untargetability on leap.";
+    }
+
+
+    public override int getMinimumForActive() {
         return 2;
     }
 

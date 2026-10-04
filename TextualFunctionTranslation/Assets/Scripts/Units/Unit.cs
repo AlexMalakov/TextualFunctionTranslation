@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Runtime.CompilerServices;
 
 [System.Serializable]
 struct StarStats {
@@ -67,7 +66,6 @@ public abstract class Unit : MonoBehaviour
     [Header ("Objects")]
     [SerializeField] protected CombatManager manager;
     [SerializeField] private ParticleManager pm;
-    [SerializeField] private CombatLog combatLog;
     [SerializeField] private Sprite unitIcon;
     [SerializeField] private AnimationController ac;
     private HealthBarManager hpBar;
@@ -91,20 +89,20 @@ public abstract class Unit : MonoBehaviour
     private bool combatEnd = true;
 
     public void Start() {
+        this.fixY();
+        this.resetStats();
         this.Walk = new WalkState(this);
         this.Idle = new IdleState(this);
         this.Attack = new AttackState(this, this.attackCooldownTime, this.attackWindupTime);
-        this.fixY();
     }
 
     private void fixY() {
         this.transform.position = new Vector3(this.transform.position.x, .25f, this.transform.position.y);//heehee i did a hardcode
     }
 
-    public Unit setBlueprint(UnitBlueprint blueprint, CombatManager manager, CombatLog log, ParticleManager pm) {
+    public Unit setBlueprint(UnitBlueprint blueprint, CombatManager manager, ParticleManager pm) {
         this.manager = manager;
         this.unitBlueprint = blueprint;
-        this.combatLog = log;
         this.pm = pm;
         this.fixY();
         this.resetStats();
@@ -134,6 +132,10 @@ public abstract class Unit : MonoBehaviour
 
     public int getCost() {
         return this.unitBlueprint.unitCost * (int)Mathf.Pow(2, this.starLevel - 1);
+    }
+
+    public UnitBlueprint getBlueprint() {
+        return this.unitBlueprint;
     }
 
     public HexSquare getPosition() {
@@ -182,13 +184,24 @@ public abstract class Unit : MonoBehaviour
         return this.classTrait;
     }
 
+    public string getRoleTraitName() {
+        return this.roleTraitName;
+    }
+
+    public string getClassTraitName() {
+        return this.classTraitName;
+    }
+
     public Sprite getUnitIcon() {
         return this.unitIcon;
     }
 
-    public virtual void initUnit(HexSquare square, HealthBarManager hpBar, Transform hpCanvas) { //NOTE: this is called both at the start of prep and end of prep
+    //Instantiate(hpBarPrefab).GetComponent<HealthBarManager>()
+    public virtual void initUnit(HexSquare square) { //NOTE: this is called both at the start of prep and end of prep
         this.resetStats();
-        this.assignHpBar(hpBar, hpCanvas);
+        if(this.hpBar == null) {
+            this.manager.requestHealthBar(this);
+        }
         this.currentTarget = null;
         this.placeUnitOnSquare(square, true);
         this.combatEnd = false;
@@ -203,10 +216,6 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void assignHpBar(HealthBarManager hpBar, Transform hpCanvas) {
-        if(this.hpBar != null) {
-            this.hpBar.onDeath();
-        }
-
         this.healthCalculator = new UnitNumericCalculator(this.health.getStat(this.starLevel));
         this.currentHealth = this.healthCalculator.calculate();
 
@@ -215,7 +224,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     public virtual void triggerUpdate(CombatManager manager) {
-
+        
         if(this.currentState != null && this.isDead()) {
             //TODO: cancel state, and end
             this.currentState.onStateExit();
@@ -246,13 +255,12 @@ public abstract class Unit : MonoBehaviour
                 this.currentState = this.Idle;
             }
         }
-
         currentState.triggerUpdate();
     }
 
     public virtual void requestStateSwap() {
         StateDataContainer stateData = new StateDataContainer(this.currentTarget, null, -1f, false);
-        if(this.currentTarget == null) {
+        if(this.currentTarget == null || this.currentTarget.isDead()) {
             this.currentState.swapStates(this.Idle, stateData);
             this.currentState = this.Idle;
         } else if(this.canReachTarget()) {
@@ -292,15 +300,14 @@ public abstract class Unit : MonoBehaviour
             } else {
                 this.triggerAnimation("victory_clap");
             }
-            this.hpBar.onDeath();
-            this.hpBar = null;
+            this.hpBar.hideHPBar();
         }
 
         // Debug.Log("WE ARE ATTACKING A NULL BUT COMBAT ENDED HERE");
 
-        this.Walk.cancelAction();
-        this.Idle.cancelAction();
-        this.Attack.cancelAction();
+        this.Walk.forceEnd();
+        this.Idle.forceEnd();
+        this.Attack.forceEnd();
         this.currentState = this.Idle;
         this.combatEnd = true;
         
@@ -331,20 +338,32 @@ public abstract class Unit : MonoBehaviour
     public void placeUnitOnBench() {
         this.unclaimSquare();
     }
-    public void attackTarget() {
-        // if(this.combatEnd) {
-        //     return;
-        // }
 
-        this.combatLog.logEvent(new CombatEvent(this, this.currentTarget, CombatEventType.Attack));
+    public bool canAttackTarget() {
+        return !this.combatEnd && this.currentTarget != null;
+    }
+
+    public void attackTarget() {
+        this.pm.requestProjectile(this, this.currentTarget, this.ac.getAttackType());
         CombatManager.callTraitMethod(this.getRoleTrait(), this.getRoleTrait().onUnitAttack, this, this.currentTarget);
         CombatManager.callTraitMethod(this.getClassTrait(), this.getClassTrait().onUnitAttack, this, this.currentTarget);
+        if(this.currentTarget == null) {
+            return;
+        }
         this.currentTarget.takeDamage(this.calcDamage(), this);
+    }
+
+    public void onReposition() {
+        CombatManager.callTraitMethod(this.getRoleTrait(), this.getRoleTrait().onReposition, this);
+    }
+
+    public int getAttackType() {
+        return this.ac.getAttackType();
     }
 
     //returns true if target is in range
     private bool canReachTarget() {
-        if(this.currentTarget == null) {
+        if(this.currentTarget == null || this.currentTarget.isDead()) {
             return false;
         }
         return HexSquare.hexDist(this.getPosition(), this.currentTarget.getPosition()) <= this.getRange();
@@ -363,8 +382,6 @@ public abstract class Unit : MonoBehaviour
         this.hpBar.updateDamage(in_damage);
 
         if(this.currentHealth <= 0) {
-            this.combatLog.logEvent(new CombatEvent(this, damage_from, CombatEventType.Death));
-            this.combatLog.logEvent(new CombatEvent(damage_from, this, CombatEventType.Kill));
 
             CombatManager.callTraitMethod(damage_from.getRoleTrait(), damage_from.getRoleTrait().onEnemyDefeat, damage_from, this);
             CombatManager.callTraitMethod(damage_from.getClassTrait(), damage_from.getClassTrait().onEnemyDefeat, damage_from, this);
@@ -385,6 +402,7 @@ public abstract class Unit : MonoBehaviour
             this.currentHealth = this.healthCalculator.calculate();
         }
 
+        this.pm.requestPlayerParticle(this, ParticleType.Heal, 2.5f);
         this.hpBar.updateDamage(preHealth - this.currentHealth);
     }
 
@@ -398,10 +416,11 @@ public abstract class Unit : MonoBehaviour
     }
 
     public virtual void onDeath() {
+        Debug.Log("I AM DAED!!!!!" + gameObject.name);
         this.triggerAnimation("death");
 
         this.manager.onUnitDeath(this);
-        this.pm.unassignStar(this);
+        this.pm.cancelUnitParticles(this);
         this.unclaimSquare();
         //TODO: review unclaim square usage
 
@@ -411,9 +430,35 @@ public abstract class Unit : MonoBehaviour
     }
 
     private void die() {
-        this.hpBar.onDeath();
-        this.hpBar = null;
+        this.hpBar.hideHPBar();
         this.gameObject.SetActive(false);
+    }
+
+    public void bringBackHPBar() {
+        this.hpBar.show();
+        this.hpBar.updateMaxHealth(this.currentHealth, this.starLevel);
+        this.hpBar.reset();
+    }
+
+    public void hideHPBar() {
+        this.hpBar.hideHPBar();
+    }
+
+    public void fakeDestroyObject() {
+        this.hpBar.hideHPBar();
+
+        this.Walk.forceEnd();
+        this.Idle.forceEnd();
+        this.Attack.forceEnd();
+        this.currentState = null;
+
+        if(this.curPosition != null) {
+            this.unclaimSquare();
+        }
+
+        this.gameObject.SetActive(false);
+        
+        Debug.Log("ABOUT TO FAKE KILL: " + this.unitName);
     }
 
     public void destroyObject() {
@@ -421,15 +466,16 @@ public abstract class Unit : MonoBehaviour
             this.hpBar.onDeath();
         }
 
-        this.Walk.cancelAction();
-        this.Idle.cancelAction();
-        this.Attack.cancelAction();
+        this.Walk.forceEnd();
+        this.Idle.forceEnd();
+        this.Attack.forceEnd();
         this.currentState = null;
 
         if(this.curPosition != null) {
             this.unclaimSquare();
         }
         
+        Debug.Log("ABOUT TO KILL: " + this.unitName);
         Destroy(this.gameObject);
     }
 
@@ -437,11 +483,21 @@ public abstract class Unit : MonoBehaviour
         this.starLevel += 1;
 
         this.resetStats();
-        this.hpBar.updateMaxHealth(this.currentHealth, this.starLevel);
+        if(this.hpBar != null) {
+            this.hpBar.updateMaxHealth(this.currentHealth, this.starLevel);
+        }
     }
 
     public int getMergeLevel() {
         return this.starLevel;
+    }
+
+    public void setMergeLevel(int newLevel) {
+        this.starLevel = newLevel;
+        this.resetStats();
+        if(this.hpBar != null) {
+            this.hpBar.updateMaxHealth(this.currentHealth, this.starLevel);
+        }
     }
 
     public void buffStat(BuffableStats stat, Operation operation, Unit source) {
@@ -453,12 +509,16 @@ public abstract class Unit : MonoBehaviour
                 this.currentHealth = Mathf.Min(this.currentHealth + Mathf.Max(newMaxHp - oldMaxHp, 0), newMaxHp);
 
                 this.hpBar.updateMaxHealth(newMaxHp, this.starLevel); //TODO: other places this is updated?
+
+                this.pm.requestPlayerParticle(this, ParticleType.Health, 2.5f);
                 break;
             case BuffableStats.Damage:
                 this.damageCalculator.addOperation(operation);
+                this.pm.requestPlayerParticle(this, ParticleType.Damage, 2.5f);
                 break;
             case BuffableStats.AttackSpeed:
                 this.attackSpeedCalculator.addOperation(operation);
+                this.pm.requestPlayerParticle(this, ParticleType.Speed, 2.5f);
                 break;
         }
     }
@@ -468,11 +528,19 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void showStunParticles(float stunDuration) {
-        this.pm.requestStar(this, stunDuration);
+        this.pm.requestPlayerParticle(this, ParticleType.Star, stunDuration);
     }
 
     public void stunOver() {
-        this.pm.unassignStar(this);
+        this.pm.cancelUnitParticle(this, ParticleType.Star);
+    }
+
+    public bool isBuffedByOther() {
+        return this.healthCalculator.isBuffedByOther() || this.damageCalculator.isBuffedByOther() || this.attackSpeedCalculator.isBuffedByOther();
+    }
+
+    public bool isBuffedBySelf() {
+        return this.healthCalculator.isBuffedBySelf() || this.damageCalculator.isBuffedBySelf() || this.attackSpeedCalculator.isBuffedBySelf();
     }
 
     /*

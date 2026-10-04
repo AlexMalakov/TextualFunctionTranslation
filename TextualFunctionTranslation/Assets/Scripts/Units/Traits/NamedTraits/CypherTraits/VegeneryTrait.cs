@@ -14,7 +14,7 @@ class VegenereCharacterTransformation : CharacterTransformation {
         for(int i = 0; i < cypherText.Length; i++) {
             //this is horrifying will debug the issues tomorrow byeeee :)
             //ok alex from literally 5 months after this comment checking in I did not in fact come back tomorrow also it was bugged kill me
-            outputArr[i] = (char)((((int)cypherText[i] + (int)this.key[i % key.Length] - (int)'a') % 26) + (int)'a'); 
+            outputArr[i] = (char)((((int)cypherText[i] + (int)this.key[i % key.Length] - (int)'a' - (int)'a') % 26) + (int)'a'); 
         }
     }
 }
@@ -23,14 +23,16 @@ public class VegeneryTrait : CypherTrait
 {
     [SerializeField] private Shop shop;
 
-    public void buyTopUnit() {
+    public void buyTopUnit() { //TODO: combat event?
         string unitName = this.shop.getVigUnitName();
+        Debug.Log("bought CYPHER WITH KEY " + unitName + " I AM " + gameObject.name);
         this.addToCypher(new List<CharacterTransformation>(){new VegenereCharacterTransformation(unitName)});
         this.shop.giftVigUnit();
     }
 
     public void trashTopUnit() {
         string unitName = this.shop.getVigUnitName();
+        Debug.Log("sold CYPHER WITH KEY " + unitName + " I AM " + gameObject.name);
         this.addToCypher(new List<CharacterTransformation>(){new VegenereCharacterTransformation(unitName)});
         this.shop.trashVigUnit();
     }
@@ -39,13 +41,17 @@ public class VegeneryTrait : CypherTrait
         return "vigenery";
     }
 
-    public override string getTraitDescription() {
-        return ("Brilliant inventors that have revolutionized the technology of the kingdom."
-            + " At the end of a succesfull combat recruit the left most unit in the shop free of cost." +
-            " Unit is only recruited if there is space on your bench, otherwise the unit is lost.");
+    public override string getTraitNarrative() {
+        return "Renowned inventors who attract others to witness their brilliant minds in action.";
     }
 
-    protected override int getMinimumForActive() {
+    public override string getTraitEffect() {
+        return (
+            "After a combat concludes, recruit the left most unit from the baracks onto the bench. If there is no space, the unit is lost."
+        );
+    }
+
+    public override int getMinimumForActive() {
         return 2;
     }
 

@@ -8,38 +8,43 @@ public class HeroCheck : MonoBehaviour
     [SerializeField] private HumanPlayer player;
     [SerializeField] private Player enemy;
 
-    //TODO: wire up
-
     private bool failed = false;
 
     public void precombatCheck() {
+        Debug.Log("PRECOMBAT CHECK!!!");
         this.failed = false; //reset
 
         if(!this.checkKing()) {
+            Debug.Log("PRECOMBAT CHECK!!! FAILED KING");
             this.failed = true;
             return;
         }
 
         if(!this.outcastsAlone()) {
+            Debug.Log("PRECOMBAT CHECK!!! FAILED OUTCASTS");
             this.failed = true;
             return;
         }
 
         if(!this.noDups()) {
+            Debug.Log("PRECOMBAT CHECK!!! FAILED DUPS");
             this.failed = true;
             return;
         }
 
         if(!this.circleJerk()) {
+            Debug.Log("PRECOMBAT CHECK!!! FAILED JERK");
             this.failed = true;
             return;
         }
 
         if(!this.isBroke()) {
+            Debug.Log("PRECOMBAT CHECK!!! NOT BROKE");
             this.failed = true;
             return;
         }
 
+        Debug.Log("PASSED HERO CHECK!");
         //haven't failed yet, just need death unit to die now
     }
 
@@ -66,25 +71,30 @@ public class HeroCheck : MonoBehaviour
 
         bool selfBuffing = false;
         foreach(Unit o in outcasts) {
-            //todo: check if an outcast has a self buff
+            if(o.isBuffedBySelf()) {
+                return false;
+            }
         }
 
         return !selfBuffing;
     }
 
-    private bool noDups() { //TODO: lets check active units isnt returning bench
+    private bool noDups() {
         List<string> unitNames = new List<string>();
         foreach(Unit u in this.player.getActiveUnits()) {
             if(unitNames.Contains(u.getName())) {
                 return false;
             }
+            unitNames.Add(u.getName());
         }
         return true;
     }
 
     private bool circleJerk() {
         foreach(Unit u in this.player.getActiveUnits()) {
-            //TODO: check if a non self buff is present
+            if(!u.isBuffedByOther()) {
+                return false;
+            }
         }
         return true;
     }
@@ -94,17 +104,20 @@ public class HeroCheck : MonoBehaviour
     }
 
     public void onDeathCheck(Unit dead) {
+        Debug.Log("PRECOMBAT CHECK!!! DEATH CHECK!!!" + this.failed);
         if(!this.failed) {
+            Debug.Log("PRECOMBAT CHECK!!! SAC CHECK!!!" + this.failed);
             if(this.isSacrifice(dead)) {
                 this.shop.revealHero();
             }
+            Debug.Log("PRECOMBAT CHECK!!! SACK CHECK OVER!!!" + this.failed);
             
             this.failed = true; //even when hero is revealed so that we don't waste effort once we're done
         }
     }
 
     private bool isSacrifice(Unit dead) {
-        return dead.getRoleTrait().getTraitName() == "goblin" || dead.getRoleTrait().getTraitName() == "plague doctor";
+        return dead.getClassTrait().getTraitName() == "troll" || dead.getRoleTrait().getTraitName() == "plague doctor";
     }
 
 }

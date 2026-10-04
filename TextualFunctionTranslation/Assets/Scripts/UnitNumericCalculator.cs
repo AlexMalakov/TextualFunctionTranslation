@@ -10,11 +10,13 @@ public struct Operation {
     public OperationType type;
     public float amount;
     public string buffName;
+    public bool isSelfBuff;
 
-    public Operation(OperationType type, float amount, string buffName) {
+    public Operation(OperationType type, float amount, string buffName, bool isSelfBuff) {
         this.type = type;
         this.amount = amount;
         this.buffName = buffName;
+        this.isSelfBuff = isSelfBuff;
     }
 
     public float apply(float incoming) {
@@ -61,5 +63,23 @@ public class UnitNumericCalculator
         }
 
         return carry;
+    }
+
+    public bool isBuffedByOther() {
+        foreach(Operation o in this.operations) {
+            if(!o.isSelfBuff) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool isBuffedBySelf() {
+        foreach(Operation o in this.operations) {
+            if(o.isSelfBuff) {
+                return true;
+            }
+        }
+        return false;
     }
 }

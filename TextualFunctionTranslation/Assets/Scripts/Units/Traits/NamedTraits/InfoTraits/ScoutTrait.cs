@@ -9,6 +9,9 @@ public class ScoutTrait : InformationTrait
     [SerializeField] private float stunDamageSmall;
     [SerializeField] private float stunDamageLarge;
 
+    [SerializeField] private float healSmall;
+    [SerializeField] private float healLarge;
+
     [SerializeField] private float stunDuration;
 
 
@@ -24,6 +27,7 @@ public class ScoutTrait : InformationTrait
         List<Unit> scoutsStuns = this.attackedUnits[traitHaver];
 
         if(!scoutsStuns.Contains(target)) {
+            this.log.logEvent(new CombatEvent(traitHaver, target, CombatEventType.Attack));
             this.logSquare(target.getPosition());
             target.stunUnit(this.stunDuration);
             
@@ -34,17 +38,28 @@ public class ScoutTrait : InformationTrait
         }
     }
 
+
+    public override void onReposition(Unit traitHaver) {
+        traitHaver.heal(traitHaver.calcMaxHealth() * (this.getNumberActive() > 2 ? this.healLarge : this.healSmall));
+        this.logSquare(traitHaver.getPosition());
+    }
+
     public override string getTraitName() {
         return "scout";
     }
 
-    public override string getTraitDescription() {
-        return ("The bravest and fastest, acting as an warning system for the rest of the party. When a scout attacks a unit for the first time, "
-            + "their opponent is stunned for " + stunDuration + " seconds, and takes " + stunDamageSmall + "/" + stunDamageLarge + " damage. Units can be stunned"
-            + " ny multiple different scounts, but only once per scout.");
+    public override string getTraitNarrative() {
+        return "The nimblest soldiers in the party, who regularly make first contact with opposing forces.";
     }
 
-    protected override int getMinimumForActive() {
+    public override string getTraitEffect() {
+        return (
+            "When a scout attacks a unit for the first time, the target is stunned for " + stunDuration + " seconds, and takes "
+            + stunDamageSmall+"/"+stunDamageLarge + ". Everytime a scout moves to, they heal for " + this.healSmall+"/"+this.healLarge + " percent max health." 
+        );
+    }
+
+    public override int getMinimumForActive() {
         return 2;
     }
 

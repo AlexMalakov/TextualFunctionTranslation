@@ -42,6 +42,7 @@ public class UnitMovementManager : MonoBehaviour
             yield return null;
         }
 
+        u.transform.position = dest;
         this.draggedUnits.Remove(u);
     }
 

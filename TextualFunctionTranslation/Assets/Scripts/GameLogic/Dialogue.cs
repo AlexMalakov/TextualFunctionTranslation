@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using UnityEngine.UI;
-using TMPro;
 using System.Linq;
 
 [System.Serializable]
@@ -12,7 +11,7 @@ public struct DialogueLine
     public string text;
     public string speaker;
     public bool on_the_left;
-    public string randomize;
+    public bool randomize;
 }
 
 [System.Serializable]
@@ -47,6 +46,12 @@ public class Dialogue : MonoBehaviour
 
     public void Update() {
         if(inDialogue && Input.GetKeyDown(KeyCode.Space)) {
+            this.nextLine();
+        }
+    }
+
+    public void nextLine() {
+        if(inDialogue) {
             this.curLine++;
             this.showLine();
         }
@@ -58,7 +63,7 @@ public class Dialogue : MonoBehaviour
             return;
         }
 
-        this.dia.displayLine(this.dialogueLines[this.curLine].on_the_left, this.dialogueLines[this.curLine].speaker, this.dialogueLines[this.curLine].text);
+        this.dia.displayLine(this.dialogueLines[this.curLine].on_the_left, this.dialogueLines[this.curLine].speaker, this.dialogueLines[this.curLine].text, this.dialogueLines[this.curLine].randomize);
     }
 
     private void endDialogue() {

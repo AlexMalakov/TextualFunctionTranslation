@@ -5,7 +5,7 @@ using UnityEngine;
 public class AnimationController : MonoBehaviour
 {
     [SerializeField] private Animator animator;
-
+    [SerializeField] private GameObject physicalModel;
     [SerializeField] private int attackType;
 
     private int randomIdle = 0;
@@ -13,6 +13,10 @@ public class AnimationController : MonoBehaviour
     private void Awake() {
         animator.SetInteger("ATTACK_TYPE", this.attackType);
         animator.SetTrigger("idle");
+    }
+
+    public int getAttackType() {
+        return this.attackType;
     }
 
     private void OnEnable() {
@@ -28,4 +32,6 @@ public class AnimationController : MonoBehaviour
     public void triggerAnimation(string trigger) {
         this.animator.SetTrigger(trigger);
     }
+
+
 }

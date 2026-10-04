@@ -1,25 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
+using System.Linq;
 
 public abstract class Trait : MonoBehaviour
 {
     [SerializeField] private TraitDisplay traitDisplay;
     [SerializeField] private Sprite traitIcon;
+    [SerializeField] private Sprite effectImg;
+    [SerializeField] private TraitCodexInfo tci;
+    [SerializeField] private GameObject traitExplainerMenu;
+    [SerializeField] protected CombatLog log;
     [SerializeField] private bool playersTrait;
     private TraitWidget tw;
     private string traitName;
-    private int numberActive = 0;
+    private HashSet<Unit> activeUnits = new HashSet<Unit>();
     
     public bool attemptActivate(int numUnits) {
         return numUnits >= this.getMinimumForActive();
     }
 
     public void Awake() { //I'm allowed to be an awake because I update trait widget by giving it myself, and static facts about myself
-        this.tw = traitDisplay.createWidget(playersTrait);
-        this.tw.init(this);
+        this.tw = traitDisplay.createWidget(playersTrait, this is CypherTrait);
+        this.tw.init(this, this.tci, this.traitExplainerMenu);
     }
 
     public TraitWidget getTraitWidget() {
@@ -60,17 +63,17 @@ public abstract class Trait : MonoBehaviour
     public virtual void resetCypher() {}
     public virtual char[] runCypher(char[] curCypherText) {return curCypherText;}
 
-    public virtual void registerUnit(bool addingUnit) {
+    public virtual void registerUnit(bool addingUnit, Unit u) {
         if(addingUnit)
-            this.numberActive++;
+            this.activeUnits.Add(u);
         else
-            this.numberActive--;
+            this.activeUnits.Remove(u);
 
         this.tw.update();
     }
 
     public void wipeCount() {
-        this.numberActive = 0;
+        this.activeUnits = new HashSet<Unit>();
     }
 
     //these should do whatever the trait does
@@ -93,20 +96,27 @@ public abstract class Trait : MonoBehaviour
 
     public virtual void onCombatEnd(){}
 
+    public virtual void onReposition(Unit traitHaver) {}
+
     //constructor work around cuz unity is a chud platform :(
     public abstract string getTraitName();
-    public abstract string getTraitDescription();
+    public abstract string getTraitNarrative();
+    public abstract string getTraitEffect();
 
-    protected abstract int getMinimumForActive();
+    public abstract int getMinimumForActive();
 
     public abstract List<int> getTraitTiering();
 
     public int getNumberActive() {
-        return this.numberActive;
+        return this.activeUnits.Select(u => u.getName()).Distinct().ToList().Count;
     }
     
     public Sprite getTraitIcon() {
         return this.traitIcon;
+    }
+
+    public Sprite getTraitEffectImg() {
+        return this.effectImg;
     }
 /*
 

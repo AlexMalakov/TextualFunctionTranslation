@@ -35,6 +35,10 @@ public class Randomizer : Unit
 
 
     public override void triggerUpdate(CombatManager manager) {
+        if(this.rng == null) {
+            this.rng = new System.Random(randomSeed);
+        }
+
         if(!this.isDead() && this.currentState != null && (this.currentTarget == null || this.currentTarget.isDead())) {
             this.currentTarget = this.manager.getRandomAttackTarget(this.rng);
             if(this.currentState.cancelAction()) {

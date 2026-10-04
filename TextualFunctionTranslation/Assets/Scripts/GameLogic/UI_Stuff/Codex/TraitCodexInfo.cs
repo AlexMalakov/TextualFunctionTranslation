@@ -7,9 +7,10 @@ using TMPro;
 public class TraitCodexInfo : MonoBehaviour
 {
     [SerializeField] private TMP_Text traitName;
-    [SerializeField] private TMP_Text traitBreakpoints;
-    [SerializeField] private TMP_Text traitDescription;
-    [SerializeField] private Image image;
+    [SerializeField] private TMP_Text traitNarrative;
+    [SerializeField] private TMP_Text traitEffect;
+    [SerializeField] private Image icon;
+    [SerializeField] private Image imageExplenation;
 
     
     public void showTrait(Trait t) {
@@ -23,10 +24,11 @@ public class TraitCodexInfo : MonoBehaviour
             text = text.Substring(0, text.Length-2);
         }
 
-        this.traitBreakpoints.text = text;
-        this.traitDescription.text = t.getTraitDescription();
+        this.traitNarrative.text = t.getTraitNarrative();
+        this.traitEffect.text = t.getTraitEffect();
 
-        this.image.sprite = t.getTraitIcon();
+        this.icon.sprite = t.getTraitIcon();
+        this.imageExplenation.sprite = t.getTraitEffectImg();
         //TODO: units that have a trait
     }
 }

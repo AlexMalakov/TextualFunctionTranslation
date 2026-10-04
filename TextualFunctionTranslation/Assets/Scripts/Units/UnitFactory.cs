@@ -15,10 +15,9 @@ public class UnitFactory : MonoBehaviour
 {
     [SerializeField] private List<UnitBlueprint> curUnits;
     [SerializeField] private CombatManager cm;
-    [SerializeField] private CombatLog log;
     [SerializeField] private ParticleManager pm;
+    [SerializeField] private ShopPool shopPool;
     private static CombatManager com;
-    private static CombatLog logg;
     private static ParticleManager pmm;
 
     static List<UnitBlueprint> units;
@@ -26,8 +25,8 @@ public class UnitFactory : MonoBehaviour
     public void Awake() { //Awake because this needs to run first
         units = this.curUnits;
         com = cm;
-        logg = log;
         pmm = pm;
+        this.shopPool.initPool(this.curUnits);
     }
 
     public static List<UnitBlueprint> getAllBlueprints() {
@@ -38,7 +37,7 @@ public class UnitFactory : MonoBehaviour
     public static Unit createUnit(string unitName) {
         foreach(UnitBlueprint up in units) {
             if(up.unitName == unitName) {
-                return Instantiate(up.unitPrefab).GetComponent<Unit>().setBlueprint(up, com, logg, pmm);
+                return Instantiate(up.unitPrefab).GetComponent<Unit>().setBlueprint(up, com, pmm);
             }
         }
 

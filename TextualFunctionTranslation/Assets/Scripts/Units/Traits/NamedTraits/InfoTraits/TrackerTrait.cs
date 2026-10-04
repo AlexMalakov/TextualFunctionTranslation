@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TrackerTrait : InformationTrait
 {
-    private Dictionary<Unit, List<Unit>> assistMap;
+    private Dictionary<Unit, List<Unit>> assistMap; //TODO: stats from multiple trackers
     private int lenseCount;
     [SerializeField] private HumanPlayer player;
 
@@ -27,6 +27,7 @@ public class TrackerTrait : InformationTrait
         foreach(Unit u in this.assistMap.Keys) {
             if(this.assistMap[u].Contains(death)) {
                 this.lenseCount++;
+                this.log.logEvent(new CombatEvent(u, death, CombatEventType.Attack));
                 //TODO: give unit it's combat buff???
             }
         }
@@ -44,13 +45,18 @@ public class TrackerTrait : InformationTrait
         return "tracker";
     }
 
-    public override string getTraitDescription() { //TODO: buff?
-        return ("The kingdoms hunters, capable of following any prey for miles. Collect lenses and ___ on takedowns, "
-            + ". Can use lenses to uncover hidden energies on hexes of the battle field. Opponent's trackers will instead "
-            + "steal your lenses.");
+    public override string getTraitNarrative() {
+        return "Hunters and foresters capable of following prey for miles.";
     }
 
-    protected override int getMinimumForActive() {
+    public override string getTraitEffect() {
+        return (
+            "Collects lenses on kills and assists. Lenses can be used to discover glyphs on the battlefield. Opponent's trackers will steal your lenses instead."
+        );
+    }
+
+
+    public override int getMinimumForActive() {
         return 1;
     }
 

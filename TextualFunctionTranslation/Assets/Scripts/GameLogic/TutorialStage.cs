@@ -46,9 +46,9 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     [SerializeField] private HumanPlayer player;
     [SerializeField] private BenchSlot leftMostSlot;
     [SerializeField] private RetryLevelButton retry;
-    [SerializeField] private ButtonObjectHider codexButtonTrait;
+    [SerializeField] private ButtonObjectToggler codexButtonTrait;
     [SerializeField] private UnitSellDock sellDock;
-    [SerializeField] private ButtonObjectHider codexButtonUnit;
+    [SerializeField] private DisplayButton swapCypherTrait;
     [SerializeField] private LenseButton lb;
     [SerializeField] private string unitToMove;
 
@@ -79,7 +79,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
         return null;
     }
 
-    public void Awake() { //can be an awake because it just loads sections
+    protected override void onAwake() { //can be an awake because it just loads sections
         this.sections = JsonUtility.FromJson<TutorialJsonLoad>(tutorialDialogueLoad.text).sections;
     }
 
@@ -100,7 +100,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
         this.lb.tutorialLock(toggle);
         this.lense.tutorialLock(toggle);
         this.retry.tutorialLock(toggle); //society if i abstracted all this garbage
-        this.codexButtonUnit.tutorialLock(toggle);
+        this.swapCypherTrait.tutorialLock(toggle);
         this.codexButtonTrait.tutorialLock(toggle);
         this.sellDock.tutorialLock(toggle);
 
@@ -130,17 +130,17 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
         if(this.sections[this.currentSection].dialogue.Count > 0) {
             DialogueLine nextLine = this.sections[this.currentSection].dialogue[this.pointerInSection];
 
-            this.dia.displayLine(nextLine.on_the_left, nextLine.speaker, nextLine.text);
+            this.dia.displayLine(nextLine.on_the_left, nextLine.speaker, nextLine.text, false);
         }
     }
 
-    private void nextDialogue() {
+    public void nextDialogue() {
         if(this.pointerInSection < this.sections[this.currentSection].dialogue.Count) {
             this.pointerInSection++;
 
             if(this.pointerInSection < this.sections[this.currentSection].dialogue.Count) {
                 DialogueLine nextLine = this.sections[this.currentSection].dialogue[this.pointerInSection];
-                dia.displayLine(nextLine.on_the_left, nextLine.speaker, nextLine.text);
+                dia.displayLine(nextLine.on_the_left, nextLine.speaker, nextLine.text, false);
             } else {
                 this.dia.hideDialogue();
                 this.onDialogueOver();
@@ -169,6 +169,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
                 this.board.getHexAt(this.cordsToLense).tutorialFlash(true);
                 this.lense.tutorialLock(false);
                 this.lb.tutorialLock(false);
+                this.lb.flash(true);
                 break;
             case TutorialAction.ReadScroll:
                 this.scrollButton.tutorialLock(false);
@@ -234,6 +235,7 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
                     this.board.getHexAt(this.cordsToLense).tutorialFlash(false);
                     this.lense.tutorialLock(true);
                     this.lb.tutorialLock(true);
+                    this.lb.flash(false);
                     this.board.revealAllSquares(); //After lense is used dialogue gives the player all squares revealed :)
                 }
                 break;

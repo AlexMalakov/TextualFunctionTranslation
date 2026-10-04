@@ -8,25 +8,31 @@ public class UnitExpander : MonoBehaviour
 {
     [SerializeField] private Image unitIcon;
     [SerializeField] private TMP_Text health_ratio;
-    [SerializeField] private TMP_Text unit_stats;
     [SerializeField] private TMP_Text unit_name;
 
     [SerializeField] private TraitCodexButton roleTrait;
     [SerializeField] private TraitCodexButton classTrait;
+    [SerializeField] private TraitCodexInfo tci;
+    [SerializeField] private GameObject traitCodex;
+    [SerializeField] private Unit startingUnit;
+    [SerializeField] private HealthBarManager targetHPBar;
+
+    [Header ("stats")]
+    [SerializeField] private TMP_Text unit_damage;
+    [SerializeField] private TMP_Text unit_attackspeed;
+    [SerializeField] private TMP_Text unit_range;
+    [SerializeField] private TMP_Text unit_initiative;
+    [SerializeField] private TMP_Text unit_cost;
+    [SerializeField] private TMP_Text unit_taunt;
 
     private Unit tracking;
 
-
-    public void Start() {
-        //unitIcon.sprite = defaultSprite;
-        this.health_ratio.text = "";
-        this.unit_stats.text = "";
-
-        // this.roleTrait.gameObject.SetActive(false); //TODO: enable me :)
-        // this.classTrait.gameObject.SetActive(false);
-    }
-
     public void Update() {
+        if(tracking == null) {
+            this.tracking = startingUnit;
+            this.targetHPBar.initUniversal(this.tracking.calcMaxHealth(), this.tracking.getMergeLevel());
+        }
+
         if (Input.GetMouseButtonDown(0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -46,21 +52,23 @@ public class UnitExpander : MonoBehaviour
         this.unitIcon.sprite = tracking.getUnitIcon();
         this.unit_name.text = tracking.getName();
         
-        //TODO: healthbar
+        this.targetHPBar.updateMaxHealth(this.tracking.calcMaxHealth(), this.tracking.getMergeLevel());
+        this.targetHPBar.noChipDamage(this.tracking.getCurHealth());
         this.health_ratio.text = this.tracking.getCurHealth() + "/" + this.tracking.calcMaxHealth();
 
-        this.unit_stats.text = "\nDamage: " + this.tracking.calcDamage()
-                    + "\nAttack Speed: " + this.tracking.calcAttackSpeed()
-                    + "\nRange: " + this.tracking.getRange()
-                    + "\nDecision Order: " + this.tracking.getDecisionPriority()
-                    + "\nTaunt: " + this.tracking.getTaunt();
 
-        // this.roleTrait.gameObject.SetActive(true);
-        // this.classTrait.gameObject.SetActive(true);
-        // this.roleTrait.init(this.tracking.getRoleTrait());
-        // this.classTrait.init(this.tracking.getClassTrait());
+        this.unit_damage.text = this.tracking.calcDamage() + "";
+        this.unit_attackspeed.text = this.tracking.calcAttackSpeed() + "";
+        this.unit_range.text = this.tracking.getRange() + "";
+        this.unit_initiative.text = this.tracking.getDecisionPriority() + "";
+        this.unit_cost.text = this.tracking.getCost() + "";
+        this.unit_taunt.text = this.tracking.getTaunt() + "";
+
+        this.roleTrait.init(this.tracking.getRoleTrait(), this.tci, this.traitCodex);
+        this.classTrait.init(this.tracking.getClassTrait(), this.tci, this.traitCodex);
     }
 
-
-
+    public void fakeSwapTargets(Unit u) {
+        tracking = u;
+    }
 }

@@ -29,6 +29,9 @@ public class HealthBarManager : MonoBehaviour
 
     [SerializeField] private int maxDividerChunks = 36;
 
+    [Header ("unit expander setting")]
+    [SerializeField] private bool isCopyCat = false;
+
     private List<RectTransform> dividers;
 
     private float currentHealth;
@@ -38,19 +41,30 @@ public class HealthBarManager : MonoBehaviour
 
     public void init(float maxHealth, int mergeLevel, Transform target, Transform canvasParent) {
         this.transform.SetParent(canvasParent, false);
+        this.target = target;
+
+        this.initUniversal(maxHealth, mergeLevel);
+
+        this.gameObject.name = "healthbar_of_" + target.gameObject.name;
+        
+    }
+
+    public void initUniversal(float maxHealth, int mergeLevel) {
         this.currentHealth = maxHealth;
         this.maxHealth = maxHealth;
         this.healthFill.fillAmount = 1f;
         this.damageFill.fillAmount = 1f;
-        this.target = target;
         
         this.setFrame(mergeLevel);
 
         this.dividers = new List<RectTransform>();
         this.buildNewDividers(this.dividerStart);
         this.repaintDividers();
-        // transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
-        this.gameObject.name = "healthbar_of_" + target.gameObject.name;
+    }
+
+    public void reset() {
+        this.healthFill.fillAmount = 1f;
+        this.damageFill.fillAmount = 1f;
     }
 
     public void updateDamage(float damage) {
@@ -63,6 +77,13 @@ public class HealthBarManager : MonoBehaviour
             StopCoroutine(chipRoutine);
 
         chipRoutine = StartCoroutine(ChipDamage(targetFill));
+    }
+
+    public void noChipDamage(float curHP) {
+        currentHealth = Mathf.Clamp(curHP, 0, maxHealth);
+        float targetFill = currentHealth / maxHealth;
+        healthFill.fillAmount = targetFill;
+        damageFill.fillAmount = targetFill;
     }
 
     public void updateMaxHealth(float newMaxHealth, int mergeLevel) {
@@ -80,7 +101,7 @@ public class HealthBarManager : MonoBehaviour
         this.repaintDividers();
     }
 
-    private IEnumerator ChipDamage(float targetFill) {
+    private IEnumerator ChipDamage(float targetFill) { //i am likely the culprit of some bullshit 
         yield return new WaitForSeconds(chipDelay);
 
         while (damageFill.fillAmount > targetFill)
@@ -146,11 +167,25 @@ public class HealthBarManager : MonoBehaviour
     }
 
     public void LateUpdate() {
-        if (this.target)
+        if(isCopyCat) {
+            return;
+        } else if (this.target)
             transform.position = this.target.position + this.worldOffset;
     }
 
+    
+
+    public void hideHPBar() {
+        this.gameObject.SetActive(false);
+    }
+
+    public void show() {
+        this.gameObject.SetActive(true);
+    }
+
     public void onDeath() {
+        Debug.Log("HP BAR CLEANED UP!!!");
+        //only called when the unit itself is getting destroyed
         Destroy(this.gameObject);
     }
 }

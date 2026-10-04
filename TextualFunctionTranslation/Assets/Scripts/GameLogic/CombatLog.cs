@@ -4,6 +4,7 @@ using UnityEngine;
 
 
 public enum CombatEventType {
+    Start,
     Kill,
     Attack,
     Death,
@@ -45,19 +46,7 @@ public class CombatLog : MonoBehaviour
     }
 
     public void logEvent(CombatEvent ev) {
-        if(ev.eventType == CombatEventType.Attack) {
-            if(this.assistList.ContainsKey(ev.source)) {
-                if(!this.assistList[ev.source].Contains(ev.colat)) {
-                    this.log.Add(ev);
-                    this.assistList[ev.source].Add(ev.colat);
-                }
-            } else {
-                this.log.Add(ev);
-                this.assistList.Add(ev.source, new List<Unit>(){ev.colat});
-            }
-        } else {
-            this.log.Add(ev);
-        }
+        this.log.Add(ev);
     }
 
     public List<CombatEvent> getUnitsEvents(Unit u) {

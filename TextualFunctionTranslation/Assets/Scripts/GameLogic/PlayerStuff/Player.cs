@@ -20,11 +20,12 @@ public class Player : MonoBehaviour
     }
 
     public void wipeLayoutUnits() {
-        this.unitLayout = null;
         for(int i = 0; i < this.playersUnits.Count; i++) {
+            this.unitLayout.removeUnitFromLayout(this.playersUnits[i]);
             this.playersUnits[i].destroyObject();
         }
 
+        this.unitLayout = null;
         this.playersUnits = new List<Unit>();
     }
 
@@ -35,6 +36,11 @@ public class Player : MonoBehaviour
 
     public List<Unit> getActiveUnits() {
         return this.unitLayout.getActiveUnits();
+    }
+
+    public void fakeDroolingGainUnit(Unit u) {
+        //DO NOT USE ME OUTSIDE OF DROOLING PLAYER I AM A VERY BAD THING TO USE
+        this.playersUnits.Add(u);
     }
 
     public virtual PlayerUnitLayout getUnitLayout() {
@@ -56,5 +62,11 @@ public class Player : MonoBehaviour
 
     public List<Trait> getAllTraits() {
         return this.allTraits;
+    }
+
+    
+    
+    public int countRandomizers() {
+        return this.unitLayout.countRandomizers();
     }
 }

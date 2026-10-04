@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterTransformation {
-    private HexSquare to;
-    private HexSquare from;
+    public HexSquare to;
+    public HexSquare from; //TODO: make me private again
 
     public CharacterTransformation(HexSquare to, HexSquare from) {
         this.to = to;

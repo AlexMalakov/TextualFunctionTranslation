@@ -7,14 +7,21 @@ public class LenseItem : MonoBehaviour
     
     [SerializeField] private HumanPlayer player;
     [SerializeField] private TutorialStage tut;
+    [SerializeField] private Texture2D lenseCursor;
 
     private bool tutorialLockOn;
     private bool tutorialActive;
 
     private bool lenseToggle = false;
 
+
     public void toggleLenses(bool status) {
         this.lenseToggle = status;
+        if(this.lenseToggle) {
+            Cursor.SetCursor(lenseCursor, new Vector2(lenseCursor.width / 2f, lenseCursor.height / 2f), CursorMode.Auto);
+        } else {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
     }
 
     public void checkUserInteraction() {
@@ -33,7 +40,7 @@ public class LenseItem : MonoBehaviour
         }
     }
 
-    private void useLense(HexSquare s) {
+    public void useLense(HexSquare s) {
         if(this.tutorialActive && !this.tut.onLenseUse(s)) {
             return;
         }
@@ -48,6 +55,9 @@ public class LenseItem : MonoBehaviour
 
     public void tutorialLock(bool lockOn) {
         this.tutorialLockOn = lockOn;
+        if(lockOn) {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
     }
 
     public void tutorialStarted(bool started) {

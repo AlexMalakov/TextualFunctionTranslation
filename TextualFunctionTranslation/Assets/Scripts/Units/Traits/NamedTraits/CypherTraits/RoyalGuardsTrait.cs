@@ -46,17 +46,18 @@ public class RoyalGuardsTrait : CypherTrait
 
     public override void onCombatStart(Unit traitHaver){
         float amt = this.getNumberActive() > 2 ? this.count * this.healthPerFullCompStack : this.count * this.healthPerStack;
-        Operation buff = new Operation(OperationType.PreAdd, amt, "royal guard health");
+        Operation buff = new Operation(OperationType.PreAdd, amt, "royal guard health", true);
         traitHaver.buffStat(BuffableStats.Health, buff, traitHaver);
 
         amt = this.getNumberActive() > 2 ? this.count * this.damagePerFullCompStack : this.count * this.damagePerStack;
-        buff = new Operation(OperationType.PreAdd, amt, "royal guard damage");
+        buff = new Operation(OperationType.PreAdd, amt, "royal guard damage", true);
         traitHaver.buffStat(BuffableStats.Damage, buff, traitHaver);
 
         this.startCount = this.count;
     }
 
     public override void onEnemyDefeat(Unit traitHaver, Unit target){
+        this.log.logEvent(new CombatEvent(traitHaver, target, CombatEventType.Kill));
         this.count += (int) (this.getNumberActive() > 2 ? this.killStackGainLarge : this.killStackGainSmall);
         if(this.traitHolder is HumanPlayer) {
             this.pi.setGloryStacks(this.count);
@@ -66,6 +67,8 @@ public class RoyalGuardsTrait : CypherTrait
     }
 
     public override void onCombatSurvival(Unit traitHaver){
+
+        this.log.logEvent(new CombatEvent(traitHaver, traitHaver, CombatEventType.Survival));
         this.count += (int) (this.getNumberActive() > 2 ? this.surviveStackGainLarge : this.surviveStackGainSmall);
         if(this.traitHolder is HumanPlayer) {
             this.pi.setGloryStacks(this.count);
@@ -80,19 +83,20 @@ public class RoyalGuardsTrait : CypherTrait
     }
 
     public override string getTraitName() {
-        return "royal guard";
+        return "ceasarian legionaries";
     }
 
-    public override string getTraitDescription() {
-        return ("An elite regiment of the kings own guards, and veterans of many of the kingdoms combats. Gains "
-            + healthPerStack + "/" + healthPerFullCompStack + " health and " + damagePerStack + "/" + damagePerFullCompStack
-            + " damage per stack of glory. For each succesfull combat, gain stacks carrying over into all future combats in the run. "
-            + " Gain " + this.killStackGainSmall + "/" + this.killStackGainLarge + " glory for each royal guard final blow, and "
-            + surviveStackGainSmall + "/" + surviveStackGainLarge + " glory for each surviving royal guard after a combat.");
-
+    public override string getTraitNarrative() {
+        return "The elite personal guard of the monarchy, famed for their skill, experience, and code.";
     }
 
-    protected override int getMinimumForActive() {
+    public override string getTraitEffect() {
+        return ("Gains " + this.killStackGainSmall+"/"+this.killStackGainLarge + " stacks of glory on kill, and " + surviveStackGainSmall+"/"+surviveStackGainLarge
+                +" stacks of glory on battle survival. Glory stacks carry across succesful combats. Gain " + healthPerStack+"/"+healthPerFullCompStack 
+                + " health and " +damagePerStack+"/"+damagePerFullCompStack + " damage per glory stack.");
+    }
+
+    public override int getMinimumForActive() {
         return 2;
     }
 

@@ -14,8 +14,8 @@ public class DruidTrait : InformationTrait
     private List<HexSquare> vowelSquares;
     private HexSquare ySquare;
 
-    public override void registerUnit(bool addingUnit) {
-        base.registerUnit(addingUnit);
+    public override void registerUnit(bool addingUnit, Unit u) {
+        base.registerUnit(addingUnit, u);
 
         pm.hideLeaves(this.traitPlayer is HumanPlayer);
         if(this.getMinimumForActive() <= this.getNumberActive()) {
@@ -52,13 +52,14 @@ public class DruidTrait : InformationTrait
     }
 
     public override void onCombatStart(Unit traitHaver) {
+        this.log.logEvent(new CombatEvent(traitHaver, traitHaver, CombatEventType.Start));
         if (vowelSquares.Contains(traitHaver.getPosition())) {
-            Operation buffOpp = new Operation(OperationType.PreMultiply, this.statBoostAmountV, "Druid Start Buff");
+            Operation buffOpp = new Operation(OperationType.PostMultiply, this.statBoostAmountV, "Druid Start Buff", true);
             traitHaver.buffStat(BuffableStats.Damage, buffOpp, traitHaver);
             traitHaver.buffStat(BuffableStats.Health, buffOpp, traitHaver);
             return;
         } else if(traitHaver.getPosition() == ySquare) {
-            Operation buffOpp = new Operation(OperationType.PreMultiply, this.statBoostAmountY, "Druid Start Buff");
+            Operation buffOpp = new Operation(OperationType.PostMultiply, this.statBoostAmountY, "Druid Start Buff", true);
             traitHaver.buffStat(BuffableStats.Damage, buffOpp, traitHaver);
             traitHaver.buffStat(BuffableStats.Health, buffOpp, traitHaver);
             return;
@@ -66,15 +67,21 @@ public class DruidTrait : InformationTrait
     }
 
     public override string getTraitName() {
-        return "druid";
+        return "draeoiudys";
     }
 
-    public override string getTraitDescription() {
-        return ("A band of magicians in tune with the magic of the land. Spawn in ley lines on squares that give druids "
-            + statBoostAmountV + " and " + statBoostAmountV + " times more damage and health when starting combat on them.");
+    public override string getTraitNarrative() {
+        return "A gathering of mages in tune with the land.";
     }
 
-    protected override int getMinimumForActive() {
+    public override string getTraitEffect() {
+        return (
+            "Spawn ley lines onto the battlefield, granting " + statBoostAmountV + " times more damage and health from green energy and " + statBoostAmountY + " times more damage and health from purple energy. These bonuses are for draeoiudys only."
+        );
+    }
+    
+
+    public override int getMinimumForActive() {
         return 2;
     }
 

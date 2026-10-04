@@ -3,45 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[System.Serializable]
-public class ShopEntry {
-    public List<string> units;
-}
 
 public class Shop : MonoBehaviour
 {
     [SerializeField] private HumanPlayer player;
-    [SerializeField] private List<ShopEntry> shopEntries;
-    [SerializeField] private List<ShopButton> shopButtons;
     [SerializeField] private StatusMessage brokeNotifier;
+    [SerializeField] private List<ShopButton> shopButtons;
 
     [Header ("special")]
     [SerializeField] private TutorialStage tut;
-    [SerializeField] private ShopEntry tutorialShop;
-    [SerializeField] private ShopEntry heroShop;
+    [SerializeField] private List<string> tutorialShop;
+    [SerializeField] private List<string> heroShop;
+    [SerializeField] private ShopPool pool;
+
+    private List<UnitBlueprint> currentEntries = new List<UnitBlueprint>();
 
     private bool tutorialLockOn = false;
     private bool tutorialActive = false;
 
-    private int shopIndex = 0;
-
-    public int getShopIndex() {
-        return this.shopIndex;
-    }
-
-    public void setShopIndex(int index) {
-        this.shopIndex = index;
-        this.shopIndex = this.shopIndex >= this.shopEntries.Count ? 0 : this.shopIndex;
-    }
-
-    private void nextShop() {
-        this.shopIndex++;
-        this.shopIndex = this.shopIndex >= this.shopEntries.Count ? 0 : this.shopIndex;
-    }
-
     void Start() { //sets initial entries, runs after factories have finished
         if(!this.tutorialActive) {
-            this.updateEntries(this.shopEntries[shopIndex]);
+            this.updateEntries();
         } else {
             this.updateEntries(this.tutorialShop);
         }
@@ -63,40 +45,45 @@ public class Shop : MonoBehaviour
         
         Unit u = UnitFactory.createUnit(ub.unitName);
         this.player.purchaseUnit(u);
+        this.pool.removeFromPool(ub);
         
         if(this.tutorialActive) {
             this.tut.onUnitBought();
-        } else {
-            this.shopIndex++;
         }
 
-        this.updateEntries(this.shopEntries[shopIndex]);
+        this.updateEntries();
     }
 
-    private void updateEntries(ShopEntry curEntry) {
+    public void updateEntries(List<string> hardcodedEntries) {
         for(int i = 0; i < this.shopButtons.Count; i++) {
-            this.shopButtons[i].setOffering(UnitFactory.lookupBlueprint(curEntry.units[i]));
+            this.shopButtons[i].setOffering(UnitFactory.lookupBlueprint(hardcodedEntries[i]));
+        }
+    }
+
+    public void updateEntries() {
+        this.currentEntries = pool.sampleFromPool();
+        for(int i = 0; i < this.shopButtons.Count; i++) {
+            this.shopButtons[i].setOffering(this.currentEntries[i]);
         }
     }
 
     public string getVigUnitName() {
-        return this.shopEntries[shopIndex].units[0];
+        return this.currentEntries[0].unitName;;
     }
 
     public void giftVigUnit() {
-        if(this.player.hasBenchSpace(this.shopEntries[shopIndex].units[0])) {
-            Unit u = UnitFactory.createUnit(this.shopEntries[shopIndex].units[0]);
+        if(this.player.hasBenchSpace(this.currentEntries[0].unitName)) {
+            Unit u = UnitFactory.createUnit(this.currentEntries[0].unitName);
             this.player.gainUnit(u);
-            this.shopIndex++;
-            this.updateEntries(this.shopEntries[shopIndex]);
+
+            this.updateEntries();
         } else {
             this.trashVigUnit();
         }
     }
 
     public void trashVigUnit() {
-        this.shopIndex++;
-        this.updateEntries(this.shopEntries[shopIndex]);
+        this.updateEntries();
     }
 
     public void tutorialLock(bool lockOn) {
@@ -115,7 +102,8 @@ public class Shop : MonoBehaviour
 
     public void tutorialStarted(bool started) {
         this.tutorialActive = started;
-        this.updateEntries(this.tutorialShop);
+        if(started) 
+            this.updateEntries(this.tutorialShop);
     }
 
     public void revealHero() {

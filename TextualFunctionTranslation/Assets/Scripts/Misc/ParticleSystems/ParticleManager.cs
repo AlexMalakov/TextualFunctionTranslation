@@ -2,74 +2,228 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum ParticleType {
+    Boom, Fart, Star, Heal, Damage, Health, Speed
+}
+
+[System.Serializable]
+public struct ParticlePool
+{
+    public GameObject p;
+    public List<GameObject> l;
+    public int c;
+
+    public void init() {
+        for(int i = 0; i < c; i++) {
+            l.Add(ParticleManager.Larper.FakeInstantiate(p));
+            l[l.Count - 1].SetActive(false);
+        }
+    }
+
+    public GameObject next() {
+        for(int i = 0; i < l.Count; i++) {
+            if(!l[i].activeInHierarchy) {
+                l[i].SetActive(true);
+                return l[i];
+            }
+
+        }
+        l.Add(ParticleManager.Larper.FakeInstantiate(p));
+        return l[l.Count - 1];
+    }
+}
+
+struct UnitParticle {
+    public GameObject p;
+    public ParticleType pt;
+    public float e;
+
+    public UnitParticle(GameObject pp, ParticleType ppt, float exp) {
+        p = pp; pt = ppt; e = exp;
+    }
+}
+
 public class ParticleManager : MonoBehaviour
 {
+    
+    //this should all be in custom serialized structs but htis shit needs to be done in less than 9 days so womp womp to good design
     [SerializeField] private GameObject cam;
+    [SerializeField] private MonoLarper serLarper;
+    public static MonoLarper Larper;
     [Header ("Leaves")]
     [SerializeField] private GameObject leafPrefab;
-    [SerializeField] private int leafCount = 12;
-    private List<GameObject> leafsPlayer = new List<GameObject>();
-    private List<GameObject> leafsEnemy = new List<GameObject>();
-
-    [Header ("Stars")]
-    [SerializeField] private GameObject starsPrefab;
-    [SerializeField] private int starCount = 10;
-    private List<GameObject> stars = new List<GameObject>();
-    private Dictionary<Unit, FakeStarParticle> unitToStar;
+    [SerializeField] private List<GameObject> playerLeaves;
+    [SerializeField] private List<GameObject> enemyLeaves;
 
     [Header ("Explosions")]
-    [SerializeField] private GameObject boomPrefab;
-    [SerializeField] private int boomCount = 20;
-    private List<GameObject> booms = new List<GameObject>();
+    [SerializeField] private ParticlePool booms;
 
     [Header ("Fart")]
-    [SerializeField] private GameObject fartPrefab;
-    [SerializeField] private int fartCount = 20;
-    private List<GameObject> farts = new List<GameObject>();
+    [SerializeField] private ParticlePool farts;
 
+    [Header ("Player status particles")]
+    [SerializeField] private ParticlePool stars;
+    [SerializeField] private ParticlePool healingPs;
+    [SerializeField] private ParticlePool damagePs;
+    [SerializeField] private ParticlePool healthPs;
+    [SerializeField] private ParticlePool speedPs;
+
+    private Dictionary<Unit, List<UnitParticle>> unitParts = new Dictionary<Unit, List<UnitParticle>>();
+
+    [Header ("Projectiles")]
+    [SerializeField] private ParticlePool arrows;
+    [SerializeField] private ParticlePool magics;
+    
 
 
     public void Awake() {
-        for(int i = 0; i < this.leafCount/2; i++) {
-            this.leafsPlayer.Add(Instantiate(this.leafPrefab));
-            this.leafsPlayer[this.leafsPlayer.Count - 1].SetActive(false);
+        Larper = serLarper;
+
+        for(int i = 0; i < 6; i++) {
+            GameObject l1 = Instantiate(this.leafPrefab);
+            GameObject l2 = Instantiate(this.leafPrefab);
+            l1.SetActive(false);
+            l2.SetActive(false);
+            this.playerLeaves.Add(l1);
+            this.enemyLeaves.Add(l2);
         }
 
-        for(int i = 0; i < this.leafCount/2; i++) {
-            this.leafsEnemy.Add(Instantiate(this.leafPrefab));
-            this.leafsEnemy[this.leafsEnemy.Count - 1].SetActive(false);
-        }
-
-        for(int i = 0; i < this.starCount; i++) {
-            this.stars.Add(Instantiate(this.starsPrefab));
-            this.stars[this.stars.Count - 1].SetActive(false);
-        }
-
-        this.unitToStar = new Dictionary<Unit, FakeStarParticle>();
-
-        for(int i = 0; i < this.boomCount; i++) {
-            this.booms.Add(Instantiate(this.boomPrefab));
-            this.booms[this.booms.Count - 1].SetActive(false);
-        }
-
-        for(int i = 0; i < this.fartCount; i++) {
-            this.farts.Add(Instantiate(this.fartPrefab));
-            this.farts[this.farts.Count - 1].SetActive(false);
-        }
-    }
-
-    private int nextInPool(List<GameObject> pool) {
-        for(int i = 0; i < pool.Count; i++) {
-            if(!pool[i].activeInHierarchy) {
-                return i;
-            }
-        }
-        return -1;
+        this.booms.init();
+        this.farts.init();
+        this.stars.init();
+        this.healingPs.init();
+        this.damagePs.init();
+        this.healthPs.init();
+        this.speedPs.init();
+        this.arrows.init();
+        this.magics.init();
     }
     
-    //y = 0
+
+
+    public void requestParticle(HexSquare s, ParticleType pt, float dur) {
+        GameObject part = pt == ParticleType.Boom ? this.booms.next() : this.farts.next();
+        part.transform.position = new Vector3(s.transform.position.x, part.transform.position.y, s.transform.position.z);
+        StartCoroutine(this.clean(part, dur));
+    }
+    
+
+    public void requestPlayerParticle(Unit u, ParticleType pt, float dur) {
+        if(this.unitParts.ContainsKey(u)) {
+            for(int i = 0; i < this.unitParts[u].Count; i++) {
+                UnitParticle up = this.unitParts[u][i];
+                if(up.pt == pt) {
+                    if(pt == ParticleType.Star) {
+                        up.p.GetComponent<FakeStarParticle>().increaseDurationTo(dur);
+                    }
+                    up.e = Time.time + dur;
+                    return;
+                }
+            }
+        } else {
+            this.unitParts.Add(u, new List<UnitParticle>());
+        }
+
+        GameObject newP;
+        switch(pt) {
+            case ParticleType.Star:
+                newP = this.stars.next();
+                newP.GetComponent<FakeStarParticle>().doOrbit(dur, cam, u);
+                break;
+            case ParticleType.Heal:
+                newP = this.healingPs.next();
+                break;
+            case ParticleType.Health:
+                newP = this.healthPs.next();
+                break;
+            case ParticleType.Damage:
+                newP = this.damagePs.next();
+                break;
+            case ParticleType.Speed:
+                newP = this.speedPs.next();
+                break;
+            default:
+                return;
+        }
+
+        UnitParticle upp = new UnitParticle(newP, pt, Time.time + dur);
+        this.unitParts[u].Add(upp);
+        newP.transform.position = u.transform.position;
+
+        if(pt != ParticleType.Star) {
+            StartCoroutine(this.cleanUpp(u, upp));
+        }
+    }
+
+    public void cancelUnitParticles(Unit u) {
+        if(!this.unitParts.ContainsKey(u))
+            return;
+
+        for(int i = 0; i < this.unitParts[u].Count; i++) {
+            UnitParticle up = this.unitParts[u][i];
+            up.e = 0f;
+            if(up.pt == ParticleType.Star) {
+                up.p.GetComponent<FakeStarParticle>().cancelAnim();
+            } else {
+                up.p.SetActive(false);
+            }
+        }
+
+        this.unitParts[u] = new List<UnitParticle>();
+    }
+
+    public void cancelUnitParticle(Unit u, ParticleType pt) {
+        if(!this.unitParts.ContainsKey(u))
+            return;
+
+        for(int i = 0; i < this.unitParts[u].Count; i++) {
+            UnitParticle up = this.unitParts[u][i];
+            if(up.pt == pt) {
+                up.e = 0f;
+                if(up.pt == ParticleType.Star) {
+                    up.p.GetComponent<FakeStarParticle>().cancelAnim();
+                } else {
+                    up.p.SetActive(false);
+                }
+
+                this.unitParts[u].Remove(up);
+                return;
+            }
+        }
+    }
+
+    public void requestProjectile(Unit attacker, Unit target, int attackType) {
+        if(attackType < 1 || attackType > 2) {
+            return;
+        }
+
+        GameObject projectile = attackType == 1 ? this.arrows.next() : this.magics.next();
+        StartCoroutine(projectile.GetComponent<Projectile>().launchProjectile(attacker, target));
+    }
+
+
+
+
+    private IEnumerator clean(GameObject launchMe, float duration) {
+        yield return new WaitForSeconds(duration);
+        launchMe.SetActive(false);
+    }
+
+    private IEnumerator cleanUpp(Unit u, UnitParticle launchMe) {
+        while(launchMe.e > Time.time) {
+            yield return null;
+        }
+
+        this.unitParts[u].Remove(launchMe);
+        launchMe.p.SetActive(false);
+    }
+
+
+
+
     public List<GameObject> requestLeaf(bool isPlayer) {
-        List<GameObject> leavesToUse = isPlayer ? this.leafsPlayer : this.leafsEnemy;
+        List<GameObject> leavesToUse = isPlayer ? this.playerLeaves : this.enemyLeaves;
         foreach(GameObject l in leavesToUse) {
             l.SetActive(true);
             l.GetComponent<LeafParticle>().setY(false);
@@ -79,62 +233,9 @@ public class ParticleManager : MonoBehaviour
     }
 
     public void hideLeaves(bool isPlayer) {
-        foreach(GameObject l in isPlayer ? this.leafsPlayer : this.leafsEnemy) {
+        foreach(GameObject l in isPlayer ? this.playerLeaves : this.enemyLeaves) {
             l.SetActive(false);
         }
     }
 
-    public void requestStar(Unit u, float stunDuration) {
-        if(this.unitToStar.ContainsKey(u)) {
-            this.unitToStar[u].increaseDurationTo(stunDuration);
-            return;
-        }
-
-        int index = this.nextInPool(this.stars);
-        GameObject nextStar;
-        if(index < 0) {
-            nextStar = Instantiate(this.starsPrefab);
-            this.stars.Add(nextStar); 
-        } else {
-            nextStar = this.stars[index];
-        }
-
-        nextStar.SetActive(true);
-        this.unitToStar.Add(u, nextStar.GetComponent<FakeStarParticle>());
-        nextStar.GetComponent<FakeStarParticle>().doOrbit(stunDuration, cam, u);
-        nextStar.transform.position = u.transform.position;
-    }
-
-    public void unassignStar(Unit u) {
-        if(this.unitToStar.ContainsKey(u)) {
-            this.unitToStar[u].cancelAnim();
-            this.unitToStar.Remove(u);
-        }
-    }
-
-    public void requestBoom(HexSquare s) {
-        int index = this.nextInPool(this.booms);
-        GameObject nextBoom;
-        if(index < 0) {
-            nextBoom = Instantiate(this.boomPrefab);
-            this.booms.Add(nextBoom); 
-        } else {
-            nextBoom = this.booms[index];
-        }
-        nextBoom.SetActive(true);
-        nextBoom.transform.position = s.transform.position;
-    }
-
-    public void requestFart(HexSquare s) {
-        int index = this.nextInPool(this.farts);
-        GameObject nextFart;
-        if(index < 0) {
-            nextFart = Instantiate(this.fartPrefab);
-            this.farts.Add(nextFart); 
-        } else {
-            nextFart = this.farts[index];
-        }
-        nextFart.SetActive(true);
-        nextFart.transform.position = s.transform.position;
-    }
 }

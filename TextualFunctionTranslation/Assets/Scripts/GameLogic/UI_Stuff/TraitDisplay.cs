@@ -11,20 +11,36 @@ public class TraitDisplay : MonoBehaviour
     [SerializeField] private Transform playerParent;
     [SerializeField] private Transform enemyParent;
 
-    [SerializeField] private float spacing = 60f;
-    [SerializeField] private float sectionSpacing = 30f;
+    [SerializeField] private DisplayButton displayButton;
 
-    private List<TraitWidget> playerWidgets = new List<TraitWidget>();
-    private List<TraitWidget> enemyWidgets = new List<TraitWidget>();
+    private bool showingCypher = true;
+
+    private List<TraitWidget> playerInfoWidgets = new List<TraitWidget>();
+    private List<TraitWidget> playerCypherWidgets = new List<TraitWidget>();
+    private List<TraitWidget> enemyInfoWidgets = new List<TraitWidget>();
+    private List<TraitWidget> enemyCypherWidgets = new List<TraitWidget>();
 
     private void clearFromBar() {
-        foreach(TraitWidget tw in this.playerWidgets) {
+        foreach(TraitWidget tw in this.playerInfoWidgets) {
             tw.makeActive(false, false);
         }
 
-        foreach(TraitWidget tw in this.enemyWidgets) {
+        foreach(TraitWidget tw in this.playerCypherWidgets) {
             tw.makeActive(false, false);
         }
+
+        foreach(TraitWidget tw in this.enemyInfoWidgets) {
+            tw.makeActive(false, false);
+        }
+
+        foreach(TraitWidget tw in this.enemyCypherWidgets) {
+            tw.makeActive(false, false);
+        }
+    }
+
+    public void toggleShowCypher() {
+        this.showingCypher = !this.showingCypher;
+        this.onUnitLayoutUpdate();
     }
 
     public void onUnitLayoutUpdate() {
@@ -33,8 +49,6 @@ public class TraitDisplay : MonoBehaviour
         List<Trait> playerInActiveTraits = new List<Trait>();
         List<Trait> playerActiveTraits = this.player.getUnitLayout().getActiveTraits();
         List<Trait> enemyActiveTraits = this.enemy.getUnitLayout().getActiveTraits();
-
-        float y = 0;
 
         foreach(Unit u in this.player.getActiveUnits()) {
             if(!playerActiveTraits.Contains(u.getRoleTrait()) && !playerInActiveTraits.Contains(u.getRoleTrait())) {
@@ -46,60 +60,57 @@ public class TraitDisplay : MonoBehaviour
             }
         }
 
-        foreach(Trait t in enemyActiveTraits.OrderByDescending(t => t.getTraitName())) {
-            this.setupWidget(t.getTraitWidget(), y, true);
-            y -= spacing;
-        }
-
-        foreach(Trait t in playerActiveTraits.OrderBy(t => t.getTraitName())) {
-            this.setupWidget(t.getTraitWidget(), y, true);
-            y -= spacing;
-        }
-
-        foreach(Trait t in playerInActiveTraits.OrderBy(t => t.getTraitName())) {
-            this.setupWidget(t.getTraitWidget(), y, false);
-            y -= spacing;
-        }
-
         int counter = 0;
         foreach(Trait t in playerActiveTraits.OrderBy(t => t.getTraitName())) {
-            t.getTraitWidget().transform.SetSiblingIndex(counter);
-            counter++;
+            if(this.showingCypher == (t is CypherTrait)) {
+                this.setupWidget(t.getTraitWidget(), true);
+                t.getTraitWidget().transform.SetSiblingIndex(counter);
+                counter++;
+            }
         }
 
         foreach(Trait t in playerInActiveTraits.OrderBy(t => t.getTraitName())) {
-            t.getTraitWidget().transform.SetSiblingIndex(counter);
-            counter++;
+            if(this.showingCypher == (t is CypherTrait)) {
+                this.setupWidget(t.getTraitWidget(), false);
+                t.getTraitWidget().transform.SetSiblingIndex(counter);
+                counter++;
+            }
         }
 
         counter = 0;
-        foreach(Trait t in playerInActiveTraits.OrderByDescending(t => t.getTraitName())) {
-            t.getTraitWidget().transform.SetSiblingIndex(counter);
-            counter++;
+        foreach(Trait t in enemyActiveTraits.OrderByDescending(t => t.getTraitName())) {
+            if(this.showingCypher == (t is CypherTrait)) {
+                this.setupWidget(t.getTraitWidget(), true);
+                t.getTraitWidget().transform.SetSiblingIndex(counter);
+                counter++;
+            }
         }
     }
 
 
-    public TraitWidget createWidget(bool playersTrait) {
+    public TraitWidget createWidget(bool playersTrait, bool isCypher) {
         if(playersTrait) {
             TraitWidget tw = Instantiate(twPrefab, this.playerParent).GetComponent<TraitWidget>();
-            this.playerWidgets.Add(tw);
+            (isCypher ? this.playerCypherWidgets : this.playerInfoWidgets).Add(tw);
             return tw;
         } else {
             TraitWidget tw = Instantiate(twPrefab, this.enemyParent).GetComponent<TraitWidget>();
-            this.enemyWidgets.Add(tw);
+            (isCypher ? this.enemyCypherWidgets : this.enemyInfoWidgets).Add(tw);
             return tw;
         }
     }
 
-    private void setupWidget(TraitWidget tw, float yOffset, bool isEnoughForActive) {
+    private void setupWidget(TraitWidget tw, bool isEnoughForActive) {
         tw.makeActive(true, isEnoughForActive);
-
-        RectTransform rect = tw.GetComponent<RectTransform>();
-        rect.anchoredPosition = new Vector2(0, yOffset);
     }
 
     public IEnumerator playCypherTraitAnim() {
+        this.displayButton.showButton(false);
+        if(!this.showingCypher) {
+            this.toggleShowCypher();
+            this.displayButton.toggleFromDisplay();
+        }
+
         List<Trait> playerActiveCypherTraits = this.player.getUnitLayout().getActiveTraits().Where(t => t is CypherTrait).ToList();
         List<Trait> enemyActiveCypherTraits = this.enemy.getUnitLayout().getActiveTraits().Where(t => t is CypherTrait).ToList();
 
@@ -108,7 +119,7 @@ public class TraitDisplay : MonoBehaviour
                 ((VegeneryTrait)t).buyTopUnit();
             }
             t.getTraitWidget().flashTrait();
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(GlobalData.CypherRevealDuration);
         }
 
         foreach(Trait t in enemyActiveCypherTraits.OrderBy(t => t.getTraitName())) {
@@ -116,11 +127,16 @@ public class TraitDisplay : MonoBehaviour
                 ((VegeneryTrait)t).trashTopUnit();
             }
             t.getTraitWidget().flashTrait();
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(GlobalData.CypherRevealDuration);
         }
     }
 
     public IEnumerator playTraitSquareReveal() {
+        if(this.showingCypher) {
+            this.toggleShowCypher();
+            this.displayButton.toggleFromDisplay();
+        }
+
         List<Trait> playerActiveInfoTraits = this.player.getUnitLayout().getActiveTraits().Where(t => t is InformationTrait).ToList();
         List<Trait> enemyActiveInfoTraits = this.enemy.getUnitLayout().getActiveTraits().Where(t => t is InformationTrait).ToList();
 
@@ -131,7 +147,7 @@ public class TraitDisplay : MonoBehaviour
 
             t.getTraitWidget().flashTrait();
             t.runSquareReveal();
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(GlobalData.SquareRevealDuration);
         }
 
         foreach(Trait t in enemyActiveInfoTraits.OrderBy(t => t.getTraitName())) {
@@ -141,7 +157,9 @@ public class TraitDisplay : MonoBehaviour
 
             t.getTraitWidget().flashTrait();
             t.runSquareReveal();
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(GlobalData.SquareRevealDuration);
         }
+        
+        this.displayButton.showButton(true);
     }
 }

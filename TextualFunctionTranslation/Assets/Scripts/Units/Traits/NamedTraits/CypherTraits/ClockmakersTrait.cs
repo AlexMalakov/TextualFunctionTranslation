@@ -6,19 +6,21 @@ public class ClockmakersTrait : CypherTrait
 {
     [SerializeField] private CombatManager cm;
     [SerializeField] private float healthBoostAmount;
+    [SerializeField] private Player traitPlayer; //continue where you left off this.combatManager.getBoard().getPlayerSquares()
     //this traits buffs stack :)
 
     public override void onCombatStart(Unit traitHaver){
+        this.log.logEvent(new CombatEvent(traitHaver, traitHaver, CombatEventType.Start));
         this.applyInRadius(traitHaver, 1);
-        if(this.getNumberActive() > 2) {
-            this.applyInRadius(traitHaver, 2);
-        }
+        // if(this.getNumberActive() > 2) {
+        //     this.applyInRadius(traitHaver, 2);
+        // }
     }
 
     private void applyInRadius(Unit traitHaver, int radius) {
         List<HexSquare> radCircle = this.getSquaresInRadius(traitHaver.getPosition(), radius, this.cm.getBoard());
         
-        Operation buff = new Operation(OperationType.PreAdd, this.healthBoostAmount, "clockmaker health " + traitHaver.getName());
+        Operation buff = new Operation(OperationType.PreAdd, this.healthBoostAmount, "clockmaker health " + traitHaver.getName(), false);
         foreach(HexSquare s in radCircle) {
             if(s.getUnit() != null && this.cm.sameOwner(s.getUnit(), traitHaver)) {
                 s.getUnit().buffStat(BuffableStats.Health, buff, traitHaver);
@@ -30,12 +32,12 @@ public class ClockmakersTrait : CypherTrait
         HexSquare prev = null;
         foreach(HexSquare s in radCircle) {
             if(prev != null) {
-                cypher.Add(new CharacterTransformation(s, prev));
+                cypher.Add(new CharacterTransformation(prev, s));
             }
 
             prev = s;
         }
-        cypher.Add(new CharacterTransformation(radCircle[0], prev));
+        cypher.Add(new CharacterTransformation(prev, radCircle[0]));
 
         this.addToCypher(cypher);
     }
@@ -43,13 +45,15 @@ public class ClockmakersTrait : CypherTrait
     public override string getTraitName() {
         return "clockmaker";
     }
-
-    public override string getTraitDescription() {
-        return ("Talented mechanics that imbue their creations with magic to never lose the current time. Grants " 
-            + healthBoostAmount + " health to surrounding units in a 1/2 radius. Stacks from seperate clockmakers.");
+    public override string getTraitNarrative() {
+        return "Armorers, toolsmiths, and craftsman recruited famed for their strength and attention to detail.";
     }
 
-    protected override int getMinimumForActive() {
+    public override string getTraitEffect() {
+        return ("Grants " + healthBoostAmount + "/TODO health and TODO/TODO attack speed to surrounding units.");
+    }
+
+    public override int getMinimumForActive() {
         return 2;
     }
 

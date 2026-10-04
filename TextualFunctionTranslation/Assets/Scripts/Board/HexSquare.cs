@@ -65,7 +65,6 @@ public class HexSquare : MonoBehaviour
 {
     [SerializeField] private TMP_Text text;
     [SerializeField] private GameObject flashMe;
-    [SerializeField] private ParticleManager particle;
     private AxialCoord axc;
     private Unit unit;
 
@@ -121,7 +120,7 @@ public class HexSquare : MonoBehaviour
         if(status) {
             Debug.Log("CLAIMING SQUARE " + this.toString());
             if(this.unit != null) {
-                throw new Exception("cannot claim an already claimed hex square! " + u.gameObject.name + " on square " + this.toString());
+                throw new Exception("cannot claim an already claimed hex square! " + u.gameObject.name + " on square " + this.toString() + " trying to take from " + this.unit.gameObject.name);
             } 
             this.unit = u;
         } else {

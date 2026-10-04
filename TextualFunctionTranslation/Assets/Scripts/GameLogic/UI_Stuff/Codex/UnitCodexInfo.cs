@@ -16,19 +16,19 @@ public class UnitCodexInfo : MonoBehaviour
 
     
     public void showUnit(UnitBlueprint ub) {
-        this.unitName.text = ub.unitName;
-        this.unitCost.text = ub.unitCost + "";
+        // this.unitName.text = ub.unitName;
+        // this.unitCost.text = ub.unitCost + "";
 
-        Unit actual = ub.unitPrefab.GetComponent<Unit>();
+        // Unit actual = ub.unitPrefab.GetComponent<Unit>();
 
-        this.unitStats.text = "Health: " + actual.getMaxHealth(1) + "/" + actual.getMaxHealth(2) + "/" + actual.getMaxHealth(3)
-                    + "\nDamage: " + actual.getDamage(1) + "/" + actual.getDamage(2) + "/" + actual.getDamage(3)
-                    + "\nAttack Speed: " + actual.getAttackSpeed()
-                    + "\nRange: " + actual.getRange()
-                    + "\nDecision Order: " + actual.getDecisionPriority()
-                    + "\nTaunt: " + actual.getTaunt();
-        roleTraitButton.init(actual.getRoleTrait()); //unlikely but possible danger
-        classTraitButton.init(actual.getClassTrait());
+        // this.unitStats.text = "Health: " + actual.getMaxHealth(1) + "/" + actual.getMaxHealth(2) + "/" + actual.getMaxHealth(3)
+        //             + "\nDamage: " + actual.getDamage(1) + "/" + actual.getDamage(2) + "/" + actual.getDamage(3)
+        //             + "\nAttack Speed: " + actual.getAttackSpeed()
+        //             + "\nRange: " + actual.getRange()
+        //             + "\nDecision Order: " + actual.getDecisionPriority()
+        //             + "\nTaunt: " + actual.getTaunt();
+        // roleTraitButton.init(actual.getRoleTrait()); //unlikely but possible danger
+        // classTraitButton.init(actual.getClassTrait());
 
     }
 }

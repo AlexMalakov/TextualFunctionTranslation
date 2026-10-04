@@ -11,6 +11,7 @@ public class CityWatchTrait : CypherTrait
 
     //TODO: should this trait's buffs stack
     public override void onCombatStart(Unit traitHaver){
+        this.log.logEvent(new CombatEvent(traitHaver, traitHaver, CombatEventType.Start));
         HexSquare start = traitHaver.getPosition();
         List<Unit> leftBuff = new List<Unit>();
         List<Unit> rightBuff = new List<Unit>();
@@ -35,6 +36,7 @@ public class CityWatchTrait : CypherTrait
             start = next;
         }
 
+        start = traitHaver.getPosition();
         HexSquare leftEdge;
         while(true) {
             AxialCoord sCords = start.getCoords();
@@ -54,19 +56,24 @@ public class CityWatchTrait : CypherTrait
         }
 
         float amt = this.getNumberActive() > 2 ? this.healthBuff * this.fullTraitMultiplier : this.healthBuff;
-        Operation buff = new Operation(OperationType.PreMultiply, amt, "city watch health buff");
+        Operation buff = new Operation(OperationType.PostMultiply, amt, "city watch health buff", false);
         foreach(Unit u in leftBuff) {
             u.buffStat(BuffableStats.Health, buff, traitHaver);
         }
 
         amt = this.getNumberActive() > 2 ? this.damageBuff * this.fullTraitMultiplier : this.damageBuff;
-        buff = new Operation(OperationType.PreMultiply, amt, "city watch damage buff");
+        buff = new Operation(OperationType.PostMultiply, amt, "city watch damage buff", false);
         foreach(Unit u in rightBuff) {
             u.buffStat(BuffableStats.Damage, buff, traitHaver);
         }
 
 
         loopdeloop.Add(new CharacterTransformation(leftEdge, rightEdge));
+
+        foreach(CharacterTransformation ct in loopdeloop) {
+            Debug.Log("CITY WATCH CHECK: from " + ct.to.getCharValue() + " to " + ct.from.getCharValue());
+        }
+        Debug.Log("CITY WATCH CHECK: done ");
         this.addToCypher(loopdeloop);
     }
 
@@ -89,15 +96,18 @@ public class CityWatchTrait : CypherTrait
         return "city watch";
     }
 
-    public override string getTraitDescription() {
-        return ("The reliable town guard that has been protecting the kingdom for hundreds of years. " 
-            + " Grants " + this.healthBuff + "/" + (this.healthBuff * this.fullTraitMultiplier)
-            + " health to the units in it's row on the left, and " 
-            + this.damageBuff +"/" + (this.damageBuff * this.fullTraitMultiplier) 
-            + " damage to the units on it's row on the right. The damage and health buffs are seperate but do not stack");
+    public override string getTraitNarrative() {
+        return "Volunteers and recruits gathered from local villages.";
     }
 
-    protected override int getMinimumForActive() {
+    public override string getTraitEffect() {
+        return ("Grants units in its row on the left " + this.healthBuff+"/"+(this.healthBuff * this.fullTraitMultiplier) 
+                    + " health, and units in its row to the right " +this.damageBuff+"/"+(this.damageBuff * this.fullTraitMultiplier) + " damage."
+                    + " The damage and health buffs are seperate, but do not stack.");
+    }
+
+
+    public override int getMinimumForActive() {
         return 2;
     }
 

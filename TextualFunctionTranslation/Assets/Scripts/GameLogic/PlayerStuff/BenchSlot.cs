@@ -9,6 +9,20 @@ public class BenchSlot : MonoBehaviour
     private int slotNum;
     private bool flashing;
 
+    private Unit unitBackup;
+
+    public void saveState() {
+        this.unitBackup = this.unit;
+    }
+
+    public void backupState() {
+        this.unit = this.unitBackup;
+        if(this.unit != null) {
+            this.unit.placeUnitOnBench();
+            this.unit.transform.position = this.transform.position;
+        }
+    }
+
     public void init(int slotNum) {
         this.slotNum = slotNum;
     }

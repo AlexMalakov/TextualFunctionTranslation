@@ -4,21 +4,18 @@ using UnityEngine;
 
 public class TraitVLayout : MonoBehaviour
 {
+    [SerializeField] private Player player;
+    [SerializeField] private TraitCodexInfo tci;
     [SerializeField] private GameObject traitPrefab;
-    [SerializeField] private List<Trait> roleTraits;
-    [SerializeField] private GameObject roleParent;
-    [SerializeField] private List<Trait> classTraits;
-    [SerializeField] private GameObject classParent;
+    [SerializeField] private GameObject traitParent;
+    [SerializeField] private GameObject traitCodex;
 
     public void Start() {
-        foreach(Trait t in this.roleTraits) {
-            GameObject nt = Instantiate(this.traitPrefab, this.roleParent.transform);
-            nt.GetComponent<TraitCodexButton>().init(t);
+        foreach(Trait t in this.player.getAllTraits()) {
+            GameObject nt = Instantiate(this.traitPrefab, this.traitParent.transform);
+            nt.GetComponent<TraitCodexButton>().init(t, tci, traitCodex);
         }
 
-        foreach(Trait t in this.classTraits) {
-            GameObject nt = Instantiate(this.traitPrefab, this.classParent.transform);
-            nt.GetComponent<TraitCodexButton>().init(t);
-        }
+        this.tci.showTrait(this.player.getAllTraits()[0]);
     }
 }

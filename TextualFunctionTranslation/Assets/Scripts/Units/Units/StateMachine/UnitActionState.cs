@@ -18,7 +18,14 @@ public abstract class UnitActionState
     public abstract void onStateExit();
 
     //Can't cancel a walk or stun, but can cancel an atatck
-    public virtual bool cancelAction() {return false;}
+    public virtual bool cancelAction() {
+        return false;
+    }
+
+    public virtual void forceEnd() {
+        this.frameLockout = 0;
+        this.cancelAction();
+    }
 
     protected abstract bool readyToSwap();
 

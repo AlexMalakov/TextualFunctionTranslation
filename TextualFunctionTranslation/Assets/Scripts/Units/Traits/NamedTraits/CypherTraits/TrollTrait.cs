@@ -5,9 +5,7 @@ using UnityEngine;
 public class TrollTrait : CypherTrait
 {
     [SerializeField] private CombatManager cm;
-    [SerializeField] private float debuffAmountSmall;
-    [SerializeField] private float debuffAmount;
-    [SerializeField] private float debuffAmountLarge;
+    [SerializeField] private ParticleManager pm;
 
     [SerializeField] private float damageAmountSmall;
     [SerializeField] private float damageAmount;
@@ -18,101 +16,68 @@ public class TrollTrait : CypherTrait
     [SerializeField] private float healPercentLarge;
     
     public override void onUnitDeath(Unit traitHaver, Unit killer) {
-        this.applyInDirection(traitHaver, 1, -1, 0);
-        this.applyInDirection(traitHaver, -1, 1, 0);
-        this.applyInDirection(traitHaver, 1, 0, -1);
-        this.applyInDirection(traitHaver, -1, 0, 1);
-        this.applyInDirection(traitHaver, 0, -1, 1);
-        this.applyInDirection(traitHaver, 0, 1, -1);
-    }
 
-    //TODO: some kind of visual element?
-    private void applyInDirection(Unit originUnit, int qOffset, int rOffset, int sOffset) {
-        List<HexSquare> squares = this.getSquaresInDirection(originUnit, qOffset, rOffset, sOffset);
+        this.log.logEvent(new CombatEvent(traitHaver, killer, CombatEventType.Death));
+        
+        List<HexSquare> radCircle = this.getSquaresInRadius(traitHaver.getPosition(), 1, this.cm.getBoard());
 
-        if(squares.Count == 0)
-            return;
+        foreach(HexSquare s in radCircle) {
+            this.pm.requestParticle(s, ParticleType.Boom, 1f);
+        }
 
-        float debuff = 1;
         float damage = 0;
         float heal = 0;
 
         if(this.getNumberActive() == 1) {
-            debuff = this.debuffAmountSmall;
             damage = this.damageAmountSmall;
             heal = this.healPercentSmall;
         } else if(this.getNumberActive() == 2) {
-            debuff = this.debuffAmount;
             damage = this.damageAmount;
             heal = this.healPercent;
         } else if(this.getNumberActive() == 3) {
-            debuff = this.debuffAmountLarge;
             damage = this.damageAmountLarge;
             heal = this.healPercentLarge;
         }
 
-        Operation buff = new Operation(OperationType.PostMultiply, debuff, "Troll Debuff");
-
-        if(squares.Count == 1) {
-            Unit u = squares[0].getUnit();
-            if(u != null && this.cm.sameOwner(originUnit, u)) {
-                u.heal(heal);
-            } else if(u != null) {
-                u.buffStat(BuffableStats.Damage, buff, originUnit);
-                u.takeDamage(damage, originUnit);
+        foreach(HexSquare s in radCircle) {
+            if(s.getUnit() != null && this.cm.sameOwner(s.getUnit(), traitHaver)) {
+                s.getUnit().heal(heal);
+            } else if(s.getUnit() != null) {
+                s.getUnit().takeDamage(damage, traitHaver);
             }
-            return;
-        } 
+        }
 
         List<CharacterTransformation> cypher = new List<CharacterTransformation>();
-        for(int i = 1; i < squares.Count; i++) {
-            Unit u = squares[0].getUnit();
-            if(u != null && this.cm.sameOwner(originUnit, u)) {
-                u.heal(heal);
-            } else if(u != null) {
-                u.buffStat(BuffableStats.Damage, buff, originUnit);
-                u.takeDamage(damage, originUnit);
+
+        HexSquare prev = null;
+        foreach(HexSquare s in radCircle) {
+            if(prev != null) {
+                cypher.Add(new CharacterTransformation(s, prev));
             }
 
-            cypher.Add(new CharacterTransformation(squares[i], squares[i-1]));
+            prev = s;
         }
-        
-        cypher.Add(new CharacterTransformation(squares[0], squares[squares.Count-1]));
+        cypher.Add(new CharacterTransformation(radCircle[0], prev));
+
         this.addToCypher(cypher);
-    }
-
-    private List<HexSquare> getSquaresInDirection(Unit originUnit, int qOffset, int rOffset, int sOffset) {
-        List<HexSquare> squares = new List<HexSquare>();
-        HexSquare iter = originUnit.getPosition();
-        int distance = getNumberActive() + 1;
-
-        for(int i = 1; i < distance; i++) {
-            AxialCoord iterC = iter.getCoords();
-            HexSquare check = this.cm.getBoard().getHexAt(new AxialCoord(iterC.q + qOffset, iterC.r + rOffset, iterC.s + sOffset));
-            if(!check.isSquare()) {
-                break;
-            }
-
-            iter = check;
-            squares.Add(iter);
-        }
-
-        return squares;
     }
 
     public override string getTraitName() {
         return "troll";
     }
 
-    public override string getTraitDescription() {
-        return ("A band of local trolls who recently discovered explosives. On death sends 6 projectile in each direction, traveling 2/3/4 hexes."
-                + " Allies hit by these projectiles heal for " + this.healPercentSmall + "/" + this.healPercent + "/" + this.healPercentLarge 
-                + " %health. Enemies hit by these projectiles take " + this.damageAmountSmall + "/" + this.damageAmount + "/" + damageAmountLarge
-                +" damage and debuffs damage by a multiplier of " + this.debuffAmountSmall + "/" + this.debuffAmount + "/" + this.debuffAmountLarge
-                + ". This debuff doesn't stack.");
+    public override string getTraitNarrative() {
+        return "A local band of trolls gifted with club and proficient with explosives.";
     }
 
-    protected override int getMinimumForActive() {
+    public override string getTraitEffect() {
+        return (
+            "On death, explodes. Explosion targets surrounding squares, dealing " + this.damageAmountSmall+"/"+this.damageAmount+"/"+damageAmountLarge
+            + " damage to enemies, and healing allies for "+ this.healPercentSmall+"/"+this.healPercent+"/"+this.healPercentLarge + " percent of max hp."
+        );
+    }
+
+    public override int getMinimumForActive() {
         return 1;
     }
 

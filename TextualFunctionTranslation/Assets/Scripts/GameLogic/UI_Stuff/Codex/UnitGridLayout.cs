@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class UnitGridLayout : MonoBehaviour
 {
-
     [SerializeField] private GameObject unitHolder;
 
-    public void Start()
-    {
+    public void Start() {
         foreach(UnitBlueprint bp in UnitFactory.getAllBlueprints()) {
             GameObject newUnit = Instantiate(unitHolder, this.transform);
             newUnit.GetComponent<UnitCodexButton>().init(bp);

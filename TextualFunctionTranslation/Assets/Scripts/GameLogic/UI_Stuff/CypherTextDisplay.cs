@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class CypherTextDisplay : MonoBehaviour
 {
-    [SerializeField] private TMP_Text cyphertext;
+    [SerializeField] private RandTMP cyphertext;
 
 
     public void setCypherText(string msg) {
-        this.cyphertext.text = msg;
+        this.cyphertext.setText(msg);
     }
 
     public bool toggleDisplay() {

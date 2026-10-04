@@ -10,6 +10,9 @@ public class DemonKing : Unit
     private bool isWaking = false;
 
     public override void triggerUpdate(CombatManager manager) {
+        if(this.currentState == null) {
+            this.currentState = this.Idle;
+        }
         if(this.isAsleep) {
             return;
         }
@@ -17,12 +20,11 @@ public class DemonKing : Unit
         base.triggerUpdate(manager);
     }
 
-    public override void initUnit(HexSquare square, HealthBarManager hpBar, Transform hpCanvas) {
+    public override void initUnit(HexSquare square) {
         this.isAsleep = true;
         this.isWaking = false;
 
-        base.initUnit(square, hpBar, hpCanvas);
-        //TODO: trigger zzz anim
+        base.initUnit(square);
     }
 
 
@@ -30,7 +32,7 @@ public class DemonKing : Unit
         if(this.isAsleep && !this.isWaking) {
             this.isWaking = true;
             Invoke(nameof(wakeUp), this.wakeTimer);
-            //TODO: trigger waking anim
+            this.triggerAnimation("king_rise");
         }
 
         base.takeDamage(damage, from);

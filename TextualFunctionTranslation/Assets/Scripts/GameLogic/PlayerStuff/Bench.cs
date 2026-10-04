@@ -7,10 +7,23 @@ public class Bench : MonoBehaviour
 {
     [SerializeField] private List<BenchSlot> benchSlotPositions;
     [SerializeField] private HumanPlayer player;
+    [SerializeField] private TraitDisplay traitDisplay;
 
     void Awake() { //Awake because this doesn't affect other systems
         for(int i = 0; i < this.benchSlotPositions.Count; i++) {
             this.benchSlotPositions[i].init(i);
+        }
+    }
+
+    public void saveBenchState() {
+        foreach(BenchSlot b in this.benchSlotPositions) {
+            b.saveState();
+        }
+    }
+
+    public void resetBenchState() {
+        foreach(BenchSlot b in this.benchSlotPositions) {
+            b.backupState();
         }
     }
 
@@ -91,6 +104,7 @@ public class Bench : MonoBehaviour
         }
         this.benchSlotPositions[slotNum].insertUnit(u);
         StartCoroutine(this.player.getUnitMoveManager().dragUnitTo(u, this.benchSlotPositions[slotNum].transform, true));
+        this.traitDisplay.onUnitLayoutUpdate();
         return true;
     }
 

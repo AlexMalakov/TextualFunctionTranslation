@@ -16,30 +16,35 @@ public class MarksmanTrait : InformationTrait
         this.unitCounters.Add(traitHaver, 0);
     }
 
-    public override void onUnitAttack(Unit traitHaver, Unit target) {
+    public override void onUnitAttack(Unit traitHaver, Unit target) { //TODO: review that the buff actually applied
         if(this.unitCounters[traitHaver] < 15) {
             float attackGain = this.getNumberActive() > 2 ? this.largeAttackGain : this.smallAttackGain;
-            Operation buffOpp = new Operation(OperationType.Add, attackGain, "Marksman Shot Buff " + this.unitCounters[traitHaver]);
+            Operation buffOpp = new Operation(OperationType.PostAdd, attackGain, "Marksman Shot Buff " + this.unitCounters[traitHaver], true);
+            this.log.logEvent(new CombatEvent(traitHaver, target, CombatEventType.Attack));
             traitHaver.buffStat(BuffableStats.AttackSpeed, buffOpp, traitHaver);
         } 
 
         this.unitCounters[traitHaver] = this.unitCounters[traitHaver] + 1;
 
-        if(this.unitCounters[traitHaver] % 15 == 0) {
-            this.logSquare(target.getPosition());
-        }
+        this.logSquare(target.getPosition());
+        this.logSquare(traitHaver.getPosition());
     }
 
     public override string getTraitName() {
         return "marksman";
     }
 
-    public override string getTraitDescription() {
-        return ("The sharpest of shooters across the kingdom. Each marksman gains " + this.smallAttackGain + "/" + this.largeAttackGain
-        + " bonus attack speed after attacking 15 times, stacking infinitely.");
+    public override string getTraitNarrative() {
+        return "The sharpest of shooters from across the kingdom.";
     }
 
-    protected override int getMinimumForActive() {
+    public override string getTraitEffect() {
+        return (
+            "On every attack, gains" + this.smallAttackGain+"/"+this.largeAttackGain + " attackspeed, up to 15 times."
+        );
+    }
+
+    public override int getMinimumForActive() {
         return 2;
     }
 

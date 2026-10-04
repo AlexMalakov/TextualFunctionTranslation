@@ -13,21 +13,30 @@ public class HumanPlayer : Player //player but has money and shit
     [SerializeField] private int money = 0;
     [SerializeField] private PlayerInfo pi;
     [SerializeField] private int lenseCount;
+    [SerializeField] private ShopPool pool;
 
-    [SerializeField] private Shop shop;
-
-    private List<Unit> unitsCopy;
+    private Dictionary<Unit, int> unitsCopy;
+    private List<Unit> destroyBackup = new List<Unit>();
 
     private int prevMoney = 0;
-    private int prevShopIndex = 0;
 
 
     public override void init() {
         base.init();
-        this.unitsCopy = new List<Unit>(this.playersUnits);
+        this.unitsCopy = new Dictionary<Unit, int>();
+        foreach(Unit u in this.playersUnits) {
+            this.unitsCopy.Add(u, u.getMergeLevel());
+        }
+
+        foreach(Unit u in this.destroyBackup) {
+            u.destroyObject();
+        }
+        this.destroyBackup = new List<Unit>();
+
+        this.bench.saveBenchState();
+        this.pool.backupThePool();
         this.pi.setDollars(this.money);
         this.prevMoney = this.money;
-        this.prevShopIndex = this.shop.getShopIndex();
         this.lenseCount = 0;
     }
 
@@ -117,7 +126,11 @@ public class HumanPlayer : Player //player but has money and shit
 
     private IEnumerator killUnitInMerge(Unit preMerge, Unit postMerge) {
         yield return this.umm.dragUnitTo(preMerge, postMerge.transform.position, false);
-        preMerge.destroyObject();
+        this.bench.removeUnitFromBench(preMerge);
+        this.unitLayout.removeUnitFromLayout(preMerge);
+        this.playersUnits.Remove(preMerge);
+        preMerge.fakeDestroyObject();
+        this.destroyBackup.Add(preMerge);
     }
 
     public void sellUnit(Unit u) {
@@ -126,11 +139,15 @@ public class HumanPlayer : Player //player but has money and shit
         }
 
         this.money += u.getCost() - 1;
+        this.pool.returnToPool(u);
         this.playersUnits.Remove(u);
         this.bench.removeUnitFromBench(u);
         this.unitLayout.removeUnitFromLayout(u);
         this.pi.setDollars(this.money);
-        u.destroyObject();
+
+        u.fakeDestroyObject();
+        this.destroyBackup.Add(u);
+        // u.destroyObject();
     }
 
     public Bench getBench() {
@@ -146,26 +163,39 @@ public class HumanPlayer : Player //player but has money and shit
     }
 
     public void loseCombat() {
-        for(int i = this.playersUnits.Count - 1; i >= 0; i--) {
-            if(!this.unitsCopy.Contains(this.playersUnits[i])) {
+        for(int i = this.playersUnits.Count - 1; i >= 0; i--) { //remove any units that we say we have but we wouldn't from the restart
+            if(!this.unitsCopy.ContainsKey(this.playersUnits[i])) {
                 Unit pointer = this.playersUnits[i];
                 this.playersUnits.Remove(pointer);
                 pointer.destroyObject();
             }
         }
+
+        foreach(Unit u in this.unitsCopy.Keys) { //return any units we should have but got rid of (be careful of merge)
+            if(this.destroyBackup.Contains(u)) {
+                this.destroyBackup.Remove(u);
+                u.gameObject.SetActive(true);
+                this.playersUnits.Add(u);
+            }
+            u.setMergeLevel(this.unitsCopy[u]);
+        }
+
+        this.bench.resetBenchState();
+        this.pool.rewindPool();
+        this.unitLayout.resetToCombatStart();
         this.money = this.prevMoney;
         this.pi.setDollars(this.money);
-        this.shop.setShopIndex(this.prevShopIndex);
     }
 
     public void gainLenses(int deltaL) {
         if(deltaL > 0) {
-            //Little particle to show it went up
+            //TODO: Little particle to show it went up
         } else if(deltaL < 0) {
             //Little particle to show it went down
         }
 
         this.lenseCount += deltaL;
+        this.lenseCount = Mathf.Max(0, this.lenseCount);
         this.pi.setLenseCount(this.lenseCount);
     }
 

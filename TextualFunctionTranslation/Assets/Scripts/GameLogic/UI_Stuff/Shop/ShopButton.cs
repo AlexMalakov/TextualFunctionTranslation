@@ -12,9 +12,12 @@ public class ShopButton : MonoBehaviour
 
     [SerializeField] private UnitBlueprint unitBeingSold;
 
-    [SerializeField] private TMP_Text unitName;
+    [SerializeField] private RandTMP unitName;
     [SerializeField] private TMP_Text unitCost;
     [SerializeField] private Image unitSprite;
+
+    [SerializeField] private Image traitCypherSprite;
+    [SerializeField] private Image traitInfoSprite;
 
     [SerializeField] private ButtonCover cover;
 
@@ -29,8 +32,11 @@ public class ShopButton : MonoBehaviour
     public void setOffering(UnitBlueprint unitBeingSold) {
         this.unitBeingSold = unitBeingSold;
         unitCost.text = "" + unitBeingSold.unitCost;
-        unitName.text = unitBeingSold.unitName;
+        unitName.setText(unitBeingSold.unitName);
         this.unitSprite.sprite = unitBeingSold.unitIcon;
+
+        this.traitCypherSprite.sprite = TraitFactory.getTraitForVis(unitBeingSold.unitPrefab.GetComponent<Unit>().getRoleTraitName()).getTraitIcon();
+        this.traitInfoSprite.sprite = TraitFactory.getTraitForVis(unitBeingSold.unitPrefab.GetComponent<Unit>().getClassTraitName()).getTraitIcon();
     }
 
     public void onButtonClick() {

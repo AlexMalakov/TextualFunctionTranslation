@@ -19,10 +19,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private StatusMessage statusMessage;
 
     [SerializeField] private HumanPlayer player;
+    [SerializeField] private Player enemy;
     [SerializeField] private TextAsset dialogueJson;
     [SerializeField] private LevelViewer levelView;
+    [SerializeField] private Shop shop;
 
     [SerializeField] private RoyalGuardsTrait enemyRG;
+
+    [SerializeField] private List<RandTMP> scramblableItems;
+    private int livingRandomizers = 0;
+    private int randomizerFrameCount = 0;
+    private int FRAMES_TILL_RAND = 15;
 
     private int currentStage = 0;
     private bool tutorialActive = true;
@@ -31,6 +38,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PrecombatManager pcm;
     [SerializeField] private ReviewManager rvm;
     [SerializeField] private SavedGameData data;
+
+    [Header ("testing")]
+    [SerializeField] private DroolingPlayer drooler; 
+    [SerializeField] private bool runningTest;
 
     private bool boardLocked = true;
 
@@ -79,6 +90,16 @@ public class GameManager : MonoBehaviour
         } else {
             this.handleResults();
         }
+
+        if(this.livingRandomizers > 0) {
+            if(this.randomizerFrameCount % this.FRAMES_TILL_RAND == 0) {
+                this.scrambleAllTMP();
+            }
+
+            this.randomizerFrameCount = (this.randomizerFrameCount + 1) % this.FRAMES_TILL_RAND;
+        } else {
+            this.resetAllTMP();
+        }
     }
 
     public bool canModifyBoard() {
@@ -103,7 +124,23 @@ public class GameManager : MonoBehaviour
             this.postPrepDialogue();
         }
 
-        this.levelView.onLevelStart(this.getCurrentLevel().getRewardMoney(), this.player.getActiveUnits().Count, this.getCurrentLevel().getMaxUnits());
+        ShopRarity curOdds = this.getCurrentLevel().setShopOdds();
+        if(!this.tutorialActive) {
+            this.shop.updateEntries();
+        }
+        this.levelView.onLevelStart(this.getCurrentLevel().getRewardMoney(), this.player.getActiveUnits().Count, this.getCurrentLevel().getMaxUnits(), curOdds);
+
+        
+        this.livingRandomizers = this.enemy.countRandomizers();
+        Debug.Log("RAND COUNT: " + livingRandomizers);
+        if(this.livingRandomizers > 0) {
+            this.randomizerFrameCount = 0;
+            this.scrambleAllTMP();
+        }
+
+        if(runningTest) {
+            this.drooler.prepStart();
+        }
     }
 
     private void postPrepDialogue() {
@@ -112,6 +149,10 @@ public class GameManager : MonoBehaviour
 
     public void handlePreperation() {
         this.pcm.handlePrep();
+
+        if(runningTest) {
+            this.drooler.prepHappening();
+        }
     }
 
     public void onPreperationEnd() {
@@ -127,6 +168,9 @@ public class GameManager : MonoBehaviour
             this.tut.onTutorialCombatStart();
         }
         this.combatManager.initializeCombat();
+        if(runningTest) {
+            this.drooler.combatStart();
+        }
         yield return this.combatManager.precombatAnims();
         this.combatSched.onCombatStart();
     }
@@ -135,21 +179,21 @@ public class GameManager : MonoBehaviour
         this.combatSched.runNUpdates();
     }
 
-    public void restartLevel(bool randomizerSurvived) {
+    public void restartLevel() {
         this.statusMessage.displayMessage("YOU LOSE");
         this.gameState = GameStage.result_loss;
-        this.onCombatEnd(false, randomizerSurvived);
+        this.onCombatEnd(false);
     }
 
-    public void continueToNextLevel(bool randomizerSurvived) {
+    public void continueToNextLevel() {
         this.gameState = GameStage.result_win;
-        this.onCombatEnd(true, randomizerSurvived);
+        this.onCombatEnd(true);
     }
 
 
-    public void onCombatEnd(bool wonCombat, bool randomizerSuvived) {
+    public void onCombatEnd(bool wonCombat) {
         this.combatSched.combatOver();
-        ReviewData rd = new ReviewData(wonCombat, randomizerSuvived);
+        ReviewData rd = new ReviewData(wonCombat);
         this.onResultsStart(wonCombat, rd);
     }
 
@@ -161,11 +205,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+
     private IEnumerator postResultsDialogue(ReviewData rd) {
+        yield return new WaitForSeconds(5f); //break before the cyphers start
         yield return StartCoroutine(this.runAnimationsAndSwap());
 
         string ciphertext = this.combatManager.encrypt(this.getCurrentLevel().getLevelCipher());
         this.rvm.onResultsStart(ciphertext, rd);
+
+        if(runningTest) {
+            this.drooler.resultsStart();
+        }
     }
 
     private IEnumerator runAnimationsAndSwap() {
@@ -197,6 +248,10 @@ public class GameManager : MonoBehaviour
         } else {
             this.player.loseCombat();
             this.gameState = GameStage.preperation;
+
+            if(runningTest) {
+                this.drooler.resultsEnd();
+            }
         }
         this.board.hideAllSquares();
         this.onPreperationStart();
@@ -207,6 +262,40 @@ public class GameManager : MonoBehaviour
             this.postPrepDialogue();
         } else {
             StartCoroutine(this.postResultsDialogue(rd.Value));
+        }
+    }
+    
+
+    private void scrambleAllTMP() {
+        foreach(RandTMP t in this.scramblableItems) {
+            t.scramble();
+        }
+    }
+
+    private void resetAllTMP() {
+        foreach(RandTMP t in this.scramblableItems) {
+            t.reset();
+        }
+    }
+
+    public static string scrambleString(string input) {
+        char[] chars = input.ToCharArray();
+
+        for (int i = 0; i < chars.Length; i++) {
+            if (chars[i] >= 'a' && chars[i] <= 'z') {
+                chars[i] = (char)Random.Range('a', 'z' + 1);
+            } else if (chars[i] >= 'A' && chars[i] <= 'Z') {
+                chars[i] = (char)Random.Range('A', 'Z' + 1);
+            }
+        }
+
+        return new string(chars);
+    }
+
+    public void onRandomizerDeath() {
+        this.livingRandomizers--;
+        if(this.livingRandomizers <= 0) {
+            this.resetAllTMP();
         }
     }
 }

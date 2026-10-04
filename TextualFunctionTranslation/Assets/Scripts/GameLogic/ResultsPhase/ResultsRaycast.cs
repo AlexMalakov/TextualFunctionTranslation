@@ -9,6 +9,7 @@ public class ResultsRaycast : MonoBehaviour
     [SerializeField] private CombatManager cm;
     [SerializeField] private Player player;
     [SerializeField] private Player enemy;
+    [SerializeField] private ParticleManager pm;
 
     [SerializeField] private TutorialStage tut;
 
@@ -43,7 +44,7 @@ public class ResultsRaycast : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit)) {
                 if (hit.collider.gameObject.GetComponentInParent<Unit>() != null) {
-
+                    this.endMovie();
                     this.onUnitPressed(hit.collider.gameObject.GetComponentInParent<Unit>());
                     return;
                 }
@@ -54,7 +55,7 @@ public class ResultsRaycast : MonoBehaviour
         }
     }
 
-    private void endMovie() {
+    public void endMovie() {
         if(this.unitMovie != null) {
             hideEvent(this.curFrame);
             this.tut.onMovieEnded();
@@ -64,11 +65,15 @@ public class ResultsRaycast : MonoBehaviour
         }
     }
 
-    private void onUnitPressed(Unit u) {
+    public void onUnitPressed(Unit u) {
         if(this.tutorialActive && !this.tut.isMovieUnit(u)) {
             return;
         }
         List<CombatEvent> uEvents = this.log.getUnitsEvents(u);
+        if(uEvents.Count == 0) {
+            return;
+        }
+
         this.cm.hideAllUnits();
         this.unitMovie = StartCoroutine(this.playUnitMovie(u, uEvents));
     }
@@ -86,14 +91,23 @@ public class ResultsRaycast : MonoBehaviour
 
     private void showEvent(CombatEvent ev) {
         switch(ev.eventType) {
+            case CombatEventType.Start:
+                ev.source.gameObject.SetActive(true);
+                ev.source.fakePlaceOnSquare(ev.sourcePos);
+                ev.source.triggerAnimation("precombat");
+                ev.source.rotateTo((this.cm.isPlayerUnit(ev.source) ? this.player : this.enemy).getUnitRotation(false));
+                break;
             case CombatEventType.Kill:
                 this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "movie_attack", "death");
+                this.pm.requestProjectile(ev.source, ev.colat, ev.source.getAttackType());
                 break;
             case CombatEventType.Attack:
                 this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "movie_attack", "idle_combat");
+                this.pm.requestProjectile(ev.source, ev.colat, ev.source.getAttackType());
                 break;
             case CombatEventType.Death:
                 this.showFight(ev.source, ev.colat, ev.sourcePos, ev.colatPos, "death", "movie_attack");
+                this.pm.requestProjectile(ev.colat, ev.source, ev.colat.getAttackType());
                 break;
             case CombatEventType.Survival:
                 ev.source.gameObject.SetActive(true);
@@ -119,6 +133,12 @@ public class ResultsRaycast : MonoBehaviour
 
     private void hideEvent(CombatEvent ev) {
         switch(ev.eventType) {
+            case CombatEventType.Start:
+                ev.source.gameObject.SetActive(false);
+                ev.source.fakePlaceOnSquare(ev.source.getPosition());
+                ev.source.triggerAnimation("idle");
+                ev.source.rotateTo((this.cm.isPlayerUnit(ev.source) ? this.player : this.enemy).getUnitRotation(false));
+                break;
             case CombatEventType.Kill:
                 this.hideFight(ev.source, ev.colat);
                 break;

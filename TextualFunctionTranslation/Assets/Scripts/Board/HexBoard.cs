@@ -17,6 +17,9 @@ public class HexBoard : MonoBehaviour
 
     //create a hex board that will be used
     public void initBoard() {
+        if(this.squares.Count > 0) {
+            return;
+        }
         for(int y = 0; y < 8; y++) {
             List<HexSquare> lis = new List<HexSquare>();
             for(int x = 0; x < ((y % 2 == 0) ? 6 : 7); x++) {

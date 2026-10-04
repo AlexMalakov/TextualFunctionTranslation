@@ -16,6 +16,10 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private CombatLog combatLog;
     [SerializeField] private TraitDisplay traitDisplay;
     [SerializeField] private float precombatAnimTime = 2f;
+    [SerializeField] private HeroCheck heroCheck;
+
+    [SerializeField] private AssasinsGuildTrait playerAss;
+    [SerializeField] private AssasinsGuildTrait enemyAss;
 
     private List<Unit> units;
 
@@ -32,9 +36,12 @@ public class CombatManager : MonoBehaviour
         this.enemy.init();
         this.enemy.claimUnitsFromLayout();
         
-        bool mimicPresent = false;
+        Unit mimicPresent = null;
         foreach(Unit u in this.enemy.getActiveUnits()) {
-            mimicPresent = mimicPresent || (u is Mimic);
+            if(u is Mimic) {
+                mimicPresent = u;
+                break;
+            }
         }
 
         foreach(Trait t in this.player.getAllTraits()) {
@@ -43,42 +50,44 @@ public class CombatManager : MonoBehaviour
 
         foreach(Trait t in this.enemy.getAllTraits()) {
             t.wipeCount();
-            if(mimicPresent) {
-                t.registerUnit(true);
+            if(mimicPresent != null) {
+                t.registerUnit(true, mimicPresent);
             }
         }
 
         foreach(Unit u in this.player.getActiveUnits()) {
-            u.getRoleTrait().registerUnit(true);
-            u.getClassTrait().registerUnit(true);
+            u.getRoleTrait().registerUnit(true, u);
+            u.getClassTrait().registerUnit(true, u);
         }
 
         foreach(Unit u in this.enemy.getActiveUnits()) {
-            u.getRoleTrait().registerUnit(true);
-            u.getClassTrait().registerUnit(true);
+            u.getRoleTrait().registerUnit(true, u);
+            u.getClassTrait().registerUnit(true, u);
         }
 
         this.traitDisplay.onUnitLayoutUpdate();
     }
 
     public void placeUnitsFromLayouts() {
-        this.player.getUnitLayout().placeUnits(this.healthbarPrefab, this.hpCanvas);
-        this.enemy.getUnitLayout().placeUnits(this.healthbarPrefab, this.hpCanvas);
+        this.player.getUnitLayout().placeUnits();
+        this.enemy.getUnitLayout().placeUnits();
     }
 
     public void initializeCombat() {
         this.units = new List<Unit>();
         this.units.AddRange(this.player.getActiveUnits());
         this.units.AddRange(this.enemy.getActiveUnits());
-        livingPlayerUnits = this.player.getActiveUnits().Count;
-        livingEnemyUnits = this.enemy.getActiveUnits().Count;
-        this.units.OrderBy(u => u.getDecisionPriority());//TODO CHECK: is this deterministic?
+        this.livingPlayerUnits = this.player.getActiveUnits().Count;
+        this.livingEnemyUnits = this.enemy.getActiveUnits().Count;
+        this.units = this.units.OrderBy(u => u.getDecisionPriority()).ThenByDescending(u => u.getMergeLevel()).ToList();//TODO CHECK: is this deterministic?
 
         this.placeUnitsFromLayouts();
 
         this.combatLog.initLog(this.units);
 
         this.traitPreCombat();
+
+        this.heroCheck.precombatCheck();
     }
 
     public void requestHealthBar(Unit u) {
@@ -87,7 +96,12 @@ public class CombatManager : MonoBehaviour
 
     public IEnumerator precombatAnims() {
         foreach(Unit u in this.units) {
-            u.triggerAnimation("draw_weapon"); //TODO: only can transition from idle, not from assassin jump >:( 
+            if(u is DemonKing) {
+                u.triggerAnimation("king_precombat");
+            } else if(!((this.playerAss.attemptActivate(this.playerAss.getNumberActive()) && this.isPlayerUnit(u)) 
+                        || (this.enemyAss.attemptActivate(this.enemyAss.getNumberActive()) && !this.isPlayerUnit(u)))) {
+                u.triggerAnimation("precombat");
+            }
         }
 
         yield return new WaitForSeconds(precombatAnimTime);
@@ -95,9 +109,15 @@ public class CombatManager : MonoBehaviour
 
     //check each unit every frame
     public void runAttackFrame() {
+        if(this.livingPlayerUnits <= 0 || this.livingEnemyUnits <= 0) {
+            this.onCombatOver();
+            return;
+        }
+
         foreach(Unit u in this.units) {
-            if(!u.isDead())
+            if(!u.isDead()) {
                 u.triggerUpdate(this);
+            }
         }
     }
 
@@ -158,6 +178,12 @@ public class CombatManager : MonoBehaviour
     }
 
     public void onUnitDeath(Unit u) {
+        this.heroCheck.onDeathCheck(u);
+
+        if(u is Randomizer) {
+            this.gameManager.onRandomizerDeath();
+        }
+
         foreach(Trait t in this.player.getUnitLayout().getActiveTraits().OrderBy(t => t.getTraitName())) {
             callTraitMethod(t, t.informAllOffDeath, u);
         }
@@ -168,12 +194,12 @@ public class CombatManager : MonoBehaviour
 
         if(player.ownsUnit(u)) {
             this.livingPlayerUnits--;
-            if(livingPlayerUnits <= 0) {
+            if(this.livingPlayerUnits <= 0) {
                 this.onCombatOver();
             }
         } else if(enemy.ownsUnit(u)) {
             this.livingEnemyUnits--;
-            if(livingEnemyUnits <= 0) {
+            if(this.livingEnemyUnits <= 0) {
                 this.onCombatOver();
             }
         } else {
@@ -182,17 +208,10 @@ public class CombatManager : MonoBehaviour
     }
 
     public void onCombatOver() {
-        bool randomizerSurvived = false;
         foreach(Unit u in this.units) {
             if(!u.isDead()) {
                 callTraitMethod(u.getRoleTrait(), u.getRoleTrait().onCombatSurvival, u);
                 callTraitMethod(u.getClassTrait(), u.getClassTrait().onCombatSurvival, u);
-
-                this.combatLog.logEvent(new CombatEvent(u, u, CombatEventType.Survival));
-
-                if(u is Randomizer) {
-                    randomizerSurvived = true;
-                }
             }
         }
 
@@ -209,9 +228,9 @@ public class CombatManager : MonoBehaviour
         }
 
         if(this.livingPlayerUnits <= 0) {
-            this.gameManager.restartLevel(randomizerSurvived);
+            this.gameManager.restartLevel();
         } else {
-            this.gameManager.continueToNextLevel(randomizerSurvived);
+            this.gameManager.continueToNextLevel();
         }
     }
 
@@ -245,7 +264,7 @@ public class CombatManager : MonoBehaviour
         char[] cypherArray = plaintext.ToCharArray();
 
         //TO CHECK: make sure this is same order as animations are
-        foreach(Trait t in this.player.getUnitLayout().getActiveTraits().OrderBy(t => t.getTraitName())) {
+        foreach(Trait t in this.player.getUnitLayout().getActiveTraits().OrderByDescending(t => t.getTraitName())) {
             cypherArray = t.runCypher(cypherArray);
             if(t is CypherTrait) {
                 Debug.Log("encryption test: ENCRYPTED WITH TRAIT " + t.gameObject.name);
@@ -255,7 +274,7 @@ public class CombatManager : MonoBehaviour
             
         }
         
-        foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits().OrderByDescending(t => t.getTraitName())) {
+        foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits().OrderBy(t => t.getTraitName())) {
             cypherArray = t.runCypher(cypherArray);
             if(t is CypherTrait) {
                 Debug.Log("encryption test: ENCRYPTED WITH TRAIT " + t.gameObject.name);
@@ -269,6 +288,11 @@ public class CombatManager : MonoBehaviour
     
     public IEnumerator runCypherAnimation() {
         yield return this.traitDisplay.playCypherTraitAnim();
+        foreach(Unit u in this.units) {
+            if(u is DemonKing) {
+                yield return this.traitDisplay.playCypherTraitAnim();
+            }
+        }
     }
 
     private void traitPreCombat() {
@@ -302,6 +326,11 @@ public class CombatManager : MonoBehaviour
     public void resetToPostCombat() {
         Dictionary<Unit, HexSquare> startingPos = this.combatLog.getInitialPositions();
 
+        foreach(Unit u in this.units) {
+            u.unclaimSquare();
+            u.bringBackHPBar();
+        }
+
         foreach(Unit u in this.units) { //TODO: make sure no new units end up in combat somehow -- lock playerunit layout when not in prep phase i think
             if(startingPos.ContainsKey(u)) {
                 u.placeUnitOnSquare(startingPos[u], true);
@@ -317,6 +346,7 @@ public class CombatManager : MonoBehaviour
         Dictionary<Unit, HexSquare> startingPos = this.combatLog.getInitialPositions();
         foreach(Unit u in this.units) { //TODO: make sure no new units end up in combat somehow -- lock playerunit layout when not in prep phase i think
             if(startingPos.ContainsKey(u)) {
+                u.hideHPBar();
                 u.gameObject.SetActive(false);
             } else {
                 Debug.Log("UNKNOWN KEY FROM UNIT " + u.gameObject.name);

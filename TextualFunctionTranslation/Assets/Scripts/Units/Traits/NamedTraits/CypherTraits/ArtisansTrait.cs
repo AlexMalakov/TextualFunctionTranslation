@@ -11,9 +11,11 @@ public class ArtisansTrait : CypherTrait
 
     public override void onEnemyDefeat(Unit traitHaver, Unit target){
         float amt = this.getNumberActive() == 1 ? this.damageAmountSmall : (this.getNumberActive() == 2 ? this.damageAmount : this.damageAmountLarge);
-        Operation buff = new Operation(OperationType.PreMultiply, amt, "Artisan Stack for " + target.getName());
+        Operation buff = new Operation(OperationType.PreAdd, amt, "Artisan Stack for " + target.getName(), true);
         traitHaver.buffStat(BuffableStats.Damage, buff, traitHaver);
         traitHaver.heal(healAmount);
+
+        this.log.logEvent(new CombatEvent(traitHaver, target, CombatEventType.Kill));
 
         List<CharacterTransformation> cypher = new List<CharacterTransformation>();
         cypher.Add(new CharacterTransformation(target.getPosition(), traitHaver.getPosition()));
@@ -26,12 +28,16 @@ public class ArtisansTrait : CypherTrait
         return "artisan";
     }
 
-    public override string getTraitDescription() {
-        return ("Talented and precise craftsmen. On kill or assist gain " + damageAmountSmall +"/"+ damageAmount +"/."+  damageAmountLarge 
-            + " damage and regenerate a " + healAmount + " health. Stacks in combat infinitely.");
+
+    public override string getTraitNarrative() {
+        return "Talented craftsman and artists whose skill with brush and chisel is only rivaled by their skill with bow and magic.";
     }
 
-    protected override int getMinimumForActive() {
+    public override string getTraitEffect() {
+        return "On kill gain " + damageAmountSmall +"/"+damageAmount+"/"+damageAmountLarge + " damage and regenerate " + healAmount + " health on kill. Stacks within combat infinitely.";
+    }
+
+    public override int getMinimumForActive() {
         return 1;
     }
 

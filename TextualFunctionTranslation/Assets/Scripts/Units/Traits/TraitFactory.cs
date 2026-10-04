@@ -35,4 +35,14 @@ public class TraitFactory : MonoBehaviour
 
         throw new Exception("TRAIT DOES NOT EXIST IN FACTORY!" + t_name);
     }
+
+    public static Trait getTraitForVis(string t_name) { //useful for icons
+        foreach(Trait t in staticPlayerTraits) {
+            if(t.getTraitName() == t_name) {
+                return t;
+            }
+        }
+
+        throw new Exception("TRAIT DOES NOT EXIST IN FACTORY!" + t_name);
+    }
 }

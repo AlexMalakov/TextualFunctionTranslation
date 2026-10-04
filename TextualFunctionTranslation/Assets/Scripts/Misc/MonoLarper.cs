@@ -50,6 +50,10 @@ public class MonoLarper : MonoBehaviour
         return Instantiate(obj, position, quaternion);
     }
 
+    public GameObject FakeInstantiate(GameObject obj) {
+        return Instantiate(obj);
+    }
+
     public void Destroy(GameObject obj) {
         Destroy(obj);
     }

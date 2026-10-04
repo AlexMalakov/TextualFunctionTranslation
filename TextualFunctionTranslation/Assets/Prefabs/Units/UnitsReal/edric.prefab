@@ -30,7 +30,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: classTraitName
-      value: royal guard
+      value: ceasarian legionaries
       objectReference: {fileID: 0}
     - target: {fileID: 1345106722733009539, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       propertyPath: tombstonePrefab
@@ -139,7 +139,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 8063337273378544252, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4868626733178719328}
     m_AddedComponents: []
@@ -149,9 +149,9 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1594449420069669637, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
   m_PrefabInstance: {fileID: 1194477352468963503}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &7129018602351198816 stripped
+--- !u!4 &9184273770956487379 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 8249748404496949967, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8063337273378544252, guid: 19022650d17354e45b297cc34b03e3de, type: 3}
   m_PrefabInstance: {fileID: 1194477352468963503}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5729025685799742675
@@ -160,7 +160,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 7129018602351198816}
+    m_TransformParent: {fileID: 9184273770956487379}
     m_Modifications:
     - target: {fileID: 163482356263644614, guid: f73e70f6aa67746988eef4639d8754aa, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -188,15 +188,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 869547353759555763, guid: f73e70f6aa67746988eef4639d8754aa, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 869547353759555763, guid: f73e70f6aa67746988eef4639d8754aa, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 869547353759555763, guid: f73e70f6aa67746988eef4639d8754aa, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 869547353759555763, guid: f73e70f6aa67746988eef4639d8754aa, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

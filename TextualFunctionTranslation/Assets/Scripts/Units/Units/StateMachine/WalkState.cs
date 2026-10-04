@@ -52,6 +52,7 @@ public class WalkState : UnitActionState
             Vector3 dest = new Vector3(this.walkTo.transform.position.x, this.unitOwner.transform.position.y, this.walkTo.transform.position.z);
             this.unitOwner.transform.position = dest;
             this.walkTo = null;
+            this.unitOwner.onReposition();
         }
     }
 

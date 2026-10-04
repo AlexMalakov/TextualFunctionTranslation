@@ -10,7 +10,6 @@ public class IdleState : UnitActionState
         this.idleFrames = CombatScheduler.timeToTicks(GlobalData.TimeIdle);
     }
 
-
     public override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
         if(data.flt > 0f) {
             if(data.stunned)

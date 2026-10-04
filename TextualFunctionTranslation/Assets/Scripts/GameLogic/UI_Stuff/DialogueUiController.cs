@@ -18,7 +18,13 @@ public class DialogueUiController : MonoBehaviour
     [SerializeField] private TMP_Text rightText;
     [SerializeField] private TMP_Text leftText;
 
-    public void displayLine(bool left, string iconToShow, string text) {
+    private bool randomize = false;
+    private int FRAMES_TILL_RAND = 15;
+    private int randCounter = 0;
+
+    public void displayLine(bool left, string iconToShow, string text, bool rnd) {
+        this.randomize = rnd;
+
         if(left) {
             this.leftObject.SetActive(true);
             this.rightObject.SetActive(false);
@@ -42,4 +48,21 @@ public class DialogueUiController : MonoBehaviour
         this.rightObject.SetActive(false);
         this.belowBar.SetActive(false);
     }
+
+    public void Update() {
+        if(this.belowBar.activeInHierarchy && this.randomize) {
+            if(this.randCounter % this.FRAMES_TILL_RAND == 0) {
+                this.scrambleAllTMP();
+            }
+            
+            randCounter = (randCounter + 1) % this.FRAMES_TILL_RAND;
+        }
+    }
+
+    private void scrambleAllTMP() {
+        rightText.text = GameManager.scrambleString(rightText.text);
+        leftText.text = GameManager.scrambleString(leftText.text);
+    }
 }
+
+    
