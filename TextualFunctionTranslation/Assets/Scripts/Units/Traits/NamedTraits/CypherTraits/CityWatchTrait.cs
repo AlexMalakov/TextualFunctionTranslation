@@ -55,13 +55,13 @@ public class CityWatchTrait : CypherTrait
             start = next;
         }
 
-        float amt = this.getNumberActive() > 2 ? this.healthBuff * this.fullTraitMultiplier : this.healthBuff;
+        float amt = this.getNumberActive() > 3 ? this.healthBuff * this.fullTraitMultiplier : this.healthBuff;
         Operation buff = new Operation(OperationType.PostMultiply, amt, "city watch health buff", false);
         foreach(Unit u in leftBuff) {
             u.buffStat(BuffableStats.Health, buff, traitHaver);
         }
 
-        amt = this.getNumberActive() > 2 ? this.damageBuff * this.fullTraitMultiplier : this.damageBuff;
+        amt = this.getNumberActive() > 3 ? this.damageBuff * this.fullTraitMultiplier : this.damageBuff;
         buff = new Operation(OperationType.PostMultiply, amt, "city watch damage buff", false);
         foreach(Unit u in rightBuff) {
             u.buffStat(BuffableStats.Damage, buff, traitHaver);

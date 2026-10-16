@@ -9,6 +9,7 @@ public class ToolTipManager : MonoBehaviour
 {
     [SerializeField] private GameObject toolTipPopUp;
     [SerializeField] private TMP_Text text;
+    [SerializeField] private float gap = 10f;
 
     public void Update() {
         if(EventSystem.current == null) {
@@ -36,14 +37,40 @@ public class ToolTipManager : MonoBehaviour
         toolTipPopUp.SetActive(true);
         text.text = tip.getToolTip();
 
-        RectTransform target = tip.GetComponent<RectTransform>();
-        Vector3[] corners = new Vector3[4];
-        target.GetWorldCorners(corners);
-        Vector3 bottomCenter = (corners[0] + corners[3]) / 2f;
-        toolTipPopUp.GetComponent<RectTransform>().position = bottomCenter;
+        RectTransform popup = toolTipPopUp.GetComponent<RectTransform>();
+        Rect target = this.getScreenRect(tip.GetComponent<RectTransform>());
+        Rect pop = this.getScreenRect(popup);
+
+        float w = pop.width;
+        float h = pop.height;
+
+        //vertical: below if it fits, else above, else whichever side has more room
+        float roomBelow = target.yMin - this.gap;
+        float roomAbove = Screen.height - target.yMax - this.gap;
+        float y;
+        if(roomBelow >= h) {
+            y = target.yMin - this.gap - h / 2f;
+        } else if(roomAbove >= h) {
+            y = target.yMax + this.gap + h / 2f;
+        } else {
+            y = roomBelow >= roomAbove ? h / 2f : Screen.height - h / 2f;
+        }
+
+        //horizontal: centered on the target, slid left/right to stay on screen
+        float x = Mathf.Clamp(target.center.x, w / 2f, Screen.width - w / 2f);
+
+        //move by the difference so pivot/anchors don't matter
+        Vector3 delta = new Vector3(x, y, 0f) - (Vector3)pop.center;
+        popup.position += delta;
     }
 
     private void hideTip() {
         toolTipPopUp.SetActive(false);
     }
+
+    private Rect getScreenRect(RectTransform rt) {
+        Vector3[] corners = new Vector3[4];
+        rt.GetWorldCorners(corners);
+        return new Rect(corners[0].x, corners[0].y, corners[2].x - corners[0].x, corners[2].y - corners[0].y);
+  }
 }

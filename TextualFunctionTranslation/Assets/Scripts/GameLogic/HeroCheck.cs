@@ -104,13 +104,12 @@ public class HeroCheck : MonoBehaviour
     }
 
     public void onDeathCheck(Unit dead) {
-        Debug.Log("PRECOMBAT CHECK!!! DEATH CHECK!!!" + this.failed);
+        if(!player.ownsUnit(dead))
+            return;
         if(!this.failed) {
-            Debug.Log("PRECOMBAT CHECK!!! SAC CHECK!!!" + this.failed);
             if(this.isSacrifice(dead)) {
                 this.shop.revealHero();
             }
-            Debug.Log("PRECOMBAT CHECK!!! SACK CHECK OVER!!!" + this.failed);
             
             this.failed = true; //even when hero is revealed so that we don't waste effort once we're done
         }

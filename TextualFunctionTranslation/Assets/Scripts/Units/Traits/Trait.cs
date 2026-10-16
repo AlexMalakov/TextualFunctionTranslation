@@ -11,7 +11,7 @@ public abstract class Trait : MonoBehaviour
     [SerializeField] private TraitCodexInfo tci;
     [SerializeField] private GameObject traitExplainerMenu;
     [SerializeField] protected CombatLog log;
-    [SerializeField] private bool playersTrait;
+    [SerializeField] protected bool playersTrait;
     private TraitWidget tw;
     private string traitName;
     private HashSet<Unit> activeUnits = new HashSet<Unit>();
@@ -91,6 +91,7 @@ public abstract class Trait : MonoBehaviour
 
     //THESE LAST 2 are kinda ass they only exist for one trait
     public virtual void informAllOffDeath(Unit died){}
+    public virtual void informAllOfReposition(Unit mover){}
 
     public virtual void preCombatFinal(Unit traitHaver) {}
 

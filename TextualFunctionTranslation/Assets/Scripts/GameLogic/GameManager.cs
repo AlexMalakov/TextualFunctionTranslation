@@ -33,7 +33,6 @@ public class GameManager : MonoBehaviour
 
     private int currentStage = 0;
     private bool tutorialActive = true;
-    private bool blockPlusPlus = false; //sometimes you just write stupid shit...
 
     [SerializeField] private PrecombatManager pcm;
     [SerializeField] private ReviewManager rvm;
@@ -68,22 +67,15 @@ public class GameManager : MonoBehaviour
         this.onPreperationStart();
     }
 
-    private CombatStage getCurrentLevel() {
+    public CombatStage getCurrentLevel() {
         if(this.tutorialActive) {
             return this.tut;
         }
         return this.currentLevel[this.currentStage];
     }
 
-
-    public void onTutorialOver() {
-        this.tutorialActive = false;
-        this.blockPlusPlus = true;
-    }
-
-
     void Update() {
-        if(this.gameState == GameStage.combat) { 
+        if(this.gameState == GameStage.combat) {
             this.handleCombat();
         } else if(this.gameState == GameStage.preperation) {
             this.handlePreperation();
@@ -119,15 +111,17 @@ public class GameManager : MonoBehaviour
         );
 
         if(this.data.showDialogue && this.getCurrentLevel().hasDialogue(false)) {
+            this.pcm.lockForDialogue(true);
             this.getCurrentLevel().getDialogue(false).startDialogue(null);
         } else {
             this.postPrepDialogue();
         }
 
         ShopRarity curOdds = this.getCurrentLevel().setShopOdds();
-        if(!this.tutorialActive) {
+        if(!this.tut.isActive()) {
             this.shop.updateEntries();
         }
+        this.shop.lockShop(false);
         this.levelView.onLevelStart(this.getCurrentLevel().getRewardMoney(), this.player.getActiveUnits().Count, this.getCurrentLevel().getMaxUnits(), curOdds);
 
         
@@ -145,6 +139,7 @@ public class GameManager : MonoBehaviour
 
     private void postPrepDialogue() {
         this.boardLocked = false;
+        this.pcm.lockForDialogue(false);
     }
 
     public void handlePreperation() {
@@ -156,9 +151,13 @@ public class GameManager : MonoBehaviour
     }
 
     public void onPreperationEnd() {
+        if(this.gameState != GameStage.preperation || this.boardLocked) {
+            return;
+        }
         this.gameState = GameStage.combat;
         this.pcm.endPrep();
         this.boardLocked = true;
+        this.shop.lockShop(true);
 
         StartCoroutine(this.onCombatStart());
     }
@@ -208,14 +207,15 @@ public class GameManager : MonoBehaviour
 
 
     private IEnumerator postResultsDialogue(ReviewData rd) {
-        yield return new WaitForSeconds(5f); //break before the cyphers start
+        yield return new WaitForSeconds(4f); //break before the cyphers start
         yield return StartCoroutine(this.runAnimationsAndSwap());
 
         string ciphertext = this.combatManager.encrypt(this.getCurrentLevel().getLevelCipher());
         this.rvm.onResultsStart(ciphertext, rd);
+        this.player.clearMergeQueue();
 
         if(runningTest) {
-            this.drooler.resultsStart();
+            this.drooler.resultsStart(rd.playerWon);
         }
     }
 
@@ -236,13 +236,15 @@ public class GameManager : MonoBehaviour
 
     public void onResultsEnd(bool nextStage) {
         this.rvm.onResultsEnd();
-        if(this.gameState == GameStage.result_win && nextStage) {
+
+        if(this.tutorialActive && nextStage) {
             this.player.gainMoney(this.getCurrentLevel().getRewardMoney());
-            if(this.blockPlusPlus) {//"sometimes you just write stupid shit..." shut up dork this is brilliant
-                this.blockPlusPlus = false;
-            } else {
-                this.currentStage++;
-            }
+            this.combatManager.wipeEnemyLayout();
+            this.gameState = GameStage.preperation;
+            this.tutorialActive = false;
+        } else if(this.gameState == GameStage.result_win && nextStage) {
+            this.player.gainMoney(this.getCurrentLevel().getRewardMoney());
+            this.currentStage++;
             this.gameState = GameStage.preperation;
             this.combatManager.wipeEnemyLayout();
         } else {

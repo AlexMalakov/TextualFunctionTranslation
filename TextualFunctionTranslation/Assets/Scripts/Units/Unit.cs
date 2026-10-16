@@ -67,7 +67,7 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected CombatManager manager;
     [SerializeField] private ParticleManager pm;
     [SerializeField] private Sprite unitIcon;
-    [SerializeField] private AnimationController ac;
+    [SerializeField] protected AnimationController ac;
     private HealthBarManager hpBar;
 
     //[Header ("Active Stats")]
@@ -88,16 +88,19 @@ public abstract class Unit : MonoBehaviour
 
     private bool combatEnd = true;
 
-    public void Start() {
-        this.fixY();
-        this.resetStats();
+    public void Awake() {
         this.Walk = new WalkState(this);
         this.Idle = new IdleState(this);
         this.Attack = new AttackState(this, this.attackCooldownTime, this.attackWindupTime);
     }
 
+    public void Start() {
+        this.fixY();
+        this.resetStats();
+    }
+
     private void fixY() {
-        this.transform.position = new Vector3(this.transform.position.x, .25f, this.transform.position.y);//heehee i did a hardcode
+        this.transform.position = new Vector3(this.transform.position.x, .25f, this.transform.position.z);//heehee i did a hardcode
     }
 
     public Unit setBlueprint(UnitBlueprint blueprint, CombatManager manager, ParticleManager pm) {
@@ -166,8 +169,16 @@ public abstract class Unit : MonoBehaviour
         return this.damageCalculator.calculate();
     }
 
+    public float calcDamageReadOnly() {
+        return this.damageCalculator.calculate();
+    }
+
     public virtual float calcAttackSpeed() {
-        return (float) this.attackSpeedCalculator.calculate();
+        return (float) Mathf.Max(.1f, this.attackSpeedCalculator.calculate());
+    }
+
+    public virtual float calcUsableAttackSpeed() {
+        return (this.attackWindupTime + this.attackCooldownTime) / Mathf.Pow(this.calcAttackSpeed(), .7f);
     }
 
     public Trait getRoleTrait() {
@@ -196,12 +207,17 @@ public abstract class Unit : MonoBehaviour
         return this.unitIcon;
     }
 
+    public bool isOwnedByPlayer() {
+        return this.manager.isPlayerUnit(this);
+    }
+
     //Instantiate(hpBarPrefab).GetComponent<HealthBarManager>()
     public virtual void initUnit(HexSquare square) { //NOTE: this is called both at the start of prep and end of prep
         this.resetStats();
         if(this.hpBar == null) {
             this.manager.requestHealthBar(this);
         }
+        this.hpBar.setPlayerOwner(this.isOwnedByPlayer());
         this.currentTarget = null;
         this.placeUnitOnSquare(square, true);
         this.combatEnd = false;
@@ -280,6 +296,18 @@ public abstract class Unit : MonoBehaviour
         }
 
         stateData.sq = this.manager.requestRoute(this, this.currentTarget);
+
+        this.walkOrWait(stateData);
+    }
+
+    protected void walkOrWait(StateDataContainer stateData) {
+        if(stateData.sq == null || !stateData.sq.isSquare()) {
+            stateData.flt = -1;
+            this.currentState.swapStates(this.Idle, stateData);
+            this.currentState = this.Idle;
+            return;
+        }
+
         this.currentState.swapStates(this.Walk, stateData);
         this.currentState = this.Walk;
     }
@@ -290,14 +318,16 @@ public abstract class Unit : MonoBehaviour
         this.currentState = this.Idle;
     }
 
-    public void onCombatEnd() {
+    public virtual void onCombatEnd() {
         if(!this.isDead()) {
             float rng = Random.Range(0f, 1f);
             if(rng < .05f) {
                 this.triggerAnimation("victory_dance");
-            } else if(rng < .4f) {
+            } else if(rng < .32f) {
                 this.triggerAnimation("victory_jump");
-            } else {
+            } else if(rng < .65f) {
+                this.triggerAnimation("victory_cheer");
+            }else {
                 this.triggerAnimation("victory_clap");
             }
             this.hpBar.hideHPBar();
@@ -355,6 +385,8 @@ public abstract class Unit : MonoBehaviour
 
     public void onReposition() {
         CombatManager.callTraitMethod(this.getRoleTrait(), this.getRoleTrait().onReposition, this);
+        CombatManager.callTraitMethod(this.getClassTrait(), this.getClassTrait().onReposition, this);
+        this.manager.onUnitReposition(this);
     }
 
     public int getAttackType() {
@@ -373,6 +405,10 @@ public abstract class Unit : MonoBehaviour
         this.ac.triggerAnimation(trigger);
     }
 
+    public void triggerAnimationWithSpeed(string trigger, float speed) {
+        this.ac.triggerAnimationWithSpeed(trigger, speed);
+    }
+
     public virtual void takeDamage(float in_damage, Unit damage_from) {
         if(this.isDead()) {
             return;
@@ -382,6 +418,8 @@ public abstract class Unit : MonoBehaviour
         this.hpBar.updateDamage(in_damage);
 
         if(this.currentHealth <= 0) {
+
+            this.manager.heroDeathCheck(this);
 
             CombatManager.callTraitMethod(damage_from.getRoleTrait(), damage_from.getRoleTrait().onEnemyDefeat, damage_from, this);
             CombatManager.callTraitMethod(damage_from.getClassTrait(), damage_from.getClassTrait().onEnemyDefeat, damage_from, this);
@@ -395,6 +433,9 @@ public abstract class Unit : MonoBehaviour
     }
 
     public void heal(float in_healing) {
+        if(this.isDead()) {
+            return;
+        }
         float preHealth = this.currentHealth;
         this.currentHealth += in_healing;
 
@@ -423,7 +464,9 @@ public abstract class Unit : MonoBehaviour
         this.pm.cancelUnitParticles(this);
         this.unclaimSquare();
         //TODO: review unclaim square usage
-
+        this.Walk.forceEnd();
+        this.Idle.forceEnd();
+        this.Attack.forceEnd();
 
         //careful that this isn't called more than once
         Invoke(nameof(die), 2.5f);
@@ -470,6 +513,7 @@ public abstract class Unit : MonoBehaviour
         this.Idle.forceEnd();
         this.Attack.forceEnd();
         this.currentState = null;
+        this.pm.pruneFromParticleMap(this);
 
         if(this.curPosition != null) {
             this.unclaimSquare();

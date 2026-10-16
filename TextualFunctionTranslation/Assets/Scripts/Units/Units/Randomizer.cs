@@ -21,18 +21,12 @@ public class Randomizer : Unit
             this.rng = new System.Random(randomSeed);
         }
 
-        return this.damageCalculator.calculateFromN((float)this.rng.NextDouble() * (this.maxDamage - this.minDamage));
+        return this.damageCalculator.calculateFromN(this.minDamage + (float)this.rng.NextDouble() * (this.maxDamage - this.minDamage));
     }
 
-    public System.Random getRandomizer() {
-        if(this.rng == null) {
-            this.rng = new System.Random(randomSeed);
-        }
-
-        return this.rng;
+    public override int getRange() {
+        return this.currentRange;
     }
-
-
 
     public override void triggerUpdate(CombatManager manager) {
         if(this.rng == null) {
@@ -53,22 +47,28 @@ public class Randomizer : Unit
 
     public override void requestStateSwap() {
         if(this.currentState is AttackState) {
-            this.manager.getRandomAttackTarget(this.rng);
-
             if(this.rng == null) {
                 this.rng = new System.Random(randomSeed);
             }
-            this.currentRange = rng.Next(this.minRange, this.maxRange);
+
+            this.currentTarget = this.manager.getRandomAttackTarget(this.rng);
+            this.currentRange = rng.Next(this.minRange, this.maxRange+1);
+            this.ac.setAttackType(this.currentRange - 1);
         }
 
         base.requestStateSwap();
     }
 
+    public override void onCombatEnd() {
+        base.onCombatEnd();
+        this.rng = null;//force it to be reset
+    }
+
     protected override void reassignTargetAndWalk(StateDataContainer stateData) {
         //we don't try to get a closer target we just walk :)
         stateData.sq = this.manager.requestRoute(this, this.currentTarget);
-        this.currentState.swapStates(this.Walk, stateData);
-        this.currentState = this.Walk;
+
+        this.walkOrWait(stateData);
     }
 
 }

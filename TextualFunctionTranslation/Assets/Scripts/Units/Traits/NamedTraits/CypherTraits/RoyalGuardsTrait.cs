@@ -14,8 +14,20 @@ class CaesarCharacterTransformation : CharacterTransformation {
     public override void apply(char[] outputArr, char[] cypherText) {
         Debug.Log("Caesar encryption: key" + this.key + " | input: " + new string(cypherText));
         for(int i = 0; i < cypherText.Length; i++) {
-            outputArr[i] = (char)((((int)cypherText[i] + this.key - (int)'a') % 26) + (int)'a');
+            if(!isLetter(cypherText[i])) {
+                continue;
+            }
+            int caseBase = isUpper(cypherText[i]) ? 'A' : 'a';
+            outputArr[i] = (char)((((int)cypherText[i] - caseBase + this.key) % 26) + caseBase);
         }
+    }
+
+    private bool isLetter(char c) {
+        return ((int)c >= (int)'a' && (int)c <= (int)'z') || ((int)c >= (int)'A' && (int)c <= (int)'Z');
+    }
+
+    private bool isUpper(char c) {
+        return (int)'A' <= (int)c && (int)c <= (int)'Z';
     }
 }
 
@@ -45,11 +57,11 @@ public class RoyalGuardsTrait : CypherTrait
     }
 
     public override void onCombatStart(Unit traitHaver){
-        float amt = this.getNumberActive() > 2 ? this.count * this.healthPerFullCompStack : this.count * this.healthPerStack;
+        float amt = this.getNumberActive() > 3 ? this.count * this.healthPerFullCompStack : this.count * this.healthPerStack;
         Operation buff = new Operation(OperationType.PreAdd, amt, "royal guard health", true);
         traitHaver.buffStat(BuffableStats.Health, buff, traitHaver);
 
-        amt = this.getNumberActive() > 2 ? this.count * this.damagePerFullCompStack : this.count * this.damagePerStack;
+        amt = this.getNumberActive() > 3 ? this.count * this.damagePerFullCompStack : this.count * this.damagePerStack;
         buff = new Operation(OperationType.PreAdd, amt, "royal guard damage", true);
         traitHaver.buffStat(BuffableStats.Damage, buff, traitHaver);
 
@@ -58,7 +70,7 @@ public class RoyalGuardsTrait : CypherTrait
 
     public override void onEnemyDefeat(Unit traitHaver, Unit target){
         this.log.logEvent(new CombatEvent(traitHaver, target, CombatEventType.Kill));
-        this.count += (int) (this.getNumberActive() > 2 ? this.killStackGainLarge : this.killStackGainSmall);
+        this.count += (int) (this.getNumberActive() > 3 ? this.killStackGainLarge : this.killStackGainSmall);
         if(this.traitHolder is HumanPlayer) {
             this.pi.setGloryStacks(this.count);
         } else {
@@ -69,7 +81,7 @@ public class RoyalGuardsTrait : CypherTrait
     public override void onCombatSurvival(Unit traitHaver){
 
         this.log.logEvent(new CombatEvent(traitHaver, traitHaver, CombatEventType.Survival));
-        this.count += (int) (this.getNumberActive() > 2 ? this.surviveStackGainLarge : this.surviveStackGainSmall);
+        this.count += (int) (this.getNumberActive() > 3 ? this.surviveStackGainLarge : this.surviveStackGainSmall);
         if(this.traitHolder is HumanPlayer) {
             this.pi.setGloryStacks(this.count);
         } else {
@@ -98,6 +110,11 @@ public class RoyalGuardsTrait : CypherTrait
 
     public override int getMinimumForActive() {
         return 2;
+    }
+
+
+    public void resetStacks() {
+        this.count = this.startCount;
     }
 
     public override List<int> getTraitTiering() {

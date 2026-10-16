@@ -129,8 +129,9 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     private void startDialogue() {
         if(this.sections[this.currentSection].dialogue.Count > 0) {
             DialogueLine nextLine = this.sections[this.currentSection].dialogue[this.pointerInSection];
+            this.raycast.diaLock(true);
 
-            this.dia.displayLine(nextLine.on_the_left, nextLine.speaker, nextLine.text, false);
+            this.dia.displayLine(nextLine.on_the_left, nextLine.speaker, nextLine.text, false, false);
         }
     }
 
@@ -140,9 +141,10 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
 
             if(this.pointerInSection < this.sections[this.currentSection].dialogue.Count) {
                 DialogueLine nextLine = this.sections[this.currentSection].dialogue[this.pointerInSection];
-                dia.displayLine(nextLine.on_the_left, nextLine.speaker, nextLine.text, false);
+                dia.displayLine(nextLine.on_the_left, nextLine.speaker, nextLine.text, false, false);
             } else {
                 this.dia.hideDialogue();
+                this.raycast.diaLock(false);
                 this.onDialogueOver();
             }
         }
@@ -296,7 +298,10 @@ public class TutorialStage : CombatStage //this is poorly abstracted they have l
     private void endTutorial() {
         this.disableControls(false);
         this.started = false;
-        this.game.onTutorialOver(); //TODO: this doesn't end the stage this just undoes all controls
+    }
+
+    public bool isActive() {
+        return this.started;
     }
 
     

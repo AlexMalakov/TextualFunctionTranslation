@@ -12,6 +12,7 @@ public struct DialogueLine
     public string speaker;
     public bool on_the_left;
     public bool randomize;
+    public bool permissionToScramble;
 }
 
 [System.Serializable]
@@ -27,6 +28,7 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private List<DialogueLine> dialogueLines;
     [SerializeField] private GameManager gm;
     [SerializeField] private DialogueUiController dia;
+    [SerializeField] private CameraRayCast camCast;
 
     private ReviewData? reviewDataSave;
 
@@ -41,6 +43,7 @@ public class Dialogue : MonoBehaviour
     public void startDialogue(ReviewData? rd) {
         this.reviewDataSave = rd;
         this.inDialogue = true;
+        this.camCast.diaLock(true);
         this.showLine();
     }
 
@@ -63,12 +66,13 @@ public class Dialogue : MonoBehaviour
             return;
         }
 
-        this.dia.displayLine(this.dialogueLines[this.curLine].on_the_left, this.dialogueLines[this.curLine].speaker, this.dialogueLines[this.curLine].text, this.dialogueLines[this.curLine].randomize);
+        this.dia.displayLine(this.dialogueLines[this.curLine].on_the_left, this.dialogueLines[this.curLine].speaker, this.dialogueLines[this.curLine].text, this.dialogueLines[this.curLine].randomize, this.dialogueLines[this.curLine].permissionToScramble);
     }
 
     private void endDialogue() {
         this.curLine = 0;
         this.inDialogue = false;
+        this.camCast.diaLock(false);
         this.dia.hideDialogue();
         gm.doneYapping(this.reviewDataSave);
     }

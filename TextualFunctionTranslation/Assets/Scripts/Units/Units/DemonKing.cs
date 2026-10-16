@@ -27,6 +27,11 @@ public class DemonKing : Unit
         base.initUnit(square);
     }
 
+    public override void onCombatEnd() {
+        CancelInvoke(nameof(wakeUp));
+        base.onCombatEnd();
+    }
+
 
     public override void takeDamage(float damage, Unit from) {
         if(this.isAsleep && !this.isWaking) {

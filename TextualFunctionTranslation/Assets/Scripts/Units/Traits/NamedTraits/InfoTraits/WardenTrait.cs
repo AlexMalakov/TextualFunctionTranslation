@@ -21,7 +21,7 @@ public class WardenTrait : InformationTrait
             }
         }
 
-        float buffAmt = this.getNumberActive() > 2 ? this.largeBoostAmount : this.smallBoostAmount;
+        float buffAmt = this.getNumberActive() > 3 ? this.largeBoostAmount : this.smallBoostAmount;
         Operation buffOpp = new Operation(OperationType.PostAdd, buffAmt, "Warden Health Buff " + traitHaver.getName(), false);
 
         foreach(HexSquare s in close2) {
@@ -39,7 +39,7 @@ public class WardenTrait : InformationTrait
             return new List<HexSquare>();
         }
 
-        AxialCoord pos = traitHaver.getPosition().getCoords();
+        AxialCoord pos = origin.getCoords();
         HexSquare leftSquare;
         HexSquare rightSquare;
         if(cm.isPlayerUnit(traitHaver)) { //just dont use r

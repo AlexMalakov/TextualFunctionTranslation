@@ -9,7 +9,9 @@ public class Mimic : Unit
     }
 
     public override int getRange() {
-        return this.currentTarget != null ? this.currentTarget.getRange() : base.getRange();
+        int newRange = this.currentTarget != null ? this.currentTarget.getRange() : base.getRange();
+        this.ac.setAttackType(newRange - 1);
+        return newRange;
     }
 
     public override float calcAttackSpeed() {

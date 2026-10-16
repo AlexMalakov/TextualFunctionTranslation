@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 57259ea948a6a47378599f1e75024935
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 160921
+  packageName: Infinity PBR Support Files
+  packageVersion: 4.4
+  assetPath: Assets/Magic Pig Games (Infinity PBR)/Shared Files/Shaders/IPBR_DiffuseHSL.shader
+  uploadId: 889892

@@ -27,11 +27,11 @@ class StablePriorityQueue<T> {
 
     private void heapifyUp(int index) {
         printHeap();
-        if(index/2 >= 0 && index > 0 && this.gt(heap[index/2], heap[index])) {
+        if((index-1)/2 >= 0 && index > 0 && this.gt(heap[(index-1)/2], heap[index])) {
             (T item, int priority, long order) swap = heap[index];
-            heap[index] = heap[index/2];
-            heap[index/2] = swap;
-            heapifyUp(index/2);
+            heap[index] = heap[(index-1)/2];
+            heap[(index-1)/2] = swap;
+            heapifyUp((index-1)/2);
         }
     }
 
@@ -113,7 +113,7 @@ class AStarNode {
 
 public class AStar
 {
-    public static List<HexSquare> runAStar(HexSquare start, HexSquare dest, HexBoard board) {
+    public static List<HexSquare> runAStar(HexSquare start, HexSquare dest, HexBoard board, NullSquare nullS) {
         StablePriorityQueue<AStarNode> pq =  new StablePriorityQueue<AStarNode>();
 
 
@@ -127,19 +127,9 @@ public class AStar
                 break;
             }
 
-            
-            // string visitedCon = "";
-            // foreach(HexSquare hs in visited) {
-            //     visitedCon += " | " + hs.toString();
-            // }
-            // Debug.Log("VISITED CONTAINS" + visitedCon);
-            // Debug.Log("I AM " + workingNode.val.toString());
-
             if(visited.Contains(workingNode.val)) {
-                // Debug.Log("skipped!!!!!!!");
                 continue;
             }
-            // Debug.Log("CONTINUINGING INTO NEIGHBORS???");
 
             visited.Add(workingNode.val);
             foreach(AxialCoord axc in workingNode.val.getNeighborCoords()) {
@@ -153,14 +143,18 @@ public class AStar
             }
         }
 
-        Debug.Log("calculated route dest to start!!!!!!!!!!!!!!!!");
+        if (workingNode == null || workingNode.val != dest) {
+            return new List<HexSquare> { nullS };
+        }
+
+        // Debug.Log("calculated route dest to start!!!!!!!!!!!!!!!!");
         List<HexSquare> pathSequence = new List<HexSquare>();
         while(workingNode != null) {
-            Debug.Log("next node: " + workingNode.val.toString());
+            // Debug.Log("next node: " + workingNode.val.toString());
             pathSequence.Add(workingNode.val);
             workingNode = workingNode.prev;
         }
-        Debug.Log("===========================");
+        // Debug.Log("===========================");
         return pathSequence;
     }
 }

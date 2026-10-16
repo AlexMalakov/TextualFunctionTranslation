@@ -26,11 +26,15 @@ public class UnitExpander : MonoBehaviour
     [SerializeField] private TMP_Text unit_taunt;
 
     private Unit tracking;
+    private bool hpBarinited = false;
 
     public void Update() {
         if(tracking == null) {
             this.tracking = startingUnit;
-            this.targetHPBar.initUniversal(this.tracking.calcMaxHealth(), this.tracking.getMergeLevel());
+            if(tracking != null && !hpBarinited) {
+                this.targetHPBar.initUniversal(this.tracking.calcMaxHealth(), this.tracking.getMergeLevel());
+                hpBarinited = true;
+            }
         }
 
         if (Input.GetMouseButtonDown(0)) {
@@ -57,8 +61,8 @@ public class UnitExpander : MonoBehaviour
         this.health_ratio.text = this.tracking.getCurHealth() + "/" + this.tracking.calcMaxHealth();
 
 
-        this.unit_damage.text = this.tracking.calcDamage() + "";
-        this.unit_attackspeed.text = this.tracking.calcAttackSpeed() + "";
+        this.unit_damage.text = this.tracking.calcDamageReadOnly() + "";
+        this.unit_attackspeed.text = this.tracking.calcUsableAttackSpeed().ToString("F1");
         this.unit_range.text = this.tracking.getRange() + "";
         this.unit_initiative.text = this.tracking.getDecisionPriority() + "";
         this.unit_cost.text = this.tracking.getCost() + "";

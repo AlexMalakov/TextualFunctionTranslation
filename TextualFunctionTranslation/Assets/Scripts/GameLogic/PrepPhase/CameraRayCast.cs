@@ -8,9 +8,11 @@ public class CameraRayCast : MonoBehaviour
 
     private bool toggle = false;
     private bool tutorialLockOn = false;
+    private bool diaLockIsOn = false;
+    private bool popUpLockOn = false;
 
     public void checkUserInteraction() {
-        if(this.tutorialLockOn) {
+        if(this.tutorialLockOn || this.diaLockIsOn || this.popUpLockOn) {
             if(toggle) {
                 this.releaseUnit();
                 toggle = false;
@@ -44,6 +46,26 @@ public class CameraRayCast : MonoBehaviour
 
     public void tutorialLock(bool lockActive) {
         this.tutorialLockOn = lockActive;
+        if(toggle) {
+            this.releaseUnit();
+            toggle = false;
+        }
+    }
+
+    public void diaLock(bool lockActive) {
+        this.diaLockIsOn = lockActive;
+        if(toggle) {
+            this.releaseUnit();
+            toggle = false;
+        }
+    }
+
+    public void popUpLock(bool lockActive) {
+        this.popUpLockOn = lockActive;
+        if(toggle) {
+            this.releaseUnit();
+            toggle = false;
+        }
     }
 
     public void tutorialStarted(bool started) {

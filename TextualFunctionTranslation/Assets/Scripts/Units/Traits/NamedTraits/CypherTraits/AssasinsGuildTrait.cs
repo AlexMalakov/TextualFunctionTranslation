@@ -7,6 +7,8 @@ public class AssasinsGuildTrait : CypherTrait
 {
     [SerializeField] private CombatManager cm;
     [SerializeField] private UnitMovementManager umm;
+    [SerializeField] private float invulSmall = 2f;
+    [SerializeField] private float invulLarge = 4f;
     //todo: untargetable for the first 3 seconds
 
     public override void onPrecombatStart() {
@@ -29,8 +31,11 @@ public class AssasinsGuildTrait : CypherTrait
 
         AxialCoord mirrored = traitHaver.getPosition().getCoords().getMirroredCoord();
         OffsetCoord readable = mirrored.toOffset();
+        this.cm.addInvulUnit(traitHaver, this.getNumberActive() > 3 ? this.invulLarge : this.invulSmall);
+
         if(this.cm.getBoard().getHexAt(mirrored).getUnit() == null) {
             traitHaver.placeUnitOnSquare(this.cm.getBoard().getHexAt(mirrored), false);
+            this.cm.onUnitReposition(traitHaver);
             StartCoroutine(this.umm.boingTo(traitHaver, this.cm.getBoard().getHexAt(mirrored).transform.position));
             return;
         }
@@ -42,6 +47,7 @@ public class AssasinsGuildTrait : CypherTrait
                 if(s.getUnit() == null) {
                     traitHaver.placeUnitOnSquare(s, false);
                     StartCoroutine(this.umm.boingTo(traitHaver, s.transform.position));
+                    this.cm.onUnitReposition(traitHaver);
                     return;
                 }
             }
@@ -59,7 +65,7 @@ public class AssasinsGuildTrait : CypherTrait
     }
 
     public override string getTraitEffect() {
-        return "At the start of combat, leaps to the other size. Gains 3/5 seconds of untargetability on leap.";
+        return "At the start of combat, leaps to the other size. Gains " + this.invulSmall +"/"+ this.invulLarge + "seconds of untargetability on leap.";
     }
 
 

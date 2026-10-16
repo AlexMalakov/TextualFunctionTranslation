@@ -13,11 +13,11 @@ public class PlagueDoctorTrait : InformationTrait
         this.log.logEvent(new CombatEvent(traitHaver, killer, CombatEventType.Death));
         List<HexSquare> squares = this.getSquaresInRadius(killer.getPosition(), 1, cm.getBoard());
 
-        Operation debuff = new Operation(OperationType.PostAdd, this.attackSpeedLossAmount, "Doctor Debuff", true);
+        Operation debuff = new Operation(OperationType.PostAdd, -this.attackSpeedLossAmount, "Doctor Debuff", true);
         killer.buffStat(BuffableStats.AttackSpeed, debuff, traitHaver);
 
         this.logSquare(killer.getPosition());
-        this.pm.requestParticle(killer.getPosition(), ParticleType.Fart, 6f);
+        this.pm.requestParticle(killer.getPosition(), ParticleType.Fart, 1.5f);
 
         Debug.Log(traitHaver.getName() + "I AM DEAD AND THIS MANY HEXES SHOULD GET FARTED ON:" + squares.Count);
 
@@ -28,7 +28,7 @@ public class PlagueDoctorTrait : InformationTrait
 
             if(s.isSquare()) {
                 this.logSquare(s);
-                this.pm.requestParticle(s, ParticleType.Fart, 6f);
+                this.pm.requestParticle(s, ParticleType.Fart, 1.5f);
             }
         }
     }

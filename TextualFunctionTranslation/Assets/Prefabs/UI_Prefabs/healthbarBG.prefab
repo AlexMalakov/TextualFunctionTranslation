@@ -185,10 +185,12 @@ MonoBehaviour:
   dividerWidthReduction: 0.0005
   hpDividerPrefab: {fileID: 3184343641388794530, guid: b28ce1eabb78b42db8fc96dad453ffda, type: 3}
   hpDividerParent: {fileID: 6326874515499935240}
-  standardHealthColor: {r: 0.9529412, g: 0.37254903, b: 0.37254903, a: 1}
+  standardHealthColor: {r: 0.2776789, g: 0.9056604, b: 0.30190414, a: 1}
+  enemyHealthColor: {r: 0.9529412, g: 0.37254903, b: 0.37254903, a: 1}
   maxHPColor: {r: 0, g: 0, b: 0, a: 1}
   hpBarColorful: {fileID: 7453024471714718916}
   maxDividerChunks: 30
+  isCopyCat: 0
 --- !u!1 &4975198231087332185
 GameObject:
   m_ObjectHideFlags: 0

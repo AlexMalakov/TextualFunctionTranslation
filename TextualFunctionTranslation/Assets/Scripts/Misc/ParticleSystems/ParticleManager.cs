@@ -34,7 +34,7 @@ public struct ParticlePool
     }
 }
 
-struct UnitParticle {
+class UnitParticle {
     public GameObject p;
     public ParticleType pt;
     public float e;
@@ -105,9 +105,15 @@ public class ParticleManager : MonoBehaviour
     public void requestParticle(HexSquare s, ParticleType pt, float dur) {
         GameObject part = pt == ParticleType.Boom ? this.booms.next() : this.farts.next();
         part.transform.position = new Vector3(s.transform.position.x, part.transform.position.y, s.transform.position.z);
+        part.GetComponent<ParticleSystem>().Play();
         StartCoroutine(this.clean(part, dur));
     }
     
+    public void pruneFromParticleMap(Unit u) {
+        if(this.unitParts.ContainsKey(u)) {
+            this.unitParts.Remove(u);
+        }
+    }
 
     public void requestPlayerParticle(Unit u, ParticleType pt, float dur) {
         if(this.unitParts.ContainsKey(u)) {
@@ -133,15 +139,19 @@ public class ParticleManager : MonoBehaviour
                 break;
             case ParticleType.Heal:
                 newP = this.healingPs.next();
+                newP.GetComponent<ParticleSystem>().Play();
                 break;
             case ParticleType.Health:
                 newP = this.healthPs.next();
+                newP.GetComponent<ParticleSystem>().Play();
                 break;
             case ParticleType.Damage:
                 newP = this.damagePs.next();
+                newP.GetComponent<ParticleSystem>().Play();
                 break;
             case ParticleType.Speed:
                 newP = this.speedPs.next();
+                newP.GetComponent<ParticleSystem>().Play();
                 break;
             default:
                 return;
@@ -207,14 +217,17 @@ public class ParticleManager : MonoBehaviour
 
     private IEnumerator clean(GameObject launchMe, float duration) {
         yield return new WaitForSeconds(duration);
+        launchMe.GetComponent<ParticleSystem>().Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         launchMe.SetActive(false);
     }
 
     private IEnumerator cleanUpp(Unit u, UnitParticle launchMe) {
         while(launchMe.e > Time.time) {
+            if(!this.unitParts.ContainsKey(u) || !this.unitParts[u].Contains(launchMe)) yield break;
             yield return null;
         }
 
+        launchMe.p.GetComponent<ParticleSystem>().Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         this.unitParts[u].Remove(launchMe);
         launchMe.p.SetActive(false);
     }
@@ -234,6 +247,7 @@ public class ParticleManager : MonoBehaviour
 
     public void hideLeaves(bool isPlayer) {
         foreach(GameObject l in isPlayer ? this.playerLeaves : this.enemyLeaves) {
+            l.GetComponentInChildren<ParticleSystem>().Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             l.SetActive(false);
         }
     }

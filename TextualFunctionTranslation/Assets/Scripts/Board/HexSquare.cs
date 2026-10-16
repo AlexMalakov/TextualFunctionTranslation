@@ -118,13 +118,13 @@ public class HexSquare : MonoBehaviour
 
     public virtual void claimSquare(Unit u, bool status) {
         if(status) {
-            Debug.Log("CLAIMING SQUARE " + this.toString());
+            // Debug.Log("CLAIMING SQUARE " + this.toString());
             if(this.unit != null) {
                 throw new Exception("cannot claim an already claimed hex square! " + u.gameObject.name + " on square " + this.toString() + " trying to take from " + this.unit.gameObject.name);
             } 
             this.unit = u;
         } else {
-            Debug.Log("UNCLAIMING SQUARE " + this.toString());
+            // Debug.Log("UNCLAIMING SQUARE " + this.toString());
             if(this.unit == null) {
                 throw new Exception("cannot leave an unoccupied hex square! " + u.gameObject.name + " on square " + this.toString());
             }

@@ -32,10 +32,12 @@ public class ShopPool : MonoBehaviour
     [SerializeField] private List<string> startingUnits;
     [SerializeField] private List<string> skipUnits;
 
+    private System.Random myRng;
+
 
     public void initFromLevel(ShopRarity rare, int seed) {
         this.sr = rare;
-        UnityEngine.Random.InitState(seed);
+        this.myRng = new System.Random(seed);
     }
 
     public void initPool(List<UnitBlueprint> blups) {
@@ -45,7 +47,7 @@ public class ShopPool : MonoBehaviour
             poolAndCount.Add(i, new Dictionary<UnitBlueprint, int>());
         }
 
-        UnityEngine.Random.InitState(System.DateTime.Now.Millisecond);
+        this.myRng = new System.Random(System.DateTime.Now.Millisecond);
 
         foreach(UnitBlueprint ub in blups) {
             if(this.skipUnits.Contains(ub.unitName)) {
@@ -86,12 +88,12 @@ public class ShopPool : MonoBehaviour
     public void returnToPool(Unit u) {
         int realCost = u.getBlueprint().unitCost;
         if(this.poolAndCount[realCost].ContainsKey(u.getBlueprint())) {
-            this.poolAndCount[realCost][u.getBlueprint()] = this.poolAndCount[realCost][u.getBlueprint()] + u.getMergeLevel();
+            this.poolAndCount[realCost][u.getBlueprint()] = this.poolAndCount[realCost][u.getBlueprint()] + (1 << (u.getMergeLevel()-1));
         } else {
             for(int i = 0; i < this.poolAndCount[realCost].Keys.Count; i++) {
                 UnitBlueprint ub = this.poolAndCount[realCost].Keys.ToList()[i];
                 if(ub.unitName == u.getName()) {
-                    this.poolAndCount[realCost][ub] = this.poolAndCount[realCost][ub] + u.getMergeLevel();
+                    this.poolAndCount[realCost][ub] = this.poolAndCount[realCost][ub] + (1 << (u.getMergeLevel()-1));
                 }
             }
         }
@@ -100,7 +102,7 @@ public class ShopPool : MonoBehaviour
     public List<UnitBlueprint> sampleFromPool() {
         List<UnitBlueprint> sample = new List<UnitBlueprint>();
         for(int i = 0; i < 5; i++) {
-            int rng = UnityEngine.Random.Range(0, 100);
+            int rng = this.myRng.Next(0, 100);
             if (rng < this.sr.chance2)
                 sample.Add(this.sampleFromCost(2, sample));
             else if (rng < this.sr.chance2 + this.sr.chance3)
@@ -125,9 +127,9 @@ public class ShopPool : MonoBehaviour
 
         Debug.Log("WE HAVE MIRACULOUSLY COMPLETED THE POOL");
         //backup we just say fuck the pool and pick randomly
-        int rCost = UnityEngine.Random.Range(2, 6);
+        int rCost = this.myRng.Next(2, 6);
         Dictionary<UnitBlueprint, int> chosen = this.poolAndCount[rCost];
-        return chosen.Keys.ToList()[UnityEngine.Random.Range(0, chosen.Count)];
+        return chosen.Keys.ToList()[this.myRng.Next(0, chosen.Count)];
     }
 
     private UnitBlueprint sampleFromCostInternals(int cost, List<UnitBlueprint> alreadyTaking) {
@@ -143,6 +145,6 @@ public class ShopPool : MonoBehaviour
             return null;
         }
 
-        return options[UnityEngine.Random.Range(0, options.Count)];
+        return options[this.myRng.Next(0, options.Count)];
     }
 }

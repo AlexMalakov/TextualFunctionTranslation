@@ -9,6 +9,7 @@ public class PrecombatManager : MonoBehaviour
     [SerializeField] private CombatManager combatManager;
 
     private bool inPrep;
+    private bool dialogueLocked;
 
     public void handlePrep() {
         if(!this.inPrep) {
@@ -20,8 +21,15 @@ public class PrecombatManager : MonoBehaviour
 
     private void startPrep() {
         this.inPrep = true;
-        this.gameButton.runPrecombat(true);
+        this.gameButton.runPrecombat(!this.dialogueLocked);
         this.combatManager.placeUnitsFromLayouts();
+    }
+
+    public void lockForDialogue(bool locked) {
+        this.dialogueLocked = locked;
+        if(this.inPrep) {
+            this.gameButton.runPrecombat(!locked);
+        }
     }
 
     public void endPrep() {

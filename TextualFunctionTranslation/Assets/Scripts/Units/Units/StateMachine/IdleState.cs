@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class IdleState : UnitActionState
 {
-    private int idleFrames;
 
-    public IdleState(Unit u) : base(u) {
-        this.idleFrames = CombatScheduler.timeToTicks(GlobalData.TimeIdle);
-    }
+    public IdleState(Unit u) : base(u) {}
 
     public override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
         if(data.flt > 0f) {
@@ -16,7 +13,7 @@ public class IdleState : UnitActionState
                 this.unitOwner.showStunParticles(data.flt);
             this.frameLockout = CombatScheduler.timeToTicks(data.flt);
         } else {
-            this.frameLockout = this.idleFrames;
+            this.frameLockout = CombatScheduler.timeToTicks(GlobalData.TimeIdle);
             this.unitOwner.triggerAnimation("idle_combat");
         }
     }

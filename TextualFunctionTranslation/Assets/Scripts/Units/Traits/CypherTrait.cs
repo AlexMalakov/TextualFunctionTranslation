@@ -16,7 +16,7 @@ public class CharacterTransformation {
         char f = from.getCharValue();
         for(int i = 0; i < cypherText.Length; i++) {
             if (char.ToLower(t) == char.ToLower(cypherText[i])) {
-                outputArr[i] = f;
+                outputArr[i] = char.IsUpper(cypherText[i]) ? char.ToUpper(f) : char.ToLower(f);
             }
         }
     }

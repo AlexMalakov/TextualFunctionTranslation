@@ -15,15 +15,19 @@ public class DialogueUiController : MonoBehaviour
     [SerializeField] private Image rightImage;
     [SerializeField] private Image leftImage;
 
-    [SerializeField] private TMP_Text rightText;
-    [SerializeField] private TMP_Text leftText;
+    [SerializeField] private RandDialogueTMP rightText;
+    [SerializeField] private RandDialogueTMP leftText;
 
     private bool randomize = false;
     private int FRAMES_TILL_RAND = 15;
     private int randCounter = 0;
 
-    public void displayLine(bool left, string iconToShow, string text, bool rnd) {
+    public void displayLine(bool left, string iconToShow, string text, bool rnd, bool permissionToScramble) {
         this.randomize = rnd;
+        this.leftText.allowedToScramble(permissionToScramble);
+        this.rightText.allowedToScramble(permissionToScramble);
+        this.leftText.setPermaScramble(rnd);
+        this.rightText.setPermaScramble(rnd);
 
         if(left) {
             this.leftObject.SetActive(true);
@@ -31,7 +35,7 @@ public class DialogueUiController : MonoBehaviour
             this.belowBar.SetActive(true);
 
             this.leftImage.sprite = this.nameToIcon.First(x => x.name == iconToShow).icon;
-            this.leftText.text = text;
+            this.leftText.setText(text);
         } else {
             this.leftObject.SetActive(false);
             this.rightObject.SetActive(true);
@@ -39,7 +43,7 @@ public class DialogueUiController : MonoBehaviour
 
             Debug.Log("MATCH FOR icon :" + iconToShow);
             this.rightImage.sprite = this.nameToIcon.First(x => x.name == iconToShow).icon;
-            this.rightText.text = text;
+            this.rightText.setText(text);
         }
     }
 
@@ -60,8 +64,8 @@ public class DialogueUiController : MonoBehaviour
     }
 
     private void scrambleAllTMP() {
-        rightText.text = GameManager.scrambleString(rightText.text);
-        leftText.text = GameManager.scrambleString(leftText.text);
+        rightText.scramble();
+        leftText.scramble();
     }
 }
 

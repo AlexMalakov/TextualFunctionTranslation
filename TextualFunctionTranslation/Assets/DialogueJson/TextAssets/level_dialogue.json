@@ -117,7 +117,7 @@
                     "randomize": false
                 },
                 {
-                    "text": "CaREfuL, yOUR maJeStY. wE dON’t KnOW wHat sUrPRisES tHiS jOURneY miGhT hoLd.",
+                    "text": "CaReFuL, yOuR mAjEsTy. wE DoN't KnOw WhAt SuRpRiSeS tHiS jOuRnEy MiGhT hOlD.",
                     "speaker": "Mimic",
                     "on_the_left": false,
                     "randomize": false
@@ -129,7 +129,7 @@
                     "randomize": false
                 },
                 {
-                    "text": "wHaT thE HeLl?",
+                    "text": "wHaT tHe HeLl?",
                     "speaker": "Mimic",
                     "on_the_left": true,
                     "randomize": false
@@ -141,7 +141,7 @@
                     "randomize": false
                 },
                 {
-                    "text": "ThIS rEmINdS mE... tHe hERo hATeD tHESE tHinGs. wEnT On A tIrADe ovER hIS diSLIkE oF cOpYCatS.",
+                    "text": "ThIs ReMiNdS mE... tHe HeRo HaTeD tHeSe ThInGs. WeNt On A tIrAdE OvEr HiS dIsLiKe Of CoPyCaTs.",
                     "speaker": "Mimic",
                     "on_the_left": false,
                     "randomize": false
@@ -153,7 +153,7 @@
                     "randomize": false
                 },
                 {
-                    "text": "hE dID?",
+                    "text": "hE dId?",
                     "speaker": "Mimic",
                     "on_the_left": true,
                     "randomize": false
@@ -165,7 +165,7 @@
                     "randomize": false
                 },
                 {
-                    "text": "YeAH. aLso WhY hE rEFusED to TrAIn wItH ThE nEW reCRUiTs oN HiS thIRD daY. kEPt MuMBliNg aBoUT ArMIeS \"SuPpREsSinG iNdiViDUAliTY\".",
+                    "text": "YeAh. AlSo WhY hE rEfUsEd To TrAiN wItH tHe NeW rEcRuItS oN hIs ThIrD dAy. KePt MuMbLiNg AbOuT aRmIeS \"SuPpReSsInG iNdIvIdUaLiTy\".",
                     "speaker": "Mimic",
                     "on_the_left": false,
                     "randomize": false
@@ -218,7 +218,7 @@
                     "randomize": false
                 },
                 {
-                    "text": "I hope our campaign doesn’t end like fathers.",
+                    "text": "I hope our campaign doesn't end like fathers.",
                     "speaker": "You",
                     "on_the_left": true,
                     "randomize": false

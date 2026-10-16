@@ -19,6 +19,7 @@ public class ButtonCover : MonoBehaviour
             this.imageToF.color = flashColor;
             this.flash();
         } else {
+            CancelInvoke();
             this.unflash();
         }
     }
@@ -40,6 +41,7 @@ public class ButtonCover : MonoBehaviour
     }
 
     public void coverButton(bool buttonIsEnabled) {
+        CancelInvoke();
         this.imageToF.color = disabledColor;
         this.imageToF.enabled = !buttonIsEnabled;
     }

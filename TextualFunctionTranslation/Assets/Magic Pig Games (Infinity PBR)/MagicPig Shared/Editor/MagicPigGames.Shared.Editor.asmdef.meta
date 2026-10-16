@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2d225383056ef474bb4294527e5cd8aa
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 281692
+  packageName: Projectile Factory - Behavior Based Projectile System
+  packageVersion: 1.2
+  assetPath: Assets/Magic Pig Games (Infinity PBR)/MagicPig Shared/Editor/MagicPigGames.Shared.Editor.asmdef
+  uploadId: 933042

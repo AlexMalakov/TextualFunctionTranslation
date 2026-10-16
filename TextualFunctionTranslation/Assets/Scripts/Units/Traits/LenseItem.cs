@@ -28,7 +28,9 @@ public class LenseItem : MonoBehaviour
         if(this.tutorialLockOn) {
             return;
         }
+
         if(this.lenseToggle && player.getLenses() > 0 && (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))) {
+
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
@@ -44,6 +46,7 @@ public class LenseItem : MonoBehaviour
         if(this.tutorialActive && !this.tut.onLenseUse(s)) {
             return;
         }
+
 
         if(s.isShowingChar()) {
             return;
@@ -62,5 +65,9 @@ public class LenseItem : MonoBehaviour
 
     public void tutorialStarted(bool started) {
         this.tutorialActive = started;
+    }
+
+    public bool isToggled() {
+        return this.lenseToggle;
     }
 }

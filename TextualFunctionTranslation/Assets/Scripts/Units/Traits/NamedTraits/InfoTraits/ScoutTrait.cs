@@ -31,7 +31,7 @@ public class ScoutTrait : InformationTrait
             this.logSquare(target.getPosition());
             target.stunUnit(this.stunDuration);
             
-            float damage = this.getNumberActive() > 2 ? this.stunDamageLarge : this.stunDamageSmall;
+            float damage = this.getNumberActive() > 3 ? this.stunDamageLarge : this.stunDamageSmall;
             target.takeDamage(damage, traitHaver);
 
             attackedUnits[traitHaver].Add(target);
@@ -40,7 +40,7 @@ public class ScoutTrait : InformationTrait
 
 
     public override void onReposition(Unit traitHaver) {
-        traitHaver.heal(traitHaver.calcMaxHealth() * (this.getNumberActive() > 2 ? this.healLarge : this.healSmall));
+        traitHaver.heal(traitHaver.calcMaxHealth() * (this.getNumberActive() > 3 ? this.healLarge : this.healSmall) / 100f);
         this.logSquare(traitHaver.getPosition());
     }
 

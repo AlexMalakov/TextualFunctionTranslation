@@ -54,7 +54,7 @@ public class MonoLarper : MonoBehaviour
         return Instantiate(obj);
     }
 
-    public void Destroy(GameObject obj) {
+    public void FakeDestroy(GameObject obj) {
         Destroy(obj);
     }
 }

@@ -194,8 +194,16 @@ public class PlayerUnitLayout : MonoBehaviour
     public void placeUnits() {
         foreach (KeyValuePair<Unit, HexSquare> kvp in this.layout) {
             Unit u = kvp.Key;
+            u.unclaimSquare();
+        }
+
+        foreach (KeyValuePair<Unit, HexSquare> kvp in this.layout) {
+            Unit u = kvp.Key;
             HexSquare sq = kvp.Value;
 
+            if(this.humanPlayer != null) {
+                this.humanPlayer.getUnitMoveManager().overrideMovement(u);
+            }
             u.initUnit(sq);
         }
     }

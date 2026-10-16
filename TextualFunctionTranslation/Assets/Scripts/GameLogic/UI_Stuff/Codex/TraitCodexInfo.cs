@@ -12,7 +12,18 @@ public class TraitCodexInfo : MonoBehaviour
     [SerializeField] private Image icon;
     [SerializeField] private Image imageExplenation;
 
-    
+    [SerializeField] private List<Image> unitIconImages;
+    [SerializeField] private Sprite capsSprite;
+    [SerializeField] private List<Sprite> demonSprites;
+
+
+
+    public void Awake() {
+        foreach(Image img in this.unitIconImages) {
+            img.gameObject.SetActive(false);
+        }
+    }
+
     public void showTrait(Trait t) {
         this.traitName.text = t.getTraitName();
 
@@ -29,6 +40,31 @@ public class TraitCodexInfo : MonoBehaviour
 
         this.icon.sprite = t.getTraitIcon();
         this.imageExplenation.sprite = t.getTraitEffectImg();
-        //TODO: units that have a trait
+        
+        foreach(Image img in this.unitIconImages) {
+            img.gameObject.SetActive(false);
+        }
+
+        if(t.getTraitName() == "hero") {
+            this.unitIconImages[0].gameObject.SetActive(true);
+            this.unitIconImages[0].sprite = this.capsSprite;
+        } else if(t.getTraitName() == "demon") {
+            this.unitIconImages[0].gameObject.SetActive(true);
+            this.unitIconImages[0].sprite = this.demonSprites[0];
+            this.unitIconImages[1].gameObject.SetActive(true);
+            this.unitIconImages[1].sprite = this.demonSprites[1];
+            this.unitIconImages[2].gameObject.SetActive(true);
+            this.unitIconImages[2].sprite = this.demonSprites[2];
+        }else {
+            int ptr = 0;
+            foreach(UnitBlueprint ub in UnitFactory.getAllBlueprints()) {
+                if(ub.unitPrefab.GetComponent<Unit>().getRoleTraitName() == t.getTraitName() || ub.unitPrefab.GetComponent<Unit>().getClassTraitName() == t.getTraitName()) {
+                    this.unitIconImages[ptr].gameObject.SetActive(true);
+                    this.unitIconImages[ptr].sprite = ub.unitIcon;
+                    ptr+=1;
+                }
+            }
+        }
+        
     }
 }

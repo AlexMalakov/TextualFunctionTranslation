@@ -34,14 +34,14 @@ public class TrollTrait : CypherTrait
         } else if(this.getNumberActive() == 2) {
             damage = this.damageAmount;
             heal = this.healPercent;
-        } else if(this.getNumberActive() == 3) {
+        } else if(this.getNumberActive() >= 3) {
             damage = this.damageAmountLarge;
             heal = this.healPercentLarge;
         }
 
         foreach(HexSquare s in radCircle) {
             if(s.getUnit() != null && this.cm.sameOwner(s.getUnit(), traitHaver)) {
-                s.getUnit().heal(heal);
+                s.getUnit().heal(s.getUnit().calcMaxHealth() * heal/100f);
             } else if(s.getUnit() != null) {
                 s.getUnit().takeDamage(damage, traitHaver);
             }

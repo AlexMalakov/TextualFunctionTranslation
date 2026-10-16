@@ -4,25 +4,38 @@ using UnityEngine;
 
 public class UnitMovementManager : MonoBehaviour
 {
-    private List<Unit> draggedUnits = new List<Unit>();
+    private Dictionary<Unit, int> moveTokens = new Dictionary<Unit, int>();
     [SerializeField] private float unitDragSnapSpeed;
     [SerializeField] private float unitJumpSpeed;
     [SerializeField] private float boingMultiplicitiveHeight;
     [SerializeField] private float unitFastTime = .1f;
-    
+
     public void overrideMovement(Unit u) {
-        this.draggedUnits.Remove(u);
+        this.claimMovement(u);
+    }
+
+    private int claimMovement(Unit u) {
+        int token = this.moveTokens.TryGetValue(u, out int cur) ? cur + 1 : 1;
+        this.moveTokens[u] = token;
+        return token;
+    }
+
+    private bool ownsMovement(Unit u, int token) {
+        return this.moveTokens.TryGetValue(u, out int cur) && cur == token;
+    }
+
+    private void releaseMovement(Unit u, int token) {
+        if(this.ownsMovement(u, token)) {
+            this.moveTokens.Remove(u);
+        }
     }
 
     public IEnumerator dragUnitTo(Unit u, Transform dest, bool snap) {
         return this.dragUnitTo(u, dest.position, snap);
     }
-    
+
     public IEnumerator dragUnitTo(Unit u, Vector3 dest, bool snap) {
-        if(this.draggedUnits.Contains(u)) { //is this possible? {
-            yield break;
-        }
-        this.draggedUnits.Add(u);
+        int token = this.claimMovement(u);
 
         Vector3 startPos = u.transform.position;
 
@@ -32,8 +45,7 @@ public class UnitMovementManager : MonoBehaviour
         float totalDur = !snap ? unitFastTime : (dest - startPos).magnitude / this.unitDragSnapSpeed;
 
         while(elapsed < totalDur) {
-            
-            if (!this.draggedUnits.Contains(u)) {
+            if(!this.ownsMovement(u, token)) {
                 yield break;
             }
 
@@ -42,16 +54,15 @@ public class UnitMovementManager : MonoBehaviour
             yield return null;
         }
 
-        u.transform.position = dest;
-        this.draggedUnits.Remove(u);
+        if(this.ownsMovement(u, token)) {
+            u.transform.position = dest;
+        }
+        this.releaseMovement(u, token);
     }
 
     public IEnumerator boingTo(Unit u, Vector3 dest) {
-        if(this.draggedUnits.Contains(u)) { //no boing
-            yield break;
-        }
+        int token = this.claimMovement(u);
 
-        this.draggedUnits.Add(u);
         Vector3 startPos = u.transform.position;
         dest.y = startPos.y;
         u.triggerAnimation("leap");
@@ -61,7 +72,7 @@ public class UnitMovementManager : MonoBehaviour
         float arcHeight = (dest - startPos).magnitude * this.boingMultiplicitiveHeight;
 
         while(elapsed < totalDur) {
-            if(!this.draggedUnits.Contains(u)) {
+            if(!this.ownsMovement(u, token)) {
                 yield break;
             }
 
@@ -72,7 +83,10 @@ public class UnitMovementManager : MonoBehaviour
             yield return null;
         }
 
-        u.triggerAnimation("landing");
-        this.draggedUnits.Remove(u);
+        if(this.ownsMovement(u, token)) {
+            u.triggerAnimation("landing");
+            u.transform.position = dest;
+        }
+        this.releaseMovement(u, token);
     }
 }

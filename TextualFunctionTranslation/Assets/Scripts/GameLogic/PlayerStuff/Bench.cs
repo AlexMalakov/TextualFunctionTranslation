@@ -121,6 +121,16 @@ public class Bench : MonoBehaviour
         return null;
     }
 
+    public List<Unit> getUnitsOnBench() {
+        List<Unit> units = new List<Unit>();
+        foreach(BenchSlot b in this.benchSlotPositions) {
+            if(b.isOccupied()) {
+                units.Add(b.getUnit());
+            }
+        }
+        return units;
+    }
+
 
     public string jsonify() {
         return "";

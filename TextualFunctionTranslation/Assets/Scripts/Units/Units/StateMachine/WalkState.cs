@@ -4,18 +4,13 @@ using UnityEngine;
 
 public class WalkState : UnitActionState
 {
-    private int walkFrames;
-    private float rotTime; //doesn't need to be in frames it's purely cosmetic
     private HexSquare walkTo;
     private Coroutine shwalkin;
     private Coroutine shrotatin;
     private Quaternion targetRot;
     private bool rotAsigned = false;
 
-    public WalkState(Unit u) : base(u) {
-        this.walkFrames = CombatScheduler.timeToTicks(GlobalData.TimeWalk);
-        this.rotTime = GlobalData.TimeTurn;
-    }
+    public WalkState(Unit u) : base(u) {}
 
     public override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
         this.target = data.unit;
@@ -23,7 +18,7 @@ public class WalkState : UnitActionState
 
         if(this.walkTo != null && this.walkTo.isSquare()) {
             this.unitOwner.placeUnitOnSquare(this.walkTo, false);
-            this.frameLockout = this.walkFrames;  
+            this.frameLockout = CombatScheduler.timeToTicks(GlobalData.TimeWalk);
             shwalkin = GlobalData.Larper.FakeStartCoroutine(new CoroutineableMethod(this.walkToTarget));
             shrotatin = GlobalData.Larper.FakeStartCoroutine(new CoroutineableMethod(this.rotateToTarget));
             this.unitOwner.triggerAnimation("run");
@@ -67,7 +62,8 @@ public class WalkState : UnitActionState
         Vector3 dest = new Vector3(this.walkTo.transform.position.x, startPos.y, this.walkTo.transform.position.z);
 
         while(this.frameLockout > 0) {
-            float elap = (this.walkFrames - this.frameLockout)/(float)this.walkFrames;
+            int walkFrames = CombatScheduler.timeToTicks(GlobalData.TimeWalk);
+            float elap = (walkFrames - this.frameLockout)/(float)walkFrames;
             this.unitOwner.transform.position = Vector3.Lerp(startPos, dest, elap);
             yield return null;
         }
@@ -86,8 +82,8 @@ public class WalkState : UnitActionState
 
         float elapsed = 0f;
 
-        while(elapsed < this.rotTime) {
-            this.unitOwner.transform.rotation = Quaternion.Slerp(startRot, this.targetRot, elapsed/this.rotTime);
+        while(elapsed < GlobalData.TimeTurn) {
+            this.unitOwner.transform.rotation = Quaternion.Slerp(startRot, this.targetRot, elapsed/GlobalData.TimeTurn);
             elapsed += Time.deltaTime;
             yield return null;
         }

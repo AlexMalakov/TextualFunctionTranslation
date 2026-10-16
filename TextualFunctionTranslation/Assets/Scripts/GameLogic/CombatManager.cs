@@ -22,6 +22,8 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private AssasinsGuildTrait enemyAss;
 
     private List<Unit> units;
+    private Dictionary<Unit, int> iframes = new Dictionary<Unit, int>();
+    private bool combatEnded = false;
 
     //not very nice but it will make this unit division work better
     private int livingPlayerUnits = -1;
@@ -75,11 +77,14 @@ public class CombatManager : MonoBehaviour
 
     public void initializeCombat() {
         this.units = new List<Unit>();
+        this.iframes = new Dictionary<Unit, int>();
         this.units.AddRange(this.player.getActiveUnits());
         this.units.AddRange(this.enemy.getActiveUnits());
         this.livingPlayerUnits = this.player.getActiveUnits().Count;
         this.livingEnemyUnits = this.enemy.getActiveUnits().Count;
         this.units = this.units.OrderBy(u => u.getDecisionPriority()).ThenByDescending(u => u.getMergeLevel()).ToList();//TODO CHECK: is this deterministic?
+
+        this.combatEnded = false;
 
         this.placeUnitsFromLayouts();
 
@@ -119,6 +124,15 @@ public class CombatManager : MonoBehaviour
                 u.triggerUpdate(this);
             }
         }
+
+        List<Unit> iUnits = this.iframes.Keys.ToList();
+        for(int i = this.iframes.Count - 1; i >= 0; i--) {
+            this.iframes[iUnits[i]] = this.iframes[iUnits[i]] - 1;
+            if(this.iframes[iUnits[i]] == 0) {
+                this.iframes.Remove(iUnits[i]);
+                iUnits.RemoveAt(i);
+            }
+        }
     }
 
     public HexBoard getBoard() {
@@ -135,7 +149,13 @@ public class CombatManager : MonoBehaviour
         return this.player.ownsUnit(unit);
     }
 
+    public void addInvulUnit(Unit registerMe, float invulDurationInSec) {
+        this.iframes.Add(registerMe, CombatScheduler.timeToTicks(invulDurationInSec));
+    }
+
     public Unit requestAttackTarget(Unit attacker, Unit previousTarget) {
+        Dictionary<HexSquare, int> dists = bfsTheBoard(attacker.getPosition());
+
         int bestTaunt = int.MinValue;
         int closestTarget = int.MaxValue;
         Unit target = null;
@@ -144,15 +164,25 @@ public class CombatManager : MonoBehaviour
         if(previousTarget != null && !previousTarget.isDead()) {
             target = previousTarget;
             bestTaunt = previousTarget.getTaunt();
-            closestTarget = HexSquare.hexDist(previousTarget.getPosition(), attacker.getPosition());
+            closestTarget = reachCost(attacker, previousTarget, dists);
             prevDist = closestTarget;
         }
 
         foreach(Unit u in this.units) {
-            if(u.isDead())
+            if(u.isDead() || sameOwner(attacker, u) || this.iframes.ContainsKey(u))
                 continue;
-            int d = HexSquare.hexDist(u.getPosition(), attacker.getPosition());
-            if(!sameOwner(attacker, u) && (closestTarget > d || (closestTarget == d && bestTaunt < u.getTaunt() && d < prevDist))) {
+            
+            int d = reachCost(attacker, u, dists);
+            bool better = false;
+            if(target == null) {
+                better = true;
+            } else if(target == previousTarget) {
+                better = (d <= closestTarget - 1 || (d < closestTarget && u.getTaunt() > bestTaunt));
+            } else {
+                better = (d < closestTarget || (d == closestTarget && u.getTaunt() > bestTaunt));
+            }
+            
+            if(better) {
                 target = u;
                 bestTaunt = u.getTaunt();
                 closestTarget = d;
@@ -165,21 +195,58 @@ public class CombatManager : MonoBehaviour
     public Unit getRandomAttackTarget(System.Random rand) {
         List<Unit> playerPool = new List<Unit>();
         foreach(Unit u in this.units) {
-            if(this.isPlayerUnit(u) && !u.isDead()) {
+            if(this.isPlayerUnit(u) && !u.isDead() && !this.iframes.ContainsKey(u)) {
                 playerPool.Add(u);
             }
         }
 
+        if(playerPool.Count == 0) {
+            return null;
+        }
         return playerPool[rand.Next(0, playerPool.Count)];
+    }
+
+    private Dictionary<HexSquare, int> bfsTheBoard(HexSquare start) {
+        Dictionary<HexSquare, int> dist = new Dictionary<HexSquare, int>(){{start, 0}};
+        Queue<HexSquare> q = new Queue<HexSquare>();
+        q.Enqueue(start);
+        while(q.Count > 0) {
+            HexSquare next = q.Dequeue();
+            foreach(AxialCoord c in next.getNeighborCoords()) {
+                HexSquare n = this.board.getHexAt(c);
+                if(n == null || !n.isSquare() || n.getUnit() != null || dist.ContainsKey(n)) {
+                    continue;
+                }
+                dist[n] = dist[next] + 1;
+                q.Enqueue(n);
+            }
+        }
+
+        return dist;
+    }
+
+    private int reachCost(Unit attacker, Unit target, Dictionary<HexSquare, int> dist) {
+        if(HexSquare.hexDist(attacker.getPosition(), target.getPosition()) <= attacker.getRange()) {
+            return 0;
+        }
+        int best = int.MaxValue;
+        foreach(HexSquare s in dist.Keys) {
+            if(dist[s] < best && HexSquare.hexDist(s, target.getPosition()) <= attacker.getRange()) {
+                best = dist[s];
+            }
+        }
+        return best;
     }
 
     public HexSquare requestRoute(Unit attacker, Unit target) {
         return this.board.pathfindToSquare(attacker.getPosition(), target.getPosition());
     }
 
-    public void onUnitDeath(Unit u) {
+    public void heroDeathCheck(Unit u) {
         this.heroCheck.onDeathCheck(u);
+    }
 
+    public void onUnitDeath(Unit u) {
         if(u is Randomizer) {
             this.gameManager.onRandomizerDeath();
         }
@@ -207,7 +274,21 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    public void onUnitReposition(Unit u) {
+        foreach(Trait t in this.player.getUnitLayout().getActiveTraits().OrderBy(t => t.getTraitName())) {
+            callTraitMethod(t, t.informAllOfReposition, u);
+        }
+
+        foreach(Trait t in this.enemy.getUnitLayout().getActiveTraits().OrderBy(t => t.getTraitName())) {
+            callTraitMethod(t, t.informAllOfReposition, u);
+        }
+    }
+
     public void onCombatOver() {
+        if(this.combatEnded) {
+            return;
+        }
+        this.combatEnded = true;
         foreach(Unit u in this.units) {
             if(!u.isDead()) {
                 callTraitMethod(u.getRoleTrait(), u.getRoleTrait().onCombatSurvival, u);
@@ -240,6 +321,13 @@ public class CombatManager : MonoBehaviour
 
     public IEnumerator runSquaresReveal() {
         yield return this.traitDisplay.playTraitSquareReveal();
+        foreach(Unit u in this.units) {
+            if(u is DemonKing) {
+                u.getPosition().highlightSquare(new Color(0, 0, 0), 1f);   
+                yield return new WaitForSeconds(1f);
+                yield return this.traitDisplay.playTraitSquareReveal();
+            }
+        }
         
     }
 
@@ -287,10 +375,12 @@ public class CombatManager : MonoBehaviour
     }
     
     public IEnumerator runCypherAnimation() {
-        yield return this.traitDisplay.playCypherTraitAnim();
+        yield return this.traitDisplay.playCypherTraitAnim(false);
         foreach(Unit u in this.units) {
             if(u is DemonKing) {
-                yield return this.traitDisplay.playCypherTraitAnim();
+                u.getPosition().highlightSquare(new Color(0, 0, 0), 1f);   
+                yield return new WaitForSeconds(1f);
+                yield return this.traitDisplay.playCypherTraitAnim(true);
             }
         }
     }
@@ -332,6 +422,10 @@ public class CombatManager : MonoBehaviour
         }
 
         foreach(Unit u in this.units) { //TODO: make sure no new units end up in combat somehow -- lock playerunit layout when not in prep phase i think
+            if(!this.player.ownsUnit(u) && !this.enemy.ownsUnit(u)) {
+                continue;
+            }
+            
             if(startingPos.ContainsKey(u)) {
                 u.placeUnitOnSquare(startingPos[u], true);
                 u.rotateTo((this.isPlayerUnit(u) ? this.player : this.enemy).getUnitRotation(false));

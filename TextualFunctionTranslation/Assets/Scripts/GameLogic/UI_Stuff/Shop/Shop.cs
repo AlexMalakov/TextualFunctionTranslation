@@ -20,6 +20,7 @@ public class Shop : MonoBehaviour
 
     private bool tutorialLockOn = false;
     private bool tutorialActive = false;
+    private bool shopLock = false;
 
     void Start() { //sets initial entries, runs after factories have finished
         if(!this.tutorialActive) {
@@ -31,14 +32,18 @@ public class Shop : MonoBehaviour
     }
 
     public void onUnitPurchased(UnitBlueprint ub) {
-        if(this.tutorialLockOn) {
+        if(this.tutorialLockOn || this.shopLock) {
             return;
         }
 
         if(!this.player.canPurchaseUnit(ub.unitName, ub.unitCost)) //TODO SWAP COST 
         {
             this.brokeNotifier.gameObject.SetActive(true);
-            this.brokeNotifier.displayMessage("YOU ARE TOO BROKE TO BUY THIS!");
+            if(ub.unitCost > this.player.getMoney()) {
+                this.brokeNotifier.displayMessage("CANNOT BUY THIS UNIT (YOU ARE BROKE)!");
+            } else {
+                this.brokeNotifier.displayMessage("CANNOT BUY THIS UNIT (NO SPACE)!");
+            }
             return;
         }
         
@@ -74,7 +79,9 @@ public class Shop : MonoBehaviour
     public void giftVigUnit() {
         if(this.player.hasBenchSpace(this.currentEntries[0].unitName)) {
             Unit u = UnitFactory.createUnit(this.currentEntries[0].unitName);
-            this.player.gainUnit(u);
+            this.player.receiveGiftedUnit(u);
+            this.brokeNotifier.displayMessage("Your vigeneries have recruited " + u.getName() + " to your army.");
+            this.pool.removeFromPool(u.getBlueprint());
 
             this.updateEntries();
         } else {
@@ -86,11 +93,24 @@ public class Shop : MonoBehaviour
         this.updateEntries();
     }
 
+    public List<UnitBlueprint> getEntries() {
+        return this.currentEntries;
+    }
+
     public void tutorialLock(bool lockOn) {
         this.tutorialLockOn = lockOn;
 
         foreach(ShopButton be in this.shopButtons) {
-            be.tutorialLockStatus(lockOn);
+            be.tutorialLockStatus(this.shopLock || this.tutorialLockOn);
+        }
+    }
+
+    //parallel lock to tutorial lokc
+    public void lockShop(bool lockOn) {
+        this.shopLock = lockOn;
+
+        foreach(ShopButton be in this.shopButtons) {
+            be.tutorialLockStatus(this.shopLock || this.tutorialLockOn);
         }
     }
 

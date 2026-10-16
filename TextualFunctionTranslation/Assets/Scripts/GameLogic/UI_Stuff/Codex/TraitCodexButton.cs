@@ -11,6 +11,8 @@ public class TraitCodexButton : MonoBehaviour
     [SerializeField] private Button button;
     [SerializeField] private Image image;
     [SerializeField] private TMP_Text trait_name;
+    [SerializeField] private TMP_Text trait_count;
+    [SerializeField] private TMP_Text trait_breakpoints;
     private TraitCodexInfo tci;
     private GameObject traitCodex;
 
@@ -26,7 +28,17 @@ public class TraitCodexButton : MonoBehaviour
         this.traitCodex = traitCodex;
         if(this.trait_name != null) {
             trait_name.text = trait.getTraitName(); 
+            string text = "";
+            foreach(int tier in trait.getTraitTiering()) {
+                text = text + tier + " / ";
+            }
+            if(text.Length > 0) {
+                text = text.Substring(0, text.Length-2);
+            }
+            this.trait_breakpoints.text = text;
+            this.trait_count.text = trait.getNumberActive() + "";
         }        
+        
         this.trait = trait;
         this.image.sprite = this.trait.getTraitIcon();
     }

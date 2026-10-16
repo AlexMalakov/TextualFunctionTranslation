@@ -17,11 +17,6 @@ public class StatusMessage : MonoBehaviour
 
     private Coroutine coroutine;
 
-    public void Start() {
-        this.canvasGroup.alpha = 0f;
-        this.gameObject.SetActive(false);
-    }
-
     public void displayMessage(string msg) {
         if(this.coroutine != null) {
             StopCoroutine(this.coroutine);

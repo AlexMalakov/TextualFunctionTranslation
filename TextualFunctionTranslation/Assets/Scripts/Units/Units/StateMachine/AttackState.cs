@@ -12,21 +12,16 @@ public class AttackState : UnitActionState
 
     private float cooldownTime;
     private float windupTime;
-    private int swingFrames;
 
     private int attackSpeedCooldownFrames;
     private int attackSpeedWindupFrames;
 
-    private int minSwingFrames;
 
     private Coroutine windupCoroutine;
 
     public AttackState(Unit u, float cooldownTime, float windupTime) : base(u) {
-        this.swingFrames = CombatScheduler.timeToTicks(GlobalData.TimeSwing);
         this.cooldownTime = cooldownTime;
         this.windupTime = windupTime;
-
-        this.minSwingFrames = CombatScheduler.timeToTicks(GlobalData.TimeMinWindup);
     }
 
     public override void onStateEnter(UnitActionState stateFrom, StateDataContainer data) {
@@ -35,7 +30,7 @@ public class AttackState : UnitActionState
 
         //be careful of the logic here
         float wind = (windupTime / Mathf.Pow(ats, .7f));
-        this.attackSpeedWindupFrames = (int)Mathf.Max(minSwingFrames, CombatScheduler.timeToTicks(wind));;
+        this.attackSpeedWindupFrames = (int)Mathf.Max(CombatScheduler.timeToTicks(GlobalData.TimeMinWindup), CombatScheduler.timeToTicks(wind));;
 
         float cool = (cooldownTime / Mathf.Pow(ats, .7f));
         this.attackSpeedCooldownFrames = (int)(CombatScheduler.timeToTicks(cool));
@@ -96,7 +91,7 @@ public class AttackState : UnitActionState
 
     private IEnumerator runWindup() {
         this.frameLockout = this.attackSpeedWindupFrames;
-        this.unitOwner.triggerAnimation("windup_attack");
+        this.unitOwner.triggerAnimationWithSpeed("windup_attack", this.attackSpeedWindupFrames * CombatScheduler.combatTimePerTick);
 
         while(this.frameLockout > 0 && this.attackStage == AttackStage.Windup) {
             float ratio = (this.attackSpeedWindupFrames - this.frameLockout) / (float)this.attackSpeedWindupFrames;
@@ -115,8 +110,8 @@ public class AttackState : UnitActionState
             this.frameLockout = 0;
             return;
         }
-        this.frameLockout = this.swingFrames;
-        this.unitOwner.triggerAnimation("attack");
+        this.frameLockout = CombatScheduler.timeToTicks(GlobalData.TimeSwing);
+        this.unitOwner.triggerAnimationWithSpeed("attack", GlobalData.TimeSwing + this.attackSpeedCooldownFrames * CombatScheduler.combatTimePerTick);
         this.unitOwner.attackTarget();
     }
 

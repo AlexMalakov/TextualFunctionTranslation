@@ -15,8 +15,11 @@ public class HumanPlayer : Player //player but has money and shit
     [SerializeField] private int lenseCount;
     [SerializeField] private ShopPool pool;
 
+    [SerializeField] private RoyalGuardsTrait myRG;
+
     private Dictionary<Unit, int> unitsCopy;
     private List<Unit> destroyBackup = new List<Unit>();
+    private List<Unit> mergeQueue = new List<Unit>();
 
     private int prevMoney = 0;
 
@@ -38,6 +41,7 @@ public class HumanPlayer : Player //player but has money and shit
         this.pi.setDollars(this.money);
         this.prevMoney = this.money;
         this.lenseCount = 0;
+        this.pi.setLenseCount(0);
     }
 
     public void setUnitCap(int cap) {
@@ -80,6 +84,36 @@ public class HumanPlayer : Player //player but has money and shit
         this.gainUnit(u);
     }
 
+    public void receiveGiftedUnit(Unit u) {
+        
+        //we can only be gifted one unit between rounds. Meaning only Unit u is able to merge
+
+        if(this.bench.hasAnotherStarLevel(u, u.getName(), 1)) {
+            Unit mergeTo = this.bench.getAnotherStarLevel(u, u.getName(), 1);
+            StartCoroutine(killUnitInMerge(u, mergeTo));
+            mergeTo.mergeUnit();
+
+            if(this.bench.hasAnotherStarLevel(mergeTo, mergeTo.getName(), 2)) {
+                Unit mergeThree = this.bench.getAnotherStarLevel(mergeTo, mergeTo.getName(), 2);        
+                StartCoroutine(killUnitInMerge(mergeTo, mergeThree)); 
+                mergeThree.mergeUnit();
+            } else if(this.unitLayout.hasAnotherStarLevel(mergeTo, mergeTo.getName(), 2)) {
+                this.mergeQueue.Add(mergeTo);
+            }
+            return;
+        }
+
+        this.playersUnits.Add(u);
+
+        if(this.unitLayout.hasAnotherStarLevel(u, u.getName(), 1)) {
+            this.mergeQueue.Add(u);
+        }
+
+        BenchSlot unitSlot = this.bench.addUnitToBench(u); //throws exception if it fails but shouldnt since im checking for room first
+        u.rotateTo(this.getUnitRotation(true));
+        StartCoroutine(this.getUnitMoveManager().dragUnitTo(u, unitSlot.transform, false));
+    }
+
     public void gainUnit(Unit u) {
         this.playersUnits.Add(u);
 
@@ -104,6 +138,9 @@ public class HumanPlayer : Player //player but has money and shit
 
     //recursively merge until can no longer merge any longer
     private void mergeUnit(Unit u, int starLevel) {
+        if(starLevel >= 3) {
+            return;
+        }
         Unit mergeTo;
         if(this.bench.hasAnotherStarLevel(u, u.getName(), starLevel)) {
             mergeTo = this.bench.getAnotherStarLevel(u, u.getName(), starLevel);
@@ -124,13 +161,15 @@ public class HumanPlayer : Player //player but has money and shit
         this.mergeUnit(mergeTo, ++starLevel);
     }
 
+
     private IEnumerator killUnitInMerge(Unit preMerge, Unit postMerge) {
-        yield return this.umm.dragUnitTo(preMerge, postMerge.transform.position, false);
         this.bench.removeUnitFromBench(preMerge);
         this.unitLayout.removeUnitFromLayout(preMerge);
         this.playersUnits.Remove(preMerge);
-        preMerge.fakeDestroyObject();
+        preMerge.unclaimSquare();
         this.destroyBackup.Add(preMerge);
+        yield return this.umm.dragUnitTo(preMerge, postMerge.transform.position, false);
+        preMerge.fakeDestroyObject();
     }
 
     public void sellUnit(Unit u) {
@@ -162,6 +201,14 @@ public class HumanPlayer : Player //player but has money and shit
         return this.unitCap;
     }
 
+    public void clearMergeQueue() {
+        for(int i = this.mergeQueue.Count - 1; i >= 0; i--) {
+            this.mergeUnit(this.mergeQueue[i], this.mergeQueue[i].getMergeLevel());
+        }
+
+        this.mergeQueue = new List<Unit>();
+    }
+
     public void loseCombat() {
         for(int i = this.playersUnits.Count - 1; i >= 0; i--) { //remove any units that we say we have but we wouldn't from the restart
             if(!this.unitsCopy.ContainsKey(this.playersUnits[i])) {
@@ -176,6 +223,7 @@ public class HumanPlayer : Player //player but has money and shit
                 this.destroyBackup.Remove(u);
                 u.gameObject.SetActive(true);
                 this.playersUnits.Add(u);
+                u.bringBackHPBar();
             }
             u.setMergeLevel(this.unitsCopy[u]);
         }
@@ -185,6 +233,7 @@ public class HumanPlayer : Player //player but has money and shit
         this.unitLayout.resetToCombatStart();
         this.money = this.prevMoney;
         this.pi.setDollars(this.money);
+        this.myRG.resetStacks();
     }
 
     public void gainLenses(int deltaL) {

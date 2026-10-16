@@ -104,7 +104,7 @@ public class TraitDisplay : MonoBehaviour
         tw.makeActive(true, isEnoughForActive);
     }
 
-    public IEnumerator playCypherTraitAnim() {
+    public IEnumerator playCypherTraitAnim(bool kingRun) {
         this.displayButton.showButton(false);
         if(!this.showingCypher) {
             this.toggleShowCypher();
@@ -115,7 +115,7 @@ public class TraitDisplay : MonoBehaviour
         List<Trait> enemyActiveCypherTraits = this.enemy.getUnitLayout().getActiveTraits().Where(t => t is CypherTrait).ToList();
 
         foreach(Trait t in playerActiveCypherTraits.OrderByDescending(t => t.getTraitName())) {
-            if(t is VegeneryTrait) { //I'm sorry but this has to happen with the visual hurk (thats me vomiting i am vomiting)
+            if((t is VegeneryTrait) && !kingRun) { //I'm sorry but this has to happen with the visual hurk (thats me vomiting i am vomiting)
                 ((VegeneryTrait)t).buyTopUnit();
             }
             t.getTraitWidget().flashTrait();
@@ -123,7 +123,7 @@ public class TraitDisplay : MonoBehaviour
         }
 
         foreach(Trait t in enemyActiveCypherTraits.OrderBy(t => t.getTraitName())) {
-            if(t is VegeneryTrait) {
+            if((t is VegeneryTrait) && !kingRun) {
                 ((VegeneryTrait)t).trashTopUnit();
             }
             t.getTraitWidget().flashTrait();
@@ -159,7 +159,7 @@ public class TraitDisplay : MonoBehaviour
             t.runSquareReveal();
             yield return new WaitForSeconds(GlobalData.SquareRevealDuration);
         }
-        
+
         this.displayButton.showButton(true);
     }
 }

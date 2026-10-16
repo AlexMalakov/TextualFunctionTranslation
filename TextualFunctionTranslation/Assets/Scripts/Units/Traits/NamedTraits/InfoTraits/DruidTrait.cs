@@ -10,6 +10,7 @@ public class DruidTrait : InformationTrait
     [SerializeField] private Player traitPlayer;
     [SerializeField] private float statBoostAmountV;
     [SerializeField] private float statBoostAmountY;
+    [SerializeField] private float nonDruidStatBoostAmount;
 
     private List<HexSquare> vowelSquares;
     private HexSquare ySquare;
@@ -66,8 +67,20 @@ public class DruidTrait : InformationTrait
         }
     }
 
+    public override void preCombatFinal(Unit traitHaver) {
+        foreach (HexSquare s in vowelSquares) {
+            if(s.getUnit() != null) {
+                //this is a little hacky - it runs up to three times
+                //but won't multibuff any unit because Druid Start Buff is always given which means it won't stack
+                Operation buffOpp = new Operation(OperationType.PostMultiply, this.nonDruidStatBoostAmount, "Druid Start Buff", true);
+                traitHaver.buffStat(BuffableStats.Damage, buffOpp, s.getUnit());
+                traitHaver.buffStat(BuffableStats.Health, buffOpp, s.getUnit());
+            }
+        }
+    }
+
     public override string getTraitName() {
-        return "draeoiudys";
+        return "draeioudys";
     }
 
     public override string getTraitNarrative() {
@@ -76,7 +89,7 @@ public class DruidTrait : InformationTrait
 
     public override string getTraitEffect() {
         return (
-            "Spawn ley lines onto the battlefield, granting " + statBoostAmountV + " times more damage and health from green energy and " + statBoostAmountY + " times more damage and health from purple energy. These bonuses are for draeoiudys only."
+            "Spawn 6 ley lines, 5 green and one purple, onto the battlefield, granting " + statBoostAmountV + " times more damage and health from green energy and " + statBoostAmountY + " times more damage and health from purple energy. Non draeioudys only gain " + this.nonDruidStatBoostAmount + " and do not receive an extra purple energy boost."
         );
     }
     

@@ -12,7 +12,7 @@ public class ClockmakersTrait : CypherTrait
     public override void onCombatStart(Unit traitHaver){
         this.log.logEvent(new CombatEvent(traitHaver, traitHaver, CombatEventType.Start));
         this.applyInRadius(traitHaver, 1);
-        // if(this.getNumberActive() > 2) {
+        // if(this.getNumberActive() > 3) {
         //     this.applyInRadius(traitHaver, 2);
         // }
     }

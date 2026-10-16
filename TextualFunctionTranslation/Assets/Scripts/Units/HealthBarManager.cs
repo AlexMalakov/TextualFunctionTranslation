@@ -24,6 +24,7 @@ public class HealthBarManager : MonoBehaviour
     [SerializeField] private Transform hpDividerParent;
 
     [SerializeField] private Color standardHealthColor;
+    [SerializeField] private Color enemyHealthColor;
     [SerializeField] private Color maxHPColor;
     [SerializeField] private Image hpBarColorful;
 
@@ -33,6 +34,7 @@ public class HealthBarManager : MonoBehaviour
     [SerializeField] private bool isCopyCat = false;
 
     private List<RectTransform> dividers;
+    private bool isPlayerUnit = true;
 
     private float currentHealth;
     private float maxHealth;
@@ -49,6 +51,14 @@ public class HealthBarManager : MonoBehaviour
         
     }
 
+    public void setPlayerOwner(bool playerOwns) {
+        if(this.isPlayerUnit == playerOwns) {
+            return;
+        }
+        this.isPlayerUnit = playerOwns;
+        this.repaintDividers();
+    }
+
     public void initUniversal(float maxHealth, int mergeLevel) {
         this.currentHealth = maxHealth;
         this.maxHealth = maxHealth;
@@ -57,12 +67,14 @@ public class HealthBarManager : MonoBehaviour
         
         this.setFrame(mergeLevel);
 
+
         this.dividers = new List<RectTransform>();
         this.buildNewDividers(this.dividerStart);
         this.repaintDividers();
     }
 
     public void reset() {
+        this.currentHealth = maxHealth;
         this.healthFill.fillAmount = 1f;
         this.damageFill.fillAmount = 1f;
     }
@@ -135,7 +147,7 @@ public class HealthBarManager : MonoBehaviour
             this.hpBarColorful.color = this.maxHPColor;
             return;
         }
-        this.hpBarColorful.color = this.standardHealthColor;
+        this.hpBarColorful.color = this.isPlayerUnit ? this.standardHealthColor : this.enemyHealthColor;
 
         if(chunks - 1 > this.dividers.Count) {
             this.buildNewDividers(chunks - this.dividers.Count - 1);
@@ -173,8 +185,6 @@ public class HealthBarManager : MonoBehaviour
             transform.position = this.target.position + this.worldOffset;
     }
 
-    
-
     public void hideHPBar() {
         this.gameObject.SetActive(false);
     }
@@ -184,7 +194,6 @@ public class HealthBarManager : MonoBehaviour
     }
 
     public void onDeath() {
-        Debug.Log("HP BAR CLEANED UP!!!");
         //only called when the unit itself is getting destroyed
         Destroy(this.gameObject);
     }
